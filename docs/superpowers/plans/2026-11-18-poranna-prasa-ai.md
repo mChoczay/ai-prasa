@@ -15,6 +15,8 @@
 
 ## Global Constraints
 
+- **GitHub:** repo `mChoczay/ai-prasa` (public, `main`), site URL `https://mchoczay.github.io/ai-prasa/`. Wherever this plan says `{{GH_OWNER}}`/`{{GH_REPO}}`, use these values. n8n credentials (all ready 2026-11-18): `Anthropic account 2`, `GitHub account`, `Gmail account`.
+- **Commits (owner's rule):** the owner is the author (repo-local `user.name`/`user.email`, GitHub noreply address). The subject is one short, simple sentence and the body a brief summary of the changes. The `feat: …` messages in the tasks below only suggest the content; rewrite them in this style.
 - **Isolation and supply chain (owner's rule):**
   - Nothing is installed globally: no winget, no global npm, no PATH or registry changes, no system settings.
   - Tools live in `<project>/.tools/` (gitignored) and are put on PATH only for the current shell by `. .\scripts\env.ps1`. Git is the owner's own system install (2.56.1, verified 2026-11-18), so MinGit is not downloaded.
@@ -29,7 +31,7 @@
   - The Anthropic key is short-lived (owner sets a 7-day lifetime). Expiry must stop the pipeline cleanly with a clear mail, never loop.
 - n8n instance: the owner's n8n Cloud instance, reached through the connected n8n MCP server. Its address stays out of the repo (public). Workflow names start with `PPAI · `. Data Tables use the exact names in Task 10. Workflow timezone: `Europe/Warsaw`.
 - Before creating or changing anything in n8n, call `get_user_preferences` and apply what it returns. Before the first workflow, read `get_workflow_sdk_reference` and `get_workflow_best_practices`. Validate every workflow with `validate_workflow` before `create_workflow_from_code` / `update_workflow`.
-- Claude over HTTP only: `POST https://api.anthropic.com/v1/messages`, headers `anthropic-version: 2026-10-21` and `content-type: application/json`, auth through the existing n8n credential `Anthropic account` (predefined type `anthropicApi`; look up its id with `list_credentials`).
+- Claude over HTTP only: `POST https://api.anthropic.com/v1/messages`, headers `anthropic-version: 2026-10-21` and `content-type: application/json`, auth through the n8n credential `Anthropic account 2` (predefined type `anthropicApi`, the owner's dedicated short-lived key; look up its id with `list_credentials`). Do not use the older `Anthropic account` credential.
   - Never send `temperature`, `top_p`, `top_k` or `budget_tokens`.
   - Structured output goes through `output_config: {format: {type: "json_schema", schema}}`.
   - Effort goes in `output_config.effort`.

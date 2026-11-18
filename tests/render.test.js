@@ -129,6 +129,14 @@ test('renderEdition shows the weekly supplement when present', () => {
   assert.match(html, /<p>Akapit drugi\.<\/p>/);
 });
 
+test('renderEdition credits the ranking data sources', () => {
+  const html = renderEdition(published(), profilesById);
+  assert.match(html, /<footer class="credits">/);
+  assert.match(html, /href="https:\/\/artificialanalysis\.ai\/"/);
+  assert.match(html, /LMArena[\s\S]*CC BY 4\.0/);
+  assert.match(html, /Hugging Face/);
+});
+
 test('renderEdition escapes story titles', () => {
   const e = published();
   e.stories[0].title = '<img src=x onerror=alert(1)>';

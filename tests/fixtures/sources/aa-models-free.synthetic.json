@@ -1,0 +1,11 @@
+{
+  "tier": "free",
+  "intelligence_index_version": 5,
+  "pagination": { "page": 1, "page_size": 200, "total_pages": 1, "has_more": false },
+  "data": [
+    { "id": "m1", "slug": "model-a", "name": "Model A (High)", "model_creator": { "id": "c1", "name": "Firma A" }, "evaluations": { "artificial_analysis_intelligence_index": 71.2, "artificial_analysis_coding_index": null, "artificial_analysis_agentic_index": null } },
+    { "id": "m2", "slug": "model-b", "name": "Model B", "model_creator": { "id": "c2", "name": "Firma B" }, "evaluations": { "artificial_analysis_intelligence_index": 64.0, "artificial_analysis_coding_index": null, "artificial_analysis_agentic_index": null } },
+    { "id": "m3", "slug": "model-c", "name": "Model C", "model_creator": { "id": "c3", "name": "Firma C" }, "evaluations": { "artificial_analysis_intelligence_index": null, "artificial_analysis_coding_index": null, "artificial_analysis_agentic_index": null } },
+    { "id": "m4", "slug": "model-d", "name": "Model D (Low)", "model_creator": { "id": "c1", "name": "Firma A" }, "evaluations": { "artificial_analysis_intelligence_index": 68.9, "artificial_analysis_coding_index": null, "artificial_analysis_agentic_index": null } }
+  ]
+}

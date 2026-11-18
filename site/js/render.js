@@ -17,6 +17,7 @@ const BOARDS = Object.freeze([
   ['hf_trending', 'Hugging Face (trending)'],
 ]);
 const NO_DATA = '<p class="no-data">dane niedostępne</p>';
+const CREDITS = `<footer class="credits">Dane rankingowe: <a href="https://artificialanalysis.ai/" target="_blank" rel="noopener noreferrer">Artificial Analysis</a> · <a href="https://huggingface.co/datasets/lmarena-ai/leaderboard-dataset" target="_blank" rel="noopener noreferrer">LMArena</a> (CC BY 4.0) · <a href="https://huggingface.co/models?sort=trending" target="_blank" rel="noopener noreferrer">Hugging Face</a>. Teksty powstają automatycznie z pomocą AI na podstawie podanych źródeł.</footer>`;
 
 export function escapeHtml(value) {
   if (value == null) return '';
@@ -223,6 +224,7 @@ export function renderEdition(edition, profilesById) {
 </div>
 ${period(e.weekly, 'Tydzień w AI')}${period(e.monthly, 'Miesiąc w AI')}
 ${e.closing ? `<p class="closing">${escapeHtml(e.closing)}</p>` : ''}
+${CREDITS}
 </article>`;
 }
 

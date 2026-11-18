@@ -47,13 +47,13 @@ function renderErrorEmail({ step, message, kind }) {
     subject = 'Poranna prasa AI: wstrzymane – brak kredytów API';
     body = `<p>Pipeline zatrzymał się, bo na koncie API Anthropic skończyły się kredyty. Nie będzie ponawiał prób.</p>
 <ol><li>Doładuj kredyty w Console (platform.claude.com → Billing).</li>
-<li>W n8n, w tabeli <code>pipeline_state</code>, ustaw <code>paused</code> na <code>false</code>.</li></ol>`;
+<li>W n8n uruchom ręcznie workflow <strong>PPAI · odblokuj</strong> (ustawia <code>pipeline_state.paused</code> na <code>false</code>).</li></ol>`;
   } else if (kind === 'auth') {
     subject = 'Poranna prasa AI: wstrzymane – klucz API nieważny';
     body = `<p>Pipeline zatrzymał się, bo klucz API został odrzucony (prawdopodobnie wygasł). Nie będzie ponawiał prób.</p>
 <ol><li>W Console utwórz nowy klucz w workspace używanym przez n8n.</li>
 <li>Wklej go do credentiala <code>Anthropic account 2</code> w n8n.</li>
-<li>W tabeli <code>pipeline_state</code> ustaw <code>paused</code> na <code>false</code>.</li></ol>`;
+<li>Uruchom ręcznie workflow <strong>PPAI · odblokuj</strong> (ustawia <code>pipeline_state.paused</code> na <code>false</code>).</li></ol>`;
   } else if (kind === 'budget') {
     subject = 'Poranna prasa AI: wstrzymane – miesięczny budżet wyczerpany';
     body = `<p>Wydatki na Claude'a w tym miesiącu doszły do limitu z <code>pipeline_state.monthly_budget_usd</code>. Wydania wrócą 1. dnia następnego miesiąca albo po podniesieniu limitu i ustawieniu <code>paused</code> na <code>false</code>.</p>`;

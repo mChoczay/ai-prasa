@@ -1,0 +1,48 @@
+{
+  "profiles": [
+    {
+      "id": "nvda",
+      "type": "company",
+      "name": "NVIDIA",
+      "aliases": "Nvidia,NVDA",
+      "ticker": "NVDA",
+      "summary": "Przykładowa wizytówka: amerykański producent układów GPU, które napędzają większość treningu i uruchamiania modeli AI.",
+      "owner": "spółka giełdowa (Nasdaq)",
+      "key_products": [
+        "GPU do centrów danych",
+        "CUDA"
+      ],
+      "why_it_matters": "Dostarcza większość akceleratorów AI na rynku.",
+      "updated_at": "2026-11-18",
+      "last_spotlight_at": null
+    },
+    {
+      "id": "model-x",
+      "type": "model",
+      "name": "Model X",
+      "aliases": "",
+      "ticker": "",
+      "summary": "Przykładowa wizytówka modelu: tańszy model językowy firmy X nastawiony na agentów i wywoływanie narzędzi.",
+      "owner": "Firma X",
+      "key_products": [],
+      "why_it_matters": "Obniża koszt uruchamiania agentów.",
+      "updated_at": "2026-11-18",
+      "last_spotlight_at": null
+    },
+    {
+      "id": "crwv",
+      "type": "company",
+      "name": "CoreWeave",
+      "aliases": "CRWV",
+      "ticker": "CRWV",
+      "summary": "Przykładowa wizytówka: dostawca chmury GPU wynajmujący moc obliczeniową laboratoriom AI.",
+      "owner": "spółka giełdowa (Nasdaq)",
+      "key_products": [
+        "chmura GPU"
+      ],
+      "why_it_matters": "Barometr popytu na moc obliczeniową.",
+      "updated_at": "2026-11-18",
+      "last_spotlight_at": null
+    }
+  ]
+}

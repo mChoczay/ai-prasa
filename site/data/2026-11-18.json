@@ -1,0 +1,221 @@
+{
+  "date": "2026-11-18",
+  "edition": "daily",
+  "generated_at": "2026-11-18T05:52:00+01:00",
+  "quiet_day": false,
+  "greeting": "Dzień dobry. Kiedy pracowałeś, na szczycie rankingów zrobiło się ciasno, a rynek nagrodził producentów pamięci. Najważniejsze dziś: tańszy model, który obniża koszt agentów.",
+  "lead_story": {
+    "title": "Firma X tnie ceny o 40% i wchodzi do top 3",
+    "category": "modele",
+    "status": "potwierdzone",
+    "is_update": false,
+    "lede": "Nowy model jest dostępny przez API od wczoraj wieczorem.",
+    "body": "To przykładowy tekst czołówki. Model ma dłuższe okno kontekstu i lepiej wywołuje narzędzia, a milion tokenów kosztuje wyraźnie mniej niż u poprzednika.",
+    "for_you": "Agent, który dziś kosztuje kilka dolarów dziennie, po migracji może kosztować o jedną trzecią mniej.",
+    "sources": [
+      {
+        "name": "Blog firmy X",
+        "url": "https://example.com/blog/model-x",
+        "primary": true
+      },
+      {
+        "name": "Serwis rankingowy",
+        "url": "https://example.org/leaderboard",
+        "primary": false
+      }
+    ],
+    "disclaimer": null,
+    "may_affect": [
+      "nvda",
+      "model-x"
+    ]
+  },
+  "stories": [
+    {
+      "title": "Producent chipów raportuje rekordowy kwartał",
+      "category": "gielda",
+      "status": "potwierdzone",
+      "is_update": false,
+      "lede": "Przychody z centrów danych powyżej oczekiwań.",
+      "body": "Przykładowy tekst o wynikach kwartalnych i popycie na akceleratory.",
+      "for_you": "Ceny GPU w chmurze raczej nie spadną w tym kwartale.",
+      "sources": [
+        {
+          "name": "Raport kwartalny",
+          "url": "https://example.com/ir/q3",
+          "primary": true
+        }
+      ],
+      "disclaimer": "To nie jest porada inwestycyjna.",
+      "may_affect": [
+        "nvda"
+      ]
+    },
+    {
+      "title": "Laboratorium Y zbiera nową rundę",
+      "category": "inwestycje",
+      "status": "potwierdzone",
+      "is_update": false,
+      "lede": "Wycena wyraźnie wyższa niż pół roku temu.",
+      "body": "Przykładowy tekst o rundzie finansowania i inwestorach.",
+      "for_you": "Więcej mocy obliczeniowej to szybsze kolejne wersje modeli.",
+      "sources": [
+        {
+          "name": "Agencja prasowa",
+          "url": "https://example.net/news/round",
+          "primary": false
+        }
+      ],
+      "disclaimer": "To nie jest porada inwestycyjna.",
+      "may_affect": []
+    },
+    {
+      "title": "Frameworki agentowe uzgadniają wspólny standard",
+      "category": "narzedzia",
+      "status": "opinia",
+      "is_update": false,
+      "lede": "Trzy projekty open-source ogłosiły wspólną specyfikację.",
+      "body": "Przykładowy tekst o konsolidacji narzędzi.",
+      "for_you": "Mniej przepisywania integracji przy zmianie frameworka.",
+      "sources": [
+        {
+          "name": "Blog projektu",
+          "url": "https://example.dev/spec",
+          "primary": true
+        }
+      ],
+      "disclaimer": null,
+      "may_affect": []
+    },
+    {
+      "title": "Nowe zasady dla modeli ogólnego przeznaczenia",
+      "category": "regulacje",
+      "status": "potwierdzone",
+      "is_update": true,
+      "lede": "Regulator opublikował wytyczne wykonawcze.",
+      "body": "Przykładowy tekst o obowiązkach dostawców modeli.",
+      "for_you": "Jeśli publikujesz model, sprawdź wymagania dokumentacyjne.",
+      "sources": [
+        {
+          "name": "Dziennik urzędowy",
+          "url": "https://example.eu/act",
+          "primary": true
+        }
+      ],
+      "disclaimer": null,
+      "may_affect": []
+    }
+  ],
+  "market": {
+    "commentary": "Pamięć HBM znów w centrum uwagi po wynikach dostawców.",
+    "disclaimer": "To nie jest porada inwestycyjna.",
+    "rows": [
+      {
+        "ticker": "NVDA",
+        "name": "NVIDIA",
+        "close": 190.5,
+        "change_1d": 4.1,
+        "change_7d": 5.2,
+        "change_30d": 12.3,
+        "last_trade_date": "2026-11-17"
+      },
+      {
+        "ticker": "MSFT",
+        "name": "Microsoft",
+        "close": 510.2,
+        "change_1d": -0.6,
+        "change_7d": 1.1,
+        "change_30d": 3.4,
+        "last_trade_date": "2026-11-17"
+      },
+      {
+        "ticker": "CRWV",
+        "name": "CoreWeave",
+        "close": 80,
+        "change_1d": -3.2,
+        "change_7d": -1,
+        "change_30d": 0,
+        "last_trade_date": "2026-11-17"
+      }
+    ]
+  },
+  "rankings": {
+    "commentary": "Model X awansował o dwie pozycje.",
+    "lmarena": [
+      {
+        "rank": 1,
+        "model": "Model A",
+        "org": "Firma A",
+        "score": 1480,
+        "delta": null
+      },
+      {
+        "rank": 2,
+        "model": "Model B",
+        "org": "Firma B",
+        "score": 1462,
+        "delta": -1
+      },
+      {
+        "rank": 3,
+        "model": "Model X",
+        "org": "Firma X",
+        "score": 1450,
+        "delta": 2
+      }
+    ],
+    "aa": null,
+    "hf_trending": [
+      {
+        "rank": 1,
+        "model": "org/open-8b",
+        "org": "org",
+        "score": 950,
+        "delta": "new"
+      }
+    ]
+  },
+  "rumors": [
+    {
+      "title": "Firma Q ma szykować premierę przed świętami",
+      "body": "Dwa niezależne źródła mówią o nowej wersji modelu.",
+      "sources": [
+        {
+          "name": "Serwis technologiczny",
+          "url": "https://example.com/rumor",
+          "primary": false
+        },
+        {
+          "name": "Znany leaker",
+          "url": "https://example.social/post/1",
+          "primary": false
+        }
+      ]
+    }
+  ],
+  "big_moves": [
+    {
+      "entity_id": "nvda",
+      "board": "market",
+      "change": "+4.1%",
+      "why": "Akcje wzrosły po publikacji wyników kwartalnych.",
+      "why_type": "fakt",
+      "sources": [
+        {
+          "name": "Raport kwartalny",
+          "url": "https://example.com/ir/q3",
+          "primary": true
+        }
+      ]
+    }
+  ],
+  "follow_ups": [],
+  "closing": "W tym tygodniu warto zerkać na kolejne premiery przed świętami.",
+  "weekly": null,
+  "monthly": null,
+  "spotlight": {
+    "company_id": "crwv",
+    "model_id": "model-x"
+  },
+  "minutes": 1
+}

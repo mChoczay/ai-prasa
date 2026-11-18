@@ -1,0 +1,160 @@
+{
+  "type": "object",
+  "description": "The text of today's edition, as written by the model. Dates, quiet_day, disclaimers, weekly/monthly and spotlight are added by the workflow.",
+  "properties": {
+    "greeting": { "type": "string", "description": "3-4 sentences, second person." },
+    "lead_story": {
+      "type": "object",
+      "properties": {
+        "title": { "type": "string" },
+        "category": {
+          "type": "string",
+          "enum": ["modele", "gielda", "inwestycje", "rankingi", "narzedzia", "regulacje", "przecieki", "inne"]
+        },
+        "status": { "type": "string", "enum": ["potwierdzone", "plotka", "opinia"] },
+        "is_update": { "type": "boolean" },
+        "lede": { "type": "string" },
+        "body": { "type": "string", "description": "500-700 words." },
+        "for_you": { "type": "string", "description": "What it means for an AI developer." },
+        "may_affect_names": {
+          "type": "array",
+          "description": "Companies or models this news may affect, using names from the known entity list where possible.",
+          "items": { "type": "string" }
+        },
+        "sources": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": { "type": "string" },
+              "url": { "type": "string" },
+              "primary": { "type": "boolean" }
+            },
+            "required": ["name", "url", "primary"],
+            "additionalProperties": false
+          }
+        }
+      },
+      "required": ["title", "category", "status", "is_update", "lede", "body", "for_you", "may_affect_names", "sources"],
+      "additionalProperties": false
+    },
+    "stories": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "title": { "type": "string" },
+          "category": {
+            "type": "string",
+            "enum": ["modele", "gielda", "inwestycje", "rankingi", "narzedzia", "regulacje", "przecieki", "inne"]
+          },
+          "status": { "type": "string", "enum": ["potwierdzone", "plotka", "opinia"] },
+          "is_update": { "type": "boolean" },
+          "lede": { "type": "string" },
+          "body": { "type": "string", "description": "250-400 words." },
+          "for_you": { "type": "string" },
+          "may_affect_names": { "type": "array", "items": { "type": "string" } },
+          "sources": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": { "type": "string" },
+                "url": { "type": "string" },
+                "primary": { "type": "boolean" }
+              },
+              "required": ["name", "url", "primary"],
+              "additionalProperties": false
+            }
+          }
+        },
+        "required": ["title", "category", "status", "is_update", "lede", "body", "for_you", "may_affect_names", "sources"],
+        "additionalProperties": false
+      }
+    },
+    "market": {
+      "type": "object",
+      "properties": { "commentary": { "type": "string", "description": "What moved the market, tied to the news." } },
+      "required": ["commentary"],
+      "additionalProperties": false
+    },
+    "rankings": {
+      "type": "object",
+      "properties": { "commentary": { "type": "string", "description": "2-3 sentences on leaderboard moves." } },
+      "required": ["commentary"],
+      "additionalProperties": false
+    },
+    "rumors": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "title": { "type": "string" },
+          "body": { "type": "string" },
+          "sources": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": { "type": "string" },
+                "url": { "type": "string" },
+                "primary": { "type": "boolean" }
+              },
+              "required": ["name", "url", "primary"],
+              "additionalProperties": false
+            }
+          }
+        },
+        "required": ["title", "body", "sources"],
+        "additionalProperties": false
+      }
+    },
+    "big_moves": {
+      "type": "array",
+      "description": "One entry per big move supplied in the input, with the reason.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "entity_id": { "type": "string" },
+          "board": { "type": "string", "enum": ["market", "lmarena", "aa", "hf_trending"] },
+          "change": { "type": "string" },
+          "why": { "type": "string" },
+          "why_type": { "type": "string", "enum": ["fakt", "hipoteza", "brak"] },
+          "sources": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": { "type": "string" },
+                "url": { "type": "string" },
+                "primary": { "type": "boolean" }
+              },
+              "required": ["name", "url", "primary"],
+              "additionalProperties": false
+            }
+          }
+        },
+        "required": ["entity_id", "board", "change", "why", "why_type", "sources"],
+        "additionalProperties": false
+      }
+    },
+    "follow_ups": {
+      "type": "array",
+      "description": "Reminders linking a supplied move to an earlier story. Never a forecast.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "entity_id": { "type": "string" },
+          "move": { "type": "string" },
+          "related_story": { "type": "string" },
+          "story_date": { "type": "string" }
+        },
+        "required": ["entity_id", "move", "related_story", "story_date"],
+        "additionalProperties": false
+      }
+    },
+    "closing": { "type": "string", "description": "1-2 sentences." }
+  },
+  "required": ["greeting", "lead_story", "stories", "market", "rankings", "rumors", "big_moves", "follow_ups", "closing"],
+  "additionalProperties": false
+}

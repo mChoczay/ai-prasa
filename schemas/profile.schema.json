@@ -1,0 +1,15 @@
+{
+  "type": "object",
+  "description": "A short profile card of a company, model or organization.",
+  "properties": {
+    "type": { "type": "string", "enum": ["company", "model", "org"] },
+    "name": { "type": "string" },
+    "owner": { "type": "string", "description": "Who makes or owns it." },
+    "summary": { "type": "string", "description": "2-4 sentences: who, what, why." },
+    "key_products": { "type": "array", "items": { "type": "string" } },
+    "why_it_matters": { "type": "string" },
+    "aliases": { "type": "array", "description": "Other names, including the stock ticker.", "items": { "type": "string" } }
+  },
+  "required": ["type", "name", "owner", "summary", "key_products", "why_it_matters", "aliases"],
+  "additionalProperties": false
+}

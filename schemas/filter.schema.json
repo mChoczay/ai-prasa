@@ -1,0 +1,25 @@
+{
+  "type": "object",
+  "description": "Triage of candidate headlines. One entry per candidate, by its idx.",
+  "properties": {
+    "items": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "idx": { "type": "integer", "description": "Index of the candidate in the input list." },
+          "category": {
+            "type": "string",
+            "enum": ["modele", "gielda", "inwestycje", "rankingi", "narzedzia", "regulacje", "przecieki", "inne"]
+          },
+          "importance": { "type": "integer", "description": "1 = trivia, 3 = worth a mention, 5 = must read for an AI developer today." },
+          "keep": { "type": "boolean", "description": "False for duplicates, spam, ads, off-topic or stale items." }
+        },
+        "required": ["idx", "category", "importance", "keep"],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": ["items"],
+  "additionalProperties": false
+}

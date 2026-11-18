@@ -1,0 +1,24 @@
+{
+  "type": "object",
+  "description": "Choice of today's lead, stories and rumors, by candidate idx.",
+  "properties": {
+    "lead_idx": { "type": "integer", "description": "The single most important candidate." },
+    "story_idx": {
+      "type": "array",
+      "description": "4 to 6 further candidates (fewer on a quiet day), excluding lead_idx.",
+      "items": { "type": "integer" }
+    },
+    "rumor_idx": {
+      "type": "array",
+      "description": "Candidates that are leaks or unconfirmed reports; may be empty.",
+      "items": { "type": "integer" }
+    },
+    "extra_queries": {
+      "type": "array",
+      "description": "At most 2 web search queries to find corroborating sources.",
+      "items": { "type": "string" }
+    }
+  },
+  "required": ["lead_idx", "story_idx", "rumor_idx", "extra_queries"],
+  "additionalProperties": false
+}

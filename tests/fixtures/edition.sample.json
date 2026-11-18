@@ -1,0 +1,98 @@
+{
+  "date": "2026-11-18",
+  "edition": "daily",
+  "generated_at": "2026-11-18T05:52:00+01:00",
+  "quiet_day": false,
+  "greeting": "Dzień dobry. Kiedy pracowałeś, na szczycie rankingów zrobiło się ciasno, a rynek nagrodził producentów pamięci. Najważniejsze dziś: tańszy model, który obniża koszt agentów.",
+  "lead_story": {
+    "title": "Firma X tnie ceny o 40% i wchodzi do top 3",
+    "category": "modele",
+    "status": "potwierdzone",
+    "is_update": false,
+    "lede": "Nowy model jest dostępny przez API od wczoraj wieczorem.",
+    "body": "To przykładowy tekst czołówki. Model ma dłuższe okno kontekstu i lepiej wywołuje narzędzia, a milion tokenów kosztuje wyraźnie mniej niż u poprzednika.",
+    "for_you": "Agent, który dziś kosztuje kilka dolarów dziennie, po migracji może kosztować o jedną trzecią mniej.",
+    "may_affect_names": ["Nvidia", "Model X"],
+    "sources": [
+      { "name": "Blog firmy X", "url": "https://example.com/blog/model-x", "primary": true },
+      { "name": "Serwis rankingowy", "url": "https://example.org/leaderboard", "primary": false }
+    ],
+    "disclaimer": null
+  },
+  "stories": [
+    {
+      "title": "Producent chipów raportuje rekordowy kwartał",
+      "category": "gielda",
+      "status": "potwierdzone",
+      "is_update": false,
+      "lede": "Przychody z centrów danych powyżej oczekiwań.",
+      "body": "Przykładowy tekst o wynikach kwartalnych i popycie na akceleratory.",
+      "for_you": "Ceny GPU w chmurze raczej nie spadną w tym kwartale.",
+      "may_affect_names": ["NVDA"],
+      "sources": [{ "name": "Raport kwartalny", "url": "https://example.com/ir/q3", "primary": true }],
+      "disclaimer": null
+    },
+    {
+      "title": "Laboratorium Y zbiera nową rundę",
+      "category": "inwestycje",
+      "status": "potwierdzone",
+      "is_update": false,
+      "lede": "Wycena wyraźnie wyższa niż pół roku temu.",
+      "body": "Przykładowy tekst o rundzie finansowania i inwestorach.",
+      "for_you": "Więcej mocy obliczeniowej to szybsze kolejne wersje modeli.",
+      "may_affect_names": ["Nowa Firma"],
+      "sources": [{ "name": "Agencja prasowa", "url": "https://example.net/news/round", "primary": false }],
+      "disclaimer": null
+    },
+    {
+      "title": "Frameworki agentowe uzgadniają wspólny standard",
+      "category": "narzedzia",
+      "status": "opinia",
+      "is_update": false,
+      "lede": "Trzy projekty open-source ogłosiły wspólną specyfikację.",
+      "body": "Przykładowy tekst o konsolidacji narzędzi.",
+      "for_you": "Mniej przepisywania integracji przy zmianie frameworka.",
+      "may_affect_names": [],
+      "sources": [{ "name": "Blog projektu", "url": "https://example.dev/spec", "primary": true }],
+      "disclaimer": null
+    },
+    {
+      "title": "Nowe zasady dla modeli ogólnego przeznaczenia",
+      "category": "regulacje",
+      "status": "potwierdzone",
+      "is_update": true,
+      "lede": "Regulator opublikował wytyczne wykonawcze.",
+      "body": "Przykładowy tekst o obowiązkach dostawców modeli.",
+      "for_you": "Jeśli publikujesz model, sprawdź wymagania dokumentacyjne.",
+      "may_affect_names": [],
+      "sources": [{ "name": "Dziennik urzędowy", "url": "https://example.eu/act", "primary": true }],
+      "disclaimer": null
+    }
+  ],
+  "market": { "commentary": "Pamięć HBM znów w centrum uwagi po wynikach dostawców.", "disclaimer": null },
+  "rankings": { "commentary": "Model X awansował o dwie pozycje." },
+  "rumors": [
+    {
+      "title": "Firma Q ma szykować premierę przed świętami",
+      "body": "Dwa niezależne źródła mówią o nowej wersji modelu.",
+      "sources": [
+        { "name": "Serwis technologiczny", "url": "https://example.com/rumor", "primary": false },
+        { "name": "Znany leaker", "url": "https://example.social/post/1", "primary": false }
+      ]
+    }
+  ],
+  "big_moves": [
+    {
+      "entity_id": "nvda",
+      "board": "market",
+      "change": "+4.1%",
+      "why": "Akcje wzrosły po publikacji wyników kwartalnych.",
+      "why_type": "fakt",
+      "sources": [{ "name": "Raport kwartalny", "url": "https://example.com/ir/q3", "primary": true }]
+    }
+  ],
+  "follow_ups": [],
+  "closing": "W tym tygodniu warto zerkać na kolejne premiery przed świętami.",
+  "weekly": null,
+  "monthly": null
+}

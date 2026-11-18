@@ -1,0 +1,68 @@
+// Morning and error e-mails. Dependency-free: inlined into n8n Code nodes.
+
+function escapeHtml(value) {
+  if (value == null) return '';
+  return String(value)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+const _STATUS_STYLE = Object.freeze({
+  potwierdzone: 'background:#e4efd7;color:#27500a;',
+  plotka: 'background:#faeeda;color:#633806;',
+  opinia: 'background:#ebe9e2;color:#444441;',
+});
+
+function _shell(inner) {
+  return `<!doctype html><html lang="pl"><body style="margin:0;padding:0;background:#faf8f3;">
+<div style="max-width:600px;margin:0 auto;padding:24px 16px;font-family:Georgia,'Times New Roman',serif;color:#1f1d1a;font-size:16px;line-height:1.6;">
+${inner}
+</div></body></html>`;
+}
+
+function renderEmailHtml(edition, siteUrl) {
+  const stories = [edition.lead_story, ...(edition.stories || [])].filter(Boolean);
+  const items = stories
+    .map(
+      (s) =>
+        `<li style="margin:0 0 8px;"><span style="font:11px/1.6 Arial,sans-serif;padding:1px 8px;border-radius:6px;${_STATUS_STYLE[s.status] || ''}">${escapeHtml(s.status)}</span> ${escapeHtml(s.title)}</li>`,
+    )
+    .join('');
+  const href = `${siteUrl}#/${edition.date}`;
+  const html = _shell(`<h1 style="text-align:center;font-size:30px;margin:0 0 4px;">Poranna prasa AI</h1>
+<p style="text-align:center;font:13px Arial,sans-serif;color:#5b5750;margin:0 0 20px;">${escapeHtml(edition.date)}${edition.minutes ? ` · ok. ${escapeHtml(edition.minutes)} min czytania` : ''}</p>
+<p style="font-style:italic;">${escapeHtml(edition.greeting)}</p>
+<ul style="padding-left:18px;">${items}</ul>
+<p style="text-align:center;margin:28px 0;"><a href="${escapeHtml(href)}" style="display:inline-block;background:#2f4a7a;color:#ffffff;text-decoration:none;padding:10px 22px;border-radius:8px;font:15px Arial,sans-serif;">Czytaj wydanie</a></p>`);
+  return { subject: `Poranna prasa AI: ${edition.lead_story ? edition.lead_story.title : edition.date}`, html };
+}
+
+function renderErrorEmail({ step, message, kind }) {
+  let subject;
+  let body;
+  if (kind === 'credits') {
+    subject = 'Poranna prasa AI: wstrzymane – brak kredytów API';
+    body = `<p>Pipeline zatrzymał się, bo na koncie API Anthropic skończyły się kredyty. Nie będzie ponawiał prób.</p>
+<ol><li>Doładuj kredyty w Console (platform.claude.com → Billing).</li>
+<li>W n8n, w tabeli <code>pipeline_state</code>, ustaw <code>paused</code> na <code>false</code>.</li></ol>`;
+  } else if (kind === 'auth') {
+    subject = 'Poranna prasa AI: wstrzymane – klucz API nieważny';
+    body = `<p>Pipeline zatrzymał się, bo klucz API został odrzucony (prawdopodobnie wygasł). Nie będzie ponawiał prób.</p>
+<ol><li>W Console utwórz nowy klucz w workspace używanym przez n8n.</li>
+<li>Wklej go do credentiala <code>Anthropic account 2</code> w n8n.</li>
+<li>W tabeli <code>pipeline_state</code> ustaw <code>paused</code> na <code>false</code>.</li></ol>`;
+  } else if (kind === 'budget') {
+    subject = 'Poranna prasa AI: wstrzymane – miesięczny budżet wyczerpany';
+    body = `<p>Wydatki na Claude'a w tym miesiącu doszły do limitu z <code>pipeline_state.monthly_budget_usd</code>. Wydania wrócą 1. dnia następnego miesiąca albo po podniesieniu limitu i ustawieniu <code>paused</code> na <code>false</code>.</p>`;
+  } else {
+    subject = `Poranna prasa AI: błąd w kroku ${step}`;
+    body = `<p>Dzisiejsze wydanie nie powstało przez błąd w kroku <strong>${escapeHtml(step)}</strong>.</p>`;
+  }
+  const details = message ? `<p style="font:13px monospace;color:#5b5750;">${escapeHtml(message)}</p>` : '';
+  return { subject, html: _shell(`<h2 style="margin-top:0;">${escapeHtml(subject)}</h2>${body}${details}`) };
+}
+
+export { escapeHtml, renderEmailHtml, renderErrorEmail };

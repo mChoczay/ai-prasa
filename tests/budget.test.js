@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { costUsd, checkGate, classifyApiError, assessResponse, extractJsonText } from '../n8n/lib/budget.js';
+import { costUsd, checkGate, classifyApiError, assessResponse, extractJsonText, pauseErrorOf } from '../n8n/lib/budget.js';
 
 const baseState = {
   paused: false,
@@ -183,4 +183,11 @@ test('extractJsonText joins text blocks only', () => {
     ],
   });
   assert.equal(t, '{"a":1}');
+});
+
+test('pauseErrorOf finds a credits or auth stop among sub-workflow results that continued on error', () => {
+  assert.equal(pauseErrorOf([{ ok: true }, { error: 'TRUNCATED: profile' }]), null);
+  assert.equal(pauseErrorOf([{ ok: true }, { error: { message: 'CREDITS: profile (claude-haiku-5-5) HTTP 400' } }]), 'CREDITS: profile (claude-haiku-5-5) HTTP 400');
+  assert.equal(pauseErrorOf([{ error: 'AUTH: period HTTP 401' }]), 'AUTH: period HTTP 401');
+  assert.equal(pauseErrorOf(null), null);
 });

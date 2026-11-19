@@ -125,7 +125,7 @@ const handToPeriod = node({
     name: 'Hand to period',
     parameters: {
       source: 'database',
-      workflowId: { __rl: true, mode: 'id', value: 'PERIOD_WORKFLOW_ID', cachedResultName: 'PPAI · period' },
+      workflowId: { __rl: true, mode: 'id', value: '165CDc0Z5qoioo0k', cachedResultName: 'PPAI · period' },
       mode: 'once',
       options: { waitForSubWorkflow: false },
     },
@@ -140,7 +140,7 @@ const handToProfiles = node({
     name: 'Hand to profiles',
     parameters: {
       source: 'database',
-      workflowId: { __rl: true, mode: 'id', value: 'PROFILES_WORKFLOW_ID', cachedResultName: 'PPAI · profiles' },
+      workflowId: { __rl: true, mode: 'id', value: 'JlzjHDGeEemYMhQr', cachedResultName: 'PPAI · profiles' },
       mode: 'once',
       options: { waitForSubWorkflow: false },
     },

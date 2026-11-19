@@ -163,7 +163,9 @@ const rows = node({
     parameters: {
       mode: 'runOnceForAllItems',
       jsCode:
-        INLINE('n8n/lib/news.js', 'n8n/lib/dates.js', 'n8n/lib/edition.js', 'n8n/lib/profiles.js') +
+        INLINE('n8n/lib/budget.js', 'n8n/lib/news.js', 'n8n/lib/dates.js', 'n8n/lib/edition.js', 'n8n/lib/profiles.js') +
+        "const stop = pauseErrorOf($input.all().map((i) => i.json));\n" +
+        "if (stop) throw new Error(stop);\n" +
         "const date = $('Profiles request').first().json.date;\n" +
         "const asked = $('Profile prompts').all().map((i) => i.json);\n" +
         "const out = [];\n" +
@@ -265,7 +267,7 @@ const handToPublish = node({
     name: 'Hand to publish',
     parameters: {
       source: 'database',
-      workflowId: { __rl: true, mode: 'id', value: 'PUBLISH_WORKFLOW_ID', cachedResultName: 'PPAI · publish' },
+      workflowId: { __rl: true, mode: 'id', value: 'CcAkdIqGWlJrqHGQ', cachedResultName: 'PPAI · publish' },
       mode: 'once',
       options: { waitForSubWorkflow: false },
     },

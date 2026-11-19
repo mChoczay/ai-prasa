@@ -1,6 +1,20 @@
 {
  "editions": [
   {
+   "date": "2026-11-19",
+   "kind": "daily",
+   "lead_title": "Anthropic debiutuje na Nasdaq: ticker ANT, otwarcie po 111,50 dolara",
+   "minutes": 19,
+   "categories": [
+    "gielda",
+    "modele",
+    "narzedzia",
+    "regulacje",
+    "inne",
+    "inwestycje"
+   ]
+  },
+  {
    "date": "2026-11-18",
    "kind": "daily",
    "lead_title": "Firma X tnie ceny o 40% i wchodzi do top 3",

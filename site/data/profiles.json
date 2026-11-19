@@ -1,48 +1,197 @@
 {
-  "profiles": [
-    {
-      "id": "nvda",
-      "type": "company",
-      "name": "NVIDIA",
-      "aliases": "Nvidia,NVDA",
-      "ticker": "NVDA",
-      "summary": "Przykładowa wizytówka: amerykański producent układów GPU, które napędzają większość treningu i uruchamiania modeli AI.",
-      "owner": "spółka giełdowa (Nasdaq)",
-      "key_products": [
-        "GPU do centrów danych",
-        "CUDA"
-      ],
-      "why_it_matters": "Dostarcza większość akceleratorów AI na rynku.",
-      "updated_at": "2026-11-18",
-      "last_spotlight_at": null
-    },
-    {
-      "id": "model-x",
-      "type": "model",
-      "name": "Model X",
-      "aliases": "",
-      "ticker": "",
-      "summary": "Przykładowa wizytówka modelu: tańszy model językowy firmy X nastawiony na agentów i wywoływanie narzędzi.",
-      "owner": "Firma X",
-      "key_products": [],
-      "why_it_matters": "Obniża koszt uruchamiania agentów.",
-      "updated_at": "2026-11-18",
-      "last_spotlight_at": null
-    },
-    {
-      "id": "crwv",
-      "type": "company",
-      "name": "CoreWeave",
-      "aliases": "CRWV",
-      "ticker": "CRWV",
-      "summary": "Przykładowa wizytówka: dostawca chmury GPU wynajmujący moc obliczeniową laboratoriom AI.",
-      "owner": "spółka giełdowa (Nasdaq)",
-      "key_products": [
-        "chmura GPU"
-      ],
-      "why_it_matters": "Barometr popytu na moc obliczeniową.",
-      "updated_at": "2026-11-18",
-      "last_spotlight_at": null
-    }
-  ]
+ "profiles": [
+  {
+   "id": "aapl",
+   "type": "company",
+   "name": "Apple",
+   "aliases": "Apple Inc.,Apple Computer,AAPL",
+   "ticker": "AAPL",
+   "summary": "Apple Inc. to amerykańska korporacja technologiczna z siedzibą w Cupertino w Kalifornii, działająca w Dolinie Krzemowej, znana z elektroniki użytkowej, oprogramowania i usług online. Firma powstała w 1976 roku, a od 2007 roku nosi obecną nazwę, po poszerzeniu działalności z komputerów na elektronikę użytkową. Apple jest jedną z firm należących do Big Tech, a od 2011 roku w większości przypadków jest największą firmą świata pod względem kapitalizacji rynkowej.",
+   "owner": "spółka giełdowa (NASDAQ: AAPL)",
+   "key_products": [
+    "iPhone",
+    "iPad",
+    "Mac",
+    "Apple Watch",
+    "AirPods",
+    "iOS",
+    "iPadOS",
+    "macOS",
+    "Apple Pay",
+    "iCloud",
+    "Apple Music",
+    "Apple TV"
+   ],
+   "why_it_matters": "Apple jest największym dostawcą telefonów komórkowych i tabletów na świecie, a jego sprzęt i systemy operacyjne wyznaczają standardy, w których rozwijane są również funkcje AI.",
+   "updated_at": "2026-11-19",
+   "last_spotlight_at": null
+  },
+  {
+   "id": "amd",
+   "type": "company",
+   "name": "AMD",
+   "aliases": "Advanced Micro Devices,AMD,NASDAQ: AMD",
+   "ticker": "AMD",
+   "summary": "Advanced Micro Devices, Inc. to amerykańskie wielonarodowe przedsiębiorstwo półprzewodnikowe z siedzibą w Santa Clara w Kalifornii. Projektuje procesory CPU, układy graficzne GPU, układy FPGA i systemy na chipie SoC, obsługując rynki PC, gier, centrów danych i systemów wbudowanych. Firma jest głównym konkurentem Intela i odegrała istotną rolę w rozwoju ekosystemu x86.",
+   "owner": "spółka giełdowa (NASDAQ)",
+   "key_products": [
+    "procesory Ryzen",
+    "procesory Athlon i Opteron",
+    "układy graficzne GPU",
+    "układy FPGA (po przejęciu Xilinx w 2022)",
+    "chipsety do płyt głównych"
+   ],
+   "why_it_matters": "AMD jest jednym z nielicznych dostawców zaawansowanych procesorów i akceleratorów GPU, a jego układy trafiają do serwerów, centrów danych i komputerów, co czyni je ważnym graczem w wyścigu o moc obliczeniową dla AI.",
+   "updated_at": "2026-11-19",
+   "last_spotlight_at": null
+  },
+  {
+   "id": "amzn",
+   "type": "company",
+   "name": "Amazon",
+   "aliases": "AMZN,Amazon.com,The everything store",
+   "ticker": "AMZN",
+   "summary": "Amazon to amerykańska wielonarodowa firma technologiczna, działająca w obszarze e-commerce, chmury obliczeniowej, rozrywki i streamingu cyfrowego. Założył ją Jeff Bezos w 1994 roku w Bellevue w stanie Waszyngton, początkowo jako sklep internetowy z książkami, który z czasem rozszerzył ofertę o niemal wszystkie kategorie produktów. Firma jest określana jako jedna z najbardziej wpływowych sił gospodarczych i kulturowych na świecie.",
+   "owner": "spółka giełdowa (NASDAQ)",
+   "key_products": [
+    "Amazon Web Services",
+    "Zoox",
+    "Amazon Leo",
+    "Amazon Lab126",
+    "Ring",
+    "Twitch",
+    "IMDb",
+    "Amazon MGM",
+    "Whole Foods Market"
+   ],
+   "why_it_matters": "Dzięki Amazon Web Services firma jest jednym z kluczowych dostawców infrastruktury chmurowej, na której powstaje i działa wiele systemów AI.",
+   "updated_at": "2026-11-19",
+   "last_spotlight_at": null
+  },
+  {
+   "id": "avgo",
+   "type": "company",
+   "name": "Broadcom",
+   "aliases": "AVGO,Broadcom Inc.,Broadcom Limited,Avago Technologies",
+   "ticker": "AVGO",
+   "summary": "Broadcom Inc. to amerykańska firma wielonarodowa, projektująca, rozwijająca i produkująca półprzewodniki oraz oprogramowanie infrastrukturalne. Jej produkty obsługują centra danych, sieci, broadband, łączność bezprzewodową, pamięci masowe i rynek przemysłowy. W 2025 roku około 58% przychodów pochodziło z półprzewodników, a 42% z oprogramowania infrastrukturalnego i usług. Siedziba firmy znajduje się w Palo Alto w Kalifornii, a prezesem i CEO jest Tan Hock Eng.",
+   "owner": "spółka giełdowa (NASDAQ)",
+   "key_products": [
+    "produkty półprzewodnikowe dla centrów danych i sieci",
+    "oprogramowanie infrastrukturalne",
+    "VMware (przejęte w 2023 roku)"
+   ],
+   "why_it_matters": "Broadcom jest jednym z największych dostawców półprzewodników na świecie, a w kwietniu 2026 roku jego wartość rynkowa przekroczyła 2 bln dolarów, co czyni go istotnym graczem w infrastrukturze, na której działa rozwój i wdrażanie AI.",
+   "updated_at": "2026-11-19",
+   "last_spotlight_at": null
+  },
+  {
+   "id": "googl",
+   "type": "company",
+   "name": "Alphabet",
+   "aliases": "Alphabet Inc.,GOOGL,GOOG",
+   "ticker": "GOOGL",
+   "summary": "Alphabet Inc. to amerykański wielonarodowy konglomerat technologiczny, będący spółką holdingową, do której od 2015 roku należy Google oraz kilka dawnych spółek zależnych Google. Firma jest jedną z największych spółek giełdowych na świecie i jest zaliczana do grupy Big Tech. Jej znaczenie w wyścigu AI wynika przede wszystkim z tego, że Google jest jej główną częścią działalności.",
+   "owner": "Spółka giełdowa notowana na Nasdaq (GOOGL, GOOG), siedziba w Mountain View, Kalifornia",
+   "key_products": [
+    "Google"
+   ],
+   "why_it_matters": "Jako holding obejmujący Google, Alphabet kontroluje jednego z największych graczy w dziedzinie AI i wyszukiwania internetowego, co czyni go kluczowym uczestnikiem wyścigu technologicznego.",
+   "updated_at": "2026-11-19",
+   "last_spotlight_at": null
+  },
+  {
+   "id": "meta",
+   "type": "company",
+   "name": "Meta",
+   "aliases": "Meta Platforms, Inc.,Facebook, Inc.,TheFacebook, Inc.,META",
+   "ticker": "META",
+   "summary": "Meta Platforms, Inc. z siedzibą w Menlo Park w Kalifornii to amerykański koncern technologiczny zaliczany do Big Tech. Prowadzi platformy społecznościowe i usługi komunikacyjne, m.in. Facebook, Instagram, WhatsApp, Messenger i Threads, oraz sieć reklamową dla własnych serwisów i podmiotów trzecich; reklamy stanowiły w 2023 roku 97,8% jego przychodów. Firma wyróżnia się bardzo wysokimi wydatkami na badania i rozwój, które w 2022 roku wyniosły 35,3 mld USD.",
+   "owner": "spółka giełdowa (Nasdaq: META)",
+   "key_products": [
+    "Facebook",
+    "Instagram",
+    "WhatsApp",
+    "Messenger",
+    "Threads"
+   ],
+   "why_it_matters": "Dzięki ogromnym nakładom na badania i rozwój oraz skali swoich platform Meta jest jednym z najważniejszych graczy w wyścigu o rozwój AI.",
+   "updated_at": "2026-11-19",
+   "last_spotlight_at": null
+  },
+  {
+   "id": "msft",
+   "type": "company",
+   "name": "Microsoft",
+   "aliases": "Microsoft Corporation,MSFT",
+   "ticker": "MSFT",
+   "summary": "Microsoft Corporation to amerykańskie wielonarodowe przedsiębiorstwo technologiczne z siedzibą w Redmond w stanie Waszyngton. Zyskało wpływ dzięki systemom Windows i oprogramowaniu dla komputerów osobistych, a następnie rozwinęło działalność w usługach internetowych, chmurze obliczeniowej, sztucznej inteligencji i grach wideo. Jest największą firmą software'ową pod względem przychodów i jedną z najbardziej wartościowych spółek publicznych na świecie.",
+   "owner": "Spółka giełdowa (NASDAQ)",
+   "key_products": [
+    "Windows",
+    "Microsoft Office i Microsoft 365",
+    "Azure",
+    "Xbox",
+    "Surface",
+    "Visual Studio",
+    "Microsoft SQL Server"
+   ],
+   "why_it_matters": "Microsoft jest jednym z kluczowych graczy w wyścigu AI dzięki dominującej pozycji w chmurze Azure oraz pakietom biurowym, do których wprowadza funkcje sztucznej inteligencji.",
+   "updated_at": "2026-11-19",
+   "last_spotlight_at": null
+  },
+  {
+   "id": "nvda",
+   "type": "company",
+   "name": "NVIDIA",
+   "aliases": "Nvidia Corporation,NVDA",
+   "ticker": "NVDA",
+   "summary": "NVIDIA to amerykańska wielonarodowa firma technologiczna z siedzibą w Santa Clara w Kalifornii, założona w 1993 roku przez Jensena Huanga, Chrisa Malachowsky'ego i Curtisa Priema. Firma projektuje procesory graficzne (GPU), systemy na chipie (SoC) oraz interfejsy programistyczne (API) dla gier, nauki o danych, obliczeń wysokiej wydajności, sprzętu do AI oraz zastosowań mobilnych i motoryzacyjnych. Zaczynała od kart do gier, a dziś jest jedną z największych firm świata pod względem kapitalizacji.",
+   "owner": "spółka giełdowa (NASDAQ)",
+   "key_products": [
+    "GeForce",
+    "procesory GPU dla centrów danych AI",
+    "profesjonalne GPU do obliczeń naukowych i przemysłowych",
+    "systemy na chipie (SoC)"
+   ],
+   "why_it_matters": "Sprzęt NVIDIA, zwłaszcza akceleratory do centrów danych, jest kluczowy dla rozwoju i trenowania modeli AI, a jej rosnąca kapitalizacja, która w 2025 roku przekroczyła 4 i 5 bilionów dolarów, odzwierciedla ogromny popyt na tę infrastrukturę.",
+   "updated_at": "2026-11-19",
+   "last_spotlight_at": null
+  },
+  {
+   "id": "orcl",
+   "type": "company",
+   "name": "Oracle",
+   "aliases": "Oracle Corporation,ORCL",
+   "ticker": "ORCL",
+   "summary": "Oracle Corporation to amerykańska firma technologiczna z siedzibą w Austin w Teksasie, założona w 1977 roku w Santa Clara przez Boba Minera, Eda Oatesa i Larry'ego Ellisona. Sprzedaje oprogramowanie bazodanowe, zwłaszcza Oracle Database, oraz aplikacje dla przedsiębiorstw, infrastrukturę chmurową i sprzęt. Jest jedną z 50 największych firm świata pod względem kapitalizacji rynkowej.",
+   "owner": "spółka giełdowa (NYSE, ORCL)",
+   "key_products": [
+    "Oracle Database",
+    "Oracle Cloud Infrastructure",
+    "ERP",
+    "HCM",
+    "CX",
+    "SCM"
+   ],
+   "why_it_matters": "Oracle jest kluczowym dostawcą infrastruktury danych i chmury dla dużych firm, a jej usługi chmurowe rywalizują w wyścigu AI z największymi dostawcami chmury.",
+   "updated_at": "2026-11-19",
+   "last_spotlight_at": null
+  },
+  {
+   "id": "tsm",
+   "type": "company",
+   "name": "TSMC",
+   "aliases": "Taiwan Semiconductor Manufacturing Company,Taiwan Semiconductor,TSM",
+   "ticker": "TSM",
+   "summary": "Taiwan Semiconductor Manufacturing Company to tajwańska firma działająca jako kontraktowy producent i projektant półprzewodników, z siedzibą w Hsinchu Science Park. Jest największym na świecie dedykowanym odlewnią chipów (foundry) i obsługuje około 70% globalnego rynku foundry. Głównymi klientami są Nvidia, Apple, Broadcom i Qualcomm, a jej produkcja jest kluczowa dla zaawansowanych układów potrzebnych w AI.",
+   "owner": "spółka giełdowa notowana na Tajwańskiej Giełdzie Papierów Wartościowych (TWSE) oraz na NYSE",
+   "key_products": [
+    "zaawansowane chipy na zlecenie (usługi foundry)"
+   ],
+   "why_it_matters": "TSMC produkuje większość najbardziej zaawansowanych chipów AI, więc jego zdolności produkcyjne i ewentualne zakłócenia w dostawach wpływają na tempo rozwoju całej branży.",
+   "updated_at": "2026-11-19",
+   "last_spotlight_at": null
+  }
+ ]
 }

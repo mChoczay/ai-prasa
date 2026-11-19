@@ -5,6 +5,7 @@ import { entityId } from './news.js';
 import { collectNewEntities, resolvePending, pickSpotlight } from './edition.js';
 
 const WIKI_EXTRACT_CHARS = 2500;
+const COMMONS_PREFIX = 'https://upload.wikimedia.org/wikipedia/commons/';
 
 function _stories(edition) {
   return [edition && edition.lead_story, ...((edition && edition.stories) || [])].filter(Boolean);
@@ -48,7 +49,7 @@ function profileTargets({ edition, newEntityNames, watchlist, leaderboardTop, pr
 
 function wikiSearchUrl(query) {
   return (
-    'https://en.wikipedia.org/w/api.php?action=query&format=json&generator=search&gsrlimit=1&prop=extracts%7Cinfo&exintro=1&explaintext=1&inprop=url&gsrsearch=' +
+    'https://en.wikipedia.org/w/api.php?action=query&format=json&generator=search&gsrlimit=1&prop=extracts%7Cinfo%7Cpageimages&piprop=thumbnail%7Cname&pithumbsize=800&exintro=1&explaintext=1&inprop=url&gsrsearch=' +
     encodeURIComponent(query)
   );
 }
@@ -59,7 +60,39 @@ function parseWikiSearch(body) {
   if (!pages || typeof pages !== 'object') return null;
   const page = Object.values(pages)[0];
   if (!page || typeof page.extract !== 'string' || !page.extract.trim()) return null;
-  return { title: page.title, extract: page.extract.trim().slice(0, WIKI_EXTRACT_CHARS), url: page.fullurl || null };
+  const thumb = page.thumbnail && page.thumbnail.source;
+  const image = typeof thumb === 'string' && thumb.startsWith(COMMONS_PREFIX) && page.pageimage ? { thumb, file: page.pageimage } : null;
+  return { title: page.title, extract: page.extract.trim().slice(0, WIKI_EXTRACT_CHARS), url: page.fullurl || null, image };
+}
+
+// Author and licence of a Commons file, for the photo credit.
+function commonsCreditUrl(file) {
+  return (
+    'https://commons.wikimedia.org/w/api.php?action=query&format=json&prop=imageinfo&iiprop=extmetadata&iiextmetadatafilter=Artist%7CLicenseShortName&titles=File:' +
+    encodeURIComponent(String(file || ''))
+  );
+}
+
+function _plainText(html) {
+  return String(html || '')
+    .replace(/<[^>]+>/g, ' ')
+    .replace(/&amp;/g, '&')
+    .replace(/&nbsp;/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+function parseCommonsCredit(body) {
+  const pages = body && body.query && body.query.pages;
+  const page = pages && typeof pages === 'object' ? Object.values(pages)[0] : null;
+  const meta = page && Array.isArray(page.imageinfo) && page.imageinfo[0] && page.imageinfo[0].extmetadata;
+  if (!meta || !page.title) return null;
+  const artist = _plainText(meta.Artist && meta.Artist.value) || 'autor nieznany';
+  const license = _plainText(meta.LicenseShortName && meta.LicenseShortName.value);
+  return {
+    credit: `${artist}${license ? ` / ${license}` : ''}, Wikimedia Commons`,
+    page: 'https://commons.wikimedia.org/wiki/' + String(page.title).replace(/ /g, '_'),
+  };
 }
 
 function profilePrompt(target, wiki) {
@@ -79,7 +112,8 @@ function hasReference(target, wiki) {
   return Boolean(wiki || (target.mentions || []).length || (target.boards || []).length);
 }
 
-function profileRow(target, card, wiki, date) {
+function profileRow(target, card, wiki, date, credit = null) {
+  const image = wiki && wiki.image;
   const aliases = [...new Set([...(card.aliases || []), ...(target.ticker ? [target.ticker] : [])])];
   return {
     entity_id: target.id || entityId(card.name),
@@ -93,6 +127,9 @@ function profileRow(target, card, wiki, date) {
     why_it_matters: card.why_it_matters,
     updated_at: date,
     source_urls: wiki && wiki.url ? wiki.url : '',
+    image_url: image ? image.thumb : '',
+    image_credit: image ? (credit ? credit.credit : 'Wikimedia Commons') : '',
+    image_page: image && credit ? credit.page : '',
   };
 }
 
@@ -112,6 +149,7 @@ function profilesJson(rows) {
       why_it_matters: r.why_it_matters || '',
       updated_at: r.updated_at ? String(r.updated_at).slice(0, 10) : '',
       last_spotlight_at: r.last_spotlight_at ? String(r.last_spotlight_at).slice(0, 10) : null,
+      image: String(r.image_url || '').startsWith(COMMONS_PREFIX) ? { url: r.image_url, credit: r.image_credit || 'Wikimedia Commons', link: r.image_page || '' } : null,
     }))
     .sort((a, b) => (a.id < b.id ? -1 : a.id > b.id ? 1 : 0));
   return { profiles };
@@ -124,6 +162,11 @@ function finishEdition(edition, rows, today) {
   const todays = [];
   for (const s of _stories(done)) for (const id of s.may_affect || []) if (!todays.includes(id)) todays.push(id);
   for (const m of done.big_moves || []) if (!todays.includes(m.entity_id)) todays.push(m.entity_id);
+  const byId = new Map(profiles.map((p) => [p.id, p]));
+  for (const s of _stories(done)) {
+    const withImage = (s.may_affect || []).map((id) => byId.get(id)).find((p) => p && p.image);
+    s.image_fallback = withImage ? withImage.image : null;
+  }
   const spotlight = pickSpotlight({ profiles, todaysEntityIds: todays, today });
   done.spotlight = spotlight.company_id || spotlight.model_id ? spotlight : null;
   return { edition: done, spotlightIds: [spotlight.company_id, spotlight.model_id].filter(Boolean), profiles: { profiles } };
@@ -144,4 +187,4 @@ function historyRows(edition) {
   return { topics, tags };
 }
 
-export { profileTargets, wikiSearchUrl, parseWikiSearch, profilePrompt, hasReference, profileRow, profilesJson, finishEdition, historyRows };
+export { profileTargets, wikiSearchUrl, parseWikiSearch, commonsCreditUrl, parseCommonsCredit, profilePrompt, hasReference, profileRow, profilesJson, finishEdition, historyRows };

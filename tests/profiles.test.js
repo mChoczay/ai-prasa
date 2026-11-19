@@ -10,6 +10,8 @@ import {
   profilesJson,
   finishEdition,
   historyRows,
+  commonsCreditUrl,
+  parseCommonsCredit,
 } from '../n8n/lib/profiles.js';
 
 const edition = {
@@ -47,7 +49,7 @@ test('profileTargets skips entities that already have a profile under entity_id'
 test('wikiSearchUrl encodes the query and parseWikiSearch reads the first page', () => {
   assert.match(wikiSearchUrl('Apple company AAPL'), /gsrsearch=Apple%20company%20AAPL$/);
   const wiki = parseWikiSearch({ query: { pages: { 856: { title: 'Apple Inc.', extract: ' Apple Inc. is a company. ', fullurl: 'https://en.wikipedia.org/wiki/Apple_Inc.' } } } });
-  assert.deepEqual(wiki, { title: 'Apple Inc.', extract: 'Apple Inc. is a company.', url: 'https://en.wikipedia.org/wiki/Apple_Inc.' });
+  assert.deepEqual(wiki, { title: 'Apple Inc.', extract: 'Apple Inc. is a company.', url: 'https://en.wikipedia.org/wiki/Apple_Inc.', image: null });
   assert.equal(parseWikiSearch({ batchcomplete: '' }), null);
   assert.equal(parseWikiSearch(null), null);
 });
@@ -102,4 +104,57 @@ test('historyRows gives one topic per story and one tag per affected entity', ()
     { date: '2026-11-19', story_title: 'Lead', entity_id: 'aapl' },
     { date: '2026-11-19', story_title: 'Lead', entity_id: 'nowa-firma' },
   ]);
+});
+
+const COMMONS = 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/ab/Apple_Park.jpg/800px-Apple_Park.jpg';
+
+test('wiki search asks for the page image and keeps it only from Commons', () => {
+  assert.match(wikiSearchUrl('Apple'), /prop=extracts%7Cinfo%7Cpageimages&piprop=thumbnail%7Cname&pithumbsize=800/);
+  const page = (source) => ({ query: { pages: { 1: { title: 'Apple Inc.', extract: 'Apple is a company.', fullurl: 'https://en.wikipedia.org/wiki/Apple_Inc.', pageimage: 'Apple_Park.jpg', thumbnail: { source } } } } });
+  assert.deepEqual(parseWikiSearch(page(COMMONS)).image, { thumb: COMMONS, file: 'Apple_Park.jpg' });
+  assert.equal(parseWikiSearch(page('https://upload.wikimedia.org/wikipedia/en/a/ab/Apple_logo.svg')).image, null);
+  assert.equal(parseWikiSearch({ query: { pages: { 1: { title: 'X', extract: 'x' } } } }).image, null);
+});
+
+test('commonsCreditUrl and parseCommonsCredit give a plain-text author and licence credit', () => {
+  assert.equal(
+    commonsCreditUrl('Apple Park.jpg'),
+    'https://commons.wikimedia.org/w/api.php?action=query&format=json&prop=imageinfo&iiprop=extmetadata&iiextmetadatafilter=Artist%7CLicenseShortName&titles=File:Apple%20Park.jpg',
+  );
+  const body = (artist, license) => ({ query: { pages: { '-1': { title: 'File:Apple Park.jpg', imageinfo: [{ extmetadata: { Artist: { value: artist }, LicenseShortName: { value: license } } }] } } } });
+  assert.deepEqual(parseCommonsCredit(body('<a href="//commons.wikimedia.org/wiki/User:Jan">Jan <b>K</b></a>', 'CC BY-SA 4.0')), {
+    credit: 'Jan K / CC BY-SA 4.0, Wikimedia Commons',
+    page: 'https://commons.wikimedia.org/wiki/File:Apple_Park.jpg',
+  });
+  assert.equal(parseCommonsCredit(body('', 'CC0')).credit, 'autor nieznany / CC0, Wikimedia Commons');
+  assert.equal(parseCommonsCredit({ batchcomplete: '' }), null);
+});
+
+test('profile rows and the site file carry the Commons image with its credit', () => {
+  const wiki = { title: 'Apple Inc.', extract: 'x', url: 'https://en.wikipedia.org/wiki/Apple_Inc.', image: { thumb: COMMONS, file: 'Apple_Park.jpg' } };
+  const card = { type: 'company', name: 'Apple', owner: 'o', summary: 'S.', key_products: [], why_it_matters: 'W.', aliases: [] };
+  const credit = { credit: 'Jan K / CC BY-SA 4.0, Wikimedia Commons', page: 'https://commons.wikimedia.org/wiki/File:Apple_Park.jpg' };
+  const row = profileRow({ id: 'aapl', name: 'Apple', type: 'company', ticker: 'AAPL' }, card, wiki, '2026-11-20', credit);
+  assert.deepEqual([row.image_url, row.image_credit, row.image_page], [COMMONS, credit.credit, credit.page]);
+  const bare = profileRow({ id: 'x', name: 'X', type: 'org' }, card, null, '2026-11-20', null);
+  assert.deepEqual([bare.image_url, bare.image_credit, bare.image_page], ['', '', '']);
+  const site = profilesJson([row, bare]).profiles;
+  assert.deepEqual(site.find((p) => p.id === 'aapl').image, { url: COMMONS, credit: credit.credit, link: credit.page });
+  assert.equal(site.find((p) => p.id === 'x').image, null);
+});
+
+test('finishEdition gives stories without an article image the image of their first profiled entity', () => {
+  const rows = [
+    { entity_id: 'aapl', type: 'company', name: 'Apple', aliases: 'AAPL', image_url: COMMONS, image_credit: 'c', image_page: 'p' },
+    { entity_id: 'nowa-firma', type: 'company', name: 'Nowa Firma', aliases: '' },
+  ];
+  const e = {
+    date: '2026-11-20',
+    lead_story: { title: 'L', may_affect: ['nowa-firma', 'aapl'], may_affect_pending: [], image: null },
+    stories: [{ title: 'S', may_affect: [], may_affect_pending: [], image: { url: 'https://img.example/s.jpg' } }],
+    big_moves: [],
+  };
+  const done = finishEdition(e, rows, '2026-11-20').edition;
+  assert.deepEqual(done.lead_story.image_fallback, { url: COMMONS, credit: 'c', link: 'p' });
+  assert.equal(done.stories[0].image_fallback, null);
 });

@@ -17,7 +17,7 @@ test('plan, prompts and rows turn targets into table rows and skip items without
   assert.deepEqual(planned.map((t) => t.id), ['aapl', 'nowa-firma']);
   assert.match(planned[0].url, /gsrsearch=Apple%20company%20AAPL/);
 
-  const wikiBody = { query: { pages: { 1: { title: 'Apple Inc.', extract: 'Apple Inc. is a company.', fullurl: 'https://en.wikipedia.org/wiki/Apple_Inc.' } } } };
+  const wikiBody = { query: { pages: { 1: { title: 'Apple Inc.', extract: 'Apple Inc. is a company.', fullurl: 'https://en.wikipedia.org/wiki/Apple_Inc.', pageimage: 'Apple Park.jpg', thumbnail: { source: 'https://upload.wikimedia.org/wikipedia/commons/a/ab/Apple_Park.jpg' } } } } };
   const prompts = runCodeNode(codeNodeSource(WF, 'Profile prompts'), {
     nodes: { 'Plan profiles': planned },
     input: [{ statusCode: 200, body: wikiBody }, { statusCode: 200, body: { batchcomplete: '' } }],
@@ -29,17 +29,19 @@ test('plan, prompts and rows turn targets into table rows and skip items without
 
   const card = { type: 'company', name: 'Apple Inc.', owner: 'o', summary: 'S.', key_products: ['iPhone'], why_it_matters: 'W.', aliases: [] };
   const rows = runCodeNode(codeNodeSource(WF, 'Profile rows'), {
-    nodes: { 'Profiles request': [payload], 'Profile prompts': prompts },
+    nodes: { 'Profiles request': [payload], 'Profile prompts': prompts, 'Commons credit': [{ statusCode: 200, body: { query: { pages: { '-1': { title: 'File:Apple Park.jpg', imageinfo: [{ extmetadata: { Artist: { value: 'Jan' }, LicenseShortName: { value: 'CC0' } } }] } } } } }, { statusCode: 200, body: {} }] },
     input: [{ ok: true, data: card }, { error: { message: 'failed' } }],
   }).map((i) => i.json);
   assert.deepEqual(rows.map((r) => [r.entity_id, r.aliases, r.source_urls]), [['aapl', 'AAPL', 'https://en.wikipedia.org/wiki/Apple_Inc.']]);
+  assert.match(prompts[0].credit_url, /titles=File:Apple%20Park.jpg$/);
+  assert.deepEqual([rows[0].image_url, rows[0].image_credit, rows[0].image_page], ['https://upload.wikimedia.org/wikipedia/commons/a/ab/Apple_Park.jpg', 'Jan / CC0, Wikimedia Commons', 'https://commons.wikimedia.org/wiki/File:Apple_Park.jpg']);
 });
 
 test('profile rows stop the stage on a credits error so the pause mail goes out', () => {
   assert.throws(
     () =>
       runCodeNode(codeNodeSource(WF, 'Profile rows'), {
-        nodes: { 'Profiles request': [payload], 'Profile prompts': [{ target: { id: 'aapl' } }] },
+        nodes: { 'Profiles request': [payload], 'Profile prompts': [{ target: { id: 'aapl' } }], 'Commons credit': [{}] },
         input: [{ error: { message: 'CREDITS: profile (claude-haiku-5-5) HTTP 400' } }],
       }),
     /^Error: CREDITS:/,

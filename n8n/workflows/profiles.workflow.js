@@ -107,12 +107,31 @@ const prompts = node({
         "  const j = it.json || {};\n" +
         "  const wiki = Number(j.statusCode) === 200 ? parseWikiSearch(j.body) : null;\n" +
         "  if (!hasReference(t, wiki)) return;\n" +
-        "  out.push({ json: { target: t, wiki, user: profilePrompt(t, wiki) } });\n" +
+        "  out.push({ json: { target: t, wiki, user: profilePrompt(t, wiki), credit_url: commonsCreditUrl(wiki && wiki.image ? wiki.image.file : '') } });\n" +
         "});\n" +
         "return out.length ? out : [{ json: { none: true } }];\n",
     },
   },
   output: [{ target: { id: 'nvda' }, wiki: null, user: '...' }],
+});
+
+// Author and licence of the Commons page image (a harmless empty lookup when there is none).
+const commonsCredit = node({
+  type: 'n8n-nodes-base.httpRequest',
+  version: 4.2,
+  config: {
+    name: 'Commons credit',
+    onError: 'continueRegularOutput',
+    alwaysOutputData: true,
+    parameters: {
+      method: 'GET',
+      url: expr('{{ $json.credit_url }}'),
+      sendHeaders: true,
+      headerParameters: { parameters: [{ name: 'User-Agent', value: 'PorannaPrasaAI/1.0 (personal news digest; n8n)' }] },
+      options: { timeout: 15000, response: { response: { fullResponse: true, neverError: true, responseFormat: 'json' } } },
+    },
+  },
+  output: [{ statusCode: 200, body: { query: { pages: {} } } }],
 });
 
 const haiku = node({
@@ -132,7 +151,7 @@ const haiku = node({
           step: 'profile',
           model: 'claude-haiku-5-5',
           system: TEXT('prompts/profile.md'),
-          user: expr('{{ $json.user }}'),
+          user: expr("{{ $('Profile prompts').item.json.user }}"),
           schema: JSONFILE('schemas/profile.schema.json'),
           effort: 'low',
           max_tokens: 1500,
@@ -168,12 +187,13 @@ const rows = node({
         "if (stop) throw new Error(stop);\n" +
         "const date = $('Profiles request').first().json.date;\n" +
         "const asked = $('Profile prompts').all().map((i) => i.json);\n" +
+        "const credits = $('Commons credit').all().map((i) => (Number(i.json.statusCode) === 200 ? parseCommonsCredit(i.json.body) : null));\n" +
         "const out = [];\n" +
         "$input.all().forEach((it, i) => {\n" +
         "  const r = it.json || {};\n" +
         "  const a = asked[i];\n" +
         "  if (!a || !r.ok || !r.data || !r.data.summary) return;\n" +
-        "  out.push({ json: profileRow(a.target, r.data, a.wiki, date) });\n" +
+        "  out.push({ json: profileRow(a.target, r.data, a.wiki, date, credits[i] || null) });\n" +
         "});\n" +
         "return out;\n",
     },
@@ -193,6 +213,9 @@ const PROFILE_COLUMNS = [
   { id: 'why_it_matters', displayName: 'why_it_matters', required: false, defaultMatch: false, display: true, type: 'string', canBeUsedToMatch: true },
   { id: 'updated_at', displayName: 'updated_at', required: false, defaultMatch: false, display: true, type: 'string', canBeUsedToMatch: true },
   { id: 'source_urls', displayName: 'source_urls', required: false, defaultMatch: false, display: true, type: 'string', canBeUsedToMatch: true },
+  { id: 'image_url', displayName: 'image_url', required: false, defaultMatch: false, display: true, type: 'string', canBeUsedToMatch: true },
+  { id: 'image_credit', displayName: 'image_credit', required: false, defaultMatch: false, display: true, type: 'string', canBeUsedToMatch: true },
+  { id: 'image_page', displayName: 'image_page', required: false, defaultMatch: false, display: true, type: 'string', canBeUsedToMatch: true },
 ];
 
 const saveProfiles = node({
@@ -321,7 +344,7 @@ export default workflow('ppai-profiles', 'PPAI · profiles')
       .onTrue(
         wikipedia.to(prompts).to(
           anyPrompt
-            .onTrue(haiku.to(rows).to(anyRow.onTrue(saveProfiles.to(readAll)).onFalse(readAll)))
+            .onTrue(commonsCredit.to(haiku).to(rows).to(anyRow.onTrue(saveProfiles.to(readAll)).onFalse(readAll)))
             .onFalse(readAll),
         ),
       )

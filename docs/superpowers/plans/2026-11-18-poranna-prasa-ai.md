@@ -16,6 +16,7 @@
 ## Global Constraints
 
 - **GitHub:** repo `mChoczay/ai-prasa` (public, `main`), site URL `https://mchoczay.github.io/ai-prasa/`. Wherever this plan says `{{GH_OWNER}}`/`{{GH_REPO}}`, use these values. n8n credentials (all ready 2026-11-18): `Anthropic account 2`, `GitHub account`, `Gmail account`.
+- **Execution limit (found 2026-11-19):** the instance caps one execution at **180 s**. The pipeline is therefore a **relay**: `PPAI · daily` (gate + numbers + news, ~2 min) hands its result to the next stage through an Execute Workflow node with `waitForSubWorkflow: false`, and every stage does the same (select & fetch → write → profiles & period → publish). Each stage is its own execution under 180 s and has `PPAI · errors` as its error workflow. Long waits/loops inside one execution are not allowed.
 - **Commits (owner's rule):** the owner is the author (repo-local `user.name`/`user.email`, GitHub noreply address). The subject is one short, simple sentence and the body a brief summary of the changes. The `feat: …` messages in the tasks below only suggest the content; rewrite them in this style.
 - **Isolation and supply chain (owner's rule):**
   - Nothing is installed globally: no winget, no global npm, no PATH or registry changes, no system settings.

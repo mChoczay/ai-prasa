@@ -26,3 +26,11 @@ test('buildWorkflow replaces INLINE markers with a JS string literal of the code
   assert.match(code, /function editionDate/);
   assert.doesNotMatch(code, /^export/m);
 });
+
+test('buildWorkflow replaces TEXT and JSONFILE markers with file contents', () => {
+  const out = buildWorkflow("const a = { system: TEXT('prompts/filter.md'), schema: JSONFILE('schemas/filter.schema.json') };");
+  const obj = new Function(`return ${out.replace(/^const a = /, '').replace(/;$/, '')};`)();
+  assert.match(obj.system, /triage overnight AI news/);
+  assert.equal(obj.schema.type, 'object');
+  assert.deepEqual(obj.schema.required, ['items']);
+});

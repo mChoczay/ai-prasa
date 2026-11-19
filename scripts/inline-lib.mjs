@@ -22,11 +22,18 @@ export function inlineLib(files) {
     .join('\n');
 }
 
+// INLINE('a.js', ...) -> JS string literal of the combined library code
+// TEXT('file')          -> JS string literal of the file (prompts)
+// JSONFILE('file.json') -> the file's JSON as an object literal (schemas)
 export function buildWorkflow(source) {
-  return source.replace(/INLINE\(([^)]*)\)/g, (_, args) => {
-    const files = [...args.matchAll(/'([^']+)'|"([^"]+)"/g)].map((m) => m[1] || m[2]);
-    return JSON.stringify(`${inlineLib(files)}\n`);
-  });
+  const read = (file) => readFileSync(path.join(ROOT, file), 'utf8');
+  return source
+    .replace(/INLINE\(([^)]*)\)/g, (_, args) => {
+      const files = [...args.matchAll(/'([^']+)'|"([^"]+)"/g)].map((m) => m[1] || m[2]);
+      return JSON.stringify(`${inlineLib(files)}\n`);
+    })
+    .replace(/TEXT\('([^']+)'\)/g, (_, file) => JSON.stringify(read(file)))
+    .replace(/JSONFILE\('([^']+)'\)/g, (_, file) => JSON.stringify(JSON.parse(read(file))));
 }
 
 if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {

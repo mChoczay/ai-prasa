@@ -100,3 +100,24 @@ test('parseMassiveGrouped skips empty days and malformed input', () => {
   assert.equal(parseMassiveGrouped('nope'), null);
   assert.equal(parseMassiveGrouped([{}, null]), null);
 });
+
+import { collapseVariants } from '../n8n/lib/parsers.js';
+
+test('collapseVariants keeps the best-ranked variant per base model and re-ranks', () => {
+  const rows = [
+    { rank: 1, model: 'Claude Fable 5.2 (Max, Default Fallback)', org: 'Anthropic', score: 64.6 },
+    { rank: 2, model: 'Claude Fable 5.2 (Xhigh, Default Fallback)', org: 'Anthropic', score: 62.2 },
+    { rank: 3, model: 'GPT-6.2 Astra (Max)', org: 'OpenAI', score: 62.1 },
+    { rank: 4, model: 'Claude Opus 4.6', org: 'anthropic', score: 60 },
+    { rank: 5, model: 'Claude Opus 4.6 (High)', org: 'anthropic', score: 59 },
+  ];
+  assert.deepEqual(collapseVariants(rows), [
+    { rank: 1, model: 'Claude Fable 5.2', org: 'Anthropic', score: 64.6, variant: 'Max, Default Fallback' },
+    { rank: 2, model: 'GPT-6.2 Astra', org: 'OpenAI', score: 62.1, variant: 'Max' },
+    { rank: 3, model: 'Claude Opus 4.6', org: 'anthropic', score: 60, variant: null },
+  ]);
+});
+
+test('collapseVariants passes null through', () => {
+  assert.equal(collapseVariants(null), null);
+});

@@ -86,4 +86,20 @@ function parseMassiveGrouped(input) {
   return series;
 }
 
-export { parseLmarena, parseHfTrending, parseAaModels, parseMassiveAggs, parseMassiveGrouped };
+// Leaderboards list the same model in several settings ('X (High)', 'X (Max)'). Keep the best-ranked row per
+// base name, label it with the base name, remember the setting in `variant`, and re-rank 1..n.
+function collapseVariants(rows) {
+  if (!Array.isArray(rows)) return null;
+  const seen = new Set();
+  const out = [];
+  for (const r of rows) {
+    const m = String(r.model).match(/^(.*?)\s*\(([^()]*)\)\s*$/);
+    const base = m ? m[1].trim() : String(r.model).trim();
+    if (seen.has(base.toLowerCase())) continue;
+    seen.add(base.toLowerCase());
+    out.push({ rank: out.length + 1, model: base, org: r.org, score: r.score, variant: m ? m[2].trim() : null });
+  }
+  return out;
+}
+
+export { parseLmarena, parseHfTrending, parseAaModels, parseMassiveAggs, parseMassiveGrouped, collapseVariants };

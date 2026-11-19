@@ -106,3 +106,12 @@ test('compute numbers drops the 1d change when the previous trading day is missi
   assert.equal(json.market.rows[0].change_1d, null);
   assert.equal(json.market.rows[0].change_7d, 11.11);
 });
+
+test('lmarena and aa rankings collapse model variants to one row per base model', () => {
+  const [{ json }] = runCodeNode(code, { nodes: baseNodes() });
+  for (const board of ['lmarena', 'aa']) {
+    const names = json.rankings[board].map((r) => r.model);
+    assert.equal(new Set(names).size, names.length, board);
+    assert.ok(names.every((n) => !/\(/.test(n)), board);
+  }
+});

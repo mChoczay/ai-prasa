@@ -257,8 +257,8 @@ const computeNumbers = node({
         "const market = marketRows.length ? { rows: marketRows, as_of: asOf } : null;\n" +
         "const aaPages = $('Artificial Analysis models').all().map(ok).filter(Boolean);\n" +
         "const current = {\n" +
-        "  lmarena: parseLmarena(ok($('LMArena leaderboard').first())),\n" +
-        "  aa: aaPages.length ? parseAaModels(aaPages) : null,\n" +
+        "  lmarena: collapseVariants(parseLmarena(ok($('LMArena leaderboard').first()))),\n" +
+        "  aa: aaPages.length ? collapseVariants(parseAaModels(aaPages)) : null,\n" +
         "  hf_trending: parseHfTrending(ok($('Hugging Face trending').first())),\n" +
         "};\n" +
         "const prevRows = $('Recent leaderboard snapshots').all().map((i) => i.json).filter((r) => r.board && r.date && r.date < date);\n" +

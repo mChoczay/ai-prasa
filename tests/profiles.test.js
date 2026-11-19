@@ -158,3 +158,11 @@ test('finishEdition gives stories without an article image the image of their fi
   assert.deepEqual(done.lead_story.image_fallback, { url: COMMONS, credit: 'c', link: 'p' });
   assert.equal(done.stories[0].image_fallback, null);
 });
+
+test('Commons images served from thumb.wikimedia.org are accepted too', () => {
+  const thumb = 'https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d1/Oracle_Campus.jpg/960px-Oracle_Campus.jpg?utm_source=en.wikipedia.org';
+  const body = { query: { pages: { 1: { title: 'Oracle Corporation', extract: 'x', pageimage: 'Oracle_Campus.jpg', thumbnail: { source: thumb } } } } };
+  assert.deepEqual(parseWikiSearch(body).image, { thumb, file: 'Oracle_Campus.jpg' });
+  assert.deepEqual(profilesJson([{ entity_id: 'orcl', image_url: thumb, image_credit: 'c', image_page: 'p' }]).profiles[0].image, { url: thumb, credit: 'c', link: 'p' });
+  assert.equal(profilesJson([{ entity_id: 'x', image_url: 'https://thumb.wikimedia.org/wikipedia/en/a.png' }]).profiles[0].image, null);
+});

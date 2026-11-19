@@ -5,7 +5,8 @@ import { entityId } from './news.js';
 import { collectNewEntities, resolvePending, pickSpotlight } from './edition.js';
 
 const WIKI_EXTRACT_CHARS = 2500;
-const COMMONS_PREFIX = 'https://upload.wikimedia.org/wikipedia/commons/';
+// Wikimedia Commons file space, served from either CDN host.
+const COMMONS_IMAGE = /^https:\/\/(upload|thumb)\.wikimedia\.org\/wikipedia\/commons\//;
 
 function _stories(edition) {
   return [edition && edition.lead_story, ...((edition && edition.stories) || [])].filter(Boolean);
@@ -61,7 +62,7 @@ function parseWikiSearch(body) {
   const page = Object.values(pages)[0];
   if (!page || typeof page.extract !== 'string' || !page.extract.trim()) return null;
   const thumb = page.thumbnail && page.thumbnail.source;
-  const image = typeof thumb === 'string' && thumb.startsWith(COMMONS_PREFIX) && page.pageimage ? { thumb, file: page.pageimage } : null;
+  const image = typeof thumb === 'string' && COMMONS_IMAGE.test(thumb) && page.pageimage ? { thumb, file: page.pageimage } : null;
   return { title: page.title, extract: page.extract.trim().slice(0, WIKI_EXTRACT_CHARS), url: page.fullurl || null, image };
 }
 
@@ -149,7 +150,7 @@ function profilesJson(rows) {
       why_it_matters: r.why_it_matters || '',
       updated_at: r.updated_at ? String(r.updated_at).slice(0, 10) : '',
       last_spotlight_at: r.last_spotlight_at ? String(r.last_spotlight_at).slice(0, 10) : null,
-      image: String(r.image_url || '').startsWith(COMMONS_PREFIX) ? { url: r.image_url, credit: r.image_credit || 'Wikimedia Commons', link: r.image_page || '' } : null,
+      image: COMMONS_IMAGE.test(String(r.image_url || '')) ? { url: r.image_url, credit: r.image_credit || 'Wikimedia Commons', link: r.image_page || '' } : null,
     }))
     .sort((a, b) => (a.id < b.id ? -1 : a.id > b.id ? 1 : 0));
   return { profiles };

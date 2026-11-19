@@ -45,6 +45,21 @@ test('buildWorkflow keeps only the declarations the node code reaches', () => {
   assert.doesNotMatch(code, /function selectPrompt|function buildArticles|function entityId|function extractArticleText/);
 });
 
+test('buildWorkflow keeps multi-line template literals intact, blank lines and indentation included', () => {
+  const src = "const c = node({ config: { parameters: { jsCode: INLINE('n8n/lib/write.js') + 'return storiesPrompt({});' } } });";
+  const code = JSON.parse(buildWorkflow(src).match(/jsCode: ("(?:[^"\\]|\\.)*")/)[1]);
+  assert.match(code, /\}\n\nWrite only the "stories"/);
+  assert.match(code, /\n\n## Articles for stories/);
+});
+
+test('buildWorkflow JSONTEXT gives a string literal of minified JSON', () => {
+  const out = buildWorkflow("const s = JSONTEXT('schemas/select.schema.json');");
+  const text = new Function(`${out} return s;`)();
+  assert.equal(typeof text, 'string');
+  assert.doesNotMatch(text, /\n/);
+  assert.deepEqual(JSON.parse(text).required, ['lead_idx', 'story_idx', 'rumor_idx', 'extra_queries']);
+});
+
 test('every Code node of every workflow source parses after building', async () => {
   const { readdirSync } = await import('node:fs');
   const dir = new URL('../n8n/workflows/', import.meta.url);

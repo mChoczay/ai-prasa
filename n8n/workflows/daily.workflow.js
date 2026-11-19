@@ -179,8 +179,8 @@ const buildPayload = node({
         "const g = $('Budget gate').first().json;\n" +
         "const numbers = $('Run numbers').first().json;\n" +
         "const news = $('Run news').first().json;\n" +
-        "// relay: false stops after PPAI · select (used while testing a single stage).\n" +
-        "return [{ json: { date: g.date, run_id: g.run_id, relay: true, flags: g.flags, numbers, candidates: news.candidates || [], history_titles: news.history_titles || [] } }];\n",
+        "// stop_after: a stage name (select, write, front, period, profiles) ends the relay there, for tests.\n" +
+        "return [{ json: { date: g.date, run_id: g.run_id, relay: true, stop_after: '', flags: g.flags, numbers, candidates: news.candidates || [], history_titles: news.history_titles || [] } }];\n",
     },
   },
   output: [{ date: '2026-11-19', run_id: '2026-11-19-1', relay: true, flags: { weekly: false, monthly: false }, numbers: {}, candidates: [], history_titles: [] }],

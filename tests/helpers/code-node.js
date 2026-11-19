@@ -19,8 +19,12 @@ export function codeNodeSource(workflowFile, nodeName) {
 }
 
 // nodes: { 'Node name': [json, json, ...] } ; input: [json, ...]
-// globals: names to shadow inside the code, e.g. { URL: undefined } to mimic the n8n sandbox.
-export function runCodeNode(code, { nodes = {}, input = [], today = new Date(), globals = {} } = {}) {
+// Globals the n8n Code sandbox does not have (found in live runs); every test runs without them.
+const SANDBOX_MISSING = { URL: undefined, URLSearchParams: undefined, structuredClone: undefined };
+
+// globals: extra names to set inside the code, e.g. { $execution: { id: '1' } }.
+export function runCodeNode(code, { nodes = {}, input = [], today = new Date(), globals: extra = {} } = {}) {
+  const globals = { ...SANDBOX_MISSING, ...extra };
   const $ = (name) => {
     if (!(name in nodes)) throw new Error(`unexpected node reference: ${name}`);
     const items = nodes[name].map((json) => ({ json }));

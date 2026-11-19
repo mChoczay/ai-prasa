@@ -1,0 +1,105 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {
+  profileTargets,
+  wikiSearchUrl,
+  parseWikiSearch,
+  profilePrompt,
+  hasReference,
+  profileRow,
+  profilesJson,
+  finishEdition,
+  historyRows,
+} from '../n8n/lib/profiles.js';
+
+const edition = {
+  date: '2026-11-19',
+  lead_story: { title: 'Lead', category: 'gielda', status: 'potwierdzone', lede: 'Apple ships a chip.', body: 'Nowa Firma bought it. Nothing else here.', may_affect: ['aapl'], may_affect_pending: ['Nowa Firma'], sources: [{ url: 'https://a.example/1' }] },
+  stories: [{ title: 'Second', category: 'modele', status: 'potwierdzone', lede: 'Gemini 4 Neon is out.', body: '', may_affect: [], may_affect_pending: [], sources: [{ url: 'https://a.example/2' }, { url: 'https://a.example/3' }] }],
+  big_moves: [{ entity_id: 'nvda' }],
+};
+
+test('profileTargets builds search queries by type and collects context', () => {
+  const targets = profileTargets({
+    edition,
+    newEntityNames: ['Nowa Firma'],
+    watchlist: [{ ticker: 'AAPL', name: 'Apple', active: true }],
+    leaderboardTop: ['Gemini 4 Neon'],
+    profiles: [],
+    rankings: { lmarena: [{ rank: 2, model: 'Gemini 4 Neon', org: 'google' }], aa: null, hf_trending: [] },
+    today: '2026-11-19',
+  });
+  assert.deepEqual(targets.map((t) => [t.id, t.query]), [
+    ['aapl', 'Apple company AAPL'],
+    ['nowa-firma', 'Nowa Firma artificial intelligence'],
+    ['gemini-4-neon', 'Gemini 4 Neon google AI model'],
+  ]);
+  assert.equal(targets[0].ticker, 'AAPL');
+  assert.deepEqual(targets[1].mentions, ['Nowa Firma bought it.']);
+  assert.deepEqual(targets[2].boards, [{ board: 'lmarena', rank: 2, org: 'google' }]);
+});
+
+test('profileTargets skips entities that already have a profile under entity_id', () => {
+  const targets = profileTargets({ edition, newEntityNames: [], watchlist: [{ ticker: 'AAPL', name: 'Apple', active: true }], leaderboardTop: [], profiles: [{ entity_id: 'aapl', name: 'Apple', updated_at: '2026-11-01' }], rankings: null, today: '2026-11-19' });
+  assert.deepEqual(targets, []);
+});
+
+test('wikiSearchUrl encodes the query and parseWikiSearch reads the first page', () => {
+  assert.match(wikiSearchUrl('Apple company AAPL'), /gsrsearch=Apple%20company%20AAPL$/);
+  const wiki = parseWikiSearch({ query: { pages: { 856: { title: 'Apple Inc.', extract: ' Apple Inc. is a company. ', fullurl: 'https://en.wikipedia.org/wiki/Apple_Inc.' } } } });
+  assert.deepEqual(wiki, { title: 'Apple Inc.', extract: 'Apple Inc. is a company.', url: 'https://en.wikipedia.org/wiki/Apple_Inc.' });
+  assert.equal(parseWikiSearch({ batchcomplete: '' }), null);
+  assert.equal(parseWikiSearch(null), null);
+});
+
+test('profilePrompt lists the reference text and hasReference tells when a card can be written', () => {
+  const t = { name: 'Apple', type: 'company', ticker: 'AAPL', boards: [], mentions: ['Apple ships a chip.'] };
+  const text = profilePrompt(t, { title: 'Apple Inc.', extract: 'Apple Inc. is a company.' });
+  assert.match(text, /Stock ticker: AAPL/);
+  assert.match(text, /Wikipedia, "Apple Inc\.": Apple Inc\. is a company\./);
+  assert.match(text, /From today's news: Apple ships a chip\./);
+  assert.equal(hasReference({ mentions: [], boards: [] }, null), false);
+  assert.equal(hasReference(t, null), true);
+});
+
+test('profileRow and profilesJson convert between the card, the table and the site file', () => {
+  const row = profileRow(
+    { id: 'aapl', name: 'Apple', type: 'company', ticker: 'AAPL' },
+    { type: 'company', name: 'Apple Inc.', owner: 'spółka giełdowa (Nasdaq)', summary: 'S.', key_products: ['iPhone', 'Mac'], why_it_matters: 'W.', aliases: ['Apple Inc.'] },
+    { url: 'https://en.wikipedia.org/wiki/Apple_Inc.' },
+    '2026-11-19',
+  );
+  assert.equal(row.entity_id, 'aapl');
+  assert.equal(row.name, 'Apple');
+  assert.equal(row.aliases, 'Apple Inc.,AAPL');
+  assert.equal(row.key_products, 'iPhone, Mac');
+  const site = profilesJson([{ ...row, last_spotlight_at: '2026-10-01T00:00:00.000Z' }, {}]);
+  assert.equal(site.profiles.length, 1);
+  assert.deepEqual(site.profiles[0].key_products, ['iPhone', 'Mac']);
+  assert.equal(site.profiles[0].id, 'aapl');
+  assert.equal(site.profiles[0].last_spotlight_at, '2026-10-01');
+});
+
+test('finishEdition resolves pending names and picks the spotlight from today entities', () => {
+  const rows = [
+    { entity_id: 'aapl', type: 'company', name: 'Apple', aliases: 'AAPL' },
+    { entity_id: 'nowa-firma', type: 'company', name: 'Nowa Firma', aliases: '', last_spotlight_at: '2026-11-10' },
+    { entity_id: 'gemini-4-neon', type: 'model', name: 'Gemini 4 Neon', aliases: '' },
+  ];
+  const { edition: e, spotlightIds, profiles } = finishEdition(edition, rows, '2026-11-19');
+  assert.deepEqual(e.lead_story.may_affect, ['aapl', 'nowa-firma']);
+  assert.equal('may_affect_pending' in e.lead_story, false);
+  assert.deepEqual(e.spotlight, { company_id: 'aapl', model_id: 'gemini-4-neon' });
+  assert.deepEqual(spotlightIds, ['aapl', 'gemini-4-neon']);
+  assert.equal(profiles.profiles.length, 3);
+  assert.equal(finishEdition(edition, [], '2026-11-19').edition.spotlight, null);
+});
+
+test('historyRows gives one topic per story and one tag per affected entity', () => {
+  const { topics, tags } = historyRows({ ...edition, lead_story: { ...edition.lead_story, may_affect: ['aapl', 'nowa-firma'] } });
+  assert.deepEqual(topics.map((t) => [t.title, t.source_urls]), [['Lead', 'https://a.example/1'], ['Second', 'https://a.example/2 https://a.example/3']]);
+  assert.deepEqual(tags, [
+    { date: '2026-11-19', story_title: 'Lead', entity_id: 'aapl' },
+    { date: '2026-11-19', story_title: 'Lead', entity_id: 'nowa-firma' },
+  ]);
+});

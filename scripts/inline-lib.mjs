@@ -28,14 +28,19 @@ function chunksOf(file) {
   return chunks.map((c) => ({ name: c.name, text: c.lines.join('\n') }));
 }
 
-// Smaller Code nodes: no comment-only lines, blank lines or indentation. The libs keep multi-line
-// template literals flush left, so their text does not change.
+const backticks = (line) => (line.match(/(?<!\\)`/g) || []).length;
+
+// Smaller Code nodes: no comment-only lines, blank lines or indentation, except inside multi-line
+// template literals (prompt texts), which are kept as written.
 function compact(text) {
-  return text
-    .split('\n')
-    .filter((line) => line.trim() && !/^\s*\/\//.test(line))
-    .map((line) => line.trimStart())
-    .join('\n');
+  const out = [];
+  let inTemplate = false;
+  for (const line of text.split('\n')) {
+    if (inTemplate) out.push(line);
+    else if (line.trim() && !/^\s*\/\//.test(line)) out.push(line.trimStart());
+    if (backticks(line) % 2 === 1) inTemplate = !inTemplate;
+  }
+  return out.join('\n');
 }
 
 const identifiers = (text) => new Set(text.match(/[A-Za-z_$][\w$]*/g) || []);
@@ -73,6 +78,7 @@ export function inlineLib(files, roots = null) {
 //                        rest of that jsCode expression (up to the end of its parameters block, or the
 //                        next INLINE) are the roots.
 // TEXT('file')          -> JS string literal of the file (prompts)
+// JSONTEXT('file.json') -> JS string literal of the minified JSON (schemas inside Code nodes)
 // JSONFILE('file.json') -> the file's JSON as an object literal (schemas)
 export function buildWorkflow(source) {
   const read = (file) => readFileSync(path.join(ROOT, file), 'utf8');
@@ -84,7 +90,8 @@ export function buildWorkflow(source) {
       const rest = stop >= 0 ? after.slice(0, stop) : after;
       return JSON.stringify(`${inlineLib(files, [...identifiers(rest)])}\n`);
     })
-    .replace(/TEXT\('([^']+)'\)/g, (_, file) => JSON.stringify(read(file)))
+    .replace(/JSONTEXT\('([^']+)'\)/g, (_, file) => JSON.stringify(JSON.stringify(JSON.parse(read(file)))))
+    .replace(/(?<!JSON)TEXT\('([^']+)'\)/g, (_, file) => JSON.stringify(read(file)))
     .replace(/JSONFILE\('([^']+)'\)/g, (_, file) => JSON.stringify(JSON.parse(read(file))));
 }
 

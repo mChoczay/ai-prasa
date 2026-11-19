@@ -144,7 +144,7 @@ const relayCheck = ifElse({
     parameters: {
       conditions: {
         options: { caseSensitive: true, leftValue: '', typeValidation: 'loose', version: 2 },
-        conditions: [{ leftValue: expr('{{ $json.relay }}'), rightValue: true, operator: { type: 'boolean', operation: 'true', singleValue: true } }],
+        conditions: [{ leftValue: expr("{{ $json.relay && $json.stop_after !== 'select' }}"), rightValue: true, operator: { type: 'boolean', operation: 'true', singleValue: true } }],
         combinator: 'and',
       },
     },
@@ -158,7 +158,7 @@ const handToWrite = node({
     name: 'Hand to write',
     parameters: {
       source: 'database',
-      workflowId: { __rl: true, mode: 'id', value: 'WRITE_WORKFLOW_ID', cachedResultName: 'PPAI · write' },
+      workflowId: { __rl: true, mode: 'id', value: 'h4T8SjHzzKTYtZJE', cachedResultName: 'PPAI · write' },
       mode: 'once',
       options: { waitForSubWorkflow: false },
     },

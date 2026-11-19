@@ -3,6 +3,7 @@
 import { entityId } from './news.js';
 import { daysBetween } from './dates.js';
 
+// Copies use JSON: the n8n Code sandbox has no structuredClone.
 const STATUSES = Object.freeze(['potwierdzone', 'plotka', 'opinia']);
 const MARKET_CATEGORIES = Object.freeze(['gielda', 'inwestycje']);
 const DISCLAIMER = 'To nie jest porada inwestycyjna.';
@@ -34,7 +35,7 @@ function _hasSources(item) {
 }
 
 function checkEditionRules(input, profiles) {
-  const edition = structuredClone(input);
+  const edition = JSON.parse(JSON.stringify(input));
   const errors = [];
   const newEntityNames = [];
 
@@ -161,7 +162,7 @@ function readingMinutes(edition) {
 
 // After new profiles are saved: map each story's pending names to ids; names still unknown are dropped.
 function resolvePending(input, profiles) {
-  const edition = structuredClone(input);
+  const edition = JSON.parse(JSON.stringify(input));
   for (const story of [edition.lead_story, ...(edition.stories || [])].filter(Boolean)) {
     const ids = Array.isArray(story.may_affect) ? story.may_affect : [];
     for (const name of story.may_affect_pending || []) {

@@ -33,3 +33,19 @@ test('keep top candidates applies the Haiku triage', () => {
   assert.deepEqual(json.candidates.map((c) => c.idx), [1]);
   assert.equal(json.candidates[0].category, 'modele');
 });
+
+test('build candidates works without a global URL, as in the n8n sandbox', () => {
+  const [{ json }] = runCodeNode(buildCode, {
+    globals: { URL: undefined, URLSearchParams: undefined },
+    nodes: {
+      'News request': [{ date: '2026-11-19', run_id: 'r' }],
+      'Read feeds': [
+        { title: 'Anthropic IPO', link: 'https://www.cnbc.com/2026/11/18/anthropic-ipo.html', isoDate: recent },
+        { title: 'Different title, same page', link: 'https://www.cnbc.com/2026/11/18/anthropic-ipo.html/?utm_source=rss#top', isoDate: recent },
+      ],
+      'Recent topics': [{}],
+    },
+  });
+  assert.equal(json.candidates.length, 1);
+  assert.equal(json.candidates[0].source, 'cnbc.com');
+});

@@ -2,18 +2,26 @@
 
 const _TRACKING_PARAMS = new Set(['ref', 'fbclid']);
 
+// The n8n Code sandbox has no global URL / URLSearchParams, so URLs are split with a regex.
+function _splitUrl(url) {
+  const m = String(url || '').match(/^([a-z][a-z0-9+.-]*:)\/\/([^/?#]+)([^?#]*)(\?[^#]*)?/i);
+  if (!m) throw new Error(`invalid url: ${url}`);
+  return { protocol: m[1].toLowerCase(), host: m[2].toLowerCase(), path: m[3] || '/', query: m[4] ? m[4].slice(1) : '' };
+}
+
 function normalizeUrl(url) {
-  const u = new URL(url);
-  const host = u.host.toLowerCase().replace(/^www\./, '');
-  const params = new URLSearchParams();
-  for (const [key, value] of u.searchParams) {
-    if (key.toLowerCase().startsWith('utm_') || _TRACKING_PARAMS.has(key.toLowerCase())) continue;
-    params.append(key, value);
-  }
-  let path = u.pathname;
-  if (path.length > 1) path = path.replace(/\/+$/, '');
-  const search = params.toString();
-  return `${u.protocol}//${host}${path}${search ? `?${search}` : ''}`;
+  const u = _splitUrl(url);
+  const host = u.host.replace(/^www\./, '');
+  const params = u.query
+    .split('&')
+    .filter(Boolean)
+    .filter((pair) => {
+      const key = pair.split('=')[0].toLowerCase();
+      return !key.startsWith('utm_') && !_TRACKING_PARAMS.has(key);
+    });
+  let path = u.path;
+  if (path.length > 1) path = path.replace(/\/+$/, '') || '/';
+  return `${u.protocol}//${host}${path}${params.length ? `?${params.join('&')}` : ''}`;
 }
 
 function _fold(text) {

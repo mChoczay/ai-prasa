@@ -19,7 +19,8 @@ export function codeNodeSource(workflowFile, nodeName) {
 }
 
 // nodes: { 'Node name': [json, json, ...] } ; input: [json, ...]
-export function runCodeNode(code, { nodes = {}, input = [], today = new Date() } = {}) {
+// globals: names to shadow inside the code, e.g. { URL: undefined } to mimic the n8n sandbox.
+export function runCodeNode(code, { nodes = {}, input = [], today = new Date(), globals = {} } = {}) {
   const $ = (name) => {
     if (!(name in nodes)) throw new Error(`unexpected node reference: ${name}`);
     const items = nodes[name].map((json) => ({ json }));
@@ -27,6 +28,7 @@ export function runCodeNode(code, { nodes = {}, input = [], today = new Date() }
   };
   const inputItems = input.map((json) => ({ json }));
   const $input = { all: () => inputItems, first: () => inputItems[0] };
-  const fn = new Function('$', '$input', '$today', '$runIndex', code);
-  return fn($, $input, today, 0);
+  const names = Object.keys(globals);
+  const fn = new Function('$', '$input', '$today', '$runIndex', ...names, code);
+  return fn($, $input, today, 0, ...names.map((n) => globals[n]));
 }

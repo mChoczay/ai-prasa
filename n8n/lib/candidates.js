@@ -2,12 +2,10 @@
 // Imports are stripped by scripts/inline-lib.mjs; inline news.js alongside this file.
 import { dedupeCandidates } from './news.js';
 
+// No global URL in the n8n Code sandbox: read the host with a regex.
 function _host(url) {
-  try {
-    return new URL(url).host.toLowerCase().replace(/^www\./, '');
-  } catch {
-    return '';
-  }
+  const m = String(url || '').match(/^[a-z][a-z0-9+.-]*:\/\/([^/?#:]+)/i);
+  return m ? m[1].toLowerCase().replace(/^www\./, '') : '';
 }
 
 function _clean(text, max) {

@@ -1,5 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
 import { inlineLib, buildWorkflow } from '../scripts/inline-lib.mjs';
 
 test('inlineLib strips import and export lines and keeps functions callable', () => {
@@ -18,7 +19,7 @@ test('inlineLib keeps cross-file calls working once imports are removed', () => 
 });
 
 test('buildWorkflow replaces INLINE markers with a JS string literal of the code', () => {
-  const src = "const c = node({ config: { parameters: { jsCode: INLINE('n8n/lib/dates.js') + 'return [];' } } });";
+  const src = "const c = node({ config: { parameters: { jsCode: INLINE('n8n/lib/dates.js') + 'return [editionDate(x)];' } } });";
   const out = buildWorkflow(src);
   assert.doesNotMatch(out, /INLINE\(/);
   const literal = out.match(/jsCode: ("(?:[^"\\]|\\.)*")/)[1];
@@ -33,4 +34,25 @@ test('buildWorkflow replaces TEXT and JSONFILE markers with file contents', () =
   assert.match(obj.system, /triage overnight AI news/);
   assert.equal(obj.schema.type, 'object');
   assert.deepEqual(obj.schema.required, ['items']);
+});
+
+test('buildWorkflow keeps only the declarations the node code reaches', () => {
+  const src = "const c = node({ config: { parameters: { jsCode: INLINE('n8n/lib/news.js', 'n8n/lib/select.js') + 'return fetchList(sel, cands);' } } });";
+  const code = JSON.parse(buildWorkflow(src).match(/jsCode: ("(?:[^"\\]|\\.)*")/)[1]);
+  assert.match(code, /function fetchList/);
+  assert.match(code, /function relatedCandidates/);
+  assert.match(code, /function normalizeUrl/);
+  assert.doesNotMatch(code, /function selectPrompt|function buildArticles|function entityId|function extractArticleText/);
+});
+
+test('every Code node of every workflow source parses after building', async () => {
+  const { readdirSync } = await import('node:fs');
+  const dir = new URL('../n8n/workflows/', import.meta.url);
+  for (const file of readdirSync(dir).filter((f) => f.endsWith('.workflow.js'))) {
+    const built = buildWorkflow(readFileSync(new URL(file, dir), 'utf8'));
+    for (const m of built.matchAll(/jsCode:\s*((?:"(?:[^"\\]|\\.)*"\s*\+?\s*)+)/g)) {
+      const code = new Function(`return (${m[1].replace(/\+\s*$/, '')});`)();
+      assert.doesNotThrow(() => new Function('$', '$input', '$today', '$runIndex', code), `${file}: Code node does not parse`);
+    }
+  }
 });

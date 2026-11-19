@@ -1,19 +1,6 @@
 {
  "editions": [
   {
-   "date": "2099-01-01",
-   "kind": "daily",
-   "lead_title": "Firma X tnie ceny o 40% i wchodzi do top 3",
-   "minutes": 1,
-   "categories": [
-    "modele",
-    "gielda",
-    "inwestycje",
-    "narzedzia",
-    "regulacje"
-   ]
-  },
-  {
    "date": "2026-11-18",
    "kind": "daily",
    "lead_title": "Firma X tnie ceny o 40% i wchodzi do top 3",

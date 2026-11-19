@@ -1,6 +1,6 @@
 // Relay stage "select": the selection prompt, applying Sonnet's choice, which pages to fetch and the
 // article texts for the writer. Imports are stripped by scripts/inline-lib.mjs; inline news.js first.
-import { safeNormalizeUrl, extractArticleText } from './news.js';
+import { safeNormalizeUrl, extractArticleText, extractOgImage } from './news.js';
 
 const MIN_ARTICLE_CHARS = 500;
 const MAIN_TEXT_CHARS = 6000;
@@ -108,6 +108,12 @@ function buildArticles(selection, candidates, fetched) {
     const text = html ? extractArticleText(html, max) : '';
     return text.length >= MIN_ARTICLE_CHARS ? { text, ok: true } : { text: c.snippet || '', ok: false };
   };
+  // The page's preview image, linked (never copied) with the site as the credit.
+  const imageOf = (c) => {
+    const html = pages.get(safeNormalizeUrl(c.url));
+    const url = html ? extractOgImage(html, c.url) : null;
+    return url ? { url, credit: c.source, link: c.url } : null;
+  };
   return _chosen(selection).map(({ role, c }) => {
     const main = textOf(c, MAIN_TEXT_CHARS);
     return {
@@ -120,7 +126,8 @@ function buildArticles(selection, candidates, fetched) {
       category: c.category,
       text: main.text,
       text_ok: main.ok,
-      related: relatedCandidates(c, candidates, 2).map((r) => ({ title: r.title, url: r.url, source: r.source, text: textOf(r, RELATED_TEXT_CHARS).text })),
+      image: imageOf(c),
+      related: relatedCandidates(c, candidates, 2).map((r) => ({ title: r.title, url: r.url, source: r.source, text: textOf(r, RELATED_TEXT_CHARS).text, image: imageOf(r) })),
     };
   });
 }

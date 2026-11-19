@@ -90,3 +90,21 @@ test('assemble node routes Sundays and the 1st to the period stage and stops whe
   assert.equal(run({ ...base, flags: { weekly: true, monthly: false } }), 'period');
   assert.equal(run({ ...base, relay: false }), 'stop');
 });
+
+test('assemble node gives the lead the image of the article it cites', () => {
+  const p = {
+    ...payload,
+    articles: payload.articles.map((a, i) => (i === 0 ? { ...a, image: { url: 'https://img.example/0.jpg', credit: 'news.example', link: a.url } } : a)),
+    stories_part: { stories: [], rumors: [] },
+    entities: [],
+    leakers: [],
+  };
+  const lead = story('Lead', 'https://news.example/0');
+  const [{ json }] = runCodeNode(codeNodeSource('n8n/workflows/front.workflow.js', 'Assemble edition'), {
+    globals: sandbox,
+    nodes: { 'Front request': [p] },
+    input: [{ ok: true, data: { greeting: 'g', lead_story: lead, market: { commentary: '', mood: 'm' }, rankings: { commentary: '', notes: [] }, big_moves: [], follow_ups: [], closing: 'c' } }],
+  });
+  assert.equal(json.edition.lead_story.image.url, 'https://img.example/0.jpg');
+  assert.equal(json.edition.market.mood, 'm');
+});

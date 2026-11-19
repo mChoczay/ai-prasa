@@ -42,3 +42,17 @@ test('fetch list and build articles pair HTTP results with their urls in the n8n
   assert.equal(json.run_id, 'r');
   assert.deepEqual(json.selection, selection);
 });
+
+test('build articles keeps the preview image of the fetched page in the n8n sandbox', () => {
+  const list = runCodeNode(codeNodeSource(WF, 'Fetch list'), {
+    globals: sandbox,
+    nodes: { 'Select request': [payload], 'Select with Sonnet': [{ ok: true, data: selection }] },
+  }).map((i) => i.json);
+  const page = `<html><head><meta property="og:image" content="//cdn.news.example/0.jpg"></head><body><p>${'Shares opened higher. '.repeat(40)}</p></body></html>`;
+  const [{ json }] = runCodeNode(codeNodeSource(WF, 'Build articles'), {
+    globals: sandbox,
+    nodes: { 'Select request': [payload], 'Select with Sonnet': [{ ok: true, data: selection }], 'Fetch list': list },
+    input: [{ statusCode: 200, data: page }, { error: { message: 'timeout' } }, { statusCode: 200, data: page }],
+  });
+  assert.deepEqual(json.articles[0].image, { url: 'https://cdn.news.example/0.jpg', credit: 'news.example', link: payload.candidates[0].url });
+});

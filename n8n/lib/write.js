@@ -139,21 +139,34 @@ ${follow}
 ${headlines}`;
 }
 
+// Each story gets the preview image of the first cited article (main or related) that has one.
+function attachImages(stories, articles) {
+  const images = new Map();
+  for (const a of articles || []) {
+    for (const x of [a, ...(a.related || [])]) if (x && x.image && !images.has(safeNormalizeUrl(x.url))) images.set(safeNormalizeUrl(x.url), x.image);
+  }
+  return (stories || []).map((s) => {
+    if (!s) return s;
+    const hit = (s.sources || []).map((src) => images.get(safeNormalizeUrl(src.url))).find(Boolean);
+    return { ...s, image: hit || null };
+  });
+}
+
 function _keepKnown(sources, known) {
   return (sources || []).filter((s) => s && known.has(safeNormalizeUrl(s.url)));
 }
 
 // Merge the two model outputs into one edition (model shape); sources not from the input are dropped,
 // so checkEditionRules then removes stories left without any.
-function assembleEdition({ storiesPart, frontPart, knownUrls }) {
+function assembleEdition({ storiesPart, frontPart, knownUrls, articles = [] }) {
   const known = new Set((knownUrls || []).map(safeNormalizeUrl));
   const sp = storiesPart || {};
   const fp = frontPart || {};
   const story = (s) => (s ? { ...s, sources: _keepKnown(s.sources, known) } : null);
   return {
     greeting: fp.greeting || '',
-    lead_story: story(fp.lead_story),
-    stories: (sp.stories || []).map(story),
+    lead_story: fp.lead_story ? attachImages([story(fp.lead_story)], articles)[0] : null,
+    stories: attachImages((sp.stories || []).map(story), articles),
     market: { commentary: (fp.market && fp.market.commentary) || '', mood: (fp.market && fp.market.mood) || '' },
     rankings: { commentary: (fp.rankings && fp.rankings.commentary) || '', notes: (fp.rankings && fp.rankings.notes) || [] },
     rumors: (sp.rumors || []).map(story),
@@ -204,4 +217,4 @@ function finalizeEdition(checked, { date, generatedAt, numbers, allowedMoveIds }
   return e;
 }
 
-export { capBigMoves, pickSchema, entityList, storiesPrompt, frontPrompt, assembleEdition, finalizeEdition };
+export { attachImages, capBigMoves, pickSchema, entityList, storiesPrompt, frontPrompt, assembleEdition, finalizeEdition };

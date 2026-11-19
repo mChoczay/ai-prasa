@@ -84,7 +84,7 @@ const assemble = node({
         "const knownUrls = [];\n" +
         "for (const a of p.articles || []) { knownUrls.push(a.url); for (const r of a.related || []) knownUrls.push(r.url); }\n" +
         "for (const c of p.candidates || []) knownUrls.push(c.url);\n" +
-        "const raw = assembleEdition({ storiesPart: p.stories_part, frontPart: front, knownUrls });\n" +
+        "const raw = assembleEdition({ storiesPart: p.stories_part, frontPart: front, knownUrls, articles: p.articles || [] });\n" +
         "const checked = checkEditionRules(raw, p.entities || []);\n" +
         "const allowedMoveIds = capBigMoves(n.big_moves, 6).map((m) => m.entity_id).concat((n.ranking_moves || []).map((m) => m.entity_id));\n" +
         "const edition = finalizeEdition(checked.edition, { date: p.date, generatedAt: new Date().toISOString(), numbers: n, allowedMoveIds });\n" +

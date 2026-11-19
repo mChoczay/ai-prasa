@@ -99,10 +99,38 @@ function extractArticleText(html, maxChars = 12000) {
   return text.slice(0, maxChars);
 }
 
+const _OG_KEYS = ['og:image', 'og:image:url', 'og:image:secure_url'];
+
+// The page's preview image (og:image, else twitter:image) as an https URL, or null. Protocol-relative
+// and root-relative URLs are resolved against the page; http: and other schemes are refused.
+function extractOgImage(html, pageUrl) {
+  let og = null;
+  let tw = null;
+  for (const tag of String(html || '').match(/<meta\b[^>]*>/gi) || []) {
+    const attrs = {};
+    for (const m of tag.matchAll(/([a-z][\w:-]*)\s*=\s*("([^"]*)"|'([^']*)')/gi)) attrs[m[1].toLowerCase()] = m[3] !== undefined ? m[3] : m[4];
+    const key = String(attrs.property || attrs.name || '').toLowerCase();
+    if (!og && _OG_KEYS.includes(key) && attrs.content) og = attrs.content;
+    if (!tw && key === 'twitter:image' && attrs.content) tw = attrs.content;
+  }
+  const raw = _decodeEntities(String(og || tw || '')).trim();
+  if (!raw) return null;
+  if (/^https:\/\//i.test(raw)) return raw;
+  if (raw.startsWith('//')) return `https:${raw}`;
+  if (raw.startsWith('/')) {
+    try {
+      return `https://${_splitUrl(pageUrl).host}${raw}`;
+    } catch {
+      return null;
+    }
+  }
+  return null;
+}
+
 function entityId(name) {
   return _fold(name || '')
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/^-+|-+$/g, '');
 }
 
-export { normalizeUrl, safeNormalizeUrl, dedupeCandidates, extractArticleText, entityId };
+export { normalizeUrl, safeNormalizeUrl, dedupeCandidates, extractArticleText, extractOgImage, entityId };

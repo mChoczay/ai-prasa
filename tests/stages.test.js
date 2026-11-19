@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { selectPrompt, applySelection, relatedCandidates, fetchList, buildArticles } from '../n8n/lib/select.js';
-import { capBigMoves, pickSchema, entityList, storiesPrompt, frontPrompt, assembleEdition, finalizeEdition } from '../n8n/lib/write.js';
+import { capBigMoves, pickSchema, entityList, storiesPrompt, frontPrompt, assembleEdition, finalizeEdition, attachImages } from '../n8n/lib/write.js';
 
 const cand = (idx, title, extra = {}) => ({
   idx,
@@ -227,4 +227,44 @@ test('assembleEdition and finalizeEdition carry mood, why_short and ranking note
   assert.equal(e.market.mood, 'Trudny dzień.');
   assert.deepEqual(e.rankings.notes, [{ board: 'aa', text: 'Prowadzi Fable.' }]);
   assert.equal(e.big_moves[0].why_short, 'po wynikach');
+});
+
+test('buildArticles takes the preview image of each fetched page', () => {
+  const cands = [{ idx: 0, title: 'Lead story here', url: 'https://www.news.example/0', source: 'news.example', snippet: 's', category: 'modele' }];
+  const sel = applySelection(cands, { lead_idx: 0, story_idx: [], rumor_idx: [] });
+  const body = `<html><head><meta property="og:image" content="/i/0.jpg"></head><body><p>${'Długi akapit z treścią artykułu. '.repeat(30)}</p></body></html>`;
+  const [a] = buildArticles(sel, cands, [{ url: 'https://www.news.example/0', statusCode: 200, body }]);
+  assert.deepEqual(a.image, { url: 'https://www.news.example/i/0.jpg', credit: 'news.example', link: 'https://www.news.example/0' });
+  const [b] = buildArticles(sel, cands, []);
+  assert.equal(b.image, null);
+});
+
+test('attachImages gives each story the image of the article it cites, or null', () => {
+  const articles = [
+    { url: 'https://news.example/1', image: { url: 'https://img.example/1.jpg', credit: 'news.example', link: 'https://news.example/1' }, related: [] },
+    { url: 'https://news.example/2', image: null, related: [{ url: 'https://other.example/9', image: { url: 'https://img.example/9.jpg', credit: 'other.example', link: 'https://other.example/9' } }] },
+  ];
+  const stories = attachImages(
+    [
+      { title: 'A', sources: [{ url: 'https://news.example/1?utm_source=rss' }] },
+      { title: 'B', sources: [{ url: 'https://news.example/2' }, { url: 'https://other.example/9' }] },
+      { title: 'C', sources: [{ url: 'https://elsewhere.example/x' }] },
+    ],
+    articles,
+  );
+  assert.equal(stories[0].image.url, 'https://img.example/1.jpg');
+  assert.equal(stories[1].image.url, 'https://img.example/9.jpg');
+  assert.equal(stories[2].image, null);
+});
+
+test('assembleEdition attaches article images to the lead and the stories', () => {
+  const st = (t, url) => ({ title: t, category: 'modele', status: 'potwierdzone', is_update: false, lede: 'l', body: 'b', for_you: 'f', may_affect_names: [], sources: [{ name: 's', url, primary: true }] });
+  const raw = assembleEdition({
+    storiesPart: { stories: [st('S', 'https://news.example/2')], rumors: [] },
+    frontPart: { greeting: 'g', lead_story: st('L', 'https://news.example/1'), market: { commentary: '' }, rankings: { commentary: '' }, big_moves: [], follow_ups: [], closing: 'c' },
+    knownUrls: ['https://news.example/1', 'https://news.example/2'],
+    articles: [{ url: 'https://news.example/1', image: { url: 'https://img.example/1.jpg', credit: 'news.example', link: 'https://news.example/1' }, related: [] }],
+  });
+  assert.equal(raw.lead_story.image.url, 'https://img.example/1.jpg');
+  assert.equal(raw.stories[0].image, null);
 });

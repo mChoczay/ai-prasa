@@ -69,4 +69,21 @@ function parseMassiveAggs(input) {
   return rows.length ? rows : null;
 }
 
-export { parseLmarena, parseHfTrending, parseAaModels, parseMassiveAggs };
+// Massive grouped daily (/v2/aggs/grouped/locale/us/market/stocks/{date}), one or several days:
+// [{results: [{T: ticker, t: ms, c: close}]}] -> {TICKER: [{date, close}] ascending}, or null.
+function parseMassiveGrouped(input) {
+  const parsed = _json(input);
+  const days = (Array.isArray(parsed) ? parsed : [parsed]).filter((d) => d && Array.isArray(d.results));
+  if (!days.length) return null;
+  const series = {};
+  for (const day of days) {
+    for (const bar of day.results) {
+      if (!bar || typeof bar.T !== 'string' || !Number.isFinite(bar.t) || !Number.isFinite(bar.c)) continue;
+      (series[bar.T] = series[bar.T] || []).push({ date: new Date(bar.t).toISOString().slice(0, 10), close: bar.c });
+    }
+  }
+  for (const list of Object.values(series)) list.sort((a, b) => (a.date < b.date ? -1 : a.date > b.date ? 1 : 0));
+  return series;
+}
+
+export { parseLmarena, parseHfTrending, parseAaModels, parseMassiveAggs, parseMassiveGrouped };

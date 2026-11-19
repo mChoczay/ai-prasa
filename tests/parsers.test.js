@@ -79,3 +79,24 @@ for (const [name, fn] of [['parseLmarena', parseLmarena], ['parseHfTrending', pa
     for (const input of MALFORMED) assert.equal(fn(input), null, JSON.stringify(input));
   });
 }
+
+import { parseMassiveGrouped } from '../n8n/lib/parsers.js';
+
+test('parseMassiveGrouped turns several grouped-daily days into per-ticker ascending series', () => {
+  const day = (date, closes) => ({ status: 'OK', resultsCount: Object.keys(closes).length, results: Object.entries(closes).map(([T, c]) => ({ T, c, t: Date.parse(`${date}T05:00:00Z`) })) });
+  const series = parseMassiveGrouped([day('2026-11-18', { NVDA: 151, AMD: 200 }), day('2026-10-19', { NVDA: 180 }), day('2026-11-17', { NVDA: 155 })]);
+  assert.deepEqual(series.NVDA, [{ date: '2026-10-19', close: 180 }, { date: '2026-11-17', close: 155 }, { date: '2026-11-18', close: 151 }]);
+  assert.deepEqual(series.AMD, [{ date: '2026-11-18', close: 200 }]);
+});
+
+test('parseMassiveGrouped reads the real grouped-daily sample', () => {
+  const series = parseMassiveGrouped([JSON.parse(fixture('massive-grouped-2026-11-18.json'))]);
+  assert.equal(Object.keys(series).length, 18);
+  assert.deepEqual(series.NVDA, [{ date: '2026-11-18', close: 150.96 }]);
+});
+
+test('parseMassiveGrouped skips empty days and malformed input', () => {
+  assert.deepEqual(parseMassiveGrouped([{ status: 'OK', resultsCount: 0, results: [] }]), {});
+  assert.equal(parseMassiveGrouped('nope'), null);
+  assert.equal(parseMassiveGrouped([{}, null]), null);
+});

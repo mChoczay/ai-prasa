@@ -49,3 +49,23 @@ test('monthKey uses Warsaw time', () => {
 test('monthKey accepts a Date', () => {
   assert.equal(monthKey(new Date('2026-11-18T12:00:00Z')), '2026-11');
 });
+
+import { tradingRefDates } from '../n8n/lib/dates.js';
+
+test('tradingRefDates on a Thursday edition uses Wednesday and earlier weekdays', () => {
+  assert.deepEqual(tradingRefDates('2026-11-19'), { d0: '2026-11-18', d1: '2026-11-17', d7: '2026-11-11', d30: '2026-10-19' });
+});
+
+test('tradingRefDates on a Monday edition uses Friday', () => {
+  const r = tradingRefDates('2026-11-23');
+  assert.equal(r.d0, '2026-11-20');
+  assert.equal(r.d1, '2026-11-19');
+  assert.equal(r.d7, '2026-11-13');
+});
+
+test('tradingRefDates shifts weekend reference days back to Friday', () => {
+  const r = tradingRefDates('2026-11-17');
+  assert.equal(r.d0, '2026-11-16');
+  assert.equal(r.d1, '2026-11-13');
+  assert.equal(r.d30, '2026-10-16');
+});

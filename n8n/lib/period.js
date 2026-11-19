@@ -1,6 +1,6 @@
 // Relay stage "period": the weekly ("Tydzień w AI") and monthly ("Miesiąc w AI") supplements.
 // Imports are stripped by scripts/inline-lib.mjs; inline dates.js and edition.js first.
-import { readingMinutes } from './edition.js';
+import { supplementMinutes } from './edition.js';
 
 const WINDOWS = Object.freeze({ weekly: 7, monthly: 30 });
 
@@ -64,7 +64,7 @@ function periodSchema(single, kinds) {
 function addPeriods(edition, data, kinds) {
   const e = JSON.parse(JSON.stringify(edition));
   for (const k of kinds) e[k] = data && data[k] && data[k].body ? data[k] : null;
-  e.minutes = readingMinutes(e);
+  e.supplement_minutes = supplementMinutes(e);
   return e;
 }
 

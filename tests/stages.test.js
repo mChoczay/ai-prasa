@@ -1,5 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
 import { selectPrompt, applySelection, relatedCandidates, fetchList, buildArticles } from '../n8n/lib/select.js';
 import { capBigMoves, pickSchema, entityList, storiesPrompt, frontPrompt, assembleEdition, finalizeEdition } from '../n8n/lib/write.js';
 
@@ -198,4 +199,32 @@ test('finalizeEdition keeps the market commentary but no rows when market data i
   );
   assert.equal(e.market.rows, null);
   assert.deepEqual([e.rankings.lmarena, e.rankings.aa, e.rankings.hf_trending], [null, null, null]);
+});
+
+test('the edition schema asks for the one-line market, move and ranking fields', () => {
+  const FULL = JSON.parse(readFileSync(new URL('../schemas/edition.schema.json', import.meta.url), 'utf8'));
+  const market = pickSchema(FULL, ['market']).properties.market;
+  assert.ok(market.required.includes('mood'));
+  assert.ok(FULL.properties.big_moves.items.required.includes('why_short'));
+  const notes = FULL.properties.rankings.properties.notes;
+  assert.deepEqual(notes.items.properties.board.enum, ['lmarena', 'aa', 'hf_trending']);
+  assert.ok(FULL.properties.rankings.required.includes('notes'));
+});
+
+test('assembleEdition and finalizeEdition carry mood, why_short and ranking notes', () => {
+  const raw = assembleEdition({
+    storiesPart: { stories: [], rumors: [] },
+    frontPart: {
+      greeting: 'g', lead_story: null, closing: 'c', follow_ups: [],
+      market: { commentary: 'Długo.', mood: 'Trudny dzień.' },
+      rankings: { commentary: 'r', notes: [{ board: 'aa', text: 'Prowadzi Fable.' }] },
+      big_moves: [{ entity_id: 'nvda', board: 'market', change: '-13%', why: 'w', why_short: 'po wynikach', why_type: 'fakt', sources: [] }],
+    },
+    knownUrls: [],
+  });
+  assert.equal(raw.big_moves[0].why_short, 'po wynikach');
+  const e = finalizeEdition({ ...raw, quiet_day: true }, { date: '2026-11-20', generatedAt: 'x', numbers: { market: null, rankings: null }, allowedMoveIds: ['nvda'] });
+  assert.equal(e.market.mood, 'Trudny dzień.');
+  assert.deepEqual(e.rankings.notes, [{ board: 'aa', text: 'Prowadzi Fable.' }]);
+  assert.equal(e.big_moves[0].why_short, 'po wynikach');
 });

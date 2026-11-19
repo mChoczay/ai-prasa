@@ -12,10 +12,21 @@
     "lede": "Nowy model jest dostępny przez API od wczoraj wieczorem.",
     "body": "To przykładowy tekst czołówki. Model ma dłuższe okno kontekstu i lepiej wywołuje narzędzia, a milion tokenów kosztuje wyraźnie mniej niż u poprzednika.",
     "for_you": "Agent, który dziś kosztuje kilka dolarów dziennie, po migracji może kosztować o jedną trzecią mniej.",
-    "may_affect_names": ["Nvidia", "Model X"],
+    "may_affect_names": [
+      "Nvidia",
+      "Model X"
+    ],
     "sources": [
-      { "name": "Blog firmy X", "url": "https://example.com/blog/model-x", "primary": true },
-      { "name": "Serwis rankingowy", "url": "https://example.org/leaderboard", "primary": false }
+      {
+        "name": "Blog firmy X",
+        "url": "https://example.com/blog/model-x",
+        "primary": true
+      },
+      {
+        "name": "Serwis rankingowy",
+        "url": "https://example.org/leaderboard",
+        "primary": false
+      }
     ],
     "disclaimer": null
   },
@@ -28,8 +39,16 @@
       "lede": "Przychody z centrów danych powyżej oczekiwań.",
       "body": "Przykładowy tekst o wynikach kwartalnych i popycie na akceleratory.",
       "for_you": "Ceny GPU w chmurze raczej nie spadną w tym kwartale.",
-      "may_affect_names": ["NVDA"],
-      "sources": [{ "name": "Raport kwartalny", "url": "https://example.com/ir/q3", "primary": true }],
+      "may_affect_names": [
+        "NVDA"
+      ],
+      "sources": [
+        {
+          "name": "Raport kwartalny",
+          "url": "https://example.com/ir/q3",
+          "primary": true
+        }
+      ],
       "disclaimer": null
     },
     {
@@ -40,8 +59,16 @@
       "lede": "Wycena wyraźnie wyższa niż pół roku temu.",
       "body": "Przykładowy tekst o rundzie finansowania i inwestorach.",
       "for_you": "Więcej mocy obliczeniowej to szybsze kolejne wersje modeli.",
-      "may_affect_names": ["Nowa Firma"],
-      "sources": [{ "name": "Agencja prasowa", "url": "https://example.net/news/round", "primary": false }],
+      "may_affect_names": [
+        "Nowa Firma"
+      ],
+      "sources": [
+        {
+          "name": "Agencja prasowa",
+          "url": "https://example.net/news/round",
+          "primary": false
+        }
+      ],
       "disclaimer": null
     },
     {
@@ -53,7 +80,13 @@
       "body": "Przykładowy tekst o konsolidacji narzędzi.",
       "for_you": "Mniej przepisywania integracji przy zmianie frameworka.",
       "may_affect_names": [],
-      "sources": [{ "name": "Blog projektu", "url": "https://example.dev/spec", "primary": true }],
+      "sources": [
+        {
+          "name": "Blog projektu",
+          "url": "https://example.dev/spec",
+          "primary": true
+        }
+      ],
       "disclaimer": null
     },
     {
@@ -65,19 +98,45 @@
       "body": "Przykładowy tekst o obowiązkach dostawców modeli.",
       "for_you": "Jeśli publikujesz model, sprawdź wymagania dokumentacyjne.",
       "may_affect_names": [],
-      "sources": [{ "name": "Dziennik urzędowy", "url": "https://example.eu/act", "primary": true }],
+      "sources": [
+        {
+          "name": "Dziennik urzędowy",
+          "url": "https://example.eu/act",
+          "primary": true
+        }
+      ],
       "disclaimer": null
     }
   ],
-  "market": { "commentary": "Pamięć HBM znów w centrum uwagi po wynikach dostawców.", "disclaimer": null },
-  "rankings": { "commentary": "Model X awansował o dwie pozycje." },
+  "market": {
+    "commentary": "Pamięć HBM znów w centrum uwagi po wynikach dostawców.",
+    "disclaimer": null,
+    "mood": "Pamięć HBM znów w centrum uwagi."
+  },
+  "rankings": {
+    "commentary": "Model X awansował o dwie pozycje.",
+    "notes": [
+      {
+        "board": "lmarena",
+        "text": "Model X awansował o dwie pozycje."
+      }
+    ]
+  },
   "rumors": [
     {
       "title": "Firma Q ma szykować premierę przed świętami",
       "body": "Dwa niezależne źródła mówią o nowej wersji modelu.",
       "sources": [
-        { "name": "Serwis technologiczny", "url": "https://example.com/rumor", "primary": false },
-        { "name": "Znany leaker", "url": "https://example.social/post/1", "primary": false }
+        {
+          "name": "Serwis technologiczny",
+          "url": "https://example.com/rumor",
+          "primary": false
+        },
+        {
+          "name": "Znany leaker",
+          "url": "https://example.social/post/1",
+          "primary": false
+        }
       ]
     }
   ],
@@ -88,7 +147,14 @@
       "change": "+4.1%",
       "why": "Akcje wzrosły po publikacji wyników kwartalnych.",
       "why_type": "fakt",
-      "sources": [{ "name": "Raport kwartalny", "url": "https://example.com/ir/q3", "primary": true }]
+      "sources": [
+        {
+          "name": "Raport kwartalny",
+          "url": "https://example.com/ir/q3",
+          "primary": true
+        }
+      ],
+      "why_short": "po wynikach kwartalnych"
     }
   ],
   "follow_ups": [],

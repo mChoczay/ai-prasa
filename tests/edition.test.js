@@ -7,6 +7,7 @@ import {
   collectNewEntities,
   pickSpotlight,
   readingMinutes,
+  supplementMinutes,
   upsertIndex,
   resolvePending,
 } from '../n8n/lib/edition.js';
@@ -204,4 +205,13 @@ test('upsertIndex re-run on the same date keeps one entry with the newest title'
     ['2026-11-18', 'Drugi'],
     ['2026-11-17', 'Wczoraj'],
   ]);
+});
+
+test('readingMinutes counts only the daily edition and supplementMinutes the weekly and monthly', () => {
+  const daily = { greeting: '', lead_story: { body: 'w '.repeat(2000) }, stories: [] };
+  const weekly = { title: 'T', body: 'w '.repeat(1200) };
+  assert.equal(readingMinutes({ ...daily, weekly }), readingMinutes(daily));
+  assert.equal(supplementMinutes({ ...daily, weekly }), 6);
+  assert.equal(supplementMinutes({ ...daily, weekly, monthly: { body: 'w '.repeat(1400) } }), 13);
+  assert.equal(supplementMinutes(daily), 0);
 });

@@ -39,9 +39,10 @@ test('periodPrompt keeps the window, the market change of the period and the fir
 test('periodSchema and addPeriods handle one or both supplements', () => {
   const single = { type: 'object', properties: { title: { type: 'string' } } };
   assert.deepEqual(periodSchema(single, ['weekly']).required, ['weekly']);
-  const e = addPeriods({ date: '2026-11-22', greeting: 'g', lead_story: null, stories: [], weekly: null, monthly: null }, { weekly: { title: 'T', body: 'word '.repeat(1000), takeaways: [], race_map: [] } }, ['weekly']);
+  const e = addPeriods({ date: '2026-11-22', minutes: 15, greeting: 'g', lead_story: null, stories: [], weekly: null, monthly: null }, { weekly: { title: 'T', body: 'word '.repeat(1000), takeaways: [], race_map: [] } }, ['weekly']);
   assert.equal(e.weekly.title, 'T');
   assert.equal(e.monthly, null);
-  assert.equal(e.minutes, 6);
+  assert.equal(e.minutes, 15);
+  assert.equal(e.supplement_minutes, 5);
   assert.equal(addPeriods({ date: 'x' }, {}, ['monthly']).monthly, null);
 });

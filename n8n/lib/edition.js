@@ -156,8 +156,14 @@ function readingMinutes(edition) {
   for (const m of edition.big_moves || []) words += _words(m.why);
   words += _words(edition.market && edition.market.commentary);
   words += _words(edition.rankings && edition.rankings.commentary);
-  for (const p of [edition.weekly, edition.monthly]) if (p) words += _words(p.body);
   return Math.max(1, Math.ceil(words / 200));
+}
+
+// Reading time of the weekly and monthly supplements, shown apart from the daily edition.
+function supplementMinutes(edition) {
+  let words = 0;
+  for (const p of [edition.weekly, edition.monthly]) if (p) words += _words(p.body);
+  return words ? Math.ceil(words / 200) : 0;
 }
 
 // After new profiles are saved: map each story's pending names to ids; names still unknown are dropped.
@@ -182,4 +188,4 @@ function upsertIndex(index, entry) {
   return { ...index, editions };
 }
 
-export { DISCLAIMER, resolveEntity, checkEditionRules, collectNewEntities, pickSpotlight, readingMinutes, resolvePending, upsertIndex };
+export { DISCLAIMER, resolveEntity, checkEditionRules, collectNewEntities, pickSpotlight, readingMinutes, supplementMinutes, resolvePending, upsertIndex };

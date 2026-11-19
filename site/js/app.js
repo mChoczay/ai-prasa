@@ -1,4 +1,5 @@
-import { renderEdition, renderArchive, renderProfileCard, escapeHtml } from './render.js';
+import { renderArchive, renderProfileCard, escapeHtml } from './render.js';
+import { renderFront } from './front.js';
 
 const app = document.getElementById('app');
 const dialog = document.getElementById('profile-dialog');
@@ -46,7 +47,7 @@ async function route() {
       return;
     }
     const edition = await getJson(`data/${date}.json`);
-    app.innerHTML = renderEdition(edition, profilesById);
+    app.innerHTML = renderFront(edition, profilesById);
     document.title = `${edition.lead_story ? edition.lead_story.title : date} · Poranna prasa AI`;
     window.scrollTo(0, 0);
   } catch (err) {
@@ -56,12 +57,33 @@ async function route() {
 }
 
 app.addEventListener('click', (event) => {
-  const chip = event.target.closest('.entity');
+  const chip = event.target.closest('[data-entity]');
   if (!chip) return;
   const profile = profilesById[chip.dataset.entity];
   dialogBody.innerHTML = profile ? renderProfileCard(profile) : `<p>${escapeHtml(chip.textContent)}</p>`;
   dialog.showModal();
 });
+
+// A story image that fails (blocked hotlink, 404) is swapped for its fallback once, then hidden.
+document.addEventListener(
+  'error',
+  (event) => {
+    const img = event.target;
+    if (!(img instanceof HTMLImageElement)) return;
+    const figure = img.closest('figure.img');
+    if (!figure) return;
+    const fallback = img.dataset.fallback;
+    if (fallback) {
+      delete img.dataset.fallback;
+      const caption = figure.querySelector('figcaption');
+      if (caption) caption.textContent = img.dataset.fallbackCredit ? 'fot. ' + img.dataset.fallbackCredit : '';
+      img.src = fallback;
+      return;
+    }
+    figure.classList.add('no-img');
+  },
+  true,
+);
 
 window.addEventListener('hashchange', route);
 route();

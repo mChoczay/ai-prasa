@@ -1,6 +1,56 @@
 {
  "profiles": [
   {
+   "id": "000660.ks",
+   "type": "company",
+   "name": "SK hynix",
+   "aliases": "SK Hynix,에스케이하이닉스,000660.KS",
+   "ticker": "000660.KS",
+   "summary": "SK hynix to południowokoreańska firma półprzewodnikowa, która produkuje układy pamięci DRAM oraz pamięci flash. Jest jednym z największych producentów półprzewodników na świecie i wraz z Samsung Electronics oraz Micron tworzy grupę tzw. „wielkiej trójki” producentów pamięci. Firma powstała w 1983 roku jako Hyundai Electronics, a w 2012 roku została włączona do grupy SK.",
+   "owner": "spółka giełdowa (Korea Południowa, notowana na giełdzie KRX; ticker 000660.KS)",
+   "key_products": [
+    "pamięci DRAM",
+    "pamięci flash NAND"
+   ],
+   "why_it_matters": "Jako jeden z trzech największych producentów pamięci DRAM i flash, SK hynix dostarcza komponenty kluczowe dla infrastruktury AI, a jego klientami są m.in. Nvidia i Microsoft.",
+   "updated_at": "2026-11-19",
+   "last_spotlight_at": null,
+   "image": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/24/SK_Hynix.svg/960px-SK_Hynix.svg.png?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+    "credit": "Wikimedia Commons",
+    "link": ""
+   }
+  },
+  {
+   "id": "005930.ks",
+   "type": "company",
+   "name": "Samsung",
+   "aliases": "Samsung,SEC,Samsung Electronics Co., Ltd.,삼성전자,005930.KS",
+   "ticker": "005930.KS",
+   "summary": "Samsung Electronics to południowokoreańska wielonarodowa korporacja elektroniki użytkowej i półprzewodników, założona w 1969 roku, będąca flagową spółką grupy chaebol Samsung. Jest największym na świecie producentem pamięci półprzewodnikowych, w tym DRAM i NAND flash, a także dostawcą wyświetlaczy, smartfonów i sprzętu AGD. Firma produkuje również komponenty, takie jak czujniki obrazu i panele wyświetlaczy, dla innych firm, w tym Apple.",
+   "owner": "spółka giełdowa (Korea Exchange, 005930.KS)",
+   "key_products": [
+    "Galaxy S",
+    "Galaxy A",
+    "Galaxy M",
+    "Galaxy Z Fold",
+    "Galaxy Z Flip",
+    "Galaxy Tab",
+    "pamięci DRAM i NAND flash",
+    "telewizory",
+    "Samsung Wallet",
+    "Samsung TV Plus"
+   ],
+   "why_it_matters": "Jako największy producent pamięci i jeden z dwóch największych dostawców smartfonów, Samsung kontroluje kluczowe podzespoły, od których zależy rozwój infrastruktury AI.",
+   "updated_at": "2026-11-19",
+   "last_spotlight_at": null,
+   "image": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e2/Samsung_headquarters.jpg/960px-Samsung_headquarters.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+    "credit": "Wikimedia Commons",
+    "link": ""
+   }
+  },
+  {
    "id": "aapl",
    "type": "company",
    "name": "Apple",
@@ -24,7 +74,12 @@
    ],
    "why_it_matters": "Apple jest największym dostawcą telefonów komórkowych i tabletów na świecie, a jego sprzęt i systemy operacyjne wyznaczają standardy, w których rozwijane są również funkcje AI.",
    "updated_at": "2026-11-19",
-   "last_spotlight_at": null
+   "last_spotlight_at": null,
+   "image": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/fa/Apple_logo_black.svg/960px-Apple_logo_black.svg.png?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+    "credit": "Original: Rob Janoff / Public domain, Wikimedia Commons",
+    "link": "https://commons.wikimedia.org/wiki/File:Apple_logo_black.svg"
+   }
   },
   {
    "id": "amd",
@@ -43,7 +98,12 @@
    ],
    "why_it_matters": "AMD jest jednym z nielicznych dostawców zaawansowanych procesorów i akceleratorów GPU, a jego układy trafiają do serwerów, centrów danych i komputerów, co czyni je ważnym graczem w wyścigu o moc obliczeniową dla AI.",
    "updated_at": "2026-11-19",
-   "last_spotlight_at": null
+   "last_spotlight_at": null,
+   "image": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/11/2485_Augustine_Drive_headquarters_in_Santa_Clara%2C_California.jpg/960px-2485_Augustine_Drive_headquarters_in_Santa_Clara%2C_California.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+    "credit": "Coolcaesar / CC BY-SA 4.0, Wikimedia Commons",
+    "link": "https://commons.wikimedia.org/wiki/File:2485_Augustine_Drive_headquarters_in_Santa_Clara,_California.jpg"
+   }
   },
   {
    "id": "amzn",
@@ -66,7 +126,59 @@
    ],
    "why_it_matters": "Dzięki Amazon Web Services firma jest jednym z kluczowych dostawców infrastruktury chmurowej, na której powstaje i działa wiele systemów AI.",
    "updated_at": "2026-11-19",
-   "last_spotlight_at": null
+   "last_spotlight_at": null,
+   "image": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/3/33/Jeff_Bezos_2016.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
+    "credit": "U.S. Department of Defense photo by Senior Master Sgt. Adrian Cadiz / CC BY 2.0, Wikimedia Commons",
+    "link": "https://commons.wikimedia.org/wiki/File:Jeff_Bezos_2016.jpg"
+   }
+  },
+  {
+   "id": "arm",
+   "type": "company",
+   "name": "Arm",
+   "aliases": "Arm Holdings plc,ARM,Advanced RISC Machines,Acorn RISC Machine,ARM Holdings",
+   "ticker": "ARM",
+   "summary": "Arm Holdings to brytyjska firma z siedzibą w Cambridge, zajmująca się projektowaniem i licencjonowaniem rdzeni procesorów (CPU) opartych na architekturze ARM. Obok CPU projektuje też inne układy, narzędzia programistyczne oraz platformy i oprogramowanie dla infrastruktury SoC. Architektury Arm napędzają większość nowoczesnych smartfonów i systemów wbudowanych, a także procesory w najszybszych superkomputerach.",
+   "owner": "spółka giełdowa (Nasdaq, ticker ARM); większościowy udziałowiec: SoftBank Group",
+   "key_products": [
+    "rdzenie CPU ARM",
+    "GPU Mali",
+    "GPU Immortalis (z sprzętowym śledzeniem promieni)",
+    "narzędzia DS-5",
+    "RealView i Keil"
+   ],
+   "why_it_matters": "Architektura Arm jest podstawą większości procesorów w urządzeniach mobilnych i wbudowanych, a jej licencjobiorcy obejmują praktycznie całą branżę chipów, co daje firmie kluczową pozycję w infrastrukturze sprzętowej AI.",
+   "updated_at": "2026-11-19",
+   "last_spotlight_at": null,
+   "image": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/89/ARM-Cambridge.jpg/960px-ARM-Cambridge.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+    "credit": "Wikimedia Commons",
+    "link": ""
+   }
+  },
+  {
+   "id": "asml",
+   "type": "company",
+   "name": "ASML",
+   "aliases": "ASML Holding N.V.,ASML Holding,Advanced Semiconductor Materials Lithography,ASML",
+   "ticker": "ASML",
+   "summary": "ASML Holding N.V. to holenderska firma technologiczna z siedzibą w Veldhoven, produkująca maszyny do fotolitografii wykorzystywane do wytwarzania układów scalonych. Jest największym dostawcą dla przemysłu półprzewodników i jako jedyna na świecie produkuje maszyny litografii w skrajnym ultrafiolecie (EUV), niezbędne do wytwarzania najbardziej zaawansowanych chipów. Firma powstała w 1984 roku jako joint venture Philipsa i ASM International, a jej kapitalizacja z początku 2026 roku wynosiła około 527 mld dolarów.",
+   "owner": "spółka giełdowa (Euronext Amsterdam i Nasdaq; notowana jako ASML)",
+   "key_products": [
+    "maszyny EUV",
+    "maszyny litografii DUV",
+    "PAS 2000",
+    "PAS 5500"
+   ],
+   "why_it_matters": "Bez sprzętu ASML nie da się produkować najnowocześniejszych chipów, więc firma stoi w samym centrum globalnego wyścigu o zaawansowane półprzewodniki i podlega ostrym kontrolom eksportu do Chin.",
+   "updated_at": "2026-11-19",
+   "last_spotlight_at": null,
+   "image": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/ae/ASML_headquarters_Veldhoven.jpg/960px-ASML_headquarters_Veldhoven.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+    "credit": "Wikimedia Commons",
+    "link": ""
+   }
   },
   {
    "id": "avgo",
@@ -83,7 +195,30 @@
    ],
    "why_it_matters": "Broadcom jest jednym z największych dostawców półprzewodników na świecie, a w kwietniu 2026 roku jego wartość rynkowa przekroczyła 2 bln dolarów, co czyni go istotnym graczem w infrastrukturze, na której działa rozwój i wdrażanie AI.",
    "updated_at": "2026-11-19",
-   "last_spotlight_at": null
+   "last_spotlight_at": null,
+   "image": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f8/Broadcom_Headquarters_San_Jose.jpg/960px-Broadcom_Headquarters_San_Jose.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+    "credit": "Coolcaesar / CC BY-SA 4.0, Wikimedia Commons",
+    "link": "https://commons.wikimedia.org/wiki/File:Broadcom_Headquarters_San_Jose.jpg"
+   }
+  },
+  {
+   "id": "crwv",
+   "type": "company",
+   "name": "CoreWeave",
+   "aliases": "CRWV,Atlantic Crypto",
+   "ticker": "CRWV",
+   "summary": "CoreWeave, Inc. to amerykańska firma z branży chmury obliczeniowej z siedzibą w Livingston w stanie New Jersey. Obsługuje 51 centrów danych AI, wyspecjalizowanych w wysokiej wydajności obliczeń równoległych dzięki intensywnemu wykorzystaniu procesorów graficznych (GPU). Firma powstała w 2017 roku jako Atlantic Crypto i ma centra danych w USA i Europie, część dedykowaną wielu klientom, a część jednemu.",
+   "owner": "spółka giełdowa (NASDAQ)",
+   "key_products": [
+    "chmura GPU dla AI",
+    "centra danych AI",
+    "superkomputer dla Nvidia w Plano w Teksasie"
+   ],
+   "why_it_matters": "Firma jest jednym z kluczowych dostawców infrastruktury GPU dla obciążeń AI, a jej superkomputer dla Nvidia opisywany jest przez Nvidia jako najszybszy superkomputer AI na świecie.",
+   "updated_at": "2026-11-19",
+   "last_spotlight_at": null,
+   "image": null
   },
   {
    "id": "googl",
@@ -98,7 +233,35 @@
    ],
    "why_it_matters": "Jako holding obejmujący Google, Alphabet kontroluje jednego z największych graczy w dziedzinie AI i wyszukiwania internetowego, co czyni go kluczowym uczestnikiem wyścigu technologicznego.",
    "updated_at": "2026-11-19",
-   "last_spotlight_at": null
+   "last_spotlight_at": "2026-11-19",
+   "image": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e2/Google_Campus%2C_Mountain_View%2C_CA.jpg/960px-Google_Campus%2C_Mountain_View%2C_CA.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+    "credit": "Austin McKinley / CC BY 3.0, Wikimedia Commons",
+    "link": "https://commons.wikimedia.org/wiki/File:Google_Campus,_Mountain_View,_CA.jpg"
+   }
+  },
+  {
+   "id": "intc",
+   "type": "company",
+   "name": "Intel",
+   "aliases": "INTC,Intel Corporation",
+   "ticker": "INTC",
+   "summary": "Intel Corporation to amerykańska firma technologiczna z siedzibą w Santa Clara w Kalifornii, projektująca, produkująca i sprzedająca m.in. procesory (CPU) dla rynku biznesowego i konsumenckiego. Jest jednym z dwóch głównych twórców architektury x86 używanej w większości komputerów PC, obok AMD. Firma powstała w 1968 roku, a w 1971 roku stworzyła pierwszy komercyjny mikroprocesor, Intel 4004. Obecnie, według dostępnych informacji, pracuje nad procesem produkcyjnym 18A i pozyskała pierwszego zewnętrznego klienta dla tej technologii.",
+   "owner": "spółka giełdowa (Nasdaq, INTC)",
+   "key_products": [
+    "Intel Core",
+    "Intel Xeon",
+    "Intel Arc",
+    "proces produkcyjny 18A"
+   ],
+   "why_it_matters": "Intel to jeden z kluczowych graczy w rynku procesorów i układów dla serwerów i PC, a jego próba odzyskania pozycji w produkcji półprzewodników konkuruje bezpośrednio z liderem branży, TSMC.",
+   "updated_at": "2026-11-19",
+   "last_spotlight_at": null,
+   "image": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/97/Intel_Headquarters_in_2023.jpg/960px-Intel_Headquarters_in_2023.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+    "credit": "Wikimedia Commons",
+    "link": ""
+   }
   },
   {
    "id": "meta",
@@ -117,7 +280,12 @@
    ],
    "why_it_matters": "Dzięki ogromnym nakładom na badania i rozwój oraz skali swoich platform Meta jest jednym z najważniejszych graczy w wyścigu o rozwój AI.",
    "updated_at": "2026-11-19",
-   "last_spotlight_at": null
+   "last_spotlight_at": null,
+   "image": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/af/Meta_Quest_3_display_unit.jpg/960px-Meta_Quest_3_display_unit.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+    "credit": "IHazACatNamedMax / CC BY-SA 4.0, Wikimedia Commons",
+    "link": "https://commons.wikimedia.org/wiki/File:Meta_Quest_3_display_unit.jpg"
+   }
   },
   {
    "id": "msft",
@@ -138,7 +306,37 @@
    ],
    "why_it_matters": "Microsoft jest jednym z kluczowych graczy w wyścigu AI dzięki dominującej pozycji w chmurze Azure oraz pakietom biurowym, do których wprowadza funkcje sztucznej inteligencji.",
    "updated_at": "2026-11-19",
-   "last_spotlight_at": null
+   "last_spotlight_at": null,
+   "image": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d6/Aerial_Microsoft_West_Campus_August_2009.jpg/960px-Aerial_Microsoft_West_Campus_August_2009.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+    "credit": "Jelson25 / Public domain, Wikimedia Commons",
+    "link": "https://commons.wikimedia.org/wiki/File:Aerial_Microsoft_West_Campus_August_2009.jpg"
+   }
+  },
+  {
+   "id": "mu",
+   "type": "company",
+   "name": "Micron",
+   "aliases": "MU,Micron Technology",
+   "ticker": "MU",
+   "summary": "Micron Technology, Inc. to amerykańska wielonarodowa firma półprzewodnikowa z siedzibą w Boise w stanie Idaho, założona w 1978 roku. Produkuje pamięci komputerowe i urządzenia do przechowywania danych, w tym DRAM, pamięci flash, pamięci High Bandwidth Memory (HBM) oraz dyski SSD. Jest jednym z trzech największych producentów pamięci na świecie, obok Samsunga i SK Hynix, i jedynym dużym amerykańskim producentem tego typu.",
+   "owner": "spółka giełdowa (NASDAQ)",
+   "key_products": [
+    "DRAM",
+    "pamięci flash NAND",
+    "HBM",
+    "dyski SSD",
+    "Crucial",
+    "Ballistix"
+   ],
+   "why_it_matters": "Micron, jako jeden z trzech głównych dostawców pamięci HBM, odgrywa istotną rolę w dostarczaniu pamięci potrzebnej do budowy i działania układów AI, a w maju 2026 roku osiągnął wycenę 1 bln USD.",
+   "updated_at": "2026-11-19",
+   "last_spotlight_at": null,
+   "image": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/e/e2/MicronSanJose.png?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
+    "credit": "Wikimedia Commons",
+    "link": ""
+   }
   },
   {
    "id": "nvda",
@@ -156,7 +354,12 @@
    ],
    "why_it_matters": "Sprzęt NVIDIA, zwłaszcza akceleratory do centrów danych, jest kluczowy dla rozwoju i trenowania modeli AI, a jej rosnąca kapitalizacja, która w 2025 roku przekroczyła 4 i 5 bilionów dolarów, odzwierciedla ogromny popyt na tę infrastrukturę.",
    "updated_at": "2026-11-19",
-   "last_spotlight_at": null
+   "last_spotlight_at": null,
+   "image": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/75/2788-2888_San_Tomas_Expwy.jpg/960px-2788-2888_San_Tomas_Expwy.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+    "credit": "Coolcaesar / CC BY-SA 4.0, Wikimedia Commons",
+    "link": "https://commons.wikimedia.org/wiki/File:2788-2888_San_Tomas_Expwy.jpg"
+   }
   },
   {
    "id": "orcl",
@@ -176,7 +379,78 @@
    ],
    "why_it_matters": "Oracle jest kluczowym dostawcą infrastruktury danych i chmury dla dużych firm, a jej usługi chmurowe rywalizują w wyścigu AI z największymi dostawcami chmury.",
    "updated_at": "2026-11-19",
-   "last_spotlight_at": null
+   "last_spotlight_at": null,
+   "image": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d1/Oracle_Campus_in_Austin_2018.jpg/960px-Oracle_Campus_in_Austin_2018.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+    "credit": "DronePhotographer / CC0, Wikimedia Commons",
+    "link": "https://commons.wikimedia.org/wiki/File:Oracle_Campus_in_Austin_2018.jpg"
+   }
+  },
+  {
+   "id": "pltr",
+   "type": "company",
+   "name": "Palantir",
+   "aliases": "Palantir,PLTR",
+   "ticker": "PLTR",
+   "summary": "Palantir Technologies to amerykańska spółka giełdowa z siedzibą w Miami na Florydzie, założona w 2003 roku przez m.in. Petera Thiela i Alexa Karpa. Tworzy oprogramowanie do integracji i analizy danych, z którego korzystają agencje federalne, rządy stanowe i lokalne, organizacje międzynarodowe oraz firmy prywatne. Jej produkty są wykorzystywane zarówno w wywiadzie i wojsku, jak i w analizie danych w sektorze cywilnym, a firma jest krytykowana za rolę w rozwoju nadzoru państwowego z użyciem AI i rozpoznawania twarzy.",
+   "owner": "Spółka giełdowa (NYSE, ticker PLTR)",
+   "key_products": [
+    "Gotham",
+    "Foundry",
+    "Apollo",
+    "AIP"
+   ],
+   "why_it_matters": "Palantir jest jednym z kluczowych dostawców platform do wdrażania analizy danych i AI w administracji publicznej, obronności i dużych przedsiębiorstwach, a jej produkt AIP pokazuje, jak firmy integrują modele AI z własnymi danymi.",
+   "updated_at": "2026-11-19",
+   "last_spotlight_at": null,
+   "image": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/9d/Palantir_1_2018-09-06.jpg/960px-Palantir_1_2018-09-06.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+    "credit": "Wikimedia Commons",
+    "link": ""
+   }
+  },
+  {
+   "id": "smci",
+   "type": "company",
+   "name": "Super Micro",
+   "aliases": "Supermicro,SMCI",
+   "ticker": "SMCI",
+   "summary": "Super Micro Computer, działająca jako Supermicro, to amerykańska firma IT z siedzibą w San Jose w Kalifornii, założona w 1993 roku. Jest jednym z największych producentów wysokowydajnych i energooszczędnych serwerów, a także oferuje oprogramowanie do zarządzania serwerami oraz systemy pamięci masowej. Jej produkty trafiają do centrów danych przedsiębiorstw, chmury obliczeniowej, sztucznej inteligencji, 5G i przetwarzania brzegowego. Produkcja odbywa się w Dolinie Krzemowej, Holandii i na Tajwanie.",
+   "owner": "spółka giełdowa (NASDAQ)",
+   "key_products": [
+    "serwery wysokowydajne i energooszczędne",
+    "oprogramowanie do zarządzania serwerami",
+    "systemy pamięci masowej"
+   ],
+   "why_it_matters": "Dostarcza serwery, na których działa infrastruktura AI, więc jest jednym z ważnych dostawców sprzętu dla rozwoju sztucznej inteligencji.",
+   "updated_at": "2026-11-19",
+   "last_spotlight_at": null,
+   "image": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/1d/Super_Micro_Computer_Logo.svg/960px-Super_Micro_Computer_Logo.svg.png?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+    "credit": "Wikimedia Commons",
+    "link": ""
+   }
+  },
+  {
+   "id": "tsla",
+   "type": "company",
+   "name": "Tesla",
+   "aliases": "TSLA,Tesla, Inc.",
+   "ticker": "TSLA",
+   "summary": "Tesla, Inc. to amerykańska firma produkująca pojazdy elektryczne. Z referencji wynika, że firma opracowuje Cybercab, dwuosobową elektryczną robotaxi bez kierownicy i pedałów, przeznaczoną wyłącznie do jazdy autonomicznej. Pojazd ma jeździć w usłudze przewozów Robotaxi, a Tesla wystartowała z płatnymi przejazdami w Austin w Teksasie we wrześniu 2026 roku.",
+   "owner": "Tesla, Inc. (spółka giełdowa, ticker TSLA)",
+   "key_products": [
+    "Cybercab",
+    "Robotaxi"
+   ],
+   "why_it_matters": "Tesla stawia na autonomiczne taksówki oparte wyłącznie na kamerach, bez lidarów i radarów, a jej plany przewozów bez kierowcy są w centrum uwagi, także po audycie NHTSA dotyczącym certyfikacji Cybercaba.",
+   "updated_at": "2026-11-19",
+   "last_spotlight_at": null,
+   "image": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a7/Tesla_Cybercab_on_Interstate_280_near_Palo_Alto_dllu.jpg/960px-Tesla_Cybercab_on_Interstate_280_near_Palo_Alto_dllu.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+    "credit": "Wikimedia Commons",
+    "link": ""
+   }
   },
   {
    "id": "tsm",
@@ -191,7 +465,12 @@
    ],
    "why_it_matters": "TSMC produkuje większość najbardziej zaawansowanych chipów AI, więc jego zdolności produkcyjne i ewentualne zakłócenia w dostawach wpływają na tempo rozwoju całej branży.",
    "updated_at": "2026-11-19",
-   "last_spotlight_at": null
+   "last_spotlight_at": null,
+   "image": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/51/TSMC_Global_R%EF%BC%86D_Center_at_night.jpg/960px-TSMC_Global_R%EF%BC%86D_Center_at_night.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+    "credit": "曾 成訓 / CC BY 2.0, Wikimedia Commons",
+    "link": "https://commons.wikimedia.org/wiki/File:TSMC_Global_R＆D_Center_at_night.jpg"
+   }
   }
  ]
 }

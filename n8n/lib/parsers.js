@@ -39,12 +39,14 @@ function parseHfTrending(input) {
   return _ranked(rows);
 }
 
-// Artificial Analysis free API (/api/v2/language/models/free):
+// Artificial Analysis free API (/api/v2/language/models/free), one page or an array of pages:
 // {data: [{name, model_creator: {name}, evaluations: {artificial_analysis_intelligence_index}}]}.
 function parseAaModels(input) {
-  const data = _json(input);
-  if (!data || !Array.isArray(data.data)) return null;
-  const rows = data.data
+  const parsed = _json(input);
+  const pages = Array.isArray(parsed) ? parsed : [parsed];
+  if (!pages.length || !pages.every((p) => p && Array.isArray(p.data))) return null;
+  const rows = pages
+    .flatMap((p) => p.data)
     .filter((m) => m && typeof m.name === 'string' && m.evaluations && Number.isFinite(m.evaluations.artificial_analysis_intelligence_index))
     .sort((a, b) => b.evaluations.artificial_analysis_intelligence_index - a.evaluations.artificial_analysis_intelligence_index)
     .map((m) => ({
@@ -55,4 +57,16 @@ function parseAaModels(input) {
   return _ranked(rows);
 }
 
-export { parseLmarena, parseHfTrending, parseAaModels };
+// Massive (formerly Polygon) daily aggregates, /v2/aggs/ticker/{T}/range/1/day/{from}/{to}:
+// {results: [{t: bar start in ms, c: close}]} -> [{date: 'YYYY-MM-DD', close}] ascending, or null.
+function parseMassiveAggs(input) {
+  const data = _json(input);
+  if (!data || !Array.isArray(data.results) || !data.results.length) return null;
+  const rows = data.results
+    .filter((b) => b && Number.isFinite(b.t) && Number.isFinite(b.c))
+    .map((b) => ({ date: new Date(b.t).toISOString().slice(0, 10), close: b.c }))
+    .sort((a, b) => (a.date < b.date ? -1 : a.date > b.date ? 1 : 0));
+  return rows.length ? rows : null;
+}
+
+export { parseLmarena, parseHfTrending, parseAaModels, parseMassiveAggs };

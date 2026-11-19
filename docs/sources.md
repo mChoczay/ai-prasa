@@ -32,12 +32,18 @@ Not used:
 - Limit: 100 requests per 24-hour window (one call per day is enough). 429 responses carry `Retry-After`.
 - Attribution required on every use: credited in the site footer with a link to https://artificialanalysis.ai/.
 - Fields used: `data[].name`, `data[].model_creator.name`, `data[].evaluations.artificial_analysis_intelligence_index`.
-- Parser: `parseAaModels`. Fixture: `tests/fixtures/sources/aa-models-free.synthetic.json` is built from the documented example. **Replace with a real response once the key exists.**
+- Pagination: 200 models per page, 4 pages (2026-11-19); only ~1 in 4 models carries an Intelligence Index score. The workflow fetches all pages (4 requests/day of the 100 allowed) and passes them to the parser as an array.
+- Credential: n8n **Custom Auth** `Artificial Analysis` (`{"headers":{"x-api-key":"…"}}`).
+- Parser: `parseAaModels` (one page or an array of pages). Fixture: `tests/fixtures/sources/aa-models-free.json` (real response, trimmed to 30 scored + 5 unscored models).
 
 ## Stock prices
 
-- Stooq was the plan's first choice but serves a JavaScript proof-of-work bot check instead of CSV, so it is not used (bypassing it is not allowed).
-- Pending owner decision: a free end-of-day API with the owner's own key. Candidates: Massive (formerly Polygon, free EOD for US stocks, 5 requests/min, one "grouped daily" call covers all US tickers) or Alpha Vantage (25 requests/day, 5/min, 100 days of daily history per ticker). Neither free tier is confirmed to cover Korea (Samsung, SK hynix).
+- Stooq serves a JavaScript proof-of-work bot check instead of CSV, so it is not used (bypassing it is not allowed).
+- Source: **Massive** (formerly Polygon) free plan, owner's key in n8n **Custom Auth** `Massive` (`{"headers":{"Authorization":"Bearer …"}}`).
+- Request per ticker: `GET https://api.massive.com/v2/aggs/ticker/{T}/range/1/day/{today-45d}/{yesterday}?adjusted=true&sort=asc&limit=120`. Free tier: 5 requests/min, end-of-day data (`status: DELAYED`), so requests are spaced ~13 s apart (about 4 minutes for the basket).
+- Fields used: `results[].t` (bar start, ms) and `results[].c` (close).
+- Coverage: US listings and ADRs only. Samsung (005930.KS) and SK hynix (000660.KS) have no free source and are skipped by the numbers workflow (tickers with a dot).
+- Parser: `parseMassiveAggs`. Fixture: `tests/fixtures/sources/massive-nvda-daily.json` (real response).
 
 ## n8n Gateway credits (Brave Search, Firecrawl)
 

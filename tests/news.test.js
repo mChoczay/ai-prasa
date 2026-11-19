@@ -45,6 +45,19 @@ test('extractArticleText truncates to maxChars', () => {
   assert.equal(out, 'a'.repeat(10));
 });
 
+test('extractArticleText prefers long paragraphs over page chrome when they hold enough text', () => {
+  const para = (n) => `<p class="x">Paragraph ${n} says that the company&#x27;s shares rose after the report &mdash; a long sentence.</p>`;
+  const html = `<div>Skip Navigation Markets Business Investing</div><p>Short teaser</p>${[1, 2, 3, 4, 5, 6, 7].map(para).join('<div>ad</div>')}`;
+  const out = extractArticleText(html);
+  assert.match(out, /^Paragraph 1 says that the company's shares rose after the report — a long sentence\./);
+  assert.doesNotMatch(out, /Skip Navigation|Short teaser|ad/);
+  assert.match(out, /sentence\.\n\nParagraph 2/);
+});
+
+test('extractArticleText falls back to the whole page when paragraphs are too short', () => {
+  assert.equal(extractArticleText('<div>Only a div with text&hellip;</div><p>tiny</p>'), 'Only a div with text… tiny');
+});
+
 test('entityId simple', () => {
   assert.equal(entityId('Mistral AI'), 'mistral-ai');
 });

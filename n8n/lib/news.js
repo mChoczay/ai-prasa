@@ -24,6 +24,15 @@ function normalizeUrl(url) {
   return `${u.protocol}//${host}${path}${params.length ? `?${params.join('&')}` : ''}`;
 }
 
+// normalizeUrl that never throws: invalid input comes back as the plain string.
+function safeNormalizeUrl(url) {
+  try {
+    return normalizeUrl(url);
+  } catch {
+    return String(url || '');
+  }
+}
+
 function _fold(text) {
   return text
     .toLowerCase()
@@ -58,18 +67,35 @@ function dedupeCandidates(items) {
   return kept;
 }
 
-function extractArticleText(html, maxChars = 12000) {
-  const text = (html || '')
-    .replace(/<(script|style|nav|header|footer|aside)\b[^>]*>[\s\S]*?<\/\1>/gi, ' ')
-    .replace(/<[^>]+>/g, ' ')
-    .replace(/&nbsp;/g, ' ')
-    .replace(/&lt;/g, '<')
-    .replace(/&gt;/g, '>')
-    .replace(/&quot;/g, '"')
-    .replace(/&#39;/g, "'")
-    .replace(/&amp;/g, '&')
+const _ENTITIES = { nbsp: ' ', lt: '<', gt: '>', quot: '"', apos: "'", mdash: '—', ndash: '–', hellip: '…', rsquo: '’', lsquo: '‘', rdquo: '”', ldquo: '„', amp: '&' };
+
+function _decodeEntities(text) {
+  return text.replace(/&(#x[0-9a-f]+|#\d+|[a-z]+);/gi, (whole, code) => {
+    if (code[0] === '#') {
+      const n = code[1] === 'x' || code[1] === 'X' ? parseInt(code.slice(2), 16) : parseInt(code.slice(1), 10);
+      return Number.isFinite(n) && n > 0 && n < 0x110000 ? String.fromCodePoint(n) : whole;
+    }
+    const named = _ENTITIES[code.toLowerCase()];
+    return named === undefined ? whole : named;
+  });
+}
+
+function _plain(fragment) {
+  return _decodeEntities(fragment.replace(/<[^>]+>/g, ' '))
     .replace(/\s+/g, ' ')
     .trim();
+}
+
+const MIN_PARAGRAPH_CHARS = 60;
+const MIN_PARAGRAPH_TEXT = 500;
+
+// Article text from a page: the long <p> paragraphs when they hold enough text (this skips menus and
+// teasers), otherwise the whole page without scripts and navigation.
+function extractArticleText(html, maxChars = 12000) {
+  const page = (html || '').replace(/<(script|style|nav|header|footer|aside|noscript|svg)\b[^>]*>[\s\S]*?<\/\1>/gi, ' ');
+  const paragraphs = [...page.matchAll(/<p\b[^>]*>([\s\S]*?)<\/p>/gi)].map((m) => _plain(m[1])).filter((t) => t.length > MIN_PARAGRAPH_CHARS);
+  const joined = paragraphs.join('\n\n');
+  const text = joined.length >= MIN_PARAGRAPH_TEXT ? joined : _plain(page);
   return text.slice(0, maxChars);
 }
 
@@ -79,4 +105,4 @@ function entityId(name) {
     .replace(/^-+|-+$/g, '');
 }
 
-export { normalizeUrl, dedupeCandidates, extractArticleText, entityId };
+export { normalizeUrl, safeNormalizeUrl, dedupeCandidates, extractArticleText, entityId };

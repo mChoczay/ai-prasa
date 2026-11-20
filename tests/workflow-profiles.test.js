@@ -72,3 +72,32 @@ test('finish resolves pending names, picks the spotlight and prepares the publis
   assert.equal(json.history.topics[0].title, 'Lead');
   assert.equal(json.history.tags.length, 2);
 });
+
+const PG = 'https://upload.wikimedia.org/wikipedia/commons/2/29/Postgresql_elephant.svg';
+const topicEdition = { ...edition, stories: [{ title: 'PG', category: 'narzedzia', image_topic: 'PostgreSQL', may_affect: [], may_affect_pending: [], image: null, sources: [] }] };
+const topicNodes = { ...nodes, 'Profiles request': [{ ...payload, edition: topicEdition }] };
+
+test('topic picture nodes search Wikipedia for stories without a picture and keep credited Commons files', () => {
+  const asked = runCodeNode(codeNodeSource(WF, 'Topic queries'), { nodes: topicNodes }).map((i) => i.json);
+  assert.deepEqual(asked.map((a) => a.idx), [1]);
+  assert.match(asked[0].url, /gsrsearch=PostgreSQL$/);
+  assert.deepEqual(runCodeNode(codeNodeSource(WF, 'Topic queries'), { nodes }).map((i) => i.json), [{ none: true }]);
+
+  const files = runCodeNode(codeNodeSource(WF, 'Topic files'), {
+    nodes: { 'Topic queries': asked },
+    input: [{ statusCode: 200, body: { query: { pages: { 1: { title: 'PostgreSQL', extract: 'x', pageimage: 'Postgresql_elephant.svg', thumbnail: { source: PG } } } } } }],
+  }).map((i) => i.json);
+  assert.deepEqual(files.map((f) => [f.idx, f.image_url]), [[1, PG]]);
+  assert.deepEqual(runCodeNode(codeNodeSource(WF, 'Topic files'), { nodes: { 'Topic queries': asked }, input: [{ statusCode: 500, body: {} }] }).map((i) => i.json), [{ none: true }]);
+
+  const pics = runCodeNode(codeNodeSource(WF, 'Topic images'), {
+    nodes: { 'Topic files': files },
+    input: [{ statusCode: 200, body: { query: { pages: { '-1': { title: 'File:Postgresql elephant.svg', imageinfo: [{ extmetadata: { Artist: { value: 'Jeff MacDonald' }, LicenseShortName: { value: 'BSD' } } }] } } } } }],
+  }).map((i) => i.json);
+  assert.deepEqual(pics, [{ idx: 1, image: { url: PG, credit: 'Jeff MacDonald / BSD, Wikimedia Commons', link: 'https://commons.wikimedia.org/wiki/File:Postgresql_elephant.svg' } }]);
+
+  const [{ json }] = runCodeNode(codeNodeSource(WF, 'Finish edition'), {
+    nodes: { 'Profiles request': [{ ...payload, edition: topicEdition }], 'Read all profiles': [{}], 'Topic images': pics },
+  });
+  assert.deepEqual(json.edition.stories[0].image_fallback, pics[0].image);
+});

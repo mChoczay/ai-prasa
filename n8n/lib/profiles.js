@@ -165,17 +165,56 @@ function profilesJson(rows) {
 }
 
 // Pending names become ids now that profiles exist; the spotlight is picked from today's entities.
-function finishEdition(edition, rows, today) {
+// Story positions for topic pictures: 0 is the lead, then the stories (a missing lead keeps slot 0).
+function _storySlots(edition) {
+  return [(edition && edition.lead_story) || null, ...((edition && edition.stories) || [])];
+}
+
+// Stories with no article picture that name a Wikipedia topic: one search each.
+function topicImageQueries(edition) {
+  const out = [];
+  _storySlots(edition).forEach((s, idx) => {
+    const topic = s && typeof s.image_topic === 'string' ? s.image_topic.trim() : '';
+    if (s && !s.image && topic) out.push({ idx, url: wikiSearchUrl(topic) });
+  });
+  return out;
+}
+
+// Pairs Wikipedia search answers with the asked stories; keeps Commons pictures only.
+function topicImageFiles(asked, responses) {
+  const out = [];
+  (responses || []).forEach((r, i) => {
+    const wiki = r && Number(r.statusCode) === 200 ? parseWikiSearch(r.body) : null;
+    if (!asked[i] || !wiki || !wiki.image || !COMMONS_IMAGE.test(wiki.image.thumb)) return;
+    out.push({ idx: asked[i].idx, image_url: wiki.image.thumb, credit_url: commonsCreditUrl(wiki.image.file) });
+  });
+  return out;
+}
+
+// A topic picture is used only with its author and licence page.
+function topicImages(files, creditResponses) {
+  const out = [];
+  (creditResponses || []).forEach((r, i) => {
+    const credit = r && Number(r.statusCode) === 200 ? parseCommonsCredit(r.body) : null;
+    if (!files[i] || !credit || !credit.page) return;
+    out.push({ idx: files[i].idx, image: { url: files[i].image_url, credit: credit.credit, link: credit.page } });
+  });
+  return out;
+}
+
+function finishEdition(edition, rows, today, topicPictures = []) {
   const profiles = profilesJson(rows).profiles;
   const done = resolvePending(edition, profiles);
   const todays = [];
   for (const s of _stories(done)) for (const id of s.may_affect || []) if (!todays.includes(id)) todays.push(id);
   for (const m of done.big_moves || []) if (!todays.includes(m.entity_id)) todays.push(m.entity_id);
   const byId = new Map(profiles.map((p) => [p.id, p]));
-  for (const s of _stories(done)) {
+  const byIdx = new Map((topicPictures || []).filter((t) => t && t.image).map((t) => [t.idx, t.image]));
+  _storySlots(done).forEach((s, idx) => {
+    if (!s) return;
     const withImage = (s.may_affect || []).map((id) => byId.get(id)).find((p) => p && p.image);
-    s.image_fallback = withImage ? withImage.image : null;
-  }
+    s.image_fallback = withImage ? withImage.image : byIdx.get(idx) || null;
+  });
   const spotlight = pickSpotlight({ profiles, todaysEntityIds: todays, today });
   done.spotlight = spotlight.company_id || spotlight.model_id ? spotlight : null;
   return { edition: done, spotlightIds: [spotlight.company_id, spotlight.model_id].filter(Boolean), profiles: { profiles } };
@@ -196,4 +235,4 @@ function historyRows(edition) {
   return { topics, tags };
 }
 
-export { profileTargets, wikiSearchUrl, parseWikiSearch, commonsCreditUrl, parseCommonsCredit, profilePrompt, hasReference, profileRow, profilesJson, finishEdition, historyRows };
+export { profileTargets, wikiSearchUrl, parseWikiSearch, commonsCreditUrl, parseCommonsCredit, profilePrompt, hasReference, profileRow, profilesJson, topicImageQueries, topicImageFiles, topicImages, finishEdition, historyRows };

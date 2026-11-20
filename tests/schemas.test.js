@@ -93,3 +93,12 @@ test('sample outputs validate against the smaller schemas', () => {
     [],
   );
 });
+
+test('the edition schema asks for a Wikipedia topic for the picture of every story', () => {
+  const e = load('edition');
+  for (const node of [e.properties.lead_story, e.properties.stories.items]) {
+    assert.equal(node.properties.image_topic.type, 'string');
+    assert.ok(node.required.includes('image_topic'));
+  }
+  assert.match(readFileSync(new URL('../prompts/write.md', import.meta.url), 'utf8'), /`image_topic`/);
+});

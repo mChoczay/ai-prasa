@@ -77,6 +77,10 @@
             ],
             "additionalProperties": false
           }
+        },
+        "image_topic": {
+          "type": "string",
+          "description": "English Wikipedia article title of the story's main subject (a product, technology, company or person), used to find a picture when the article has none, e.g. \"PostgreSQL\". Empty string if nothing fits."
         }
       },
       "required": [
@@ -88,7 +92,8 @@
         "body",
         "for_you",
         "may_affect_names",
-        "sources"
+        "sources",
+        "image_topic"
       ],
       "additionalProperties": false
     },
@@ -163,6 +168,10 @@
               ],
               "additionalProperties": false
             }
+          },
+          "image_topic": {
+            "type": "string",
+            "description": "English Wikipedia article title of the story's main subject (a product, technology, company or person), used to find a picture when the article has none, e.g. \"PostgreSQL\". Empty string if nothing fits."
           }
         },
         "required": [
@@ -174,7 +183,8 @@
           "body",
           "for_you",
           "may_affect_names",
-          "sources"
+          "sources",
+          "image_topic"
         ],
         "additionalProperties": false
       }

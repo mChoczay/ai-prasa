@@ -28,7 +28,8 @@
         "primary": false
       }
     ],
-    "disclaimer": null
+    "disclaimer": null,
+    "image_topic": "Large language model"
   },
   "stories": [
     {
@@ -49,7 +50,8 @@
           "primary": true
         }
       ],
-      "disclaimer": null
+      "disclaimer": null,
+      "image_topic": "Semiconductor industry"
     },
     {
       "title": "Laboratorium Y zbiera nową rundę",
@@ -69,7 +71,8 @@
           "primary": false
         }
       ],
-      "disclaimer": null
+      "disclaimer": null,
+      "image_topic": "Venture capital"
     },
     {
       "title": "Frameworki agentowe uzgadniają wspólny standard",
@@ -87,7 +90,8 @@
           "primary": true
         }
       ],
-      "disclaimer": null
+      "disclaimer": null,
+      "image_topic": "Software agent"
     },
     {
       "title": "Nowe zasady dla modeli ogólnego przeznaczenia",
@@ -105,7 +109,8 @@
           "primary": true
         }
       ],
-      "disclaimer": null
+      "disclaimer": null,
+      "image_topic": "Artificial Intelligence Act"
     }
   ],
   "market": {

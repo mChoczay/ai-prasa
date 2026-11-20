@@ -9,6 +9,9 @@ import {
   profileRow,
   profilesJson,
   finishEdition,
+  topicImageQueries,
+  topicImageFiles,
+  topicImages,
   historyRows,
   commonsCreditUrl,
   parseCommonsCredit,
@@ -180,4 +183,49 @@ test('parseCommonsCredit decodes entities and translates an unknown author', () 
   const body = (artist) => ({ query: { pages: { '-1': { title: 'File:A.jpg', imageinfo: [{ extmetadata: { Artist: { value: artist }, LicenseShortName: { value: 'CC BY 4.0' } } }] } } } });
   assert.equal(parseCommonsCredit(body('Jan &#039;K&#039; &quot;Kowal&quot;')).credit, 'Jan \'K\' "Kowal" / CC BY 4.0, Wikimedia Commons');
   assert.equal(parseCommonsCredit(body('<span class="x">Unknown author</span>')).credit, 'autor nieznany / CC BY 4.0, Wikimedia Commons');
+});
+
+const TOPIC_EDITION = () => ({
+  date: '2026-11-20',
+  lead_story: { title: 'L', image_topic: 'Gemini (language model)', may_affect: [], may_affect_pending: [], image: { url: 'https://img.example/l.jpg' } },
+  stories: [
+    { title: 'PG', image_topic: 'PostgreSQL', may_affect: [], may_affect_pending: [], image: null },
+    { title: 'No topic', image_topic: '', may_affect: [], may_affect_pending: [], image: null },
+    { title: 'Apple', image_topic: 'Apple Inc.', may_affect: ['aapl'], may_affect_pending: [], image: null },
+  ],
+  big_moves: [],
+});
+
+test('topicImageQueries asks Wikipedia only for stories without an article image that name a topic', () => {
+  const q = topicImageQueries(TOPIC_EDITION());
+  assert.deepEqual(q.map((x) => x.idx), [1, 3]);
+  assert.match(q[0].url, /gsrsearch=PostgreSQL$/);
+  assert.deepEqual(topicImageQueries({ lead_story: null, stories: [] }), []);
+});
+
+test('topicImageFiles keeps only Commons pictures and topicImages only those with a credit', () => {
+  const asked = [{ idx: 1 }, { idx: 3 }];
+  const files = topicImageFiles(asked, [
+    { statusCode: 200, body: { query: { pages: { 1: { title: 'PostgreSQL', extract: 'x', pageimage: 'Postgresql_elephant.svg', thumbnail: { source: COMMONS } } } } } },
+    { statusCode: 200, body: { query: { pages: { 2: { title: 'Apple Inc.', extract: 'y', pageimage: 'Logo.svg', thumbnail: { source: 'https://upload.wikimedia.org/wikipedia/en/l/Logo.svg' } } } } } },
+  ]);
+  assert.deepEqual(files.map((f) => [f.idx, f.image_url]), [[1, COMMONS]]);
+  assert.match(files[0].credit_url, /titles=File:Postgresql_elephant\.svg$/);
+  const credit = { statusCode: 200, body: { query: { pages: { '-1': { title: 'File:Postgresql elephant.svg', imageinfo: [{ extmetadata: { Artist: { value: 'Jeff MacDonald' }, LicenseShortName: { value: 'BSD' } } }] } } } } };
+  assert.deepEqual(topicImages(files, [credit]), [
+    { idx: 1, image: { url: COMMONS, credit: 'Jeff MacDonald / BSD, Wikimedia Commons', link: 'https://commons.wikimedia.org/wiki/File:Postgresql_elephant.svg' } },
+  ]);
+  assert.deepEqual(topicImages(files, [{ statusCode: 429, body: {} }]), []);
+});
+
+test('finishEdition falls back to the topic picture when no profiled entity has an image', () => {
+  const rows = [{ entity_id: 'aapl', type: 'company', name: 'Apple', aliases: 'AAPL', image_url: COMMONS, image_credit: 'c', image_page: 'p' }];
+  const topic = { url: 'https://upload.wikimedia.org/wikipedia/commons/x/pg.svg', credit: 'J / BSD, Wikimedia Commons', link: 'https://commons.wikimedia.org/wiki/File:pg.svg' };
+  const done = finishEdition(TOPIC_EDITION(), rows, '2026-11-20', [
+    { idx: 1, image: topic },
+    { idx: 3, image: { ...topic, url: 'https://upload.wikimedia.org/wikipedia/commons/x/other.svg' } },
+  ]).edition;
+  assert.deepEqual(done.stories[0].image_fallback, topic);
+  assert.equal(done.stories[1].image_fallback, null);
+  assert.deepEqual(done.stories[2].image_fallback, { url: COMMONS, credit: 'c', link: 'p' });
 });

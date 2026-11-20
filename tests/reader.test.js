@@ -130,3 +130,9 @@ test('the reader bar has a short back link, the page counter and a progress line
   assert.ok(!html.includes('pierwsza strona'));
   assert.ok(!html.includes('page-meta'));
 });
+
+test('reader pages keep a gap under the progress line when they do not open with a picture', () => {
+  const css = readFileSync(new URL('../site/styles.css', import.meta.url), 'utf8');
+  assert.match(css, /\.page-inner\s*\{[^}]*padding:\s*14px 16px 32px/);
+  assert.match(css, /\.page \.img-hero:first-child\s*\{[^}]*margin-top:\s*-14px/);
+});

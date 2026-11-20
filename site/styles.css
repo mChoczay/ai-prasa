@@ -167,8 +167,10 @@ body.reading main { max-width: none; padding: 0; }
 .pages { display: flex; overflow-x: auto; overflow-y: hidden; scroll-snap-type: x mandatory; scrollbar-width: none; overscroll-behavior-x: contain; }
 .pages::-webkit-scrollbar { display: none; }
 .page { flex: 0 0 100%; scroll-snap-align: start; scroll-snap-stop: always; height: calc(100dvh - 46px); overflow-y: auto; }
-.page-inner { max-width: 680px; margin: 0 auto; padding: 0 16px 32px; }
+.page-inner { max-width: 680px; margin: 0 auto; padding: 14px 16px 32px; }
 .page .img-hero { margin: 0 -16px 12px; }
+/* A page that opens with its picture keeps the picture flush under the progress line. */
+.page .img-hero:first-child { margin-top: -14px; }
 .page .img-hero img { border-radius: 0; }
 .page .img-hero figcaption { padding: 0 16px; }
 @media (min-width: 712px) {

@@ -118,3 +118,15 @@ test('publishTree writes glossary.json only when there is a glossary', () => {
   const without = publishTree({ edition, indexRaw: null, profilesJson: null });
   assert.ok(!without.tree.some((f) => f.path === 'site/data/glossary.json'));
 });
+
+test('publish workflow: GitHub calls and the morning mail retry a transient failure', () => {
+  const src = readFileSync(new URL('../n8n/workflows/publish.workflow.js', import.meta.url), 'utf8');
+  for (const name of ['GitHub: main ref', 'GitHub: base commit', 'GitHub: current index', 'GitHub: new tree', 'GitHub: new commit', 'GitHub: move main', 'Send morning mail']) {
+    const at = src.indexOf(`name: '${name}'`);
+    assert.ok(at > 0, name);
+    const block = src.slice(at, src.indexOf('parameters:', at));
+    assert.match(block, /retryOnFail: true/, name);
+    assert.match(block, /maxTries: 3/, name);
+    assert.match(block, /waitBetweenTries: 5000/, name);
+  }
+});

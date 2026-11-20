@@ -251,7 +251,7 @@ const visitStatsCheck = ifElse({
   },
 });
 
-// Read-only GoatCounter API key in an n8n Header Auth credential (Authorization: Bearer …); never in this repo.
+// Read-only GoatCounter API key in an n8n Custom Auth credential ({headers: {Authorization: 'Bearer …'}}); never in this repo.
 const goatStats = node({
   type: 'n8n-nodes-base.httpRequest',
   version: 4.5,
@@ -262,12 +262,12 @@ const goatStats = node({
       method: 'GET',
       url: expr('{{ $json.url }}'),
       authentication: 'genericCredentialType',
-      genericAuthType: 'httpHeaderAuth',
+      genericAuthType: 'httpCustomAuth',
       sendHeaders: true,
       headerParameters: { parameters: [{ name: 'Content-Type', value: 'application/json' }] },
       options: { response: { response: { fullResponse: true, neverError: true, responseFormat: 'json' } }, timeout: 10000 },
     },
-    credentials: { httpHeaderAuth: { id: 'GOATCOUNTER_CREDENTIAL_ID', name: 'GoatCounter' } },
+    credentials: { httpCustomAuth: { id: 'QYvsrmr12EumLOFG', name: 'GoatCunter' } },
   },
   output: [{ statusCode: 200, body: { total: 0, stats: [] } }],
 });

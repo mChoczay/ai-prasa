@@ -16,6 +16,7 @@ test('check feedback accepts a good rating from the site', () => {
 test('check feedback rejects a wrong key, broken JSON and a missing settings row', () => {
   assert.deepEqual(check({ body: { ...body, k: 'nope' } }), { ok: false, status: 401 });
   assert.deepEqual(check({ body: '{nope' }), { ok: false, status: 400 });
-  assert.deepEqual(check({ body }, [{}]), { ok: false, status: 401 });
+  assert.deepEqual(check({ body }, [{}]), { ok: false, status: 503 });
+  assert.deepEqual(check({ body }, [{ error: { message: 'table gone' } }]), { ok: false, status: 503 });
   assert.deepEqual(check({}), { ok: false, status: 400 });
 });

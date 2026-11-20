@@ -224,3 +224,5 @@ body.reading main { max-width: none; padding: 0; }
 .fb-msg { margin: 6px 0 0; font-size: 12px; color: var(--down); }
 .fb-msg:empty { display: none; }
 .notice { margin: 8px auto; max-width: 680px; padding: 0 16px; font: 13px/1.5 var(--sans); color: var(--ink-soft); }
+/* Typing a note: the strip must not scroll sideways under the finger. */
+.reader.typing .pages { overflow-x: hidden; }

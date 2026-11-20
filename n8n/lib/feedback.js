@@ -10,6 +10,9 @@ const FEEDBACK_MAX_NOTES = 10;
 const FEEDBACK_NOTE_CHARS = 300;
 
 function validateFeedback(body, key) {
+  // No key configured (settings row missing or its read failed): a server problem, not a wrong key,
+  // so the site must not turn ratings off.
+  if (typeof key !== 'string' || !key) return { ok: false, status: 503 };
   let b = body;
   if (typeof b === 'string') {
     try {
@@ -19,7 +22,7 @@ function validateFeedback(body, key) {
     }
   }
   if (!b || typeof b !== 'object') return { ok: false, status: 400 };
-  if (typeof key !== 'string' || !key || b.k !== key) return { ok: false, status: 401 };
+  if (b.k !== key) return { ok: false, status: 401 };
   const date = typeof b.date === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(b.date) ? b.date : null;
   const n = Number.isInteger(b.n) && b.n >= 1 && b.n <= 20 ? b.n : null;
   const title = typeof b.title === 'string' && b.title.length <= 300 ? b.title : null;
@@ -49,9 +52,10 @@ function feedbackDigest(rows, today) {
     .map((row, i) => ({ row, i }))
     .filter(({ row }) => _inWindow(row, today))
     .sort((a, b) => {
-      const ta = String(a.row.createdAt || '');
-      const tb = String(b.row.createdAt || '');
-      return ta < tb ? -1 : ta > tb ? 1 : a.i - b.i;
+      // createdAt may be an ISO string or a Date; compare as time.
+      const ta = Date.parse(a.row.createdAt) || 0;
+      const tb = Date.parse(b.row.createdAt) || 0;
+      return ta - tb || a.i - b.i;
     })
     .map(({ row }) => row);
 

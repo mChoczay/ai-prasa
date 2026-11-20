@@ -39,7 +39,8 @@ let disposeReader = null;
 // localStorage can be missing or throw (private mode); ratings are then simply off.
 const store = (() => {
   try {
-    window.localStorage.getItem('ppai.feedback');
+    window.localStorage.setItem('ppai.probe', '1');
+    window.localStorage.removeItem('ppai.probe');
     return window.localStorage;
   } catch {
     return null;
@@ -105,7 +106,6 @@ async function route() {
             pages,
             storage: store,
             fetchFn: window.fetch.bind(window),
-            onDisabled: () => root.querySelector('.reader-bar').insertAdjacentHTML('afterend', notice('Oceny wyłączone, włącz je linkiem z maila')),
           })
         : () => {};
       disposeReader = () => {

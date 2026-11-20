@@ -14,8 +14,8 @@ test('validateFeedback accepts a rating, a cleared rating and a note, as object 
 
 test('validateFeedback rejects a wrong key with 401 and bad data with 400, never throws', () => {
   assert.deepEqual(validateFeedback({ ...ok, k: 'x' }, K), { ok: false, status: 401 });
-  assert.deepEqual(validateFeedback(ok, ''), { ok: false, status: 401 });
-  assert.deepEqual(validateFeedback(ok, undefined), { ok: false, status: 401 });
+  assert.deepEqual(validateFeedback(ok, ''), { ok: false, status: 503 });
+  assert.deepEqual(validateFeedback(ok, undefined), { ok: false, status: 503 });
   const bad = [
     '{nope',
     null,
@@ -84,4 +84,13 @@ test('a note-only row does not clear the rating of its story', () => {
   ], '2026-11-20');
   assert.match(d, /less like this: "Genie 4"/);
   assert.match(d, /"Genie 4": "za długo"/);
+});
+
+test('feedbackDigest orders rows by time even when createdAt comes as Date objects', () => {
+  const d = feedbackDigest([
+    { date: '2026-11-26', n: 1, title: 'Genie 4', category: 'modele', rating: 'less', note: '', createdAt: new Date('2026-11-27T07:00:00Z') },
+    { date: '2026-11-26', n: 1, title: 'Genie 4', category: 'modele', rating: 'more', note: '', createdAt: new Date('2026-11-26T07:00:00Z') },
+  ], '2026-11-27');
+  assert.match(d, /less like this: "Genie 4"/);
+  assert.doesNotMatch(d, /more like this/);
 });

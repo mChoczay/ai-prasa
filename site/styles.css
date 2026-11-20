@@ -167,11 +167,11 @@ details > summary { cursor: pointer; }
 /* ---------- Reader ---------- */
 body.reading main { max-width: none; padding: 0; }
 .reader { position: relative; }
-.reader-bar { height: 44px; display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 0 16px; border-bottom: 1px solid var(--rule); font: 13px/1.4 var(--sans); color: var(--ink-soft); }
+.reader-bar { height: 44px; display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 0 16px; font: 13px/1.4 var(--sans); color: var(--ink-soft); }
 .reader-bar a { text-decoration: none; }
 .pages { display: flex; overflow-x: auto; overflow-y: hidden; scroll-snap-type: x mandatory; scrollbar-width: none; overscroll-behavior-x: contain; }
 .pages::-webkit-scrollbar { display: none; }
-.page { flex: 0 0 100%; scroll-snap-align: start; scroll-snap-stop: always; height: calc(100dvh - 44px); overflow-y: auto; }
+.page { flex: 0 0 100%; scroll-snap-align: start; scroll-snap-stop: always; height: calc(100dvh - 46px); overflow-y: auto; }
 .page-inner { max-width: 680px; margin: 0 auto; padding: 0 16px 32px; }
 .page .img-hero { margin: 0 -16px 12px; }
 .page .img-hero img { border-radius: 0; }
@@ -181,7 +181,6 @@ body.reading main { max-width: none; padding: 0; }
   .page .img-hero img { border-radius: 10px; }
   .page .img-hero figcaption { padding: 0; }
 }
-.page-meta { font: 12px/1.4 var(--sans); color: var(--ink-soft); text-align: right; margin: 10px 0 4px; }
 .page h2 { font-size: clamp(24px, 6vw, 32px); line-height: 1.2; margin: 6px 0 8px; }
 .page .lede { font-size: 18px; line-height: 1.5; color: var(--ink-soft); }
 .page .body p:first-child::first-letter { float: left; font-size: 3.2em; line-height: 0.85; padding: 4px 6px 0 0; font-weight: 700; }
@@ -225,3 +224,9 @@ body.reading main { max-width: none; padding: 0; }
 .mast-nav a { color: var(--ink-soft); text-decoration: none; padding-bottom: 2px; }
 .mast-nav a[aria-current="page"] { color: var(--ink); border-bottom: 1.5px solid var(--accent); }
 .dateline { margin: 0; padding: 4px 0; border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); font: 12px/1.5 var(--sans); color: var(--ink-soft); }
+
+/* Reader bar: short back link, page counter and a thin progress line under it. */
+.reader-bar .back, .reader-bar .count { color: var(--ink-soft); text-decoration: none; font: 13px/1.4 var(--sans); letter-spacing: 0.04em; }
+.progress { height: 2px; background: var(--rule); }
+.progress span { display: block; height: 2px; width: 0; background: var(--accent); transition: width 150ms ease-out; }
+@media (prefers-reduced-motion: reduce) { .progress span { transition: none; } }

@@ -119,3 +119,14 @@ test('the reader with ratings on still escapes story data', () => {
   const html = renderReader(e, profiles, 1, { feedback: true, ratings: { 1: '"><script>' } });
   assert.ok(!html.includes('<script>'));
 });
+
+test('the reader bar has a short back link, the page counter and a progress line', () => {
+  const e = real();
+  const total = 1 + e.stories.length;
+  const html = renderReader(e, profiles, 5);
+  assert.match(html, /<a class="back" href="#\/2026-11-19">‹ 19 lis<\/a>/);
+  assert.ok(html.includes(`<span class="count">5 / ${total}</span>`));
+  assert.ok(html.includes('class="progress"'));
+  assert.ok(!html.includes('pierwsza strona'));
+  assert.ok(!html.includes('page-meta'));
+});

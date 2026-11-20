@@ -1,7 +1,6 @@
 // The reader: every story (and supplement) of an edition as a page in a horizontal scroll-snap strip.
 import {
   escapeHtml,
-  longDate,
   paragraphs,
   statusBadge,
   categoryBadge,
@@ -9,7 +8,7 @@ import {
   entityChip,
   imageFigure,
 } from './render.js';
-import { readerPages } from './shape.js';
+import { readerPages, dateParts } from './shape.js';
 import { feedbackBlock } from './feedback.js';
 
 const DATE = /^\d{4}-\d{2}-\d{2}$/;
@@ -77,11 +76,12 @@ export function renderReader(edition, profilesById, page, { feedback = false, ra
       const body = p.kind === 'story' ? storyBody(p.story, profilesById) : supplementBody(e[p.kind], SUPPLEMENT_LABELS[p.kind]);
       const fb = feedback && p.kind === 'story' ? feedbackBlock(p.n, ratings[p.n] || '') : '';
       const nav = `<nav class="page-nav">${prev ? `<button class="prev" data-go="${prev.n}">‹ ${escapeHtml(pageTitle(e, prev))}</button>` : '<span></span>'}${next ? `<button class="next" data-go="${next.n}">${escapeHtml(pageTitle(e, next))} ›</button>` : ''}</nav>`;
-      return `<section class="page" data-n="${p.n}"><div class="page-inner"><p class="page-meta">${p.n} / ${total}</p>${body}${fb}${nav}</div></section>`;
+      return `<section class="page" data-n="${p.n}"><div class="page-inner">${body}${fb}${nav}</div></section>`;
     })
     .join('');
   return `<div class="reader" data-page="${escapeHtml(page)}">
-<header class="reader-bar"><a href="#/${escapeHtml(e.date)}">← pierwsza strona</a><span>${escapeHtml(longDate(e.date))}</span></header>
+<header class="reader-bar"><a class="back" href="#/${escapeHtml(e.date)}">‹ ${escapeHtml(shortDate(e.date))}</a><span class="count">${escapeHtml(page)} / ${total}</span></header>
+<div class="progress"><span></span></div>
 <button class="arrow arrow-prev" data-step="-1" aria-label="poprzednia strona">‹</button>
 <div class="pages">${sections}</div>
 <button class="arrow arrow-next" data-step="1" aria-label="następna strona">›</button>
@@ -99,6 +99,14 @@ export function initReader(root, { page, onPage }) {
     const el = list[n - 1];
     if (el) strip.scrollTo({ left: el.offsetLeft, behavior: smooth && !reduced ? 'smooth' : 'auto' });
   };
+  // Counter and progress line in the reader bar follow the visible page.
+  const count = root.querySelector('.reader-bar .count');
+  const bar = root.querySelector('.progress span');
+  const mark = (n) => {
+    if (count) count.textContent = `${n} / ${list.length}`;
+    if (bar) bar.style.width = `${(n / Math.max(list.length, 1)) * 100}%`;
+  };
+  mark(page);
   go(page, false);
   const observer = new IntersectionObserver(
     (entries) => {
@@ -107,6 +115,7 @@ export function initReader(root, { page, onPage }) {
         const n = Number(entry.target.dataset.n);
         if (n !== current) {
           current = n;
+          mark(n);
           onPage(n);
         }
       }
@@ -138,4 +147,9 @@ export function isTypingTarget(el) {
   if (!el) return false;
   const tag = String(el.tagName || '').toUpperCase();
   return tag === 'TEXTAREA' || tag === 'INPUT' || tag === 'SELECT' || el.isContentEditable === true;
+}
+
+function shortDate(dateStr) {
+  const p = dateParts(dateStr);
+  return p ? `${p.day} ${p.monthShort}` : String(dateStr || '');
 }

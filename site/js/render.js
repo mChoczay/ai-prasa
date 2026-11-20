@@ -196,3 +196,9 @@ export function renderArchive(index, { category = null } = {}) {
     .join('');
   return `<section class="archive"><h2>Archiwum</h2><nav class="filters">${filters}</nav>${items ? `<ul>${items}</ul>` : '<p class="no-data">Brak wydań w tej kategorii.</p>'}</section>`;
 }
+
+// Navigation under the paper's name: the current view is marked for screen readers and styling.
+export function mastheadNav(active) {
+  const link = (href, label, on) => `<a href="${href}"${on ? ' aria-current="page"' : ''}>${label}</a>`;
+  return `<nav class="mast-nav">${link('#/', 'Wydanie', active === 'edition')}<span aria-hidden="true">·</span>${link('#/archiwum', 'Archiwum', active === 'archive')}</nav>`;
+}

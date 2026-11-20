@@ -43,14 +43,8 @@ body {
 a { color: var(--accent); }
 main { max-width: 1100px; margin: 0 auto; padding: 0 16px 48px; }
 
-.topbar {
-  display: flex; gap: 16px; justify-content: center;
-  padding: 10px 16px; border-bottom: 1px solid var(--rule);
-  font: 14px/1.4 var(--sans);
-}
-.topbar a { text-decoration: none; }
 
-.masthead { text-align: center; padding: 24px 0 8px; border-bottom: 3px double var(--rule); }
+.masthead { text-align: center; padding: 24px 0 8px; }
 .masthead h1 { margin: 0; font-size: clamp(30px, 6vw, 48px); font-weight: 700; letter-spacing: 0.01em; }
 .meta { font: 13px/1.5 var(--sans); color: var(--ink-soft); margin: 4px 0; }
 /* front page and reader styles: see the sections at the end */
@@ -171,7 +165,6 @@ details > summary { cursor: pointer; }
 .profile-card .img-hero img { aspect-ratio: 16 / 9; }
 
 /* ---------- Reader ---------- */
-body.reading .topbar { display: none; }
 body.reading main { max-width: none; padding: 0; }
 .reader { position: relative; }
 .reader-bar { height: 44px; display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 0 16px; border-bottom: 1px solid var(--rule); font: 13px/1.4 var(--sans); color: var(--ink-soft); }
@@ -226,3 +219,9 @@ body.reading main { max-width: none; padding: 0; }
 .notice { margin: 8px auto; max-width: 680px; padding: 0 16px; font: 13px/1.5 var(--sans); color: var(--ink-soft); }
 /* Typing a note: the strip must not scroll sideways under the finger. */
 .reader.typing .pages { overflow-x: hidden; }
+
+/* Navigation in the masthead: small caps under the paper's name, the current view underlined in the accent. */
+.mast-nav { display: flex; justify-content: center; align-items: baseline; gap: 10px; margin: 10px 0 12px; font: 11px/1.4 var(--sans); letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-soft); }
+.mast-nav a { color: var(--ink-soft); text-decoration: none; padding-bottom: 2px; }
+.mast-nav a[aria-current="page"] { color: var(--ink); border-bottom: 1.5px solid var(--accent); }
+.dateline { margin: 0; padding: 4px 0; border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); font: 12px/1.5 var(--sans); color: var(--ink-soft); }

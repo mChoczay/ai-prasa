@@ -4,6 +4,7 @@ import { readFileSync } from 'node:fs';
 import {
   firstSentence,
   tabTitle,
+  dateParts,
   marketMood,
   whyShort,
   marketTiles,
@@ -115,4 +116,10 @@ test('tabTitle gives name and short Polish date, reader page and archive', () =>
 
 test('tabTitle never shows "undefined" for a story without a title', () => {
   assert.equal(tabTitle('reader', { date: '2026-11-19', lead_story: {} }, 1), '1/1 · Prasa AI');
+});
+
+test('dateParts gives the Polish day, short and full month names', () => {
+  assert.deepEqual(dateParts('2026-11-20'), { day: 20, month: 11, year: 2026, weekday: 'pt', monthShort: 'lis', monthName: 'listopad' });
+  assert.deepEqual(dateParts('2026-10-04').monthName, 'październik');
+  assert.equal(dateParts('x'), null);
 });

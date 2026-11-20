@@ -100,3 +100,16 @@ test('front page shows a supplement card that links to its reader page', () => {
   assert.ok(html.includes(`href="#/2026-11-19/${e.stories.length + 2}"`));
   assert.ok(html.includes('Tydzień w AI: Google prowadzi'));
 });
+
+test('the masthead carries the navigation with the edition marked as current', () => {
+  const html = renderFront(real(), {});
+  assert.ok(html.includes('class="mast-nav"'));
+  assert.match(html, /<a href="#\/"[^>]*aria-current="page"[^>]*>Wydanie/);
+  assert.ok(html.includes('href="#/archiwum"'));
+  assert.match(html, /class="dateline"/);
+});
+
+test('the page has no separate top bar any more', () => {
+  const index = readFileSync(new URL('../site/index.html', import.meta.url), 'utf8');
+  assert.doesNotMatch(index, /topbar/);
+});

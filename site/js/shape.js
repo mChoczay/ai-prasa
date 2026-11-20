@@ -106,16 +106,25 @@ export function minutesLabel(edition) {
 const _DAYS = ['ndz', 'pon', 'wt', 'śr', 'czw', 'pt', 'sob'];
 const _MONTHS = ['sty', 'lut', 'mar', 'kwi', 'maj', 'cze', 'lip', 'sie', 'wrz', 'paź', 'lis', 'gru'];
 
+const _MONTH_NAMES = ['styczeń', 'luty', 'marzec', 'kwiecień', 'maj', 'czerwiec', 'lipiec', 'sierpień', 'wrzesień', 'październik', 'listopad', 'grudzień'];
+
+// Parts of an edition date (RRRR-MM-DD) with Polish short and full names; null for anything else.
+export function dateParts(dateStr) {
+  const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(String(dateStr || ''));
+  if (!m) return null;
+  const [year, month, day] = [Number(m[1]), Number(m[2]), Number(m[3])];
+  if (month < 1 || month > 12 || day < 1 || day > 31) return null;
+  const weekday = _DAYS[new Date(Date.UTC(year, month - 1, day)).getUTCDay()];
+  return { day, month, year, weekday, monthShort: _MONTHS[month - 1], monthName: _MONTH_NAMES[month - 1] };
+}
+
 // Browser-tab title: short, with the paper's name and the edition's day.
 export function tabTitle(view, edition, page) {
   const e = edition || {};
   if (view === 'archive') return 'Archiwum · Prasa AI';
   if (view === 'front') {
-    const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(String(e.date || ''));
-    if (!m) return 'Prasa AI';
-    const [y, mo, d] = [Number(m[1]), Number(m[2]), Number(m[3])];
-    const day = new Date(Date.UTC(y, mo - 1, d)).getUTCDay();
-    return `Prasa AI · ${_DAYS[day]} ${d} ${_MONTHS[mo - 1]}`;
+    const p = dateParts(e.date);
+    return p ? `Prasa AI · ${p.weekday} ${p.day} ${p.monthShort}` : 'Prasa AI';
   }
   if (view === 'reader') {
     const pages = readerPages(e);

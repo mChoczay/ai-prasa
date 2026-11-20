@@ -4,7 +4,6 @@ import { workflow, node, trigger, ifElse, expr } from '@n8n/workflow-sdk';
 // The site sends text/plain JSON (no CORS preflight) with the key from feedback_settings; rows are only appended.
 // The path is not a secret (the instance host and the key are, and neither is in this repo).
 
-const STR = (id) => ({ id, displayName: id, required: false, defaultMatch: false, display: true, type: 'string', canBeUsedToMatch: true });
 
 const feedbackIn = trigger({
   type: 'n8n-nodes-base.webhook',
@@ -92,7 +91,15 @@ const saveFeedback = node({
           note: expr('{{ $json.row.note }}'),
           handled: '',
         },
-        schema: [STR('date'), { ...STR('n'), type: 'number' }, STR('title'), STR('category'), STR('rating'), STR('note'), STR('handled')],
+        schema: [
+          { id: 'date', displayName: 'date', type: 'string', required: false, defaultMatch: false, display: true, canBeUsedToMatch: true },
+          { id: 'n', displayName: 'n', type: 'number', required: false, defaultMatch: false, display: true, canBeUsedToMatch: true },
+          { id: 'title', displayName: 'title', type: 'string', required: false, defaultMatch: false, display: true, canBeUsedToMatch: true },
+          { id: 'category', displayName: 'category', type: 'string', required: false, defaultMatch: false, display: true, canBeUsedToMatch: true },
+          { id: 'rating', displayName: 'rating', type: 'string', required: false, defaultMatch: false, display: true, canBeUsedToMatch: true },
+          { id: 'note', displayName: 'note', type: 'string', required: false, defaultMatch: false, display: true, canBeUsedToMatch: true },
+          { id: 'handled', displayName: 'handled', type: 'string', required: false, defaultMatch: false, display: true, canBeUsedToMatch: true },
+        ],
       },
     },
   },

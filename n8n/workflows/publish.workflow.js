@@ -263,6 +263,8 @@ const goatStats = node({
       url: expr('{{ $json.url }}'),
       authentication: 'genericCredentialType',
       genericAuthType: 'httpHeaderAuth',
+      sendHeaders: true,
+      headerParameters: { parameters: [{ name: 'Content-Type', value: 'application/json' }] },
       options: { response: { response: { fullResponse: true, neverError: true, responseFormat: 'json' } }, timeout: 10000 },
     },
     credentials: { httpHeaderAuth: { id: 'GOATCOUNTER_CREDENTIAL_ID', name: 'GoatCounter' } },

@@ -1,5 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
 import { indexEntry, publishTree } from '../n8n/lib/publish.js';
 import { codeNodeSource, runCodeNode } from './helpers/code-node.js';
 
@@ -102,4 +103,11 @@ test('publish workflow: a failed or skipped GoatCounter call still sends the mai
     assert.equal(json.to, 'owner@example.com');
     assert.equal(json.subject, 'Poranna prasa AI: Lead');
   }
+});
+
+test('publish workflow: the GoatCounter call sends the JSON content type its API expects', () => {
+  const src = readFileSync(new URL('../n8n/workflows/publish.workflow.js', import.meta.url), 'utf8');
+  const block = src.slice(src.indexOf("name: 'GoatCounter stats'"), src.indexOf('const buildMail'));
+  assert.match(block, /sendHeaders:\s*true/);
+  assert.match(block, /name:\s*'Content-Type',\s*value:\s*'application\/json'/);
 });

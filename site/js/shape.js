@@ -121,7 +121,7 @@ export function tabTitle(view, edition, page) {
     const pages = readerPages(e);
     const p = pages[page - 1];
     if (!p) return 'Prasa AI';
-    const title = p.kind === 'story' ? p.story.title : (e[p.kind] && e[p.kind].title) || '';
+    const title = (p.kind === 'story' ? p.story.title : e[p.kind] && e[p.kind].title) || 'Prasa AI';
     return `${p.n}/${pages.length} · ${title}`;
   }
   return 'Poranna prasa AI';

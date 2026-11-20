@@ -84,6 +84,8 @@ const DISABLED_MESSAGE = 'Oceny wyłączone, włącz je linkiem z maila';
 // lifecycle: where pagehide / visibilitychange arrive (the window in the browser).
 export function initFeedback(root, { config, edition, pages, storage, fetchFn, onDisabled = () => {}, lifecycle = globalThis }) {
   const timers = new Map();
+  const saved = new Map();
+  const clicks = new Map();
   let disabled = false;
 
   // A rejected key turns ratings off. Blocks are removed, except the one just used and any with a
@@ -145,24 +147,30 @@ export function initFeedback(root, { config, edition, pages, storage, fetchFn, o
 
     const rateBtn = event.target.closest('.fb-rate');
     if (rateBtn) {
-      const before = storedRating(storage, edition.date, n);
+      // `saved` is the last rating the server accepted for this page; a failed send falls back to it,
+      // but only when no newer click happened meanwhile (that one settles the page instead).
+      if (!saved.has(n)) saved.set(n, storedRating(storage, edition.date, n));
       const rating = rateBtn.getAttribute('aria-pressed') === 'true' ? '' : rateBtn.dataset.rate;
+      const mySeq = (clicks.get(n) || 0) + 1;
+      clicks.set(n, mySeq);
       setPressed(block, rating);
       rememberRating(storage, edition.date, n, rating);
       message(block, '');
       const pending = timers.get(n);
-      const sentBefore = pending ? pending.sentBefore : before;
       if (pending) clearTimeout(pending.id);
       const run = async () => {
         timers.delete(n);
         const ok = await send({ ...fieldsFor(n), rating }, block);
-        if (!ok && !disabled) {
-          setPressed(block, sentBefore);
-          rememberRating(storage, edition.date, n, sentBefore);
-          message(block, 'Nie zapisano, spróbuj jeszcze raz');
+        if (ok) {
+          saved.set(n, rating);
+          return;
         }
+        if (disabled || clicks.get(n) !== mySeq) return;
+        setPressed(block, saved.get(n));
+        rememberRating(storage, edition.date, n, saved.get(n));
+        message(block, 'Nie zapisano, spróbuj jeszcze raz');
       };
-      timers.set(n, { id: setTimeout(run, DEBOUNCE_MS), run, sentBefore });
+      timers.set(n, { id: setTimeout(run, DEBOUNCE_MS), run });
       return;
     }
 

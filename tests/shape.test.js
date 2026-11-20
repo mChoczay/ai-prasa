@@ -112,3 +112,7 @@ test('tabTitle gives name and short Polish date, reader page and archive', () =>
   assert.equal(tabTitle('front', { date: '2026-03-01' }), 'Prasa AI · ndz 1 mar');
   assert.equal(tabTitle('reader', { date: '2026-11-19', lead_story: { title: 'A' }, weekly: { title: 'Tydzień' } }, 2), '2/2 · Tydzień');
 });
+
+test('tabTitle never shows "undefined" for a story without a title', () => {
+  assert.equal(tabTitle('reader', { date: '2026-11-19', lead_story: {} }, 1), '1/1 · Prasa AI');
+});

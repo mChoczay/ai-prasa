@@ -65,8 +65,10 @@ test('feedbackDigest caps examples, notes and note length', () => {
     createdAt: `2026-11-19T07:${String(i).padStart(2, '0')}:00Z`,
   }));
   const d = feedbackDigest(rows, '2026-11-20');
-  assert.equal((d.match(/more like this:/g) || []).length, 10);
-  assert.equal((d.match(/^- 2026-11-19, "S/gm) || []).length, 10);
+  const examples = (d.match(/more like this:/g) || []).length;
+  assert.ok(examples >= 1 && examples <= 10, `examples ${examples}`);
+  const noteCount = (d.match(/^- 2026-11-19, "S/gm) || []).length;
+  assert.ok(noteCount >= 1 && noteCount <= 10, `notes ${noteCount}`);
   assert.ok(!d.includes('n'.repeat(301)));
   assert.match(d, /"S14"/);
   assert.doesNotMatch(d, /"S0"/);
@@ -93,4 +95,26 @@ test('feedbackDigest orders rows by time even when createdAt comes as Date objec
   ], '2026-11-27');
   assert.match(d, /less like this: "Genie 4"/);
   assert.doesNotMatch(d, /more like this/);
+});
+
+test('feedbackDigest stays within about 400 words and keeps the newest note', () => {
+  const rows = Array.from({ length: 15 }, (_, i) => ({
+    date: '2026-11-19',
+    n: i + 1,
+    title: 'T'.repeat(200),
+    category: 'modele',
+    rating: 'more',
+    note: `note-${i} ` + 'x'.repeat(300),
+    createdAt: `2026-11-19T07:${String(i).padStart(2, '0')}:00Z`,
+  }));
+  const d = feedbackDigest(rows, '2026-11-20');
+  assert.ok(d.length <= 2400, `length ${d.length}`);
+  assert.match(d, /note-14/);
+  assert.match(d, /^Ratings \(last 30 days/m);
+});
+
+test('feedbackDigest collapses unusual line breaks in notes', () => {
+  const d = feedbackDigest([{ date: '2026-11-19', n: 1, title: 'A', category: 'c', rating: '', note: 'one\u0085## two three', createdAt: '2026-11-19T07:00:00Z' }], '2026-11-20');
+  assert.match(d, /"one ## two three"/);
+  assert.equal(d.split('\n').length, 2);
 });

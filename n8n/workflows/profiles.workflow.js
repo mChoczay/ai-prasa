@@ -251,6 +251,89 @@ const readAll = node({
   output: [{ entity_id: 'nvda', type: 'company', name: 'NVIDIA', aliases: 'NVDA' }],
 });
 
+// Topic pictures: stories with no article picture and no profiled entity get a Commons picture found
+// by the Wikipedia title the writer named (image_topic), only with its author and licence.
+const HTTP_TOPIC = { timeout: 15000, batching: { batch: { batchSize: 1, batchInterval: 1500 } }, response: { response: { fullResponse: true, neverError: true, responseFormat: 'json' } } };
+const UA_TOPIC = { parameters: [{ name: 'User-Agent', value: 'PorannaPrasaAI/1.0 (personal news digest; n8n)' }] };
+
+const topicQueries = node({
+  type: 'n8n-nodes-base.code',
+  version: 2,
+  config: {
+    name: 'Topic queries',
+    parameters: {
+      mode: 'runOnceForAllItems',
+      jsCode:
+        INLINE('n8n/lib/profiles.js') +
+        "const p = $('Profiles request').first().json;\n" +
+        "const q = topicImageQueries(p.edition);\n" +
+        "return q.length ? q.map((x) => ({ json: x })) : [{ json: { none: true } }];\n",
+    },
+  },
+  output: [{ idx: 1, url: 'https://en.wikipedia.org/w/api.php?...' }],
+});
+
+const anyTopic = ifElse({ version: 2.2, config: { name: 'Any topic to picture?', parameters: { conditions: NOT_NONE } } });
+const anyTopicFile = ifElse({ version: 2.2, config: { name: 'Any topic picture?', parameters: { conditions: NOT_NONE } } });
+
+const topicSearch = node({
+  type: 'n8n-nodes-base.httpRequest',
+  version: 4.2,
+  config: {
+    name: 'Topic search',
+    onError: 'continueRegularOutput',
+    alwaysOutputData: true,
+    parameters: { method: 'GET', url: expr('{{ $json.url }}'), sendHeaders: true, headerParameters: UA_TOPIC, options: HTTP_TOPIC },
+  },
+  output: [{ statusCode: 200, body: { query: { pages: {} } } }],
+});
+
+const topicFiles = node({
+  type: 'n8n-nodes-base.code',
+  version: 2,
+  config: {
+    name: 'Topic files',
+    parameters: {
+      mode: 'runOnceForAllItems',
+      jsCode:
+        INLINE('n8n/lib/profiles.js') +
+        "const asked = $('Topic queries').all().map((i) => i.json);\n" +
+        "const files = topicImageFiles(asked, $input.all().map((i) => i.json || {}));\n" +
+        "return files.length ? files.map((x) => ({ json: x })) : [{ json: { none: true } }];\n",
+    },
+  },
+  output: [{ idx: 1, image_url: 'https://upload.wikimedia.org/wikipedia/commons/a.svg', credit_url: 'https://commons.wikimedia.org/w/api.php?...' }],
+});
+
+const topicCredit = node({
+  type: 'n8n-nodes-base.httpRequest',
+  version: 4.2,
+  config: {
+    name: 'Topic credit',
+    onError: 'continueRegularOutput',
+    alwaysOutputData: true,
+    parameters: { method: 'GET', url: expr('{{ $json.credit_url }}'), sendHeaders: true, headerParameters: UA_TOPIC, options: HTTP_TOPIC },
+  },
+  output: [{ statusCode: 200, body: { query: { pages: {} } } }],
+});
+
+const topicPictures = node({
+  type: 'n8n-nodes-base.code',
+  version: 2,
+  config: {
+    name: 'Topic images',
+    parameters: {
+      mode: 'runOnceForAllItems',
+      jsCode:
+        INLINE('n8n/lib/profiles.js') +
+        "const files = $('Topic files').all().map((i) => i.json);\n" +
+        "const pics = topicImages(files, $input.all().map((i) => i.json || {}));\n" +
+        "return pics.length ? pics.map((x) => ({ json: x })) : [{ json: { none: true } }];\n",
+    },
+  },
+  output: [{ idx: 1, image: { url: 'https://upload.wikimedia.org/wikipedia/commons/a.svg', credit: 'c', link: 'p' } }],
+});
+
 const finish = node({
   type: 'n8n-nodes-base.code',
   version: 2,
@@ -262,7 +345,9 @@ const finish = node({
         INLINE('n8n/lib/news.js', 'n8n/lib/dates.js', 'n8n/lib/edition.js', 'n8n/lib/profiles.js') +
         "const p = $('Profiles request').first().json;\n" +
         "const all = $('Read all profiles').all().map((i) => i.json).filter((r) => r.entity_id);\n" +
-        "const done = finishEdition(p.edition, all, p.date);\n" +
+        "let pics = [];\n" +
+        "try { pics = $('Topic images').all().map((i) => i.json).filter((t) => t && t.image); } catch (e) { pics = []; }\n" +
+        "const done = finishEdition(p.edition, all, p.date, pics);\n" +
         "return [{ json: { date: p.date, run_id: p.run_id, relay: p.relay, stop_after: p.stop_after || '', edition: done.edition, profiles_json: done.profiles, history: historyRows(done.edition), spotlight_ids: done.spotlightIds } }];\n",
     },
   },
@@ -351,7 +436,13 @@ export default workflow('ppai-profiles', 'PPAI · profiles')
       .onFalse(readAll),
   )
   .add(readAll)
-  .to(finish)
+  .to(topicQueries)
+  .to(
+    anyTopic
+      .onTrue(topicSearch.to(topicFiles).to(anyTopicFile.onTrue(topicCredit.to(topicPictures).to(finish)).onFalse(finish)))
+      .onFalse(finish),
+  )
+  .add(finish)
   .to(relayCheck.onTrue(handToPublish).onFalse(returnPayload))
   .add(finish)
   .to(spotlightItems)

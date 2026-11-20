@@ -161,3 +161,24 @@ test('storage that refuses writes never throws out of saveConfig or rememberRati
 test('requests are sent with keepalive so they survive the tab closing', () => {
   assert.equal(buildRequest({ url: 'https://x.example/h', key: 'k' }, { date: '2026-11-19', n: 1, title: 'T', category: 'c', rating: 'ok' }).init.keepalive, true);
 });
+
+test('a failed older send does not undo a newer rating', async (t) => {
+  t.mock.timers.enable({ apis: ['setTimeout'] });
+  let release;
+  const s = setup((init) => (JSON.parse(init.body).rating === 'more' ? new Promise((r) => { release = () => r(resp(500, { ok: false })); }) : resp(200, { ok: true })));
+  s.root.dispatch('click', s.b1.rates[0]);
+  t.mock.timers.tick(2000);
+  await flush();
+  s.root.dispatch('click', s.b1.rates[2]);
+  release();
+  await flush();
+  await flush();
+  assert.equal(s.b1.rates[2].getAttribute('aria-pressed'), 'true');
+  assert.equal(s.b1.rates[0].getAttribute('aria-pressed'), 'false');
+  assert.equal(storedRating(s.storage, '2026-11-19', 1), 'less');
+  t.mock.timers.tick(2000);
+  await flush();
+  await flush();
+  assert.equal(s.b1.rates[2].getAttribute('aria-pressed'), 'true');
+  assert.equal(JSON.parse(s.calls.at(-1).body).rating, 'less');
+});

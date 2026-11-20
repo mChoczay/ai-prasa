@@ -21,7 +21,7 @@ const buildPrompt = node({
         INLINE('n8n/lib/news.js', 'n8n/lib/select.js') +
         "const p = $('Select request').first().json;\n" +
         "if (!Array.isArray(p.candidates) || !p.candidates.length) throw new Error('NO_NEWS: brak kandydatów na tematy (kanały RSS nic nie zwróciły)');\n" +
-        "return [{ json: { user: selectPrompt(p.candidates, p.history_titles) } }];\n",
+        "return [{ json: { user: selectPrompt(p.candidates, p.history_titles, p.feedback || '') } }];\n",
     },
   },
   output: [{ user: '...' }],

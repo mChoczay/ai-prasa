@@ -56,3 +56,9 @@ test('build articles keeps the preview image of the fetched page in the n8n sand
   });
   assert.deepEqual(json.articles[0].image, { url: 'https://cdn.news.example/0.jpg', credit: 'news.example', link: payload.candidates[0].url });
 });
+
+test('select prompt node passes the reader feedback from the payload', () => {
+  const code = codeNodeSource(WF, 'Build select prompt');
+  const [{ json }] = runCodeNode(code, { globals: sandbox, nodes: { 'Select request': [{ ...payload, feedback: 'FB-LINE' }] } });
+  assert.match(json.user, /## Reader feedback\nFB-LINE$/);
+});

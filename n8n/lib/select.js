@@ -7,12 +7,12 @@ const MAIN_TEXT_CHARS = 6000;
 const RELATED_TEXT_CHARS = 2500;
 const _STOP = new Set(['the', 'and', 'for', 'with', 'from', 'into', 'over', 'its', 'are', 'new', 'now', 'has', 'how', 'why', 'what', 'after', 'about', 'says', 'will', 'can', 'this', 'that', 'than', 'more', 'out']);
 
-function selectPrompt(candidates, historyTitles) {
+function selectPrompt(candidates, historyTitles, feedback = '') {
   const covered = (historyTitles || []).map((t) => `- ${t}`).join('\n') || '- (none)';
   const list = (candidates || [])
     .map((c) => `[${c.idx}] ${c.title} — ${c.source} — ${c.category}, importance ${c.importance} — ${String(c.published_at).slice(0, 16)}\n    ${c.snippet || ''}`)
     .join('\n');
-  return `Titles covered in the last 7 days:\n${covered}\n\nCandidates:\n${list}`;
+  return `Titles covered in the last 7 days:\n${covered}\n\nCandidates:\n${list}${feedback ? `\n\n## Reader feedback\n${feedback}` : ''}`;
 }
 
 // Selection by idx -> candidate objects. Unknown or repeated idx are dropped; the lead falls back to the

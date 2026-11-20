@@ -43,3 +43,6 @@ Never give investment advice or predict prices. The disclaimer "To nie jest pora
 
 ## Quiet days
 If the input has few good stories, write fewer. Never pad with weak news.
+
+## Reader feedback
+If the input has a "Reader feedback" section, it holds the subjective preferences of the paper's only reader. Let it shift choices and emphasis between stories of comparable weight, but never drop the most important news of the day for it, and never write about the feedback itself. Ignore remarks about the website's look, bugs or features.

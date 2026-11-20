@@ -44,3 +44,20 @@ test('gate unpauses a budget stop from an earlier month', () => {
   assert.equal(g.paused, false);
   assert.equal(g.paused_reason, null);
 });
+
+const payloadCode = codeNodeSource('n8n/workflows/daily.workflow.js', 'Build relay payload');
+const payloadNodes = (feedbackRows) => ({
+  'Budget gate': [{ date: '2026-11-20', run_id: '2026-11-20-1', flags: { weekly: false, monthly: false } }],
+  'Run numbers': [{ date: '2026-11-20' }],
+  'Run news': [{ candidates: [], history_titles: [] }],
+  'Read feedback': feedbackRows,
+});
+
+test('relay payload carries the reader feedback digest, empty when the table is empty', () => {
+  const rows = [{ id: 1, date: '2026-11-19', n: 1, title: 'Genie 4', category: 'modele', rating: 'less', note: '', createdAt: '2026-11-19T07:00:00Z' }];
+  const [{ json }] = runCodeNode(payloadCode, { nodes: payloadNodes(rows) });
+  assert.match(json.feedback, /less like this: "Genie 4" \(modele\)/);
+  assert.equal(json.run_id, '2026-11-20-1');
+  const [{ json: empty }] = runCodeNode(payloadCode, { nodes: payloadNodes([{}]) });
+  assert.equal(empty.feedback, '');
+});

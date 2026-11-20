@@ -22,7 +22,7 @@ const buildPrompt = node({
         INLINE('n8n/lib/news.js', 'n8n/lib/dates.js', 'n8n/lib/edition.js', 'n8n/lib/write.js') +
         'const FULL = ' + JSONTEXT('schemas/edition.schema.json') + ';\n' +
         "const p = $('Front request').first().json;\n" +
-        "const user = frontPrompt({ date: p.date, articles: p.articles, written: p.stories_part, numbers: p.numbers, candidates: p.candidates, leakers: p.leakers, entities: p.entities, historyTitles: p.history_titles });\n" +
+        "const user = frontPrompt({ date: p.date, articles: p.articles, written: p.stories_part, numbers: p.numbers, candidates: p.candidates, leakers: p.leakers, entities: p.entities, historyTitles: p.history_titles, feedback: p.feedback || '' });\n" +
         "return [{ json: { user, schema: pickSchema(FULL, ['greeting', 'lead_story', 'market', 'rankings', 'big_moves', 'follow_ups', 'closing']) } }];\n",
     },
   },

@@ -108,3 +108,14 @@ test('assemble node gives the lead the image of the article it cites', () => {
   assert.equal(json.edition.lead_story.image.url, 'https://img.example/0.jpg');
   assert.equal(json.edition.market.mood, 'm');
 });
+
+test('stories and front prompt nodes pass the reader feedback from the payload', () => {
+  const nodes = { 'Write request': [{ ...payload, feedback: 'FB-LINE' }], 'Read profiles': [{}], 'Read watchlist': [{}], 'Read leakers': [{}] };
+  const [{ json: s }] = runCodeNode(codeNodeSource('n8n/workflows/write.workflow.js', 'Build stories prompt'), { globals: sandbox, nodes });
+  assert.match(s.user, /## Reader feedback\nFB-LINE$/);
+  const p = { ...payload, feedback: 'FB-LINE', stories_part: { stories: [], rumors: [] }, entities: [], leakers: [] };
+  const [{ json: f }] = runCodeNode(codeNodeSource('n8n/workflows/front.workflow.js', 'Build front prompt'), { globals: sandbox, nodes: { 'Front request': [p] } });
+  assert.match(f.user, /## Reader feedback\nFB-LINE$/);
+  const [{ json: none }] = runCodeNode(codeNodeSource('n8n/workflows/front.workflow.js', 'Build front prompt'), { globals: sandbox, nodes: { 'Front request': [{ ...p, feedback: '' }] } });
+  assert.doesNotMatch(none.user, /Reader feedback/);
+});

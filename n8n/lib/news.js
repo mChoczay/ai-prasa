@@ -2,18 +2,35 @@
 
 const _TRACKING_PARAMS = new Set(['ref', 'fbclid']);
 
+// The n8n Code sandbox has no global URL / URLSearchParams, so URLs are split with a regex.
+function _splitUrl(url) {
+  const m = String(url || '').match(/^([a-z][a-z0-9+.-]*:)\/\/([^/?#]+)([^?#]*)(\?[^#]*)?/i);
+  if (!m) throw new Error(`invalid url: ${url}`);
+  return { protocol: m[1].toLowerCase(), host: m[2].toLowerCase(), path: m[3] || '/', query: m[4] ? m[4].slice(1) : '' };
+}
+
 function normalizeUrl(url) {
-  const u = new URL(url);
-  const host = u.host.toLowerCase().replace(/^www\./, '');
-  const params = new URLSearchParams();
-  for (const [key, value] of u.searchParams) {
-    if (key.toLowerCase().startsWith('utm_') || _TRACKING_PARAMS.has(key.toLowerCase())) continue;
-    params.append(key, value);
+  const u = _splitUrl(url);
+  const host = u.host.replace(/^www\./, '');
+  const params = u.query
+    .split('&')
+    .filter(Boolean)
+    .filter((pair) => {
+      const key = pair.split('=')[0].toLowerCase();
+      return !key.startsWith('utm_') && !_TRACKING_PARAMS.has(key);
+    });
+  let path = u.path;
+  if (path.length > 1) path = path.replace(/\/+$/, '') || '/';
+  return `${u.protocol}//${host}${path}${params.length ? `?${params.join('&')}` : ''}`;
+}
+
+// normalizeUrl that never throws: invalid input comes back as the plain string.
+function safeNormalizeUrl(url) {
+  try {
+    return normalizeUrl(url);
+  } catch {
+    return String(url || '');
   }
-  let path = u.pathname;
-  if (path.length > 1) path = path.replace(/\/+$/, '');
-  const search = params.toString();
-  return `${u.protocol}//${host}${path}${search ? `?${search}` : ''}`;
 }
 
 function _fold(text) {
@@ -50,19 +67,64 @@ function dedupeCandidates(items) {
   return kept;
 }
 
-function extractArticleText(html, maxChars = 12000) {
-  const text = (html || '')
-    .replace(/<(script|style|nav|header|footer|aside)\b[^>]*>[\s\S]*?<\/\1>/gi, ' ')
-    .replace(/<[^>]+>/g, ' ')
-    .replace(/&nbsp;/g, ' ')
-    .replace(/&lt;/g, '<')
-    .replace(/&gt;/g, '>')
-    .replace(/&quot;/g, '"')
-    .replace(/&#39;/g, "'")
-    .replace(/&amp;/g, '&')
+const _ENTITIES = { nbsp: ' ', lt: '<', gt: '>', quot: '"', apos: "'", mdash: '—', ndash: '–', hellip: '…', rsquo: '’', lsquo: '‘', rdquo: '”', ldquo: '„', amp: '&' };
+
+function _decodeEntities(text) {
+  return text.replace(/&(#x[0-9a-f]+|#\d+|[a-z]+);/gi, (whole, code) => {
+    if (code[0] === '#') {
+      const n = code[1] === 'x' || code[1] === 'X' ? parseInt(code.slice(2), 16) : parseInt(code.slice(1), 10);
+      return Number.isFinite(n) && n > 0 && n < 0x110000 ? String.fromCodePoint(n) : whole;
+    }
+    const named = _ENTITIES[code.toLowerCase()];
+    return named === undefined ? whole : named;
+  });
+}
+
+function _plain(fragment) {
+  return _decodeEntities(fragment.replace(/<[^>]+>/g, ' '))
     .replace(/\s+/g, ' ')
     .trim();
+}
+
+const MIN_PARAGRAPH_CHARS = 60;
+const MIN_PARAGRAPH_TEXT = 500;
+
+// Article text from a page: the long <p> paragraphs when they hold enough text (this skips menus and
+// teasers), otherwise the whole page without scripts and navigation.
+function extractArticleText(html, maxChars = 12000) {
+  const page = (html || '').replace(/<(script|style|nav|header|footer|aside|noscript|svg)\b[^>]*>[\s\S]*?<\/\1>/gi, ' ');
+  const paragraphs = [...page.matchAll(/<p\b[^>]*>([\s\S]*?)<\/p>/gi)].map((m) => _plain(m[1])).filter((t) => t.length > MIN_PARAGRAPH_CHARS);
+  const joined = paragraphs.join('\n\n');
+  const text = joined.length >= MIN_PARAGRAPH_TEXT ? joined : _plain(page);
   return text.slice(0, maxChars);
+}
+
+const _OG_KEYS = ['og:image', 'og:image:url', 'og:image:secure_url'];
+
+// The page's preview image (og:image, else twitter:image) as an https URL, or null. Protocol-relative
+// and root-relative URLs are resolved against the page; http: and other schemes are refused.
+function extractOgImage(html, pageUrl) {
+  let og = null;
+  let tw = null;
+  for (const tag of String(html || '').match(/<meta\b[^>]*>/gi) || []) {
+    const attrs = {};
+    for (const m of tag.matchAll(/([a-z][\w:-]*)\s*=\s*("([^"]*)"|'([^']*)')/gi)) attrs[m[1].toLowerCase()] = m[3] !== undefined ? m[3] : m[4];
+    const key = String(attrs.property || attrs.name || '').toLowerCase();
+    if (!og && _OG_KEYS.includes(key) && attrs.content) og = attrs.content;
+    if (!tw && key === 'twitter:image' && attrs.content) tw = attrs.content;
+  }
+  const raw = _decodeEntities(String(og || tw || '')).trim();
+  if (!raw) return null;
+  if (/^https:\/\//i.test(raw)) return raw;
+  if (raw.startsWith('//')) return `https:${raw}`;
+  if (raw.startsWith('/')) {
+    try {
+      return `https://${_splitUrl(pageUrl).host}${raw}`;
+    } catch {
+      return null;
+    }
+  }
+  return null;
 }
 
 function entityId(name) {
@@ -71,4 +133,4 @@ function entityId(name) {
     .replace(/^-+|-+$/g, '');
 }
 
-export { normalizeUrl, dedupeCandidates, extractArticleText, entityId };
+export { normalizeUrl, safeNormalizeUrl, dedupeCandidates, extractArticleText, extractOgImage, entityId };

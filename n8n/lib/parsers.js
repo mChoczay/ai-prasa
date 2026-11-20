@@ -39,12 +39,14 @@ function parseHfTrending(input) {
   return _ranked(rows);
 }
 
-// Artificial Analysis free API (/api/v2/language/models/free):
+// Artificial Analysis free API (/api/v2/language/models/free), one page or an array of pages:
 // {data: [{name, model_creator: {name}, evaluations: {artificial_analysis_intelligence_index}}]}.
 function parseAaModels(input) {
-  const data = _json(input);
-  if (!data || !Array.isArray(data.data)) return null;
-  const rows = data.data
+  const parsed = _json(input);
+  const pages = Array.isArray(parsed) ? parsed : [parsed];
+  if (!pages.length || !pages.every((p) => p && Array.isArray(p.data))) return null;
+  const rows = pages
+    .flatMap((p) => p.data)
     .filter((m) => m && typeof m.name === 'string' && m.evaluations && Number.isFinite(m.evaluations.artificial_analysis_intelligence_index))
     .sort((a, b) => b.evaluations.artificial_analysis_intelligence_index - a.evaluations.artificial_analysis_intelligence_index)
     .map((m) => ({
@@ -55,4 +57,49 @@ function parseAaModels(input) {
   return _ranked(rows);
 }
 
-export { parseLmarena, parseHfTrending, parseAaModels };
+// Massive (formerly Polygon) daily aggregates, /v2/aggs/ticker/{T}/range/1/day/{from}/{to}:
+// {results: [{t: bar start in ms, c: close}]} -> [{date: 'YYYY-MM-DD', close}] ascending, or null.
+function parseMassiveAggs(input) {
+  const data = _json(input);
+  if (!data || !Array.isArray(data.results) || !data.results.length) return null;
+  const rows = data.results
+    .filter((b) => b && Number.isFinite(b.t) && Number.isFinite(b.c))
+    .map((b) => ({ date: new Date(b.t).toISOString().slice(0, 10), close: b.c }))
+    .sort((a, b) => (a.date < b.date ? -1 : a.date > b.date ? 1 : 0));
+  return rows.length ? rows : null;
+}
+
+// Massive grouped daily (/v2/aggs/grouped/locale/us/market/stocks/{date}), one or several days:
+// [{results: [{T: ticker, t: ms, c: close}]}] -> {TICKER: [{date, close}] ascending}, or null.
+function parseMassiveGrouped(input) {
+  const parsed = _json(input);
+  const days = (Array.isArray(parsed) ? parsed : [parsed]).filter((d) => d && Array.isArray(d.results));
+  if (!days.length) return null;
+  const series = {};
+  for (const day of days) {
+    for (const bar of day.results) {
+      if (!bar || typeof bar.T !== 'string' || !Number.isFinite(bar.t) || !Number.isFinite(bar.c)) continue;
+      (series[bar.T] = series[bar.T] || []).push({ date: new Date(bar.t).toISOString().slice(0, 10), close: bar.c });
+    }
+  }
+  for (const list of Object.values(series)) list.sort((a, b) => (a.date < b.date ? -1 : a.date > b.date ? 1 : 0));
+  return series;
+}
+
+// Leaderboards list the same model in several settings ('X (High)', 'X (Max)'). Keep the best-ranked row per
+// base name, label it with the base name, remember the setting in `variant`, and re-rank 1..n.
+function collapseVariants(rows) {
+  if (!Array.isArray(rows)) return null;
+  const seen = new Set();
+  const out = [];
+  for (const r of rows) {
+    const m = String(r.model).match(/^(.*?)\s*\(([^()]*)\)\s*$/);
+    const base = m ? m[1].trim() : String(r.model).trim();
+    if (seen.has(base.toLowerCase())) continue;
+    seen.add(base.toLowerCase());
+    out.push({ rank: out.length + 1, model: base, org: r.org, score: r.score, variant: m ? m[2].trim() : null });
+  }
+  return out;
+}
+
+export { parseLmarena, parseHfTrending, parseAaModels, parseMassiveAggs, parseMassiveGrouped, collapseVariants };

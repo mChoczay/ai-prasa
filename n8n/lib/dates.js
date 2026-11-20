@@ -32,4 +32,25 @@ function daysBetween(a, b) {
   return Math.round((_utcMidnight(b) - _utcMidnight(a)) / 86_400_000);
 }
 
-export { editionDate, monthKey, editionFlags, daysBetween };
+function _isoFromUtc(ms) {
+  return new Date(ms).toISOString().slice(0, 10);
+}
+
+// Last weekday on or before the given day (holidays are not known; a holiday simply yields no data).
+function _weekdayOnOrBefore(dateStr) {
+  let ms = _utcMidnight(dateStr);
+  while ([0, 6].includes(new Date(ms).getUTCDay())) ms -= 86_400_000;
+  return _isoFromUtc(ms);
+}
+
+// Market reference days for an edition: d0 = last close before the edition, d1 = the close before that,
+// d7 / d30 = weekdays on or before d0 minus 7 / 30 calendar days.
+function tradingRefDates(editionDateStr) {
+  const d0 = _weekdayOnOrBefore(_isoFromUtc(_utcMidnight(editionDateStr) - 86_400_000));
+  const d1 = _weekdayOnOrBefore(_isoFromUtc(_utcMidnight(d0) - 86_400_000));
+  const d7 = _weekdayOnOrBefore(_isoFromUtc(_utcMidnight(d0) - 7 * 86_400_000));
+  const d30 = _weekdayOnOrBefore(_isoFromUtc(_utcMidnight(d0) - 30 * 86_400_000));
+  return { d0, d1, d7, d30 };
+}
+
+export { editionDate, monthKey, editionFlags, daysBetween, tradingRefDates };

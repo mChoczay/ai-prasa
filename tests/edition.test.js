@@ -7,7 +7,9 @@ import {
   collectNewEntities,
   pickSpotlight,
   readingMinutes,
+  supplementMinutes,
   upsertIndex,
+  resolvePending,
 } from '../n8n/lib/edition.js';
 
 const sample = () => JSON.parse(readFileSync(new URL('./fixtures/edition.sample.json', import.meta.url), 'utf8'));
@@ -78,6 +80,18 @@ test('may_affect_names map to ids and unknown names are collected once', () => {
   assert.deepEqual(edition.lead_story.may_affect, ['nvda']);
   assert.equal('may_affect_names' in edition.lead_story, false);
   assert.deepEqual(newEntityNames, ['Nowa Firma']);
+  assert.deepEqual(edition.lead_story.may_affect_pending, ['Nowa Firma']);
+});
+
+test('resolvePending turns names known after the profile step into ids and drops the rest', () => {
+  const e = sample();
+  e.lead_story.may_affect_names = ['Nvidia', 'Nowa Firma', 'Nieznana'];
+  const { edition } = checkEditionRules(e, profiles);
+  const later = [...profiles, { id: 'nowa-firma', type: 'company', name: 'Nowa Firma', aliases: '' }];
+  const done = resolvePending(edition, later);
+  assert.deepEqual(done.lead_story.may_affect, ['nvda', 'nowa-firma']);
+  assert.equal('may_affect_pending' in done.lead_story, false);
+  assert.ok(done.stories.every((s) => !('may_affect_pending' in s)));
 });
 
 test('quiet day: lead plus two stories sets quiet_day without errors', () => {
@@ -136,6 +150,17 @@ test('collectNewEntities respects maxPerDay', () => {
   assert.deepEqual(result.map((r) => r.id), ['a', 'b']);
 });
 
+test('collectNewEntities does not add a story name that matches a watchlist entry added the same day', () => {
+  const result = collectNewEntities({
+    newEntityNames: ['nvidia', 'NVDA'],
+    watchlist: [{ ticker: 'NVDA', name: 'NVIDIA', active: true }],
+    leaderboardTop: [],
+    profiles: [],
+    today: '2026-11-18',
+  });
+  assert.deepEqual(result.map((r) => r.id), ['nvda']);
+});
+
 test('pickSpotlight prefers today entities not spotlighted within 60 days', () => {
   const ps = [
     { id: 'recent', type: 'company', last_spotlight_at: '2026-11-08' },
@@ -180,4 +205,13 @@ test('upsertIndex re-run on the same date keeps one entry with the newest title'
     ['2026-11-18', 'Drugi'],
     ['2026-11-17', 'Wczoraj'],
   ]);
+});
+
+test('readingMinutes counts only the daily edition and supplementMinutes the weekly and monthly', () => {
+  const daily = { greeting: '', lead_story: { body: 'w '.repeat(2000) }, stories: [] };
+  const weekly = { title: 'T', body: 'w '.repeat(1200) };
+  assert.equal(readingMinutes({ ...daily, weekly }), readingMinutes(daily));
+  assert.equal(supplementMinutes({ ...daily, weekly }), 6);
+  assert.equal(supplementMinutes({ ...daily, weekly, monthly: { body: 'w '.repeat(1400) } }), 13);
+  assert.equal(supplementMinutes(daily), 0);
 });

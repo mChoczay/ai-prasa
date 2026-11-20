@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { normalizeUrl, dedupeCandidates, extractArticleText, entityId } from '../n8n/lib/news.js';
+import { normalizeUrl, dedupeCandidates, extractArticleText, entityId, extractOgImage } from '../n8n/lib/news.js';
 
 test('normalizeUrl strips www, tracking params, hash and trailing slash', () => {
   assert.equal(normalizeUrl('https://www.Example.com/a/?utm_source=x&id=2#top'), 'https://example.com/a?id=2');
@@ -45,6 +45,19 @@ test('extractArticleText truncates to maxChars', () => {
   assert.equal(out, 'a'.repeat(10));
 });
 
+test('extractArticleText prefers long paragraphs over page chrome when they hold enough text', () => {
+  const para = (n) => `<p class="x">Paragraph ${n} says that the company&#x27;s shares rose after the report &mdash; a long sentence.</p>`;
+  const html = `<div>Skip Navigation Markets Business Investing</div><p>Short teaser</p>${[1, 2, 3, 4, 5, 6, 7].map(para).join('<div>ad</div>')}`;
+  const out = extractArticleText(html);
+  assert.match(out, /^Paragraph 1 says that the company's shares rose after the report — a long sentence\./);
+  assert.doesNotMatch(out, /Skip Navigation|Short teaser|ad/);
+  assert.match(out, /sentence\.\n\nParagraph 2/);
+});
+
+test('extractArticleText falls back to the whole page when paragraphs are too short', () => {
+  assert.equal(extractArticleText('<div>Only a div with text&hellip;</div><p>tiny</p>'), 'Only a div with text… tiny');
+});
+
 test('entityId simple', () => {
   assert.equal(entityId('Mistral AI'), 'mistral-ai');
 });
@@ -55,4 +68,16 @@ test('entityId with Polish characters and dots', () => {
 
 test('entityId trims separators', () => {
   assert.equal(entityId('  --GPT (5)--  '), 'gpt-5');
+});
+
+test('extractOgImage reads og:image in any attribute order and resolves it to https', () => {
+  const page = 'https://www.cnbc.com/2026/11/18/a.html';
+  assert.equal(extractOgImage('<meta content="https://img.cnbc.com/a.jpg?w=1&amp;h=2" property="og:image">', page), 'https://img.cnbc.com/a.jpg?w=1&h=2');
+  assert.equal(extractOgImage("<meta property='og:image:url' content='//cdn.x.com/a.jpg'>", page), 'https://cdn.x.com/a.jpg');
+  assert.equal(extractOgImage('<meta property="og:image" content="/img/a.jpg">', page), 'https://www.cnbc.com/img/a.jpg');
+  assert.equal(extractOgImage('<meta property="og:image" content="http://x.com/a.jpg">', page), null);
+  assert.equal(extractOgImage('<meta name="twitter:image" content="https://t.co/b.png">', page), 'https://t.co/b.png');
+  assert.equal(extractOgImage('<meta property="og:image" content="https://a.com/og.jpg"><meta name="twitter:image" content="https://a.com/tw.jpg">', page), 'https://a.com/og.jpg');
+  assert.equal(extractOgImage('<p>no meta</p>', page), null);
+  assert.equal(extractOgImage('', page), null);
 });

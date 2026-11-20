@@ -1,4 +1,7 @@
-import { renderEdition, renderArchive, renderProfileCard, escapeHtml } from './render.js';
+import { renderArchive, renderProfileCard, escapeHtml } from './render.js';
+import { renderFront } from './front.js';
+import { parseRoute, clampPage, renderReader, initReader } from './reader.js';
+import { readerPages } from './shape.js';
 
 const app = document.getElementById('app');
 const dialog = document.getElementById('profile-dialog');
@@ -29,25 +32,42 @@ async function loadCommon() {
   return indexCache;
 }
 
+let disposeReader = null;
+
 async function route() {
-  const hash = location.hash.replace(/^#\/?/, '');
-  const [pathPart, query = ''] = hash.split('?');
+  const r = parseRoute(location.hash);
+  if (disposeReader) {
+    disposeReader();
+    disposeReader = null;
+  }
+  document.body.classList.toggle('reading', r.view === 'reader');
   try {
     const index = await loadCommon();
-    if (pathPart === 'archiwum') {
-      const category = new URLSearchParams(query).get('kat');
-      app.innerHTML = renderArchive(index, { category });
+    if (r.view === 'archive') {
+      app.innerHTML = renderArchive(index, { category: r.category });
       document.title = 'Archiwum · Poranna prasa AI';
       return;
     }
-    const date = /^\d{4}-\d{2}-\d{2}$/.test(pathPart) ? pathPart : index.editions[0] && index.editions[0].date;
+    const date = r.date || (index.editions[0] && index.editions[0].date);
     if (!date) {
       app.innerHTML = '<p class="no-data">Pierwsze wydanie jeszcze się nie ukazało.</p>';
       return;
     }
     const edition = await getJson(`data/${date}.json`);
-    app.innerHTML = renderEdition(edition, profilesById);
-    document.title = `${edition.lead_story ? edition.lead_story.title : date} · Poranna prasa AI`;
+    const title = `${edition.lead_story ? edition.lead_story.title : date} · Poranna prasa AI`;
+    if (r.view === 'reader') {
+      const page = clampPage(r.page, readerPages(edition).length);
+      app.innerHTML = renderReader(edition, profilesById, page);
+      document.title = title;
+      if (page !== r.page) history.replaceState(null, '', `#/${date}/${page}`);
+      disposeReader = initReader(app.querySelector('.reader'), {
+        page,
+        onPage: (n) => history.replaceState(null, '', `#/${date}/${n}`),
+      });
+      return;
+    }
+    app.innerHTML = renderFront(edition, profilesById);
+    document.title = title;
     window.scrollTo(0, 0);
   } catch (err) {
     console.warn(err);
@@ -56,12 +76,33 @@ async function route() {
 }
 
 app.addEventListener('click', (event) => {
-  const chip = event.target.closest('.entity');
+  const chip = event.target.closest('[data-entity]');
   if (!chip) return;
   const profile = profilesById[chip.dataset.entity];
   dialogBody.innerHTML = profile ? renderProfileCard(profile) : `<p>${escapeHtml(chip.textContent)}</p>`;
   dialog.showModal();
 });
+
+// A story image that fails (blocked hotlink, 404) is swapped for its fallback once, then hidden.
+document.addEventListener(
+  'error',
+  (event) => {
+    const img = event.target;
+    if (!(img instanceof HTMLImageElement)) return;
+    const figure = img.closest('figure.img');
+    if (!figure) return;
+    const fallback = img.dataset.fallback;
+    if (fallback) {
+      delete img.dataset.fallback;
+      const caption = figure.querySelector('figcaption');
+      if (caption) caption.textContent = img.dataset.fallbackCredit ? 'fot. ' + img.dataset.fallbackCredit : '';
+      img.src = fallback;
+      return;
+    }
+    figure.classList.add('no-img');
+  },
+  true,
+);
 
 window.addEventListener('hashchange', route);
 route();

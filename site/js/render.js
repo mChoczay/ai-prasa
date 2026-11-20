@@ -1,6 +1,7 @@
-// Pure renderers for the "Poranna prasa AI" newspaper. Every value from data goes through escapeHtml.
+// Shared renderers for the "Poranna prasa AI" newspaper (front page, reader, archive, profile card).
+// Every value from data goes through escapeHtml; data URLs are used only when they are https.
 
-const CATEGORY_LABELS = Object.freeze({
+export const CATEGORY_LABELS = Object.freeze({
   modele: 'modele',
   gielda: 'giełda',
   inwestycje: 'inwestycje',
@@ -10,14 +11,15 @@ const CATEGORY_LABELS = Object.freeze({
   przecieki: 'przecieki',
   inne: 'inne',
 });
-const WHY_LABELS = Object.freeze({ fakt: 'fakt', hipoteza: 'hipoteza', brak: 'brak jednoznacznej przyczyny' });
-const BOARDS = Object.freeze([
+export const WHY_LABELS = Object.freeze({ fakt: 'fakt', hipoteza: 'hipoteza', brak: 'brak przyczyny' });
+export const BOARDS = Object.freeze([
   ['lmarena', 'LMArena'],
   ['aa', 'Artificial Analysis'],
   ['hf_trending', 'Hugging Face (trending)'],
 ]);
-const NO_DATA = '<p class="no-data">dane niedostępne</p>';
-const CREDITS = `<footer class="credits">Dane rankingowe: <a href="https://artificialanalysis.ai/" target="_blank" rel="noopener noreferrer">Artificial Analysis</a> · <a href="https://huggingface.co/datasets/lmarena-ai/leaderboard-dataset" target="_blank" rel="noopener noreferrer">LMArena</a> (CC BY 4.0) · <a href="https://huggingface.co/models?sort=trending" target="_blank" rel="noopener noreferrer">Hugging Face</a>. Teksty powstają automatycznie z pomocą AI na podstawie podanych źródeł.</footer>`;
+export const NO_DATA = '<p class="no-data">dane niedostępne</p>';
+export const DISCLAIMER = 'To nie jest porada inwestycyjna.';
+export const CREDITS = `<footer class="credits">Dane rankingowe: <a href="https://artificialanalysis.ai/" target="_blank" rel="noopener noreferrer">Artificial Analysis</a> · <a href="https://huggingface.co/datasets/lmarena-ai/leaderboard-dataset" target="_blank" rel="noopener noreferrer">LMArena</a> (CC BY 4.0) · <a href="https://huggingface.co/models?sort=trending" target="_blank" rel="noopener noreferrer">Hugging Face</a>. Teksty powstają automatycznie z pomocą AI na podstawie podanych źródeł. Zdjęcia: podglądy artykułów źródłowych i Wikimedia Commons.</footer>`;
 
 export function escapeHtml(value) {
   if (value == null) return '';
@@ -29,7 +31,7 @@ export function escapeHtml(value) {
     .replace(/'/g, '&#39;');
 }
 
-function paragraphs(text) {
+export function paragraphs(text) {
   return String(text || '')
     .split(/\n{2,}/)
     .map((p) => p.trim())
@@ -38,7 +40,7 @@ function paragraphs(text) {
     .join('');
 }
 
-function longDate(dateStr) {
+export function longDate(dateStr) {
   const [y, m, d] = String(dateStr).split('-').map(Number);
   if (!y || !m || !d) return escapeHtml(dateStr);
   return new Intl.DateTimeFormat('pl-PL', {
@@ -54,7 +56,7 @@ function round2(n) {
   return Math.round(Number(`${Math.abs(n)}e2`)) / 100;
 }
 
-function pct(n) {
+export function pct(n) {
   if (n == null || Number.isNaN(Number(n))) return { text: '–', cls: 'flat' };
   const v = round2(n);
   const body = `${v.toFixed(2).replace('.', ',')}%`;
@@ -62,11 +64,11 @@ function pct(n) {
   return n > 0 ? { text: `+${body}`, cls: 'up' } : { text: `−${body}`, cls: 'down' };
 }
 
-function statusBadge(status) {
+export function statusBadge(status) {
   return `<span class="badge status-${escapeHtml(status)}">${escapeHtml(status)}</span>`;
 }
 
-function categoryBadge(category) {
+export function categoryBadge(category) {
   return `<span class="badge cat-${escapeHtml(category)}">${escapeHtml(CATEGORY_LABELS[category] || category)}</span>`;
 }
 
@@ -80,7 +82,11 @@ function isHttpUrl(url) {
   return /^https?:\/\//i.test(String(url || '').trim());
 }
 
-function sourcesList(sources) {
+function isHttpsUrl(url) {
+  return /^https:\/\//i.test(String(url || '').trim());
+}
+
+export function sourcesList(sources) {
   if (!sources || !sources.length) return '';
   const links = sources
     .map((s) => {
@@ -93,26 +99,24 @@ function sourcesList(sources) {
   return `<p class="sources">Źródła: ${links}</p>`;
 }
 
-function story(s, profilesById, { lead = false } = {}) {
-  const chips = (s.may_affect || []).map((id) => entityChip(id, profilesById)).join(' ');
-  return `<section class="story${lead ? ' lead' : ''}">
-<div class="badges">${categoryBadge(s.category)}${statusBadge(s.status)}${s.is_update ? '<span class="badge update">aktualizacja</span>' : ''}</div>
-<h${lead ? 2 : 3} class="title">${escapeHtml(s.title)}</h${lead ? 2 : 3}>
-<p class="lede">${escapeHtml(s.lede)}</p>
-${paragraphs(s.body)}
-<p class="for-you"><strong>Co to znaczy dla Ciebie:</strong> ${escapeHtml(s.for_you)}</p>
-${chips ? `<p class="may-affect">Może dotyczyć: ${chips}</p>` : ''}
-${s.disclaimer ? `<p class="disclaimer">${escapeHtml(s.disclaimer)}</p>` : ''}
-${sourcesList(s.sources)}
-</section>`;
+// An image with its fallback (swapped in by app.js when the first one fails). Hero images carry the
+// credit; with link: true the credit links to its source (not inside another link).
+export function imageFigure(image, fallback, { size = 'thumb', link = false } = {}) {
+  const ok = (i) => i && isHttpsUrl(i.url);
+  const main = ok(image) ? image : ok(fallback) ? fallback : null;
+  if (!main) return '';
+  const spare = main === image && ok(fallback) ? fallback : null;
+  const spareAttrs = spare ? ` data-fallback="${escapeHtml(spare.url.trim())}" data-fallback-credit="${escapeHtml(spare.credit || '')}"` : '';
+  let caption = '';
+  if (size === 'hero' && main.credit) {
+    const credit = link && isHttpsUrl(main.link) ? `<a href="${escapeHtml(main.link.trim())}" target="_blank" rel="noopener noreferrer">${escapeHtml(main.credit)}</a>` : escapeHtml(main.credit);
+    caption = `<figcaption>fot. ${credit}</figcaption>`;
+  }
+  return `<figure class="img img-${escapeHtml(size)}"><img src="${escapeHtml(main.url.trim())}" loading="lazy" decoding="async" alt=""${spareAttrs}>${caption}</figure>`;
 }
 
-export function renderMarket(market) {
-  if (!market || !Array.isArray(market.rows) || !market.rows.length) {
-    return `<section class="market"><h3>Rynek</h3>${NO_DATA}</section>`;
-  }
-  const dates = market.rows.map((r) => r.last_trade_date).filter(Boolean).sort();
-  const asOf = dates.length ? dates[dates.length - 1] : '';
+export function marketTable(market) {
+  if (!market || !Array.isArray(market.rows) || !market.rows.length) return NO_DATA;
   const rows = market.rows
     .map((r) => {
       const d1 = pct(r.change_1d);
@@ -121,9 +125,21 @@ export function renderMarket(market) {
       return `<tr><td>${escapeHtml(r.name)}</td><td class="${d1.cls}">${d1.text}</td><td class="${d7.cls}">${d7.text}</td><td class="${d30.cls}">${d30.text}</td></tr>`;
     })
     .join('');
+  return `<table><thead><tr><th>Spółka</th><th>1 d</th><th>7 d</th><th>30 d</th></tr></thead><tbody>${rows}</tbody></table>`;
+}
+
+export function asOfDate(market) {
+  const dates = ((market && market.rows) || []).map((r) => r.last_trade_date).filter(Boolean).sort();
+  return (market && market.as_of) || (dates.length ? dates[dates.length - 1] : '');
+}
+
+export function renderMarket(market) {
+  if (!market || !Array.isArray(market.rows) || !market.rows.length) {
+    return `<section class="market"><h3>Rynek</h3>${NO_DATA}</section>`;
+  }
   return `<section class="market"><h3>Rynek</h3>
-<p class="meta">notowania z ${escapeHtml(asOf)}</p>
-<table><thead><tr><th>Spółka</th><th>1 d</th><th>7 d</th><th>30 d</th></tr></thead><tbody>${rows}</tbody></table>
+<p class="meta">notowania z ${escapeHtml(asOfDate(market))}</p>
+${marketTable(market)}
 ${market.commentary ? `<p>${escapeHtml(market.commentary)}</p>` : ''}
 ${market.disclaimer ? `<p class="disclaimer">${escapeHtml(market.disclaimer)}</p>` : ''}
 </section>`;
@@ -135,9 +151,9 @@ function delta(d) {
   return d > 0 ? `<span class="up">▲ ${d}</span>` : `<span class="down">▼ ${Math.abs(d)}</span>`;
 }
 
-export function renderRankings(rankings) {
+export function rankingBoards(rankings) {
   const r = rankings || {};
-  const boards = BOARDS.map(([key, label]) => {
+  return BOARDS.map(([key, label]) => {
     const list = r[key];
     if (!Array.isArray(list) || !list.length) return `<h4>${label}</h4>${NO_DATA}`;
     const items = list
@@ -146,42 +162,18 @@ export function renderRankings(rankings) {
       .join('');
     return `<h4>${label}</h4><ol class="board">${items}</ol>`;
   }).join('');
-  return `<section class="rankings"><h3>Rankingi</h3>${boards}${r.commentary ? `<p>${escapeHtml(r.commentary)}</p>` : ''}</section>`;
 }
 
-function bigMoves(moves, profilesById) {
-  if (!moves || !moves.length) return '';
-  const items = moves
-    .map(
-      (m) => `<li>${entityChip(m.entity_id, profilesById)} <strong>${escapeHtml(m.change)}</strong>
-<p class="why why-${escapeHtml(m.why_type)}"><span class="why-label">Dlaczego? (${escapeHtml(WHY_LABELS[m.why_type] || m.why_type)})</span> ${escapeHtml(m.why)}</p>${sourcesList(m.sources)}</li>`,
-    )
-    .join('');
-  return `<section class="big-moves"><h3>Duże ruchy</h3><ul>${items}</ul></section>`;
-}
-
-function followUps(items, profilesById) {
-  if (!items || !items.length) return '';
-  const lis = items
-    .map(
-      (f) =>
-        `<li>${entityChip(f.entity_id, profilesById)} ${escapeHtml(f.move)}: pamiętasz „${escapeHtml(f.related_story)}” z ${escapeHtml(f.story_date)}?</li>`,
-    )
-    .join('');
-  return `<section class="follow-ups"><h3>Sprawdzamy</h3><ul>${lis}</ul></section>`;
-}
-
-function rumors(list) {
-  const items = (list || [])
-    .map((r) => `<li>${statusBadge('plotka')} <strong>${escapeHtml(r.title)}</strong> ${escapeHtml(r.body)}${sourcesList(r.sources)}</li>`)
-    .join('');
-  return `<section class="rumors"><h3>Plotki i przecieki</h3>${items ? `<ul>${items}</ul>` : '<p class="no-data">Dziś cisza.</p>'}</section>`;
+export function renderRankings(rankings) {
+  const r = rankings || {};
+  return `<section class="rankings"><h3>Rankingi</h3>${rankingBoards(r)}${r.commentary ? `<p>${escapeHtml(r.commentary)}</p>` : ''}</section>`;
 }
 
 export function renderProfileCard(profile) {
   if (!profile) return '';
   const products = Array.isArray(profile.key_products) ? profile.key_products.join(', ') : profile.key_products;
   return `<div class="profile-card">
+${imageFigure(profile.image, null, { size: 'hero', link: true })}
 <h3>${escapeHtml(profile.name)}</h3>
 <p>${escapeHtml(profile.summary)}</p>
 ${profile.owner ? `<p><strong>Kto:</strong> ${escapeHtml(profile.owner)}</p>` : ''}
@@ -189,43 +181,6 @@ ${products ? `<p><strong>Produkty:</strong> ${escapeHtml(products)}</p>` : ''}
 ${profile.why_it_matters ? `<p><strong>Dlaczego ważne:</strong> ${escapeHtml(profile.why_it_matters)}</p>` : ''}
 <p class="meta">stan na ${escapeHtml(profile.updated_at)}</p>
 </div>`;
-}
-
-function spotlight(sp, profilesById) {
-  if (!sp) return '';
-  const cards = [sp.company_id, sp.model_id]
-    .filter(Boolean)
-    .map((id) => renderProfileCard(profilesById && profilesById[id]))
-    .join('');
-  return cards ? `<section class="spotlight"><h3>Poznaj</h3>${cards}</section>` : '';
-}
-
-function period(p, label) {
-  if (!p) return '';
-  const takeaways = (p.takeaways || []).map((t) => `<li>${escapeHtml(t)}</li>`).join('');
-  const race = (p.race_map || [])
-    .map((r) => `<tr><td>${escapeHtml(r.area)}</td><td>${escapeHtml(r.leader)}</td><td>${escapeHtml(r.note)}</td></tr>`)
-    .join('');
-  return `<section class="supplement"><p class="kicker">${label}</p><h2>${escapeHtml(p.title)}</h2>${paragraphs(p.body)}
-${takeaways ? `<h4>Warto zapamiętać</h4><ol>${takeaways}</ol>` : ''}
-${race ? `<h4>Kto prowadzi</h4><table><tbody>${race}</tbody></table>` : ''}</section>`;
-}
-
-export function renderEdition(edition, profilesById) {
-  const e = edition;
-  const stories = (e.stories || []).map((s) => story(s, profilesById)).join('');
-  return `<article class="edition">
-<header class="masthead"><h1>Poranna prasa AI</h1>
-<p class="meta">${escapeHtml(longDate(e.date))} · ok. ${escapeHtml(e.minutes)} min czytania${e.quiet_day ? ' · spokojny dzień' : ''}</p></header>
-<p class="greeting">${escapeHtml(e.greeting)}</p>
-<div class="columns">
-<div class="main">${e.lead_story ? story(e.lead_story, profilesById, { lead: true }) : ''}${stories}</div>
-<aside class="side">${renderMarket(e.market)}${bigMoves(e.big_moves, profilesById)}${followUps(e.follow_ups, profilesById)}${renderRankings(e.rankings)}${rumors(e.rumors)}${spotlight(e.spotlight, profilesById)}</aside>
-</div>
-${period(e.weekly, 'Tydzień w AI')}${period(e.monthly, 'Miesiąc w AI')}
-${e.closing ? `<p class="closing">${escapeHtml(e.closing)}</p>` : ''}
-${CREDITS}
-</article>`;
 }
 
 export function renderArchive(index, { category = null } = {}) {

@@ -96,4 +96,15 @@ function assessResponse(json) {
   }
 }
 
-export { PRICES, costUsd, checkGate, classifyApiError, extractJsonText, assessResponse };
+// Results of Claude calls made with "continue on error": the first credits or auth stop, if any.
+// Such a stop must still end the stage (and send its mail); other failures may be skipped.
+function pauseErrorOf(results) {
+  for (const r of results || []) {
+    const e = r && r.error;
+    const message = typeof e === 'string' ? e : (e && e.message) || '';
+    if (/^(CREDITS|AUTH):/.test(message)) return message;
+  }
+  return null;
+}
+
+export { PRICES, costUsd, checkGate, classifyApiError, extractJsonText, assessResponse, pauseErrorOf };

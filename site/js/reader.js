@@ -1,0 +1,124 @@
+// The reader: every story (and supplement) of an edition as a page in a horizontal scroll-snap strip.
+import {
+  escapeHtml,
+  longDate,
+  paragraphs,
+  statusBadge,
+  categoryBadge,
+  sourcesList,
+  entityChip,
+  imageFigure,
+} from './render.js';
+import { readerPages } from './shape.js';
+
+const DATE = /^\d{4}-\d{2}-\d{2}$/;
+const SUPPLEMENT_LABELS = Object.freeze({ weekly: 'Tydzień w AI', monthly: 'Miesiąc w AI' });
+
+export function parseRoute(hash) {
+  const raw = String(hash || '').replace(/^#\/?/, '');
+  const [path, query = ''] = raw.split('?');
+  const parts = path.split('/').filter(Boolean);
+  if (parts[0] === 'archiwum') {
+    return { view: 'archive', date: null, page: null, category: new URLSearchParams(query).get('kat') };
+  }
+  const date = DATE.test(parts[0] || '') ? parts[0] : null;
+  const page = date && /^\d+$/.test(parts[1] || '') ? Number(parts[1]) : null;
+  return { view: page !== null ? 'reader' : 'front', date, page, category: null };
+}
+
+export function clampPage(page, count) {
+  const n = Number.isFinite(page) ? Math.trunc(page) : 1;
+  return Math.min(Math.max(n, 1), Math.max(count, 1));
+}
+
+function pageTitle(edition, p) {
+  return p.kind === 'story' ? p.story.title : edition[p.kind].title;
+}
+
+function storyBody(s, profilesById) {
+  const chips = (s.may_affect || []).map((id) => entityChip(id, profilesById)).join(' ');
+  return `${imageFigure(s.image, s.image_fallback, { size: 'hero', link: true })}
+<div class="badges">${categoryBadge(s.category)}${statusBadge(s.status)}${s.is_update ? '<span class="badge update">aktualizacja</span>' : ''}</div>
+<h2>${escapeHtml(s.title)}</h2>
+<p class="lede">${escapeHtml(s.lede)}</p>
+<div class="body">${paragraphs(s.body)}</div>
+${s.for_you ? `<p class="for-you"><strong>Dla Ciebie:</strong> ${escapeHtml(s.for_you)}</p>` : ''}
+${chips ? `<p class="may-affect">Może dotyczyć: ${chips}</p>` : ''}
+${s.disclaimer ? `<p class="disclaimer">${escapeHtml(s.disclaimer)}</p>` : ''}
+${sourcesList(s.sources)}`;
+}
+
+function supplementBody(p, label) {
+  const takeaways = (p.takeaways || []).map((t) => `<li>${escapeHtml(t)}</li>`).join('');
+  const race = (p.race_map || [])
+    .map((r) => `<tr><td>${escapeHtml(r.area)}</td><td>${escapeHtml(r.leader)}</td><td>${escapeHtml(r.note)}</td></tr>`)
+    .join('');
+  return `<p class="kicker">${label}</p><h2>${escapeHtml(p.title)}</h2><div class="body">${paragraphs(p.body)}</div>
+${takeaways ? `<h4>Warto zapamiętać</h4><ol>${takeaways}</ol>` : ''}
+${race ? `<h4>Kto prowadzi</h4><table><tbody>${race}</tbody></table>` : ''}`;
+}
+
+export function renderReader(edition, profilesById, page) {
+  const e = edition;
+  const pages = readerPages(e);
+  const total = pages.length;
+  const sections = pages
+    .map((p, i) => {
+      const prev = pages[i - 1];
+      const next = pages[i + 1];
+      const body = p.kind === 'story' ? storyBody(p.story, profilesById) : supplementBody(e[p.kind], SUPPLEMENT_LABELS[p.kind]);
+      const nav = `<nav class="page-nav">${prev ? `<button class="prev" data-go="${prev.n}">‹ ${escapeHtml(pageTitle(e, prev))}</button>` : '<span></span>'}${next ? `<button class="next" data-go="${next.n}">${escapeHtml(pageTitle(e, next))} ›</button>` : ''}</nav>`;
+      return `<section class="page" data-n="${p.n}"><div class="page-inner"><p class="page-meta">${p.n} / ${total}</p>${body}${nav}</div></section>`;
+    })
+    .join('');
+  return `<div class="reader" data-page="${escapeHtml(page)}">
+<header class="reader-bar"><a href="#/${escapeHtml(e.date)}">← pierwsza strona</a><span>${escapeHtml(longDate(e.date))}</span></header>
+<button class="arrow arrow-prev" data-step="-1" aria-label="poprzednia strona">‹</button>
+<div class="pages">${sections}</div>
+<button class="arrow arrow-next" data-step="1" aria-label="następna strona">›</button>
+</div>`;
+}
+
+// Browser only. Scrolls to the page, reports the visible page, handles buttons and arrow keys.
+// Returns a function that removes the listeners.
+export function initReader(root, { page, onPage }) {
+  const strip = root.querySelector('.pages');
+  const list = [...strip.querySelectorAll('.page')];
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let current = page;
+  const go = (n, smooth) => {
+    const el = list[n - 1];
+    if (el) strip.scrollTo({ left: el.offsetLeft, behavior: smooth && !reduced ? 'smooth' : 'auto' });
+  };
+  go(page, false);
+  const observer = new IntersectionObserver(
+    (entries) => {
+      for (const entry of entries) {
+        if (!entry.isIntersecting) continue;
+        const n = Number(entry.target.dataset.n);
+        if (n !== current) {
+          current = n;
+          onPage(n);
+        }
+      }
+    },
+    { root: strip, threshold: 0.6 },
+  );
+  list.forEach((el) => observer.observe(el));
+  const onClick = (event) => {
+    const target = event.target.closest('[data-go],[data-step]');
+    if (!target) return;
+    go(target.dataset.go ? Number(target.dataset.go) : current + Number(target.dataset.step), true);
+  };
+  const onKey = (event) => {
+    if (event.key === 'ArrowRight') go(current + 1, true);
+    if (event.key === 'ArrowLeft') go(current - 1, true);
+  };
+  root.addEventListener('click', onClick);
+  document.addEventListener('keydown', onKey);
+  return () => {
+    observer.disconnect();
+    root.removeEventListener('click', onClick);
+    document.removeEventListener('keydown', onKey);
+  };
+}

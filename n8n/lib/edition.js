@@ -3,6 +3,7 @@
 import { entityId } from './news.js';
 import { daysBetween } from './dates.js';
 
+// Copies use JSON: the n8n Code sandbox has no structuredClone.
 const STATUSES = Object.freeze(['potwierdzone', 'plotka', 'opinia']);
 const MARKET_CATEGORIES = Object.freeze(['gielda', 'inwestycje']);
 const DISCLAIMER = 'To nie jest porada inwestycyjna.';
@@ -34,7 +35,7 @@ function _hasSources(item) {
 }
 
 function checkEditionRules(input, profiles) {
-  const edition = structuredClone(input);
+  const edition = JSON.parse(JSON.stringify(input));
   const errors = [];
   const newEntityNames = [];
 
@@ -53,16 +54,20 @@ function checkEditionRules(input, profiles) {
   const all = [edition.lead_story, ...(edition.stories || [])].filter(Boolean).filter(validStory);
   for (const story of all) {
     const ids = [];
+    const pending = [];
     for (const name of story.may_affect_names || []) {
       const id = resolveEntity(name, profiles);
       if (id) {
         if (!ids.includes(id)) ids.push(id);
-      } else if (!newEntityNames.includes(name)) {
-        newEntityNames.push(name);
+      } else {
+        if (!pending.includes(name)) pending.push(name);
+        if (!newEntityNames.includes(name)) newEntityNames.push(name);
       }
     }
     delete story.may_affect_names;
     story.may_affect = ids;
+    // Names without a profile yet; the profile step resolves them with resolvePending.
+    story.may_affect_pending = pending;
     story.disclaimer = MARKET_CATEGORIES.includes(story.category) ? DISCLAIMER : story.disclaimer ?? null;
   }
   edition.lead_story = all[0] || null;
@@ -83,9 +88,12 @@ function collectNewEntities({ newEntityNames, watchlist, leaderboardTop, profile
   const known = profiles || [];
   const out = [];
   const seen = new Set();
+  const added = [];
   const add = (id, name, type, reason) => {
     if (!id || seen.has(id)) return;
+    if (resolveEntity(name, added) || resolveEntity(id, added)) return;
     seen.add(id);
+    added.push({ id, name, aliases: type === 'company' ? id : '' });
     out.push({ id, name, type, reason });
   };
   const missing = (name, id) => !resolveEntity(name, known) && !resolveEntity(id, known);
@@ -148,8 +156,29 @@ function readingMinutes(edition) {
   for (const m of edition.big_moves || []) words += _words(m.why);
   words += _words(edition.market && edition.market.commentary);
   words += _words(edition.rankings && edition.rankings.commentary);
-  for (const p of [edition.weekly, edition.monthly]) if (p) words += _words(p.body);
   return Math.max(1, Math.ceil(words / 200));
+}
+
+// Reading time of the weekly and monthly supplements, shown apart from the daily edition.
+function supplementMinutes(edition) {
+  let words = 0;
+  for (const p of [edition.weekly, edition.monthly]) if (p) words += _words(p.body);
+  return words ? Math.ceil(words / 200) : 0;
+}
+
+// After new profiles are saved: map each story's pending names to ids; names still unknown are dropped.
+function resolvePending(input, profiles) {
+  const edition = JSON.parse(JSON.stringify(input));
+  for (const story of [edition.lead_story, ...(edition.stories || [])].filter(Boolean)) {
+    const ids = Array.isArray(story.may_affect) ? story.may_affect : [];
+    for (const name of story.may_affect_pending || []) {
+      const id = resolveEntity(name, profiles);
+      if (id && !ids.includes(id)) ids.push(id);
+    }
+    story.may_affect = ids;
+    delete story.may_affect_pending;
+  }
+  return edition;
 }
 
 function upsertIndex(index, entry) {
@@ -159,4 +188,4 @@ function upsertIndex(index, entry) {
   return { ...index, editions };
 }
 
-export { DISCLAIMER, resolveEntity, checkEditionRules, collectNewEntities, pickSpotlight, readingMinutes, upsertIndex };
+export { DISCLAIMER, resolveEntity, checkEditionRules, collectNewEntities, pickSpotlight, readingMinutes, supplementMinutes, resolvePending, upsertIndex };

@@ -67,18 +67,39 @@ test('renderRankings marks missing boards as dane niedostępne and shows moves',
   assert.match(html, /Artificial Analysis[\s\S]*dane niedostępne/);
 });
 
-test('renderArchive filters by category', () => {
-  const index = {
-    editions: [
-      { date: '2026-11-18', kind: 'daily', lead_title: 'Modele dziś', minutes: 15, categories: ['modele', 'gielda'] },
-      { date: '2026-11-17', kind: 'daily', lead_title: 'Tylko giełda', minutes: 12, categories: ['gielda'] },
-    ],
-  };
-  const html = renderArchive(index, { category: 'modele' });
-  assert.match(html, /Modele dziś/);
-  assert.doesNotMatch(html, /Tylko giełda/);
-  assert.match(renderArchive(index, {}), /Tylko giełda/);
-  assert.match(html, /href="#\/2026-11-18"/);
+const ARCHIVE = {
+  editions: [
+    { date: '2026-11-20', kind: 'daily', lead_title: 'Anthropic na Nasdaq', minutes: 14, categories: ['inwestycje'] },
+    { date: '2026-11-19', kind: 'weekly', lead_title: 'Tydzień modeli', minutes: 13, categories: ['modele'] },
+    { date: '2026-10-31', kind: 'special', lead_title: '<script>x</script>', minutes: 5, categories: ['inne'] },
+  ],
+};
+
+test('renderArchive groups editions by month with the day, title and reading time', () => {
+  const html = renderArchive(ARCHIVE, {});
+  const months = [...html.matchAll(/<h3 class="month">([^<]+)<\/h3>/g)].map((m) => m[1]);
+  assert.deepEqual(months, ['listopad 2026', 'październik 2026']);
+  assert.ok(html.includes('<b>20</b><small>pt</small>'));
+  assert.ok(html.includes('ok. 13 min · Tydzień w AI'));
+  assert.ok(html.includes('ok. 5 min'));
+  assert.ok(!html.includes('undefined'));
+  assert.ok(!html.includes('<script>x'));
+  assert.match(html, /href="#\/2026-11-20"/);
+  assert.ok(html.includes('class="mast-nav"'));
+  assert.match(html, /<a href="#\/archiwum"[^>]*aria-current="page"[^>]*>Archiwum/);
+});
+
+test('renderArchive marks the active chip and filters by category', () => {
+  const all = renderArchive(ARCHIVE, {});
+  assert.match(all, /<a class="chip" href="#\/archiwum" aria-current="page">wszystkie<\/a>/);
+  const html = renderArchive(ARCHIVE, { category: 'modele' });
+  assert.match(html, /<a class="chip" href="#\/archiwum\?kat=modele" aria-current="page">modele<\/a>/);
+  assert.ok(html.includes('Tydzień modeli'));
+  assert.ok(!html.includes('Anthropic na Nasdaq'));
+  const empty = renderArchive(ARCHIVE, { category: 'regulacje' });
+  assert.ok(empty.includes('Brak wydań w tej kategorii.'));
+  assert.ok(empty.includes('class="mast-nav"'));
+  assert.ok(empty.includes('class="chips"'));
 });
 
 test('renderProfileCard shows the profile and its update date', () => {

@@ -6,7 +6,7 @@ import { imageFigure } from '../site/js/render.js';
 
 const load = (path) => JSON.parse(readFileSync(new URL(path, import.meta.url), 'utf8'));
 const real = () => load('./fixtures/edition-2026-11-19.json');
-const sample = () => load('../site/data/2026-11-18.json');
+const sample = () => load('./fixtures/edition-2026-11-18.json');
 const count = (html, needle) => html.split(needle).length - 1;
 
 test('front page links the lead and every story to its reader page', () => {

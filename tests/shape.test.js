@@ -16,7 +16,7 @@ import {
 
 const load = (path) => JSON.parse(readFileSync(new URL(path, import.meta.url), 'utf8'));
 const real = load('./fixtures/edition-2026-11-19.json');
-const sample = load('../site/data/2026-11-18.json');
+const sample = load('./fixtures/edition-2026-11-18.json');
 
 test('firstSentence keeps the text up to the first sentence end', () => {
   assert.equal(firstSentence('Rynek spadał. Potem rósł.'), 'Rynek spadał.');

@@ -1,3 +1,4 @@
+import { dateParts } from './shape.js';
 // Shared renderers for the "Poranna prasa AI" newspaper (front page, reader, archive, profile card).
 // Every value from data goes through escapeHtml; data URLs are used only when they are https.
 
@@ -183,18 +184,38 @@ ${profile.why_it_matters ? `<p><strong>Dlaczego ważne:</strong> ${escapeHtml(pr
 </div>`;
 }
 
+const SUPPLEMENT_KINDS = Object.freeze({ weekly: 'Tydzień w AI', monthly: 'Miesiąc w AI' });
+
+// Archive: chips for categories, editions grouped by month (newest first, as in the index), each with
+// its day, the lead title and the reading time.
 export function renderArchive(index, { category = null } = {}) {
   const editions = ((index && index.editions) || []).filter((ed) => !category || (ed.categories || []).includes(category));
-  const filters = ['<a href="#/archiwum">wszystkie</a>']
-    .concat(Object.entries(CATEGORY_LABELS).map(([key, label]) => `<a href="#/archiwum?kat=${key}"${key === category ? ' class="active"' : ''}>${label}</a>`))
-    .join(' ');
-  const items = editions
-    .map(
-      (ed) =>
-        `<li><a href="#/${escapeHtml(ed.date)}">${escapeHtml(ed.date)} · ${escapeHtml(ed.lead_title)}</a> <span class="meta">${escapeHtml(ed.minutes)} min${ed.kind && ed.kind !== 'daily' ? ` · ${escapeHtml(ed.kind)}` : ''}</span></li>`,
-    )
+  const chip = (href, label, on) => `<a class="chip" href="${href}"${on ? ' aria-current="page"' : ''}>${escapeHtml(label)}</a>`;
+  const chips = [chip('#/archiwum', 'wszystkie', !category)]
+    .concat(Object.entries(CATEGORY_LABELS).map(([key, label]) => chip(`#/archiwum?kat=${key}`, label, key === category)))
     .join('');
-  return `<section class="archive"><h2>Archiwum</h2><nav class="filters">${filters}</nav>${items ? `<ul>${items}</ul>` : '<p class="no-data">Brak wydań w tej kategorii.</p>'}</section>`;
+  const groups = [];
+  for (const ed of editions) {
+    const key = String(ed.date || '').slice(0, 7);
+    const last = groups[groups.length - 1];
+    if (last && last.key === key) last.items.push(ed);
+    else groups.push({ key, items: [ed] });
+  }
+  const row = (ed) => {
+    const p = dateParts(ed.date);
+    const extra = SUPPLEMENT_KINDS[ed.kind] ? ` · ${SUPPLEMENT_KINDS[ed.kind]}` : '';
+    const minutes = Number.isFinite(Number(ed.minutes)) && ed.minutes !== '' && ed.minutes != null ? `ok. ${escapeHtml(ed.minutes)} min` : '';
+    return `<li><a href="#/${escapeHtml(ed.date)}"><span class="day"><b>${p ? p.day : escapeHtml(ed.date)}</b><small>${p ? p.weekday : ''}</small></span><span class="what"><span class="title">${escapeHtml(ed.lead_title)}</span><span class="meta">${minutes}${extra}</span></span></a></li>`;
+  };
+  const body = groups
+    .map((g) => {
+      const p = dateParts(`${g.key}-01`);
+      return `<h3 class="month">${p ? `${p.monthName} ${p.year}` : escapeHtml(g.key)}</h3><ul class="days">${g.items.map(row).join('')}</ul>`;
+    })
+    .join('');
+  return `<section class="archive"><header class="masthead"><h1>Poranna prasa AI</h1>${mastheadNav('archive')}</header>
+<nav class="chips">${chips}</nav>
+${body || '<p class="no-data">Brak wydań w tej kategorii.</p>'}</section>`;
 }
 
 // Navigation under the paper's name: the current view is marked for screen readers and styling.

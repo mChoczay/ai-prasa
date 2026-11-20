@@ -88,10 +88,6 @@ th:first-child, td:first-child { text-align: left; }
 .closing { font-style: italic; margin-top: 24px; }
 .credits { margin-top: 32px; padding-top: 12px; border-top: 1px solid var(--rule); font: 12px/1.6 var(--sans); color: var(--ink-soft); }
 
-.archive ul { list-style: none; padding: 0; }
-.archive li { padding: 8px 0; border-bottom: 1px solid var(--rule); }
-.filters { display: flex; flex-wrap: wrap; gap: 10px; font: 14px/1.6 var(--sans); }
-.filters .active { font-weight: 700; }
 
 dialog { max-width: min(520px, calc(100vw - 32px)); border: 1px solid var(--rule); border-radius: 12px; background: var(--paper); color: var(--ink); }
 dialog::backdrop { background: rgba(0, 0, 0, 0.4); }
@@ -230,3 +226,19 @@ body.reading main { max-width: none; padding: 0; }
 .progress { height: 2px; background: var(--rule); }
 .progress span { display: block; height: 2px; width: 0; background: var(--accent); transition: width 150ms ease-out; }
 @media (prefers-reduced-motion: reduce) { .progress span { transition: none; } }
+
+/* Archive: category chips scrolling sideways, month groups, a big day number beside each lead title. */
+.archive .masthead { padding-bottom: 4px; }
+.chips { display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; padding: 8px 0 12px; }
+.chips::-webkit-scrollbar { display: none; }
+.chip { flex: 0 0 auto; font: 12px/1.4 var(--sans); padding: 4px 10px; border: 1px solid var(--rule); border-radius: 999px; color: var(--ink-soft); text-decoration: none; }
+.chip[aria-current] { background: var(--ink); border-color: var(--ink); color: var(--paper); }
+.archive .month { margin: 18px 0 4px; font: 11px/1.4 var(--sans); letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-soft); }
+.archive .days { list-style: none; padding: 0; margin: 0; }
+.archive .days a { display: flex; gap: 12px; padding: 10px 0; border-top: 1px solid var(--rule); color: var(--ink); text-decoration: none; }
+.archive .day { display: flex; flex-direction: column; align-items: center; min-width: 36px; }
+.archive .day b { font: 22px/1 var(--serif); font-weight: 400; }
+.archive .day small { font: 11px/1.4 var(--sans); color: var(--ink-soft); }
+.archive .what { display: flex; flex-direction: column; gap: 3px; }
+.archive .title { font: 15px/1.35 var(--serif); }
+.archive .meta { font: 12px/1.4 var(--sans); color: var(--ink-soft); }

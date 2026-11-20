@@ -10,7 +10,7 @@ const dialog = document.getElementById('profile-dialog');
 const dialogBody = document.getElementById('profile-body');
 let profilesById = {};
 let termsById = {};
-let termsLoaded = false; // glossary.json may not exist yet; fetch it once per page load
+let termsLoading = null; // one shared request; cleared on failure so the next view tries again
 let indexCache = null;
 
 async function getJson(path) {
@@ -34,15 +34,16 @@ async function loadCommon() {
       profilesById = {};
     }
   }
-  if (!termsLoaded) {
-    termsLoaded = true;
-    try {
-      const data = await getJson('data/glossary.json');
-      termsById = Object.fromEntries((data.terms || []).map((t) => [t.id, t]));
-    } catch {
-      termsById = {};
-    }
+  if (!termsLoading) {
+    termsLoading = getJson('data/glossary.json')
+      .then((data) => {
+        termsById = Object.fromEntries((data.terms || []).map((t) => [t.id, t]));
+      })
+      .catch(() => {
+        termsLoading = null;
+      });
   }
+  await termsLoading;
   return indexCache;
 }
 
@@ -179,8 +180,13 @@ app.addEventListener('click', (event) => {
 
 // The card closes with its cross, a tap on the dimmed backdrop (the dialog box itself has no padding,
 // so a click whose target is the dialog lands outside the content) or Esc (native).
+let pressedOnBackdrop = false;
+dialog.addEventListener('pointerdown', (event) => {
+  pressedOnBackdrop = event.target === dialog;
+});
 dialog.addEventListener('click', (event) => {
-  if (event.target === dialog || event.target.closest('.sheet-close')) dialog.close();
+  if ((event.target === dialog && pressedOnBackdrop) || event.target.closest('.sheet-close')) dialog.close();
+  pressedOnBackdrop = false;
 });
 
 // A story image that fails (blocked hotlink, 404) is swapped for its fallback once, then hidden.

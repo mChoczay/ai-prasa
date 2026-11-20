@@ -27,7 +27,8 @@ export function parseRoute(hash) {
     return { view: 'feedback', date: null, page: null, category: null, url, key, off: q.get('off') === '1' || (!url && !key) };
   }
   if (parts[0] === 'archiwum') {
-    return { view: 'archive', date: null, page: null, category: new URLSearchParams(query).get('kat') };
+    // Old ?kat= links still open the archive; there is no filter any more.
+    return { view: 'archive', date: null, page: null, category: null };
   }
   const date = DATE.test(parts[0] || '') ? parts[0] : null;
   const page = date && /^\d+$/.test(parts[1] || '') ? Number(parts[1]) : null;
@@ -83,7 +84,7 @@ export function renderReader(edition, profilesById, page, { feedback = false, ra
     })
     .join('');
   return `<div class="reader" data-page="${escapeHtml(page)}">
-<header class="reader-bar"><a class="back" href="#/${escapeHtml(e.date)}">‹ ${escapeHtml(shortDate(e.date))}</a><span class="count">${escapeHtml(page)} / ${total}</span></header>
+<header class="reader-bar"><a class="back" href="#/${escapeHtml(e.date)}" aria-label="${escapeHtml(backLabel(e.date))}">‹ ${escapeHtml(shortDate(e.date))}</a><span class="count">${escapeHtml(page)} / ${total}</span></header>
 <div class="progress"><span></span></div>
 <button class="arrow arrow-prev" data-step="-1" aria-label="poprzednia strona">‹</button>
 <div class="pages">${sections}</div>
@@ -150,6 +151,13 @@ export function isTypingTarget(el) {
   if (!el) return false;
   const tag = String(el.tagName || '').toUpperCase();
   return tag === 'TEXTAREA' || tag === 'INPUT' || tag === 'SELECT' || el.isContentEditable === true;
+}
+
+const _MONTHS_GENITIVE = ['stycznia', 'lutego', 'marca', 'kwietnia', 'maja', 'czerwca', 'lipca', 'sierpnia', 'września', 'października', 'listopada', 'grudnia'];
+
+function backLabel(dateStr) {
+  const p = dateParts(dateStr);
+  return p ? `Wróć do wydania z ${p.day} ${_MONTHS_GENITIVE[p.month - 1]}` : 'Wróć do wydania';
 }
 
 function shortDate(dateStr) {

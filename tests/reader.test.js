@@ -12,7 +12,7 @@ test('parseRoute reads the front page, reader pages and the archive', () => {
   assert.deepEqual(parseRoute('#/'), { view: 'front', date: null, page: null, category: null });
   assert.deepEqual(parseRoute(''), { view: 'front', date: null, page: null, category: null });
   assert.deepEqual(parseRoute('#/2026-11-19'), { view: 'front', date: '2026-11-19', page: null, category: null });
-  assert.deepEqual(parseRoute('#/archiwum?kat=modele'), { view: 'archive', date: null, page: null, category: 'modele' });
+  assert.deepEqual(parseRoute('#/archiwum?kat=modele'), { view: 'archive', date: null, page: null, category: null });
   assert.deepEqual(parseRoute('#/2026-11-19/abc'), { view: 'front', date: '2026-11-19', page: null, category: null });
 });
 
@@ -124,7 +124,7 @@ test('the reader bar has a short back link, the page counter and a progress line
   const e = real();
   const total = 1 + e.stories.length;
   const html = renderReader(e, profiles, 5);
-  assert.match(html, /<a class="back" href="#\/2026-11-19">‹ 19 lis<\/a>/);
+  assert.ok(html.includes('<a class="back" href="#/2026-11-19" aria-label="Wróć do wydania z 19 listopada">‹ 19 lis</a>'));
   assert.ok(html.includes(`<span class="count">5 / ${total}</span>`));
   assert.ok(html.includes('class="progress"'));
   assert.ok(!html.includes('pierwsza strona'));

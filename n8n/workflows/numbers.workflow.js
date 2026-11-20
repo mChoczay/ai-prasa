@@ -168,7 +168,7 @@ const areaBoards = node({
     parameters: {
       method: 'GET',
       url: expr('{{ $json.url }}'),
-      options: { response: { response: { fullResponse: true, neverError: true, responseFormat: 'json' } }, timeout: 30000, batching: { batch: { batchSize: 1, batchInterval: 500 } } },
+      options: { response: { response: { fullResponse: true, neverError: true, responseFormat: 'json' } }, timeout: 10000, batching: { batch: { batchSize: 6, batchInterval: 0 } } },
     },
   },
   output: [{ statusCode: 200, body: { rows: [] } }],

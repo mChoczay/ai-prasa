@@ -150,3 +150,12 @@ test('the area requests node runs in the sandbox and lists six URLs', () => {
   assert.deepEqual(items.map((i) => i.json.key), ['webdev', 'agent', 'writing', 'polish', 'math', 'image']);
   assert.ok(items.every((i) => i.json.url.startsWith('https://datasets-server.huggingface.co/filter?')));
 });
+
+test('the area requests run in parallel with a short timeout, so they add seconds, not minutes', () => {
+  const src = readFileSync(new URL('../n8n/workflows/numbers.workflow.js', import.meta.url), 'utf8');
+  const block = src.slice(src.indexOf("name: 'LMArena areas'"), src.indexOf('const aaPageList'));
+  const timeout = Number((block.match(/timeout:\s*(\d+)/) || [])[1]);
+  const batch = Number((block.match(/batchSize:\s*(\d+)/) || [])[1]);
+  assert.ok(timeout > 0 && timeout <= 10000, `timeout ${timeout}`);
+  assert.equal(batch, 6, 'all six areas in one batch');
+});

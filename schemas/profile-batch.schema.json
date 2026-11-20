@@ -1,0 +1,68 @@
+{
+  "type": "object",
+  "description": "Profile cards for several entities at once.",
+  "properties": {
+    "cards": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "description": "One card; idx is the entity number from the request.",
+        "properties": {
+          "idx": {
+            "type": "integer"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "company",
+              "model",
+              "org"
+            ]
+          },
+          "name": {
+            "type": "string"
+          },
+          "owner": {
+            "type": "string",
+            "description": "Who makes or owns it."
+          },
+          "summary": {
+            "type": "string",
+            "description": "2-4 sentences: who, what, why."
+          },
+          "key_products": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "why_it_matters": {
+            "type": "string"
+          },
+          "aliases": {
+            "type": "array",
+            "description": "Other names, including the stock ticker.",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "idx",
+          "type",
+          "name",
+          "owner",
+          "summary",
+          "key_products",
+          "why_it_matters",
+          "aliases"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": [
+    "cards"
+  ],
+  "additionalProperties": false
+}

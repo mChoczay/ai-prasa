@@ -134,6 +134,23 @@ const commonsCredit = node({
   output: [{ statusCode: 200, body: { query: { pages: {} } } }],
 });
 
+// One Haiku request for all of today's cards (one PPAI · claude execution instead of one per card).
+const cardsPromptNode = node({
+  type: 'n8n-nodes-base.code',
+  version: 2,
+  config: {
+    name: 'Cards prompt',
+    parameters: {
+      mode: 'runOnceForAllItems',
+      jsCode:
+        INLINE('n8n/lib/news.js', 'n8n/lib/dates.js', 'n8n/lib/edition.js', 'n8n/lib/profiles.js') +
+        "const asked = $('Profile prompts').all().map((i) => i.json).filter((a) => a && a.target);\n" +
+        "return [{ json: { user: cardsPrompt(asked), count: asked.length } }];\n",
+    },
+  },
+  output: [{ user: '...', count: 1 }],
+});
+
 const haiku = node({
   type: 'n8n-nodes-base.executeWorkflow',
   version: 1.2,
@@ -143,7 +160,7 @@ const haiku = node({
     parameters: {
       source: 'database',
       workflowId: { __rl: true, mode: 'id', value: 'xngSOQVAGpMZrfDS', cachedResultName: 'PPAI · claude' },
-      mode: 'each',
+      mode: 'once',
       workflowInputs: {
         mappingMode: 'defineBelow',
         value: {
@@ -151,10 +168,10 @@ const haiku = node({
           step: 'profile',
           model: 'claude-haiku-5-5',
           system: TEXT('prompts/profile.md'),
-          user: expr("{{ $('Profile prompts').item.json.user }}"),
-          schema: JSONFILE('schemas/profile.schema.json'),
+          user: expr("{{ $('Cards prompt').first().json.user }}"),
+          schema: JSONFILE('schemas/profile-batch.schema.json'),
           effort: 'low',
-          max_tokens: 1500,
+          max_tokens: 9000,
         },
         schema: [
           { id: 'run_id', displayName: 'run_id', required: false, defaultMatch: false, display: true, type: 'string', canBeUsedToMatch: true },
@@ -188,12 +205,13 @@ const rows = node({
         "const date = $('Profiles request').first().json.date;\n" +
         "const asked = $('Profile prompts').all().map((i) => i.json);\n" +
         "const credits = $('Commons credit').all().map((i) => (Number(i.json.statusCode) === 200 ? parseCommonsCredit(i.json.body) : null));\n" +
+        "const r = $input.first().json || {};\n" +
+        "const cards = r.ok && r.data && Array.isArray(r.data.cards) ? r.data.cards : [];\n" +
         "const out = [];\n" +
-        "$input.all().forEach((it, i) => {\n" +
-        "  const r = it.json || {};\n" +
-        "  const a = asked[i];\n" +
-        "  if (!a || !r.ok || !r.data || !r.data.summary) return;\n" +
-        "  out.push({ json: profileRow(a.target, r.data, a.wiki, date, credits[i] || null) });\n" +
+        "asked.forEach((a, i) => {\n" +
+        "  const card = cards.find((c) => c && c.idx === i);\n" +
+        "  if (!a || !a.target || !card || !card.summary) return;\n" +
+        "  out.push({ json: profileRow(a.target, card, a.wiki, date, credits[i] || null) });\n" +
         "});\n" +
         "return out;\n",
     },
@@ -567,7 +585,7 @@ export default workflow('ppai-profiles', 'PPAI · profiles')
       .onTrue(
         wikipedia.to(prompts).to(
           anyPrompt
-            .onTrue(commonsCredit.to(haiku).to(rows).to(anyRow.onTrue(saveProfiles.to(readAll)).onFalse(readAll)))
+            .onTrue(commonsCredit.to(cardsPromptNode).to(haiku).to(rows).to(anyRow.onTrue(saveProfiles.to(readAll)).onFalse(readAll)))
             .onFalse(readAll),
         ),
       )

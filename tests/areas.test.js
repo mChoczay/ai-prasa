@@ -80,3 +80,9 @@ test('empty or malformed answers count as missing', () => {
     assert.deepEqual(missing, KEYS);
   }
 });
+
+test('answers that do not line up with the six areas are all treated as missing', () => {
+  const { areas, missing } = buildAreas([...onlyPolish(), null], []);
+  assert.deepEqual(areas, []);
+  assert.deepEqual(missing, KEYS);
+});

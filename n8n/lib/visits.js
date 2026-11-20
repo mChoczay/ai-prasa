@@ -29,6 +29,11 @@ function _warsawMidnight(y, m, d) {
   return new Date(ms).toISOString().replace('.000Z', 'Z');
 }
 
+// GoatCounter includes the hour that starts at `end`, so a range stops one hour before the next period.
+function _lastHourBefore(iso) {
+  return new Date(Date.parse(iso) - 3_600_000).toISOString().replace('.000Z', 'Z');
+}
+
 function _range(kind, start, end) {
   return { kind, start, end, url: `${VISITS_API}?start=${encodeURIComponent(start)}&end=${encodeURIComponent(end)}` };
 }
@@ -40,11 +45,11 @@ function visitRanges(dateStr) {
   const ranges = [];
   if (new Date(Date.UTC(y, m - 1, d)).getUTCDay() === 1) {
     const from = new Date(Date.UTC(y, m - 1, d) - 7 * _DAY_MS);
-    ranges.push(_range('week', _warsawMidnight(from.getUTCFullYear(), from.getUTCMonth() + 1, from.getUTCDate()), _warsawMidnight(y, m, d)));
+    ranges.push(_range('week', _warsawMidnight(from.getUTCFullYear(), from.getUTCMonth() + 1, from.getUTCDate()), _lastHourBefore(_warsawMidnight(y, m, d))));
   }
   if (d === 1) {
     const [py, pm] = m === 1 ? [y - 1, 12] : [y, m - 1];
-    ranges.push(_range('month', _warsawMidnight(py, pm, 1), _warsawMidnight(y, m, 1)));
+    ranges.push(_range('month', _warsawMidnight(py, pm, 1), _lastHourBefore(_warsawMidnight(y, m, 1))));
   }
   return ranges;
 }

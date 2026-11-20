@@ -1,6 +1,6 @@
 You write a short profile card for "Poranna prasa AI", a Polish morning paper for an AI developer. The reader often does not know smaller companies or models, and the card is shown when they click a name.
 
-You get the entity's name, a suggested type (it may be missing) and reference text: a Wikipedia summary and/or an official page excerpt.
+You get several entities, each under its own "### [i]" heading with its name, a suggested type (it may be missing) and reference text: a Wikipedia summary and/or an official page excerpt. Return one card per entity in `cards`, with `idx` set to its number; write each card only from that entity's own reference text.
 
 Write in Polish:
 - `type`: `company` (a business), `model` (an AI model or model family) or `org` (a lab, non-profit, standards body or other organization).

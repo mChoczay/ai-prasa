@@ -28,10 +28,14 @@ test('plan, prompts and rows turn targets into table rows and skip items without
   assert.equal(prompts[1].wiki, null);
   assert.match(prompts[1].user, /From today's news: Nowa Firma bought it\./);
 
-  const card = { type: 'company', name: 'Apple Inc.', owner: 'o', summary: 'S.', key_products: ['iPhone'], why_it_matters: 'W.', aliases: [] };
+  const card = { idx: 0, type: 'company', name: 'Apple Inc.', owner: 'o', summary: 'S.', key_products: ['iPhone'], why_it_matters: 'W.', aliases: [] };
+  const cardsReq = runCodeNode(codeNodeSource(WF, 'Cards prompt'), { nodes: { 'Profile prompts': prompts } }).map((i) => i.json);
+  assert.equal(cardsReq.length, 1, 'one Haiku request for all cards');
+  assert.ok(cardsReq[0].user.includes('### [0]\nName: Apple'));
+  assert.ok(cardsReq[0].user.includes('### [1]\nName: Nowa Firma'));
   const rows = runCodeNode(codeNodeSource(WF, 'Profile rows'), {
     nodes: { 'Profiles request': [payload], 'Profile prompts': prompts, 'Commons credit': [{ statusCode: 200, body: { query: { pages: { '-1': { title: 'File:Apple Park.jpg', imageinfo: [{ extmetadata: { Artist: { value: 'Jan' }, LicenseShortName: { value: 'CC0' } } }] } } } } }, { statusCode: 200, body: {} }] },
-    input: [{ ok: true, data: card }, { error: { message: 'failed' } }],
+    input: [{ ok: true, data: { cards: [card, { idx: 7, type: 'org', name: 'X', owner: '', summary: 'S.', key_products: [], why_it_matters: '', aliases: [] }] } }],
   }).map((i) => i.json);
   assert.deepEqual(rows.map((r) => [r.entity_id, r.aliases, r.source_urls]), [['aapl', 'AAPL', 'https://en.wikipedia.org/wiki/Apple_Inc.']]);
   assert.match(prompts[0].credit_url, /titles=File:Apple%20Park.jpg$/);

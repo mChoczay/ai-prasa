@@ -6,6 +6,7 @@ import {
   parseWikiSearch,
   profilePrompt,
   hasReference,
+  cardsPrompt,
   profileRow,
   profilesJson,
   finishEdition,
@@ -228,4 +229,16 @@ test('finishEdition falls back to the topic picture when no profiled entity has 
   assert.deepEqual(done.stories[0].image_fallback, topic);
   assert.equal(done.stories[1].image_fallback, null);
   assert.deepEqual(done.stories[2].image_fallback, { url: COMMONS, credit: 'c', link: 'p' });
+});
+
+test('cardsPrompt puts every entity under its own index in one request', () => {
+  const asked = [
+    { target: { name: 'Apple', type: 'company', ticker: 'AAPL' }, wiki: { title: 'Apple Inc.', extract: 'Apple Inc. is a company.' } },
+    { target: { name: 'Nowa Firma', mentions: ['Nowa Firma bought it.'] }, wiki: null },
+  ];
+  const text = cardsPrompt(asked);
+  assert.match(text, /### \[0\]\nName: Apple/);
+  assert.match(text, /### \[1\]\nName: Nowa Firma/);
+  assert.match(text, /From today's news: Nowa Firma bought it\./);
+  assert.match(text, /2 entities/);
 });

@@ -116,6 +116,13 @@ function profilePrompt(target, wiki) {
   return lines.join('\n');
 }
 
+// All of today's cards in one request: each entity under "### [i]", answered as cards[].idx.
+function cardsPrompt(asked) {
+  const list = (asked || []).filter((a) => a && a.target);
+  const parts = list.map((a, i) => `### [${i}]\n${profilePrompt(a.target, a.wiki)}`);
+  return `Write one card for each of these ${list.length} entities. Use each entity's own reference text only.\n\n${parts.join('\n\n')}`;
+}
+
 // True when there is anything to write a card from.
 function hasReference(target, wiki) {
   return Boolean(wiki || (target.mentions || []).length || (target.boards || []).length);
@@ -235,4 +242,4 @@ function historyRows(edition) {
   return { topics, tags };
 }
 
-export { profileTargets, wikiSearchUrl, parseWikiSearch, commonsCreditUrl, parseCommonsCredit, profilePrompt, hasReference, profileRow, profilesJson, topicImageQueries, topicImageFiles, topicImages, finishEdition, historyRows };
+export { profileTargets, wikiSearchUrl, parseWikiSearch, commonsCreditUrl, parseCommonsCredit, profilePrompt, cardsPrompt, hasReference, profileRow, profilesJson, topicImageQueries, topicImageFiles, topicImages, finishEdition, historyRows };

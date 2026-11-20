@@ -60,7 +60,7 @@ function _context({ date, leakers, entities, historyTitles }) {
   return `Edition date: ${date}\n\nTrusted leakers:\n${leak}\n\nKnown entities (use these names in may_affect_names when they fit):\n${ents}\n\nTitles covered in the last 7 days:\n${hist}`;
 }
 
-function storiesPrompt({ date, articles, leakers, entities, historyTitles }) {
+function storiesPrompt({ date, articles, leakers, entities, historyTitles, feedback = '' }) {
   const stories = (articles || []).filter((a) => a.role === 'story');
   const rumors = (articles || []).filter((a) => a.role === 'rumor');
   const block = (list, start) => list.map((a, i) => _articleBlock(a, start + i)).join('\n\n') || '(none)';
@@ -72,7 +72,7 @@ Write only the "stories" and "rumors" parts of today's edition. The lead story i
 ${block(stories, 1)}
 
 ## Articles for the rumors column
-${block(rumors, stories.length + 1)}`;
+${block(rumors, stories.length + 1)}${feedback ? `\n\n## Reader feedback\n${feedback}` : ''}`;
 }
 
 function _pct(v) {
@@ -93,7 +93,7 @@ const _BOARDS = [
   ['hf_trending', 'Hugging Face trending'],
 ];
 
-function frontPrompt({ date, articles, written, numbers, candidates, leakers, entities, historyTitles }) {
+function frontPrompt({ date, articles, written, numbers, candidates, leakers, entities, historyTitles, feedback = '' }) {
   const lead = (articles || []).find((a) => a.role === 'lead');
   const n = numbers || {};
   const market = n.market && Array.isArray(n.market.rows) && n.market.rows.length
@@ -136,7 +136,7 @@ ${moves.concat(rankMoves).join('\n') || '- (none)'}
 ${follow}
 
 ## Other headlines of the day (context and possible sources for "Dlaczego?")
-${headlines}`;
+${headlines}${feedback ? `\n\n## Reader feedback\n${feedback}` : ''}`;
 }
 
 // Each story gets the preview image of the first cited article (main or related) that has one.

@@ -63,3 +63,11 @@ test('publish workflow: morning mail goes to the address from the settings table
   assert.equal(json.subject, 'Poranna prasa AI: Lead');
   assert.match(json.html, /https:\/\/example\.github\.io\/site\/#\/2026-11-19/);
 });
+
+test('publish workflow: morning mail carries the ratings link from the feedback settings table', () => {
+  const run = (settings) => runCodeNode(codeNodeSource('n8n/workflows/publish.workflow.js', 'Build morning mail'), {
+    nodes: { 'Publish request': [{ edition }], 'Read settings': [{ notify_email: 'owner@example.com', site_url: 'https://example.github.io/site/' }], 'Read feedback settings': settings },
+  })[0].json;
+  assert.match(run([{ url: 'https://h.example/w', key: 'k' }]).html, /#\/oceny\?u=https%3A%2F%2Fh\.example%2Fw&amp;k=k/);
+  assert.doesNotMatch(run([{}]).html, /oceny/);
+});

@@ -80,7 +80,7 @@ const buildPrompt = node({
         "const watchlist = $('Read watchlist').all().map((i) => i.json).filter((r) => r.ticker);\n" +
         "const leakers = $('Read leakers').all().map((i) => i.json).filter((r) => r.name).map((r) => ({ name: r.name, platform: r.platform, note: r.note }));\n" +
         "const entities = entityList(profiles, watchlist);\n" +
-        "const user = storiesPrompt({ date: p.date, articles: p.articles, leakers, entities, historyTitles: p.history_titles });\n" +
+        "const user = storiesPrompt({ date: p.date, articles: p.articles, leakers, entities, historyTitles: p.history_titles, feedback: p.feedback || '' });\n" +
         "return [{ json: { user, schema: pickSchema(FULL, ['stories', 'rumors']), entities, leakers } }];\n",
     },
   },

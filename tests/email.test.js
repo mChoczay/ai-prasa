@@ -62,3 +62,14 @@ test('generic error mail names the step and escapes the message', () => {
   assert.equal(subject, 'Poranna prasa AI: błąd w kroku Pobierz RSS');
   assert.ok(html.includes('&lt;b&gt;boom&lt;/b&gt;'));
 });
+
+test('the morning mail has the enabling link for ratings only when the url and key are set', () => {
+  const base = renderEmailHtml(edition(), SITE);
+  const withLink = renderEmailHtml(edition(), SITE, { feedbackUrl: 'https://h.example/webhook/abc', feedbackKey: 'k&1' });
+  assert.ok(withLink.html.includes(`${SITE}#/oceny?u=https%3A%2F%2Fh.example%2Fwebhook%2Fabc&amp;k=k%261`));
+  assert.match(withLink.html, /Włącz oceny na tym urządzeniu/);
+  assert.deepEqual(renderEmailHtml(edition(), SITE, { feedbackUrl: 'https://h.example/w', feedbackKey: '' }), base);
+  assert.deepEqual(renderEmailHtml(edition(), SITE, { feedbackUrl: '', feedbackKey: 'k' }), base);
+  assert.deepEqual(renderEmailHtml(edition(), SITE, {}), base);
+  assert.doesNotMatch(base.html, /oceny/);
+});

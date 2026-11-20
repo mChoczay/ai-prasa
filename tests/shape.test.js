@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import {
   firstSentence,
+  tabTitle,
   marketMood,
   whyShort,
   marketTiles,
@@ -100,4 +101,14 @@ test('minutesLabel shows the supplement time separately', () => {
   assert.equal(minutesLabel({ minutes: 15, supplement_minutes: 6 }), 'ok. 15 min + dodatek 6 min');
   assert.equal(minutesLabel({ minutes: 19 }), 'ok. 19 min');
   assert.equal(minutesLabel({ minutes: 12, supplement_minutes: 0 }), 'ok. 12 min');
+});
+
+test('tabTitle gives name and short Polish date, reader page and archive', () => {
+  const e = { date: '2026-11-19', lead_story: { title: 'Genie 4' }, stories: [{ title: 'PostgreSQL 19' }] };
+  assert.equal(tabTitle('front', e), 'Prasa AI · czw 19 lis');
+  assert.equal(tabTitle('reader', e, 2), '2/2 · PostgreSQL 19');
+  assert.equal(tabTitle('archive'), 'Archiwum · Prasa AI');
+  assert.equal(tabTitle('error'), 'Poranna prasa AI');
+  assert.equal(tabTitle('front', { date: '2026-03-01' }), 'Prasa AI · ndz 1 mar');
+  assert.equal(tabTitle('reader', { date: '2026-11-19', lead_story: { title: 'A' }, weekly: { title: 'Tydzień' } }, 2), '2/2 · Tydzień');
 });

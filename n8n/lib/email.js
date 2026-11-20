@@ -23,7 +23,7 @@ ${inner}
 </div></body></html>`;
 }
 
-function renderEmailHtml(edition, siteUrl) {
+function renderEmailHtml(edition, siteUrl, { feedbackUrl = '', feedbackKey = '' } = {}) {
   const stories = [edition.lead_story, ...(edition.stories || [])].filter(Boolean);
   const items = stories
     .map(
@@ -36,7 +36,11 @@ function renderEmailHtml(edition, siteUrl) {
 <p style="text-align:center;font:13px Arial,sans-serif;color:#5b5750;margin:0 0 20px;">${escapeHtml(edition.date)}${edition.minutes ? ` · ok. ${escapeHtml(edition.minutes)} min czytania` : ''}</p>
 <p style="font-style:italic;">${escapeHtml(edition.greeting)}</p>
 <ul style="padding-left:18px;">${items}</ul>
-<p style="text-align:center;margin:28px 0;"><a href="${escapeHtml(href)}" style="display:inline-block;background:#2f4a7a;color:#ffffff;text-decoration:none;padding:10px 22px;border-radius:8px;font:15px Arial,sans-serif;">Czytaj wydanie</a></p>`);
+<p style="text-align:center;margin:28px 0;"><a href="${escapeHtml(href)}" style="display:inline-block;background:#2f4a7a;color:#ffffff;text-decoration:none;padding:10px 22px;border-radius:8px;font:15px Arial,sans-serif;">Czytaj wydanie</a></p>${
+    feedbackUrl && feedbackKey
+      ? `\n<p style="text-align:center;font:12px Arial,sans-serif;margin:24px 0 0;"><a href="${escapeHtml(`${siteUrl}#/oceny?u=${encodeURIComponent(feedbackUrl)}&k=${encodeURIComponent(feedbackKey)}`)}" style="color:#8a857a;">Włącz oceny na tym urządzeniu</a></p>`
+      : ''
+  }`);
   return { subject: `Poranna prasa AI: ${edition.lead_story ? edition.lead_story.title : edition.date}`, html };
 }
 

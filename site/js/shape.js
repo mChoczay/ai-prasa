@@ -102,3 +102,27 @@ export function minutesLabel(edition) {
   const extra = Number(e.supplement_minutes) > 0 ? ` + dodatek ${e.supplement_minutes} min` : '';
   return `ok. ${e.minutes} min${extra}`;
 }
+
+const _DAYS = ['ndz', 'pon', 'wt', 'śr', 'czw', 'pt', 'sob'];
+const _MONTHS = ['sty', 'lut', 'mar', 'kwi', 'maj', 'cze', 'lip', 'sie', 'wrz', 'paź', 'lis', 'gru'];
+
+// Browser-tab title: short, with the paper's name and the edition's day.
+export function tabTitle(view, edition, page) {
+  const e = edition || {};
+  if (view === 'archive') return 'Archiwum · Prasa AI';
+  if (view === 'front') {
+    const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(String(e.date || ''));
+    if (!m) return 'Prasa AI';
+    const [y, mo, d] = [Number(m[1]), Number(m[2]), Number(m[3])];
+    const day = new Date(Date.UTC(y, mo - 1, d)).getUTCDay();
+    return `Prasa AI · ${_DAYS[day]} ${d} ${_MONTHS[mo - 1]}`;
+  }
+  if (view === 'reader') {
+    const pages = readerPages(e);
+    const p = pages[page - 1];
+    if (!p) return 'Prasa AI';
+    const title = p.kind === 'story' ? p.story.title : (e[p.kind] && e[p.kind].title) || '';
+    return `${p.n}/${pages.length} · ${title}`;
+  }
+  return 'Poranna prasa AI';
+}

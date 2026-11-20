@@ -10,6 +10,7 @@ import {
   imageFigure,
 } from './render.js';
 import { readerPages } from './shape.js';
+import { feedbackBlock } from './feedback.js';
 
 const DATE = /^\d{4}-\d{2}-\d{2}$/;
 const SUPPLEMENT_LABELS = Object.freeze({ weekly: 'Tydzień w AI', monthly: 'Miesiąc w AI' });
@@ -18,6 +19,12 @@ export function parseRoute(hash) {
   const raw = String(hash || '').replace(/^#\/?/, '');
   const [path, query = ''] = raw.split('?');
   const parts = path.split('/').filter(Boolean);
+  if (parts[0] === 'oceny') {
+    const q = new URLSearchParams(query);
+    const url = q.get('u') || '';
+    const key = q.get('k') || '';
+    return { view: 'feedback', date: null, page: null, category: null, url, key, off: q.get('off') === '1' || !url || !key };
+  }
   if (parts[0] === 'archiwum') {
     return { view: 'archive', date: null, page: null, category: new URLSearchParams(query).get('kat') };
   }
@@ -58,7 +65,7 @@ ${takeaways ? `<h4>Warto zapamiętać</h4><ol>${takeaways}</ol>` : ''}
 ${race ? `<h4>Kto prowadzi</h4><table><tbody>${race}</tbody></table>` : ''}`;
 }
 
-export function renderReader(edition, profilesById, page) {
+export function renderReader(edition, profilesById, page, { feedback = false, ratings = {} } = {}) {
   const e = edition;
   const pages = readerPages(e);
   const total = pages.length;
@@ -67,8 +74,9 @@ export function renderReader(edition, profilesById, page) {
       const prev = pages[i - 1];
       const next = pages[i + 1];
       const body = p.kind === 'story' ? storyBody(p.story, profilesById) : supplementBody(e[p.kind], SUPPLEMENT_LABELS[p.kind]);
+      const fb = feedback && p.kind === 'story' ? feedbackBlock(p.n, ratings[p.n] || '') : '';
       const nav = `<nav class="page-nav">${prev ? `<button class="prev" data-go="${prev.n}">‹ ${escapeHtml(pageTitle(e, prev))}</button>` : '<span></span>'}${next ? `<button class="next" data-go="${next.n}">${escapeHtml(pageTitle(e, next))} ›</button>` : ''}</nav>`;
-      return `<section class="page" data-n="${p.n}"><div class="page-inner"><p class="page-meta">${p.n} / ${total}</p>${body}${nav}</div></section>`;
+      return `<section class="page" data-n="${p.n}"><div class="page-inner"><p class="page-meta">${p.n} / ${total}</p>${body}${fb}${nav}</div></section>`;
     })
     .join('');
   return `<div class="reader" data-page="${escapeHtml(page)}">
@@ -111,6 +119,7 @@ export function initReader(root, { page, onPage }) {
     go(target.dataset.go ? Number(target.dataset.go) : current + Number(target.dataset.step), true);
   };
   const onKey = (event) => {
+    if (isTypingTarget(event.target)) return;
     if (event.key === 'ArrowRight') go(current + 1, true);
     if (event.key === 'ArrowLeft') go(current - 1, true);
   };
@@ -121,4 +130,11 @@ export function initReader(root, { page, onPage }) {
     root.removeEventListener('click', onClick);
     document.removeEventListener('keydown', onKey);
   };
+}
+
+// Keys typed into a note must not turn pages.
+export function isTypingTarget(el) {
+  if (!el) return false;
+  const tag = String(el.tagName || '').toUpperCase();
+  return tag === 'TEXTAREA' || tag === 'INPUT' || tag === 'SELECT' || el.isContentEditable === true;
 }

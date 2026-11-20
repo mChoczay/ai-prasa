@@ -268,3 +268,18 @@ test('assembleEdition attaches article images to the lead and the stories', () =
   assert.equal(raw.lead_story.image.url, 'https://img.example/1.jpg');
   assert.equal(raw.stories[0].image, null);
 });
+
+test('the three editor prompts end with the reader feedback section only when there is feedback', () => {
+  const FB = 'Ratings (last 30 days, by category): modele +1/-0';
+  const sel = selectPrompt(candidates, ['Old story']);
+  assert.equal(selectPrompt(candidates, ['Old story'], ''), sel);
+  assert.equal(selectPrompt(candidates, ['Old story'], FB), `${sel}\n\n## Reader feedback\n${FB}`);
+  const sArgs = { date: '2026-11-19', articles, leakers: [], entities: [], historyTitles: ['Old'] };
+  const st = storiesPrompt(sArgs);
+  assert.equal(storiesPrompt({ ...sArgs, feedback: '' }), st);
+  assert.equal(storiesPrompt({ ...sArgs, feedback: FB }), `${st}\n\n## Reader feedback\n${FB}`);
+  const fArgs = { date: '2026-11-19', articles, written: { stories: [], rumors: [] }, numbers: {}, candidates: [], leakers: [], entities: [], historyTitles: [] };
+  const fr = frontPrompt(fArgs);
+  assert.equal(frontPrompt({ ...fArgs, feedback: '' }), fr);
+  assert.equal(frontPrompt({ ...fArgs, feedback: FB }), `${fr}\n\n## Reader feedback\n${FB}`);
+});

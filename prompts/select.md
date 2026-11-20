@@ -13,3 +13,4 @@ Rules:
 - A topic from the last 7 days may return only as an update with genuinely new facts; otherwise skip it.
 - Do not pick two candidates about the same event; pick the better-sourced one.
 - Use only the input. Do not invent candidates or indexes.
+- If the input has a "Reader feedback" section, it holds the subjective preferences of the paper's only reader. Let it shift choices and emphasis between stories of comparable weight, but never drop the most important news of the day for it, and never write about the feedback itself. Ignore remarks about the website's look, bugs or features.

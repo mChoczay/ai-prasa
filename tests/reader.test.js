@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
-import { parseRoute, clampPage, renderReader } from '../site/js/reader.js';
+import { parseRoute, clampPage, renderReader, isTypingTarget } from '../site/js/reader.js';
 
 const real = () => JSON.parse(readFileSync(new URL('./fixtures/edition-2026-11-19.json', import.meta.url), 'utf8'));
 const count = (html, needle) => html.split(needle).length - 1;
@@ -77,4 +77,44 @@ test('reader hero images link their credit to the source', () => {
 test('page 0 in a deep link opens the reader and is clamped to the first page', () => {
   assert.deepEqual(parseRoute('#/2026-11-19/0'), { view: 'reader', date: '2026-11-19', page: 0, category: null });
   assert.equal(clampPage(0, 7), 1);
+});
+
+test('parseRoute reads the feedback activation link', () => {
+  assert.deepEqual(parseRoute('#/oceny?u=https%3A%2F%2Fx.example%2Fh&k=abc'), { view: 'feedback', date: null, page: null, category: null, url: 'https://x.example/h', key: 'abc', off: false });
+  assert.equal(parseRoute('#/oceny').off, true);
+  assert.equal(parseRoute('#/oceny?off=1').off, true);
+  assert.equal(parseRoute('#/oceny?u=https%3A%2F%2Fx.example%2Fh').off, true);
+});
+
+test('the reader shows the rating block only when enabled and only on story pages', () => {
+  const e = real();
+  e.weekly = { title: 'W', body: 'b', takeaways: [] };
+  const total = 1 + e.stories.length + 1;
+  assert.doesNotMatch(renderReader(e, profiles, 1), /Jak dla Ciebie/);
+  const html = renderReader(e, profiles, 1, { feedback: true, ratings: { 1: 'less' } });
+  assert.equal(count(html, 'Jak dla Ciebie?'), total - 1);
+  assert.match(html.slice(html.indexOf('data-n="1"'), html.indexOf('data-n="2"')), /data-rate="less"[^>]*aria-pressed="true"/);
+  assert.doesNotMatch(html.slice(html.indexOf(`class="page" data-n="${total}"`)), /Jak dla Ciebie/);
+});
+
+test('the rating block sits after the sources and before the page navigation', () => {
+  const html = renderReader(real(), profiles, 1, { feedback: true });
+  const first = html.slice(html.indexOf('class="page" data-n="1"'), html.indexOf('class="page" data-n="2"'));
+  assert.ok(first.indexOf('class="feedback"') > first.indexOf('class="sources"'));
+  assert.ok(first.indexOf('class="feedback"') < first.indexOf('class="page-nav"'));
+});
+
+test('typing targets do not turn pages', () => {
+  assert.equal(isTypingTarget({ tagName: 'TEXTAREA' }), true);
+  assert.equal(isTypingTarget({ tagName: 'INPUT' }), true);
+  assert.equal(isTypingTarget({ tagName: 'DIV', isContentEditable: true }), true);
+  assert.equal(isTypingTarget({ tagName: 'BUTTON', isContentEditable: false }), false);
+  assert.equal(isTypingTarget(null), false);
+});
+
+test('the reader with ratings on still escapes story data', () => {
+  const e = real();
+  e.lead_story.title = '<script>alert(1)</script>';
+  const html = renderReader(e, profiles, 1, { feedback: true, ratings: { 1: '"><script>' } });
+  assert.ok(!html.includes('<script>'));
 });

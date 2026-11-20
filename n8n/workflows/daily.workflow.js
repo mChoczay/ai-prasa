@@ -168,6 +168,26 @@ const runNews = node({
   output: [{ date: '2026-11-19', candidates: [], history_titles: [] }],
 });
 
+// Reader ratings and notes from the site (PPAI · oceny). A failed read never stops the edition.
+const readFeedback = node({
+  type: 'n8n-nodes-base.dataTable',
+  version: 1.1,
+  config: {
+    name: 'Read feedback',
+    alwaysOutputData: true,
+    onError: 'continueRegularOutput',
+    parameters: {
+      resource: 'row',
+      operation: 'get',
+      dataTableId: { __rl: true, mode: 'id', value: 'sae3sA0e2UW0STfb', cachedResultName: 'reader_feedback' },
+      matchType: 'allConditions',
+      filters: { conditions: [{ keyName: 'createdAt', condition: 'gte', keyValue: expr("{{ $today.minus(35, 'days').toISO() }}") }] },
+      returnAll: true,
+    },
+  },
+  output: [{ id: 1, date: '2026-11-19', n: 1, title: 'T', category: 'modele', rating: 'more', note: '', handled: '', createdAt: '2026-11-19T07:00:00.000Z' }],
+});
+
 const buildPayload = node({
   type: 'n8n-nodes-base.code',
   version: 2,
@@ -176,14 +196,17 @@ const buildPayload = node({
     parameters: {
       mode: 'runOnceForAllItems',
       jsCode:
+        INLINE('n8n/lib/dates.js', 'n8n/lib/feedback.js') +
         "const g = $('Budget gate').first().json;\n" +
         "const numbers = $('Run numbers').first().json;\n" +
         "const news = $('Run news').first().json;\n" +
+        "let feedback = '';\n" +
+        "try { feedback = feedbackDigest($('Read feedback').all().map((i) => i.json).filter((r) => r && r.n), g.date); } catch (e) { feedback = ''; }\n" +
         "// stop_after: a stage name (select, write, front, period, profiles) ends the relay there, for tests.\n" +
-        "return [{ json: { date: g.date, run_id: g.run_id, relay: true, stop_after: '', flags: g.flags, numbers, candidates: news.candidates || [], history_titles: news.history_titles || [] } }];\n",
+        "return [{ json: { date: g.date, run_id: g.run_id, relay: true, stop_after: '', flags: g.flags, numbers, candidates: news.candidates || [], history_titles: news.history_titles || [], feedback } }];\n",
     },
   },
-  output: [{ date: '2026-11-19', run_id: '2026-11-19-1', relay: true, flags: { weekly: false, monthly: false }, numbers: {}, candidates: [], history_titles: [] }],
+  output: [{ date: '2026-11-19', run_id: '2026-11-19-1', relay: true, flags: { weekly: false, monthly: false }, numbers: {}, candidates: [], history_titles: [], feedback: '' }],
 });
 
 const handToSelect = node({
@@ -229,7 +252,7 @@ export default workflow('ppai-daily', 'PPAI · daily')
   .to(saveState)
   .to(
     routeGate
-      .onCase(0, runNumbers.to(runNews).to(buildPayload).to(handToSelect))
+      .onCase(0, runNumbers.to(runNews).to(readFeedback).to(buildPayload).to(handToSelect))
       .onCase(1, stopBudget)
       .onCase(2, pausedNoop),
   );

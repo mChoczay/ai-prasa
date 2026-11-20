@@ -200,6 +200,25 @@ const sendMailCheck = ifElse({
   },
 });
 
+// Private webhook address and key for the "enable ratings" link (one row, kept only in n8n).
+const readFeedbackSettings = node({
+  type: 'n8n-nodes-base.dataTable',
+  version: 1.1,
+  config: {
+    name: 'Read feedback settings',
+    alwaysOutputData: true,
+    onError: 'continueRegularOutput',
+    parameters: {
+      resource: 'row',
+      operation: 'get',
+      dataTableId: { __rl: true, mode: 'id', value: 'FEEDBACK_SETTINGS_TABLE_ID', cachedResultName: 'feedback_settings' },
+      returnAll: false,
+      limit: 1,
+    },
+  },
+  output: [{ id: 1, url: 'https://n8n.example/webhook/x', key: 'k' }],
+});
+
 const buildMail = node({
   type: 'n8n-nodes-base.code',
   version: 2,
@@ -211,7 +230,9 @@ const buildMail = node({
         INLINE('n8n/lib/email.js') +
         "const p = $('Publish request').first().json;\n" +
         "const s = $('Read settings').first().json;\n" +
-        "const mail = renderEmailHtml(p.edition, s.site_url);\n" +
+        "let fb = {};\n" +
+        "try { fb = $('Read feedback settings').first().json || {}; } catch (e) { fb = {}; }\n" +
+        "const mail = renderEmailHtml(p.edition, s.site_url, { feedbackUrl: typeof fb.url === 'string' ? fb.url : '', feedbackKey: typeof fb.key === 'string' ? fb.key : '' });\n" +
         "return [{ json: { to: s.notify_email, subject: mail.subject, html: mail.html } }];\n",
     },
   },
@@ -354,7 +375,7 @@ export default workflow('ppai-publish', 'PPAI · publish')
   .to(newTree)
   .to(newCommit)
   .to(moveMain)
-  .to(sendMailCheck.onTrue(buildMail.to(sendMail)))
+  .to(sendMailCheck.onTrue(readFeedbackSettings.to(buildMail).to(sendMail)))
   .add(moveMain)
   .to(clearTopics)
   .to(topicRows)

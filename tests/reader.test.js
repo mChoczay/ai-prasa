@@ -73,3 +73,8 @@ test('reader hero images link their credit to the source', () => {
   const html = renderReader(e, profiles, 1);
   assert.match(html, /fot\. <a href="https:\/\/theverge\.com\/x"[^>]*>The Verge<\/a>/);
 });
+
+test('page 0 in a deep link opens the reader and is clamped to the first page', () => {
+  assert.deepEqual(parseRoute('#/2026-11-19/0'), { view: 'reader', date: '2026-11-19', page: 0, category: null });
+  assert.equal(clampPage(0, 7), 1);
+});

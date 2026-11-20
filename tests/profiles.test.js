@@ -166,3 +166,18 @@ test('Commons images served from thumb.wikimedia.org are accepted too', () => {
   assert.deepEqual(profilesJson([{ entity_id: 'orcl', image_url: thumb, image_credit: 'c', image_page: 'p' }]).profiles[0].image, { url: thumb, credit: 'c', link: 'p' });
   assert.equal(profilesJson([{ entity_id: 'x', image_url: 'https://thumb.wikimedia.org/wikipedia/en/a.png' }]).profiles[0].image, null);
 });
+
+test('a Commons image is published only together with its author and licence', () => {
+  const site = profilesJson([
+    { entity_id: 'intc', image_url: COMMONS, image_credit: 'Wikimedia Commons', image_page: '' },
+    { entity_id: 'aapl', image_url: COMMONS, image_credit: 'Jan / CC0, Wikimedia Commons', image_page: 'https://commons.wikimedia.org/wiki/File:A.jpg' },
+  ]).profiles;
+  assert.equal(site.find((p) => p.id === 'intc').image, null);
+  assert.equal(site.find((p) => p.id === 'aapl').image.credit, 'Jan / CC0, Wikimedia Commons');
+});
+
+test('parseCommonsCredit decodes entities and translates an unknown author', () => {
+  const body = (artist) => ({ query: { pages: { '-1': { title: 'File:A.jpg', imageinfo: [{ extmetadata: { Artist: { value: artist }, LicenseShortName: { value: 'CC BY 4.0' } } }] } } } });
+  assert.equal(parseCommonsCredit(body('Jan &#039;K&#039; &quot;Kowal&quot;')).credit, 'Jan \'K\' "Kowal" / CC BY 4.0, Wikimedia Commons');
+  assert.equal(parseCommonsCredit(body('<span class="x">Unknown author</span>')).credit, 'autor nieznany / CC BY 4.0, Wikimedia Commons');
+});

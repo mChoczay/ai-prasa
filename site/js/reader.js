@@ -23,7 +23,7 @@ export function parseRoute(hash) {
   }
   const date = DATE.test(parts[0] || '') ? parts[0] : null;
   const page = date && /^\d+$/.test(parts[1] || '') ? Number(parts[1]) : null;
-  return { view: page ? 'reader' : 'front', date, page, category: null };
+  return { view: page !== null ? 'reader' : 'front', date, page, category: null };
 }
 
 export function clampPage(page, count) {

@@ -74,11 +74,18 @@ function commonsCreditUrl(file) {
   );
 }
 
+const _CREDIT_ENTITIES = { amp: '&', lt: '<', gt: '>', quot: '"', apos: "'", nbsp: ' ' };
+
 function _plainText(html) {
   return String(html || '')
     .replace(/<[^>]+>/g, ' ')
-    .replace(/&amp;/g, '&')
-    .replace(/&nbsp;/g, ' ')
+    .replace(/&(#x[0-9a-f]+|#\d+|[a-z]+);/gi, (m, e) => {
+      if (e[0] === '#') {
+        const code = e[1] === 'x' || e[1] === 'X' ? parseInt(e.slice(2), 16) : parseInt(e.slice(1), 10);
+        return code > 0 && code < 0x110000 ? String.fromCodePoint(code) : m;
+      }
+      return _CREDIT_ENTITIES[e.toLowerCase()] ?? m;
+    })
     .replace(/\s+/g, ' ')
     .trim();
 }
@@ -88,7 +95,8 @@ function parseCommonsCredit(body) {
   const page = pages && typeof pages === 'object' ? Object.values(pages)[0] : null;
   const meta = page && Array.isArray(page.imageinfo) && page.imageinfo[0] && page.imageinfo[0].extmetadata;
   if (!meta || !page.title) return null;
-  const artist = _plainText(meta.Artist && meta.Artist.value) || 'autor nieznany';
+  const named = _plainText(meta.Artist && meta.Artist.value);
+  const artist = !named || /^unknown author$/i.test(named) ? 'autor nieznany' : named;
   const license = _plainText(meta.LicenseShortName && meta.LicenseShortName.value);
   return {
     credit: `${artist}${license ? ` / ${license}` : ''}, Wikimedia Commons`,
@@ -150,7 +158,7 @@ function profilesJson(rows) {
       why_it_matters: r.why_it_matters || '',
       updated_at: r.updated_at ? String(r.updated_at).slice(0, 10) : '',
       last_spotlight_at: r.last_spotlight_at ? String(r.last_spotlight_at).slice(0, 10) : null,
-      image: COMMONS_IMAGE.test(String(r.image_url || '')) ? { url: r.image_url, credit: r.image_credit || 'Wikimedia Commons', link: r.image_page || '' } : null,
+      image: COMMONS_IMAGE.test(String(r.image_url || '')) && r.image_page ? { url: r.image_url, credit: r.image_credit || 'Wikimedia Commons', link: r.image_page || '' } : null,
     }))
     .sort((a, b) => (a.id < b.id ? -1 : a.id > b.id ? 1 : 0));
   return { profiles };

@@ -8,6 +8,7 @@ const FEEDBACK_WINDOW_DAYS = 30;
 const FEEDBACK_MAX_EXAMPLES = 10;
 const FEEDBACK_MAX_NOTES = 10;
 const FEEDBACK_NOTE_CHARS = 300;
+const FEEDBACK_MAX_CHARS = 2400;
 
 function validateFeedback(body, key) {
   // No key configured (settings row missing or its read failed): a server problem, not a wrong key,
@@ -37,7 +38,7 @@ function validateFeedback(body, key) {
 }
 
 function _quoted(text, max) {
-  const s = String(text || '').replace(/\s+/g, ' ').replace(/"/g, "'").trim();
+  const s = String(text || '').replace(/[\s\u0085]+/g, ' ').replace(/"/g, "'").trim();
   return max && s.length > max ? s.slice(0, max) + '…' : s;
 }
 
@@ -74,19 +75,27 @@ function feedbackDigest(rows, today) {
   }
   const notes = recent.filter((r) => typeof r.note === 'string' && r.note.trim()).reverse().slice(0, FEEDBACK_MAX_NOTES);
 
-  const lines = [];
-  if (rated.length) {
-    const byCat = [...tally.entries()].map(([c, t]) => `${_quoted(c, 40)} +${t.more}/-${t.less}`).join(', ');
-    lines.push(`Ratings (last ${FEEDBACK_WINDOW_DAYS} days, by category): ${byCat}`);
-    for (const r of rated.slice().reverse().slice(0, FEEDBACK_MAX_EXAMPLES)) {
-      lines.push(`- ${r.rating} like this: "${_quoted(r.title, 200)}" (${_quoted(r.category, 40)})`);
-    }
+  const examples = rated
+    .slice()
+    .reverse()
+    .slice(0, FEEDBACK_MAX_EXAMPLES)
+    .map((r) => `- ${r.rating} like this: "${_quoted(r.title, 200)}" (${_quoted(r.category, 40)})`);
+  const noteLines = notes.map((r) => `- ${r.date}, "${_quoted(r.title, 200)}": "${_quoted(r.note, FEEDBACK_NOTE_CHARS)}"`);
+  const byCat = [...tally.entries()].map(([c, t]) => `${_quoted(c, 40)} +${t.more}/-${t.less}`).join(', ');
+  const build = () => {
+    const lines = [];
+    if (rated.length) lines.push(`Ratings (last ${FEEDBACK_WINDOW_DAYS} days, by category): ${byCat}`, ...examples);
+    if (noteLines.length) lines.push(`Notes from the reader (last ${FEEDBACK_WINDOW_DAYS} days, newest first):`, ...noteLines);
+    return lines.join('\n');
+  };
+  // About 400 words at most: drop the oldest example or note, from the longer list, until it fits.
+  let text = build();
+  while (text.length > FEEDBACK_MAX_CHARS && (examples.length || noteLines.length > 1)) {
+    if (examples.length >= noteLines.length || noteLines.length <= 1) examples.pop();
+    else noteLines.pop();
+    text = build();
   }
-  if (notes.length) {
-    lines.push(`Notes from the reader (last ${FEEDBACK_WINDOW_DAYS} days, newest first):`);
-    for (const r of notes) lines.push(`- ${r.date}, "${_quoted(r.title, 200)}": "${_quoted(r.note, FEEDBACK_NOTE_CHARS)}"`);
-  }
-  return lines.join('\n');
+  return text;
 }
 
 export { validateFeedback, feedbackDigest };

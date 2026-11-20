@@ -23,7 +23,8 @@ export function parseRoute(hash) {
     const q = new URLSearchParams(query);
     const url = q.get('u') || '';
     const key = q.get('k') || '';
-    return { view: 'feedback', date: null, page: null, category: null, url, key, off: q.get('off') === '1' || !url || !key };
+    // Only a bare link or off=1 turns ratings off; a cut-off link does nothing.
+    return { view: 'feedback', date: null, page: null, category: null, url, key, off: q.get('off') === '1' || (!url && !key) };
   }
   if (parts[0] === 'archiwum') {
     return { view: 'archive', date: null, page: null, category: new URLSearchParams(query).get('kat') };

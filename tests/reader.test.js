@@ -83,7 +83,8 @@ test('parseRoute reads the feedback activation link', () => {
   assert.deepEqual(parseRoute('#/oceny?u=https%3A%2F%2Fx.example%2Fh&k=abc'), { view: 'feedback', date: null, page: null, category: null, url: 'https://x.example/h', key: 'abc', off: false });
   assert.equal(parseRoute('#/oceny').off, true);
   assert.equal(parseRoute('#/oceny?off=1').off, true);
-  assert.equal(parseRoute('#/oceny?u=https%3A%2F%2Fx.example%2Fh').off, true);
+  assert.equal(parseRoute('#/oceny?u=https%3A%2F%2Fx.example%2Fh').off, false);
+  assert.equal(parseRoute('#/oceny?u=https%3A%2F%2Fx.example%2Fh&k=').off, false);
 });
 
 test('the reader shows the rating block only when enabled and only on story pages', () => {

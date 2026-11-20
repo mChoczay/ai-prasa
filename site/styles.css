@@ -226,12 +226,11 @@ body.reading main { max-width: none; padding: 0; }
 .progress span { display: block; height: 2px; width: 0; background: var(--accent); transition: width 150ms ease-out; }
 @media (prefers-reduced-motion: reduce) { .progress span { transition: none; } }
 
-/* Archive: category chips scrolling sideways, month groups, a big day number beside each lead title. */
+/* Pills scrolling sideways (ranking areas). Archive: month groups, a big day number beside each lead title. */
 .archive .masthead { padding-bottom: 4px; }
 .chips { display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; padding: 8px 0 12px; }
 .chips::-webkit-scrollbar { display: none; }
 .chip { flex: 0 0 auto; font: 12px/1.4 var(--sans); padding: 4px 10px; border: 1px solid var(--rule); border-radius: 999px; color: var(--ink-soft); text-decoration: none; }
-.chip[aria-current] { background: var(--ink); border-color: var(--ink); color: var(--paper); }
 .archive .month { margin: 18px 0 4px; font: 11px/1.4 var(--sans); letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-soft); }
 .archive .days { list-style: none; padding: 0; margin: 0; }
 .archive .days a { display: flex; gap: 12px; padding: 10px 0; border-top: 1px solid var(--rule); color: var(--ink); text-decoration: none; }

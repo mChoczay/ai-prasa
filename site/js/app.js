@@ -81,7 +81,7 @@ async function route() {
   try {
     const index = await loadCommon();
     if (r.view === 'archive') {
-      app.innerHTML = renderArchive(index, { category: r.category });
+      app.innerHTML = renderArchive(index);
       document.title = tabTitle('archive');
       return;
     }

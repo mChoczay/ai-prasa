@@ -101,3 +101,44 @@ test('topic picture nodes search Wikipedia for stories without a picture and kee
   });
   assert.deepEqual(json.edition.stories[0].image_fallback, pics[0].image);
 });
+
+const finishJson = () => runCodeNode(codeNodeSource(WF, 'Finish edition'), {
+  nodes: { 'Profiles request': [payload], 'Read all profiles': [{ entity_id: 'aapl', type: 'company', name: 'Apple', aliases: 'AAPL' }] },
+})[0].json;
+
+test('the glossary prompt lists the stories, known terms and the reader feedback', () => {
+  const [{ json }] = runCodeNode(codeNodeSource(WF, 'Glossary prompt'), {
+    nodes: { 'Profiles request': [{ ...payload, feedback: 'nie wiem co to H200' }], 'Finish edition': [finishJson()], 'Read glossary': [{ term_id: 'lsn', term: 'LSN', explain: 'Numer.' }] },
+  });
+  assert.match(json.user, /\[0\] Lead/);
+  assert.match(json.user, /- LSN/);
+  assert.match(json.user, /nie wiem co to H200/);
+});
+
+test('glossary done adds term ids, the glossary file and new rows', () => {
+  const [{ json }] = runCodeNode(codeNodeSource(WF, 'Glossary done'), {
+    nodes: {
+      'Profiles request': [payload],
+      'Finish edition': [finishJson()],
+      'Read glossary': [{ term_id: 'lsn', term: 'LSN', explain: 'Numer.' }],
+      'Glossary with Haiku': [{ ok: true, data: { stories: [{ idx: 0, terms: [{ term: 'H200', explain: 'Układ.' }] }] } }],
+    },
+  });
+  assert.deepEqual(json.edition.lead_story.terms, ['h200']);
+  assert.deepEqual(json.glossary_json.terms.map((t) => t.id), ['h200', 'lsn']);
+  assert.deepEqual(json.glossary_rows.map((r) => r.term_id), ['h200']);
+  assert.equal(json.relay, true);
+  assert.ok(json.profiles_json && json.history);
+});
+
+test('a failed glossary call passes the edition on unchanged with the known glossary', () => {
+  const finish = finishJson();
+  for (const extra of [{ 'Glossary with Haiku': [{ ok: false, error: 'x' }] }, {}]) {
+    const [{ json }] = runCodeNode(codeNodeSource(WF, 'Glossary done'), {
+      nodes: { 'Profiles request': [payload], 'Finish edition': [finish], 'Read glossary': [{ term_id: 'lsn', term: 'LSN', explain: 'Numer.' }], ...extra },
+    });
+    assert.deepEqual(json.edition, finish.edition);
+    assert.deepEqual(json.glossary_rows, []);
+    assert.deepEqual(json.glossary_json.terms.map((t) => t.id), ['lsn']);
+  }
+});

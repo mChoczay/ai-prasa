@@ -113,7 +113,7 @@ const buildTree = node({
         "const p = $('Publish request').first().json;\n" +
         "const idx = $('GitHub: current index').first().json;\n" +
         "const indexRaw = Number(idx.statusCode) === 200 ? idx.data : null;\n" +
-        "const built = publishTree({ edition: p.edition, indexRaw, profilesJson: p.profiles_json, removeDate: p.remove_date || '' });\n" +
+        "const built = publishTree({ edition: p.edition, indexRaw, profilesJson: p.profiles_json, glossaryJson: p.glossary_json || null, removeDate: p.remove_date || '' });\n" +
         "return [{ json: { head: $('GitHub: main ref').first().json.object.sha, base_tree: $('GitHub: base commit').first().json.tree.sha, tree: built.tree, message: built.message } }];\n",
     },
   },

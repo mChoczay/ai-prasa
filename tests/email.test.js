@@ -73,3 +73,21 @@ test('the morning mail has the enabling link for ratings only when the url and k
   assert.deepEqual(renderEmailHtml(edition(), SITE, {}), base);
   assert.doesNotMatch(base.html, /oceny/);
 });
+
+test('the morning mail shows who read the paper last week and last month', () => {
+  const visits = { week: { first: '2026-11-16', last: '2026-11-22', total: 6, days: [2, 0, 0, 3, 0, 0, 0] }, month: { year: 2026, month: 11, total: 23 } };
+  const html = renderEmailHtml(edition(), SITE, { visits }).html;
+  assert.match(html, /Kto czytał/);
+  assert.ok(html.includes('Tydzień 16–22 lis: 6 odwiedzających'));
+  assert.ok(html.includes('pn 2 · wt 0 · śr 0 · czw 3 · pt 0 · sob 0 · nd 0'));
+  assert.ok(html.includes('Listopad 2026: 23 odwiedzających'));
+  assert.ok(html.indexOf('Kto czytał') > html.indexOf('Czytaj wydanie'));
+  const onlyMonth = renderEmailHtml(edition(), SITE, { visits: { month: { year: 2027, month: 1, total: 4 } } }).html;
+  assert.ok(onlyMonth.includes('Styczeń 2027: 4 odwiedzających') && !onlyMonth.includes('Tydzień'));
+  assert.doesNotMatch(renderEmailHtml(edition(), SITE).html, /Kto czytał/);
+});
+
+test('a week across two months names both months', () => {
+  const visits = { week: { first: '2026-09-28', last: '2026-10-04', total: 1, days: [1, 0, 0, 0, 0, 0, 0] } };
+  assert.ok(renderEmailHtml(edition(), SITE, { visits }).html.includes('Tydzień 28 wrz – 4 paź: 1 odwiedzających'));
+});

@@ -23,7 +23,30 @@ ${inner}
 </div></body></html>`;
 }
 
-function renderEmailHtml(edition, siteUrl, { feedbackUrl = '', feedbackKey = '' } = {}) {
+const _MONTHS_SHORT = ['sty', 'lut', 'mar', 'kwi', 'maj', 'cze', 'lip', 'sie', 'wrz', 'paź', 'lis', 'gru'];
+const _MONTHS_FULL = ['Styczeń', 'Luty', 'Marzec', 'Kwiecień', 'Maj', 'Czerwiec', 'Lipiec', 'Sierpień', 'Wrzesień', 'Październik', 'Listopad', 'Grudzień'];
+const _WEEKDAYS = ['pn', 'wt', 'śr', 'czw', 'pt', 'sob', 'nd'];
+
+// "Kto czytał": visitors last week (Mon–Sun) and/or last month, from visitSummary() in visits.js.
+function _visitsBlock(visits) {
+  if (!visits || (!visits.week && !visits.month)) return '';
+  const lines = [];
+  const w = visits.week;
+  if (w) {
+    const [, fm, fd] = w.first.split('-').map(Number);
+    const [, lm, ld] = w.last.split('-').map(Number);
+    const span = fm === lm ? `${fd}–${ld} ${_MONTHS_SHORT[lm - 1]}` : `${fd} ${_MONTHS_SHORT[fm - 1]} – ${ld} ${_MONTHS_SHORT[lm - 1]}`;
+    lines.push(`Tydzień ${span}: ${escapeHtml(w.total)} odwiedzających`);
+    lines.push((w.days || []).map((n, i) => `${_WEEKDAYS[i]} ${escapeHtml(n)}`).join(' · '));
+  }
+  const m = visits.month;
+  if (m) lines.push(`${_MONTHS_FULL[m.month - 1] || ''} ${escapeHtml(m.year)}: ${escapeHtml(m.total)} odwiedzających`);
+  return `\n<div style="font:13px/1.6 Arial,sans-serif;color:#5b5750;border-top:1px solid #d9d4c7;margin:24px 0 0;padding-top:12px;"><p style="margin:0 0 4px;font-weight:bold;">Kto czytał</p>${lines
+    .map((l) => `<p style="margin:0;">${l}</p>`)
+    .join('')}</div>`;
+}
+
+function renderEmailHtml(edition, siteUrl, { feedbackUrl = '', feedbackKey = '', visits = null } = {}) {
   const stories = [edition.lead_story, ...(edition.stories || [])].filter(Boolean);
   const items = stories
     .map(
@@ -36,7 +59,7 @@ function renderEmailHtml(edition, siteUrl, { feedbackUrl = '', feedbackKey = '' 
 <p style="text-align:center;font:13px Arial,sans-serif;color:#5b5750;margin:0 0 20px;">${escapeHtml(edition.date)}${edition.minutes ? ` · ok. ${escapeHtml(edition.minutes)} min czytania` : ''}</p>
 <p style="font-style:italic;">${escapeHtml(edition.greeting)}</p>
 <ul style="padding-left:18px;">${items}</ul>
-<p style="text-align:center;margin:28px 0;"><a href="${escapeHtml(href)}" style="display:inline-block;background:#2f4a7a;color:#ffffff;text-decoration:none;padding:10px 22px;border-radius:8px;font:15px Arial,sans-serif;">Czytaj wydanie</a></p>${
+<p style="text-align:center;margin:28px 0;"><a href="${escapeHtml(href)}" style="display:inline-block;background:#2f4a7a;color:#ffffff;text-decoration:none;padding:10px 22px;border-radius:8px;font:15px Arial,sans-serif;">Czytaj wydanie</a></p>${_visitsBlock(visits)}${
     feedbackUrl && feedbackKey
       ? `\n<p style="text-align:center;font:12px Arial,sans-serif;margin:24px 0 0;"><a href="${escapeHtml(`${siteUrl}#/oceny?u=${encodeURIComponent(feedbackUrl)}&k=${encodeURIComponent(feedbackKey)}`)}" style="color:#8a857a;">Włącz oceny na tym urządzeniu</a></p>`
       : ''

@@ -3,6 +3,7 @@ import { renderFront, selectArea } from './front.js';
 import { parseRoute, clampPage, renderReader, initReader } from './reader.js';
 import { readerPages, tabTitle, rankingAreas, pickArea } from './shape.js';
 import { loadConfig, saveConfig, clearConfig, storedRating, initFeedback } from './feedback.js';
+import { countVisit } from './visits.js';
 
 const app = document.getElementById('app');
 const dialog = document.getElementById('profile-dialog');
@@ -56,6 +57,10 @@ function storedArea() {
     return null;
   }
 }
+
+// One visit per page load on the published site (local previews are not counted); hash navigation inside
+// the site is not counted again.
+if (location.hostname === 'mchoczay.github.io') countVisit(store);
 
 const notice = (text) => `<p class="notice" role="status">${escapeHtml(text)}</p>`;
 

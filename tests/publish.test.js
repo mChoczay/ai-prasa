@@ -97,7 +97,8 @@ test('publish workflow: the Monday mail shows who read the paper', () => {
 
 test('publish workflow: a failed or skipped GoatCounter call still sends the mail without the section', () => {
   const ranges = runCodeNode(rangesCode, { nodes: mailNodes('2026-11-23') }).map((i) => i.json);
-  for (const extra of [{ 'Visit ranges': ranges, 'GoatCounter stats': [{ statusCode: 401, body: {} }] }, { 'Visit ranges': [{ none: true }] }, {}]) {
+  const failed = (r) => ({ 'Visit ranges': ranges, 'GoatCounter stats': [r] });
+  for (const extra of [failed({ statusCode: 401, body: {} }), failed({ statusCode: 403, body: { error: 'forbidden' } }), failed({ statusCode: 500, body: 'oops' }), failed({ statusCode: 200, body: { stats: [] } }), failed({ kind: 'week', url: 'x' }), { 'Visit ranges': [{ none: true }] }, {}]) {
     const [{ json }] = runCodeNode(mailCode, { nodes: mailNodes('2026-11-23', extra) });
     assert.doesNotMatch(json.html, /Kto czytał/);
     assert.equal(json.to, 'owner@example.com');

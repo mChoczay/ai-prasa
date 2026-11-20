@@ -1,5 +1,6 @@
-// Regenerates site/data/ sample files from tests/fixtures/edition.sample.json. Usage: node scripts/make-sample-data.mjs
-// n8n overwrites/adds real editions at runtime; this keeps the preview and first deploy non-empty.
+// Writes sample site data (edition, index, profiles) from tests/fixtures/edition.sample.json into
+// .superpowers/sample-data/ (git-ignored), never into site/data, which holds the published editions.
+// To preview with it, copy the files into a scratch copy of site/. Usage: node scripts/make-sample-data.mjs
 import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
 import { checkEditionRules, readingMinutes, upsertIndex } from '../n8n/lib/edition.js';
 
@@ -52,10 +53,10 @@ const index = upsertIndex({ editions: [] }, {
   date: edition.date, kind: 'daily', lead_title: edition.lead_story.title, minutes: edition.minutes, categories,
 });
 
-const dataDir = new URL('site/data/', root);
+const dataDir = new URL('.superpowers/sample-data/', root);
 mkdirSync(dataDir, { recursive: true });
 const write = (name, obj) => writeFileSync(new URL(name, dataDir), `${JSON.stringify(obj, null, 2)}\n`);
 write(`${edition.date}.json`, edition);
 write('index.json', index);
 write('profiles.json', { profiles });
-console.log(`wrote site/data/${edition.date}.json, index.json, profiles.json`);
+console.log(`wrote .superpowers/sample-data/${edition.date}.json, index.json, profiles.json`);

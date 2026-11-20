@@ -136,3 +136,15 @@ test('reader pages keep a gap under the progress line when they do not open with
   assert.match(css, /\.page-inner\s*\{[^}]*padding:\s*14px 16px 32px/);
   assert.match(css, /\.page \.img-hero:first-child\s*\{[^}]*margin-top:\s*-14px/);
 });
+
+test('a story shows its known terms under the article', () => {
+  const e = real();
+  e.lead_story.terms = ['h200', 'missing'];
+  const terms = { h200: { id: 'h200', term: 'H200', explain: 'Układ.' } };
+  const html = renderReader(e, profiles, 1, { terms });
+  assert.ok(html.includes('<p class="terms">Pojęcia: <button class="term" data-term="h200">H200</button></p>'));
+  assert.ok(!html.includes('missing'));
+  e.lead_story.terms = ['missing'];
+  assert.ok(!renderReader(e, profiles, 1, { terms }).includes('class="terms"'));
+  assert.ok(!renderReader(real(), profiles, 1).includes('class="terms"'));
+});

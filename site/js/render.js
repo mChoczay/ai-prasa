@@ -79,6 +79,18 @@ export function entityChip(id, profilesById) {
   return `<button class="entity" data-entity="${escapeHtml(id)}">${escapeHtml(p.name)}</button>`;
 }
 
+// Glossary terms: a chip under the story (only for terms with an entry) and the card it opens.
+export function termChip(id, termsById) {
+  const t = termsById && termsById[id];
+  if (!t) return '';
+  return `<button class="term" data-term="${escapeHtml(id)}">${escapeHtml(t.term)}</button>`;
+}
+
+export function renderTermCard(term) {
+  if (!term) return '';
+  return `<div class="term-card"><h3>${escapeHtml(term.term)}</h3><p>${escapeHtml(term.explain)}</p></div>`;
+}
+
 function isHttpUrl(url) {
   return /^https?:\/\//i.test(String(url || '').trim());
 }

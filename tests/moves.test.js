@@ -131,3 +131,19 @@ test('findFollowUps includes the 5-day boundary', () => {
   });
   assert.equal(f.length, 1);
 });
+
+test('findFollowUps keeps one entry per company, the biggest moves first, at most three', () => {
+  const tag = (entity_id, date, story_title) => ({ entity_id, date, story_title });
+  const impactTags = [tag('googl', '2026-11-19', 'Genie 4'), tag('nvda', '2026-11-19', 'Intel 18A'), tag('amzn', '2026-11-19', 'Intel 18A'), tag('meta', '2026-11-19', 'Muse'), tag('crwv', '2026-11-19', 'Nvidia wyniki')];
+  const moves = [
+    { entity_id: 'googl', change: -3.46 },
+    { entity_id: 'googl', change: -8.72 },
+    { entity_id: 'nvda', change: -3.3 },
+    { entity_id: 'amzn', change: -3.87 },
+    { entity_id: 'meta', change: -3.27 },
+    { entity_id: 'crwv', change: -6.1 },
+    { entity_id: 'x', change: '+2 (lmarena)' },
+  ];
+  const f = findFollowUps({ impactTags, moves, today: '2026-11-20' });
+  assert.deepEqual(f.map((x) => [x.entity_id, x.move]), [['googl', '-8.72'], ['crwv', '-6.1'], ['amzn', '-3.87']]);
+});

@@ -8,6 +8,8 @@ import {
   renderArchive,
   renderProfileCard,
   entityChip,
+  termChip,
+  renderTermCard,
 } from '../site/js/render.js';
 
 const profiles = [
@@ -110,4 +112,15 @@ test('renderProfileCard shows the profile and its update date', () => {
 test('entityChip falls back to escaped text for unknown ids', () => {
   assert.equal(entityChip('nvda', profilesById), '<button class="entity" data-entity="nvda">NVIDIA</button>');
   assert.equal(entityChip('<x>', profilesById), '<span class="entity-unknown">&lt;x&gt;</span>');
+});
+
+test('termChip shows known terms only and renderTermCard explains them, both escaped', () => {
+  const terms = { h200: { id: 'h200', term: 'H200', explain: 'Układ Nvidii.' }, bad: { id: 'bad', term: '<b>"x"</b>', explain: '<i>e</i>' } };
+  assert.equal(termChip('h200', terms), '<button class="term" data-term="h200">H200</button>');
+  assert.equal(termChip('missing', terms), '');
+  assert.ok(!termChip('bad', terms).includes('<b>'));
+  assert.equal(renderTermCard(terms.h200), '<div class="term-card"><h3>H200</h3><p>Układ Nvidii.</p></div>');
+  const card = renderTermCard(terms.bad);
+  assert.ok(card.includes('&lt;b&gt;&quot;x&quot;&lt;/b&gt;') && card.includes('&lt;i&gt;e&lt;/i&gt;'));
+  assert.equal(renderTermCard(null), '');
 });

@@ -111,3 +111,10 @@ test('publish workflow: the GoatCounter call sends the JSON content type its API
   assert.match(block, /sendHeaders:\s*true/);
   assert.match(block, /name:\s*'Content-Type',\s*value:\s*'application\/json'/);
 });
+
+test('publishTree writes glossary.json only when there is a glossary', () => {
+  const withGlossary = publishTree({ edition, indexRaw: null, profilesJson: null, glossaryJson: { terms: [{ id: 'h200', term: 'H200', explain: 'U.' }] } });
+  assert.ok(withGlossary.tree.some((f) => f.path === 'site/data/glossary.json'));
+  const without = publishTree({ edition, indexRaw: null, profilesJson: null });
+  assert.ok(!without.tree.some((f) => f.path === 'site/data/glossary.json'));
+});

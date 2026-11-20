@@ -93,7 +93,7 @@ const assemble = node({
         "return [{ json: {\n" +
         "  date: p.date, run_id: p.run_id, relay: p.relay, stop_after: p.stop_after || '', flags, next, edition,\n" +
         "  rule_errors: checked.errors, new_entity_names: checked.newEntityNames,\n" +
-        "  leaderboard_top: n.leaderboard_top || [], numbers: { market: n.market || null, rankings: n.rankings || null },\n" +
+        "  leaderboard_top: n.leaderboard_top || [], numbers: { market: n.market || null, rankings: n.rankings || null }, feedback: p.feedback || '',\n" +
         "} }];\n",
     },
   },

@@ -119,3 +119,9 @@ test('stories and front prompt nodes pass the reader feedback from the payload',
   const [{ json: none }] = runCodeNode(codeNodeSource('n8n/workflows/front.workflow.js', 'Build front prompt'), { globals: sandbox, nodes: { 'Front request': [{ ...p, feedback: '' }] } });
   assert.doesNotMatch(none.user, /Reader feedback/);
 });
+
+test('assemble passes the reader feedback on to the later stages', () => {
+  const p = { ...payload, feedback: 'nie wiem co to H200', stories_part: { stories: [], rumors: [] }, entities: [], leakers: [] };
+  const [{ json }] = runCodeNode(codeNodeSource('n8n/workflows/front.workflow.js', 'Assemble edition'), { globals: sandbox, nodes: { 'Front request': [p] }, input: [{ ok: true, data: {} }] });
+  assert.equal(json.feedback, 'nie wiem co to H200');
+});

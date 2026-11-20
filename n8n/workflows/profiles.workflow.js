@@ -354,6 +354,144 @@ const finish = node({
   output: [{ date: '2026-11-19', run_id: 'r', relay: false, edition: {}, profiles_json: { profiles: [] }, history: { topics: [], tags: [] }, spotlight_ids: [] }],
 });
 
+// Glossary: one Haiku call picks hard terms per story and explains new ones; known terms come from
+// glossary_terms. Any failure passes the edition on without terms (see n8n/lib/glossary.js).
+const T_GLOSSARY = 'ZNGjyVYvonqJQGNK';
+
+const readGlossary = node({
+  type: 'n8n-nodes-base.dataTable',
+  version: 1.1,
+  config: {
+    name: 'Read glossary',
+    executeOnce: true,
+    alwaysOutputData: true,
+    onError: 'continueRegularOutput',
+    parameters: { resource: 'row', operation: 'get', dataTableId: { __rl: true, mode: 'id', value: T_GLOSSARY, cachedResultName: 'glossary_terms' }, returnAll: true },
+  },
+  output: [{ term_id: 'h200', term: 'H200', explain: 'Układ.', first_date: '2026-11-20' }],
+});
+
+const glossaryPromptNode = node({
+  type: 'n8n-nodes-base.code',
+  version: 2,
+  config: {
+    name: 'Glossary prompt',
+    parameters: {
+      mode: 'runOnceForAllItems',
+      jsCode:
+        INLINE('n8n/lib/news.js', 'n8n/lib/glossary.js') +
+        "const p = $('Profiles request').first().json;\n" +
+        "const finished = $('Finish edition').first().json;\n" +
+        "let known = [];\n" +
+        "try { known = $('Read glossary').all().map((i) => i.json).filter((r) => r && r.term_id); } catch (e) { known = []; }\n" +
+        "return [{ json: { user: glossaryPrompt(finished.edition, known, p.feedback || '') } }];\n",
+    },
+  },
+  output: [{ user: '...' }],
+});
+
+const glossaryHaiku = node({
+  type: 'n8n-nodes-base.executeWorkflow',
+  version: 1.2,
+  config: {
+    name: 'Glossary with Haiku',
+    onError: 'continueRegularOutput',
+    parameters: {
+      source: 'database',
+      workflowId: { __rl: true, mode: 'id', value: 'xngSOQVAGpMZrfDS', cachedResultName: 'PPAI · claude' },
+      mode: 'once',
+      workflowInputs: {
+        mappingMode: 'defineBelow',
+        value: {
+          run_id: expr("{{ $('Profiles request').first().json.run_id }}"),
+          step: 'glossary',
+          model: 'claude-haiku-5-5',
+          system: TEXT('prompts/glossary.md'),
+          user: expr("{{ $('Glossary prompt').first().json.user }}"),
+          schema: JSONFILE('schemas/glossary.schema.json'),
+          effort: 'low',
+          max_tokens: 2500,
+        },
+        schema: [
+          { id: 'run_id', displayName: 'run_id', required: false, defaultMatch: false, display: true, type: 'string', canBeUsedToMatch: true },
+          { id: 'step', displayName: 'step', required: false, defaultMatch: false, display: true, type: 'string', canBeUsedToMatch: true },
+          { id: 'model', displayName: 'model', required: false, defaultMatch: false, display: true, type: 'string', canBeUsedToMatch: true },
+          { id: 'system', displayName: 'system', required: false, defaultMatch: false, display: true, type: 'string', canBeUsedToMatch: true },
+          { id: 'user', displayName: 'user', required: false, defaultMatch: false, display: true, type: 'string', canBeUsedToMatch: true },
+          { id: 'schema', displayName: 'schema', required: false, defaultMatch: false, display: true, type: 'object', canBeUsedToMatch: true },
+          { id: 'effort', displayName: 'effort', required: false, defaultMatch: false, display: true, type: 'string', canBeUsedToMatch: true },
+          { id: 'max_tokens', displayName: 'max_tokens', required: false, defaultMatch: false, display: true, type: 'number', canBeUsedToMatch: true },
+        ],
+      },
+      options: { waitForSubWorkflow: true },
+    },
+  },
+  output: [{ ok: true, data: { stories: [] }, cost_usd: 0.004 }],
+});
+
+const glossaryDone = node({
+  type: 'n8n-nodes-base.code',
+  version: 2,
+  config: {
+    name: 'Glossary done',
+    parameters: {
+      mode: 'runOnceForAllItems',
+      jsCode:
+        INLINE('n8n/lib/news.js', 'n8n/lib/glossary.js') +
+        "const finished = $('Finish edition').first().json;\n" +
+        "let read = [];\n" +
+        "let readFailed = false;\n" +
+        "try { read = $('Read glossary').all().map((i) => i.json || {}); } catch (e) { readFailed = true; }\n" +
+        "if (read.some((r) => r.error || (Object.keys(r).length > 0 && !r.term_id))) readFailed = true;\n" +
+        "if (readFailed) return [{ json: { ...finished, glossary_json: null, glossary_rows: [] } }];\n" +
+        "const known = read.filter((r) => r.term_id);\n" +
+        "let answer = null;\n" +
+        "try { const r = $('Glossary with Haiku').first().json; answer = r && r.ok ? r.data : null; } catch (e) { answer = null; }\n" +
+        "let merged;\n" +
+        "try { merged = mergeGlossary(finished.edition, answer, known, finished.date); } catch (e) { merged = mergeGlossary(finished.edition, null, known, finished.date); }\n" +
+        "return [{ json: { ...finished, edition: merged.edition, glossary_json: merged.glossaryJson, glossary_rows: merged.newRows } }];\n",
+    },
+  },
+  output: [{ date: '2026-11-19', run_id: 'r', relay: false, edition: {}, glossary_json: { terms: [] }, glossary_rows: [] }],
+});
+
+const anyNewTerm = ifElse({ version: 2.2, config: { name: 'Any new term?', parameters: { conditions: NOT_NONE } } });
+
+const glossaryRowItems = node({
+  type: 'n8n-nodes-base.code',
+  version: 2,
+  config: {
+    name: 'Glossary rows',
+    parameters: {
+      mode: 'runOnceForAllItems',
+      jsCode: "const rows = $('Glossary done').first().json.glossary_rows || [];\nreturn rows.length ? rows.map((r) => ({ json: r })) : [{ json: { none: true } }];\n",
+    },
+  },
+  output: [{ term_id: 'h200', term: 'H200', explain: 'Układ.', first_date: '2026-11-20' }],
+});
+
+const saveGlossary = node({
+  type: 'n8n-nodes-base.dataTable',
+  version: 1.1,
+  config: {
+    name: 'Save glossary',
+    onError: 'continueRegularOutput',
+    parameters: {
+      resource: 'row',
+      operation: 'upsert',
+      dataTableId: { __rl: true, mode: 'id', value: T_GLOSSARY, cachedResultName: 'glossary_terms' },
+      matchType: 'allConditions',
+      filters: { conditions: [{ keyName: 'term_id', condition: 'eq', keyValue: expr('{{ $json.term_id }}') }] },
+      columns: {
+        mappingMode: 'defineBelow',
+        value: { term_id: expr('{{ $json.term_id }}'), term: expr('{{ $json.term }}'), explain: expr('{{ $json.explain }}'), first_date: expr('{{ $json.first_date }}') },
+        schema: [{ id: 'term_id', displayName: 'term_id', required: false, defaultMatch: false, display: true, type: 'string', canBeUsedToMatch: true }, { id: 'term', displayName: 'term', required: false, defaultMatch: false, display: true, type: 'string', canBeUsedToMatch: true }, { id: 'explain', displayName: 'explain', required: false, defaultMatch: false, display: true, type: 'string', canBeUsedToMatch: true }, { id: 'first_date', displayName: 'first_date', required: false, defaultMatch: false, display: true, type: 'string', canBeUsedToMatch: true }],
+      },
+    },
+  },
+  output: [{ id: 1 }],
+});
+
 const relayCheck = ifElse({
   version: 2.2,
   config: {
@@ -443,7 +581,14 @@ export default workflow('ppai-profiles', 'PPAI · profiles')
       .onFalse(finish),
   )
   .add(finish)
+  .to(readGlossary)
+  .to(glossaryPromptNode)
+  .to(glossaryHaiku)
+  .to(glossaryDone)
   .to(relayCheck.onTrue(handToPublish).onFalse(returnPayload))
+  .add(glossaryDone)
+  .to(glossaryRowItems)
+  .to(anyNewTerm.onTrue(saveGlossary))
   .add(finish)
   .to(spotlightItems)
   .to(markSpotlight);

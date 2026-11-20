@@ -29,7 +29,7 @@ function _parseIndex(raw) {
 
 // Git tree entries for one commit. With removeDate (a test cleanup), that edition's file is deleted and
 // its index entry dropped instead of publishing.
-function publishTree({ edition, indexRaw, profilesJson, removeDate }) {
+function publishTree({ edition, indexRaw, profilesJson, glossaryJson = null, removeDate }) {
   let index = _parseIndex(indexRaw);
   const tree = [];
   const file = (path, data) => ({ path, mode: '100644', type: 'blob', content: `${JSON.stringify(data, null, 1)}\n` });
@@ -42,6 +42,7 @@ function publishTree({ edition, indexRaw, profilesJson, removeDate }) {
     index = upsertIndex(index, indexEntry(edition));
     tree.push(file(`${DATA_DIR}/${edition.date}.json`, edition));
     if (profilesJson && Array.isArray(profilesJson.profiles)) tree.push(file(`${DATA_DIR}/profiles.json`, profilesJson));
+    if (glossaryJson && Array.isArray(glossaryJson.terms)) tree.push(file(`${DATA_DIR}/glossary.json`, glossaryJson));
   }
   tree.push(file(`${DATA_DIR}/index.json`, index));
   const message = removeDate ? `Remove the test edition for ${removeDate}.` : `Publish the edition for ${edition.date}.`;

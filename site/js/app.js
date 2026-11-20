@@ -1,4 +1,4 @@
-import { renderArchive, renderProfileCard, escapeHtml } from './render.js';
+import { renderArchive, renderProfileCard, renderTermCard, escapeHtml } from './render.js';
 import { renderFront, selectArea } from './front.js';
 import { parseRoute, clampPage, renderReader, initReader } from './reader.js';
 import { readerPages, tabTitle, rankingAreas, pickArea } from './shape.js';
@@ -9,6 +9,8 @@ const app = document.getElementById('app');
 const dialog = document.getElementById('profile-dialog');
 const dialogBody = document.getElementById('profile-body');
 let profilesById = {};
+let termsById = {};
+let termsLoaded = false; // glossary.json may not exist yet; fetch it once per page load
 let indexCache = null;
 
 async function getJson(path) {
@@ -30,6 +32,15 @@ async function loadCommon() {
       profilesById = Object.fromEntries((data.profiles || []).map((p) => [p.id, p]));
     } catch {
       profilesById = {};
+    }
+  }
+  if (!termsLoaded) {
+    termsLoaded = true;
+    try {
+      const data = await getJson('data/glossary.json');
+      termsById = Object.fromEntries((data.terms || []).map((t) => [t.id, t]));
+    } catch {
+      termsById = {};
     }
   }
   return indexCache;
@@ -103,7 +114,7 @@ async function route() {
       const config = store ? loadConfig(store) : null;
       const ratings = {};
       if (config) pages.forEach((p) => { if (p.kind === 'story') ratings[p.n] = storedRating(store, edition.date, p.n); });
-      app.innerHTML = renderReader(edition, profilesById, page, { feedback: !!config, ratings });
+      app.innerHTML = renderReader(edition, profilesById, page, { feedback: !!config, ratings, terms: termsById });
       document.title = tabTitle('reader', edition, page);
       if (page !== r.page) history.replaceState(null, '', `#/${date}/${page}`);
       const root = app.querySelector('.reader');
@@ -148,6 +159,14 @@ app.addEventListener('click', (event) => {
         // Not remembered; the switch still works.
       }
     }
+    return;
+  }
+  const termEl = event.target.closest('[data-term]');
+  if (termEl) {
+    const term = termsById[termEl.dataset.term];
+    dialogBody.innerHTML = term ? renderTermCard(term) : `<p>${escapeHtml(termEl.textContent)}</p>`;
+    dialog.showModal();
+    dialog.scrollTop = 0;
     return;
   }
   const chip = event.target.closest('[data-entity]');

@@ -6,6 +6,7 @@ import {
   categoryBadge,
   sourcesList,
   entityChip,
+  termChip,
   imageFigure,
 } from './render.js';
 import { readerPages, dateParts } from './shape.js';
@@ -42,8 +43,9 @@ function pageTitle(edition, p) {
   return p.kind === 'story' ? p.story.title : edition[p.kind].title;
 }
 
-function storyBody(s, profilesById) {
+function storyBody(s, profilesById, termsById) {
   const chips = (s.may_affect || []).map((id) => entityChip(id, profilesById)).join(' ');
+  const terms = (Array.isArray(s.terms) ? s.terms : []).map((id) => termChip(id, termsById)).filter(Boolean).join(' · ');
   return `${imageFigure(s.image, s.image_fallback, { size: 'hero', link: true })}
 <div class="badges">${categoryBadge(s.category)}${statusBadge(s.status)}${s.is_update ? '<span class="badge update">aktualizacja</span>' : ''}</div>
 <h2>${escapeHtml(s.title)}</h2>
@@ -51,6 +53,7 @@ function storyBody(s, profilesById) {
 <div class="body">${paragraphs(s.body)}</div>
 ${s.for_you ? `<p class="for-you"><strong>Dla Ciebie:</strong> ${escapeHtml(s.for_you)}</p>` : ''}
 ${chips ? `<p class="may-affect">Może dotyczyć: ${chips}</p>` : ''}
+${terms ? `<p class="terms">Pojęcia: ${terms}</p>` : ''}
 ${s.disclaimer ? `<p class="disclaimer">${escapeHtml(s.disclaimer)}</p>` : ''}
 ${sourcesList(s.sources)}`;
 }
@@ -65,7 +68,7 @@ ${takeaways ? `<h4>Warto zapamiętać</h4><ol>${takeaways}</ol>` : ''}
 ${race ? `<h4>Kto prowadzi</h4><table><tbody>${race}</tbody></table>` : ''}`;
 }
 
-export function renderReader(edition, profilesById, page, { feedback = false, ratings = {} } = {}) {
+export function renderReader(edition, profilesById, page, { feedback = false, ratings = {}, terms = {} } = {}) {
   const e = edition;
   const pages = readerPages(e);
   const total = pages.length;
@@ -73,7 +76,7 @@ export function renderReader(edition, profilesById, page, { feedback = false, ra
     .map((p, i) => {
       const prev = pages[i - 1];
       const next = pages[i + 1];
-      const body = p.kind === 'story' ? storyBody(p.story, profilesById) : supplementBody(e[p.kind], SUPPLEMENT_LABELS[p.kind]);
+      const body = p.kind === 'story' ? storyBody(p.story, profilesById, terms) : supplementBody(e[p.kind], SUPPLEMENT_LABELS[p.kind]);
       const fb = feedback && p.kind === 'story' ? feedbackBlock(p.n, ratings[p.n] || '') : '';
       const nav = `<nav class="page-nav">${prev ? `<button class="prev" data-go="${prev.n}">‹ ${escapeHtml(pageTitle(e, prev))}</button>` : '<span></span>'}${next ? `<button class="next" data-go="${next.n}">${escapeHtml(pageTitle(e, next))} ›</button>` : ''}</nav>`;
       return `<section class="page" data-n="${p.n}"><div class="page-inner">${body}${fb}${nav}</div></section>`;

@@ -113,3 +113,11 @@ test('the page has no separate top bar any more', () => {
   const index = readFileSync(new URL('../site/index.html', import.meta.url), 'utf8');
   assert.doesNotMatch(index, /topbar/);
 });
+
+test('the company card has a close cross at the top instead of a button at the bottom', () => {
+  const index = readFileSync(new URL('../site/index.html', import.meta.url), 'utf8');
+  const dialog = index.slice(index.indexOf('<dialog id="profile-dialog"'), index.indexOf('</dialog>'));
+  assert.ok(dialog.includes('<button type="button" class="sheet-close" aria-label="Zamknij">×</button>'));
+  assert.ok(dialog.indexOf('sheet-close') < dialog.indexOf('id="profile-body"'));
+  assert.ok(!index.includes('method="dialog"'));
+});

@@ -129,6 +129,13 @@ app.addEventListener('click', (event) => {
   const profile = profilesById[chip.dataset.entity];
   dialogBody.innerHTML = profile ? renderProfileCard(profile) : `<p>${escapeHtml(chip.textContent)}</p>`;
   dialog.showModal();
+  dialog.scrollTop = 0;
+});
+
+// The card closes with its cross, a tap on the dimmed backdrop (the dialog box itself has no padding,
+// so a click whose target is the dialog lands outside the content) or Esc (native).
+dialog.addEventListener('click', (event) => {
+  if (event.target === dialog || event.target.closest('.sheet-close')) dialog.close();
 });
 
 // A story image that fails (blocked hotlink, 404) is swapped for its fallback once, then hidden.

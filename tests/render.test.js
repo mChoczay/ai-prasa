@@ -89,17 +89,15 @@ test('renderArchive groups editions by month with the day, title and reading tim
   assert.match(html, /<a href="#\/archiwum"[^>]*aria-current="page"[^>]*>Archiwum/);
 });
 
-test('renderArchive marks the active chip and filters by category', () => {
-  const all = renderArchive(ARCHIVE, {});
-  assert.match(all, /<a class="chip" href="#\/archiwum" aria-current="page">wszystkie<\/a>/);
-  const html = renderArchive(ARCHIVE, { category: 'modele' });
-  assert.match(html, /<a class="chip" href="#\/archiwum\?kat=modele" aria-current="page">modele<\/a>/);
-  assert.ok(html.includes('Tydzień modeli'));
-  assert.ok(!html.includes('Anthropic na Nasdaq'));
-  const empty = renderArchive(ARCHIVE, { category: 'regulacje' });
-  assert.ok(empty.includes('Brak wydań w tej kategorii.'));
+test('renderArchive lists every edition without category filters', () => {
+  const html = renderArchive(ARCHIVE);
+  assert.ok(!html.includes('class="chip'));
+  assert.ok(!html.includes('class="chips"'));
+  assert.ok(html.includes('Tydzień modeli') && html.includes('Anthropic na Nasdaq'));
+  assert.equal(renderArchive(ARCHIVE, { category: 'modele' }), html, 'an old ?kat= link opens the whole archive');
+  const empty = renderArchive({ editions: [] });
+  assert.ok(empty.includes('Brak wydań.'));
   assert.ok(empty.includes('class="mast-nav"'));
-  assert.ok(empty.includes('class="chips"'));
 });
 
 test('renderProfileCard shows the profile and its update date', () => {

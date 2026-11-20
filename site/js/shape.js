@@ -1,10 +1,9 @@
 // Data shaping for the front page and the reader, with fallbacks for editions written before the
 // redesign (no market.mood, why_short, rankings.notes, images or supplement_minutes).
 
-const BOARDS = ['lmarena', 'aa', 'hf_trending'];
 const D1_THRESHOLD = 3;
 const D7_THRESHOLD = 8;
-const RANK_SHIFT = 2;
+const AREA_ROWS = 5;
 
 // The first sentence: up to a . ! or ? followed by a capitalised word or the end of the text, so
 // "2.5" and "proc. dziś" do not cut it short.
@@ -57,29 +56,19 @@ export function marketTiles(edition, max = 4) {
   return tiles.sort((a, b) => Math.abs(b.change) - Math.abs(a.change)).slice(0, max);
 }
 
-function _slug(name) {
-  return String(name || '')
-    .toLowerCase()
-    .replace(/ł/g, 'l')
-    .normalize('NFD')
-    .replace(/[̀-ͯ]/g, '')
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/^-+|-+$/g, '');
+// Ranking areas worth showing: a key, a label and at least one row; five rows each.
+export function rankingAreas(edition) {
+  const areas = (edition && edition.rankings && edition.rankings.areas) || [];
+  if (!Array.isArray(areas)) return [];
+  return areas
+    .filter((a) => a && typeof a.key === 'string' && a.key && typeof a.label === 'string' && Array.isArray(a.rows) && a.rows.length)
+    .map((a) => ({ key: a.key, label: a.label, new_leader: a.new_leader === true, rows: a.rows.slice(0, AREA_ROWS) }));
 }
 
-export function rankingChanges(edition) {
-  const rankings = (edition && edition.rankings) || {};
-  const moves = ((edition && edition.big_moves) || []).filter((m) => m.board !== 'market');
-  const out = [];
-  for (const board of BOARDS) {
-    for (const r of rankings[board] || []) {
-      const big = r.delta === 'new' || (_num(r.delta) != null && Math.abs(r.delta) >= RANK_SHIFT);
-      if (!big) continue;
-      const move = moves.find((m) => m.board === board && m.entity_id === _slug(r.model));
-      out.push({ board, model: r.model, org: r.org, rank: r.rank, delta: r.delta, why_short: move ? whyShort(move) : '', why: move ? move.why || '' : '' });
-    }
-  }
-  return out;
+// The area to open: the remembered one if this edition has it, else the first.
+export function pickArea(areas, stored) {
+  const keys = (areas || []).map((a) => a.key);
+  return keys.includes(stored) ? stored : keys[0] || '';
 }
 
 export function rankingNotes(edition) {

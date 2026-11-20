@@ -16,15 +16,18 @@ function _ranked(rows) {
 }
 
 // LMArena official dataset (huggingface.co/datasets/lmarena-ai/leaderboard-dataset), datasets-server /rows or
-// /filter response: {rows: [{row: {model_name, organization, rating, rank, category}}]}.
-function parseLmarena(input) {
+// /filter response: {rows: [{row: {model_name, organization, rating, rank, category}}]}. Only rows of the given
+// category count (the overall board by default).
+function parseLmarena(input, category = 'overall') {
   const data = _json(input);
   if (!data || !Array.isArray(data.rows)) return null;
+  // Most arenas publish a rating; the agent arena publishes a score instead.
+  const value = (r) => (Number.isFinite(r.rating) ? r.rating : r.score);
   const rows = data.rows
     .map((r) => r && r.row)
-    .filter((r) => r && r.category === 'overall' && typeof r.model_name === 'string' && Number.isFinite(r.rating))
-    .sort((a, b) => (a.rank - b.rank) || (b.rating - a.rating))
-    .map((r) => ({ model: r.model_name, org: String(r.organization || ''), score: r.rating }));
+    .filter((r) => r && r.category === category && typeof r.model_name === 'string' && Number.isFinite(value(r)))
+    .sort((a, b) => (a.rank - b.rank) || (value(b) - value(a)))
+    .map((r) => ({ model: r.model_name, org: String(r.organization || ''), score: value(r) }));
   return _ranked(rows);
 }
 

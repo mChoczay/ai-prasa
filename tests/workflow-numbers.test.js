@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { codeNodeSource, runCodeNode } from './helpers/code-node.js';
+import { areaRequests } from '../n8n/lib/areas.js';
 
 const fixture = (name) => JSON.parse(readFileSync(new URL(`./fixtures/sources/${name}`, import.meta.url), 'utf8'));
 const code = codeNodeSource('n8n/workflows/numbers.workflow.js', 'Compute numbers');
@@ -19,6 +20,8 @@ function baseNodes(overrides = {}) {
     'Watchlist closes': [{ days: [days[0], days[1], days[2], days[3]].map((d) => ({ results: d.results.filter((b) => b.T === 'NVDA') })) }],
     'LMArena leaderboard': [ok(fixture('lmarena-text-overall.json'))],
     'Hugging Face trending': [ok(fixture('hf-trending.json'))],
+    'Area requests': areaRequests(),
+    'LMArena areas': areaRequests().map(() => ({ statusCode: 503, body: 'down' })),
     'Artificial Analysis models': [ok(fixture('aa-models-free.json')), { statusCode: 500, body: {} }],
     'Recent leaderboard snapshots': [{}],
     'Recent move log': [{}],
@@ -114,4 +117,45 @@ test('lmarena and aa rankings collapse model variants to one row per base model'
     assert.equal(new Set(names).size, names.length, board);
     assert.ok(names.every((n) => !/\(/.test(n)), board);
   }
+});
+
+const polishArea = fixture('lmarena-area-polish.json');
+const areaNodes = () => ({ 'LMArena areas': areaRequests().map((r) => (r.key === 'polish' ? ok(polishArea) : { statusCode: 503, body: 'down' })) });
+
+test('compute numbers adds the answered ranking areas and lists the missing ones', () => {
+  const plain = runCodeNode(code, { nodes: baseNodes() })[0].json;
+  assert.deepEqual(plain.rankings.areas, []);
+  assert.equal(plain.areas_missing.length, 6);
+  const [{ json }] = runCodeNode(code, { nodes: baseNodes(areaNodes()) });
+  assert.deepEqual(json.rankings.areas.map((a) => a.key), ['polish']);
+  assert.equal(json.areas_missing.length, 5);
+  const areaWrites = json.writes.boards.filter((r) => r.board === 'area_polish');
+  assert.ok(areaWrites.length > 10 && areaWrites.every((r) => r.date === '2026-11-19'));
+  assert.ok(json.ranking_moves.every((m) => !String(m.board).startsWith('area_')));
+  assert.deepEqual(json.leaderboard_top, plain.leaderboard_top);
+});
+
+test('a previous area snapshot gives the area rows their changes', () => {
+  const first = runCodeNode(code, { nodes: baseNodes(areaNodes()) })[0].json;
+  const prev = first.writes.boards.filter((r) => r.board === 'area_polish').map((r) => ({ ...r, date: '2026-11-18' }));
+  [prev[0].model, prev[1].model] = [prev[1].model, prev[0].model];
+  const [{ json }] = runCodeNode(code, { nodes: baseNodes({ ...areaNodes(), 'Recent leaderboard snapshots': prev }) });
+  assert.equal(json.rankings.areas[0].rows[0].delta, 1);
+  assert.equal(json.rankings.areas[0].new_leader, true);
+  assert.equal(json.ranking_moves.length, 0);
+});
+
+test('the area requests node runs in the sandbox and lists six URLs', () => {
+  const items = runCodeNode(codeNodeSource('n8n/workflows/numbers.workflow.js', 'Area requests'), { nodes: {} });
+  assert.deepEqual(items.map((i) => i.json.key), ['webdev', 'agent', 'writing', 'polish', 'math', 'image']);
+  assert.ok(items.every((i) => i.json.url.startsWith('https://datasets-server.huggingface.co/filter?')));
+});
+
+test('the area requests run in parallel with a short timeout, so they add seconds, not minutes', () => {
+  const src = readFileSync(new URL('../n8n/workflows/numbers.workflow.js', import.meta.url), 'utf8');
+  const block = src.slice(src.indexOf("name: 'LMArena areas'"), src.indexOf('const aaPageList'));
+  const timeout = Number((block.match(/timeout:\s*(\d+)/) || [])[1]);
+  const batch = Number((block.match(/batchSize:\s*(\d+)/) || [])[1]);
+  assert.ok(timeout > 0 && timeout <= 10000, `timeout ${timeout}`);
+  assert.equal(batch, 6, 'all six areas in one batch');
 });

@@ -188,12 +188,9 @@ const SUPPLEMENT_KINDS = Object.freeze({ weekly: 'Tydzień w AI', monthly: 'Mies
 
 // Archive: chips for categories, editions grouped by month (newest first, as in the index), each with
 // its day, the lead title and the reading time.
-export function renderArchive(index, { category = null } = {}) {
-  const editions = ((index && index.editions) || []).filter((ed) => !category || (ed.categories || []).includes(category));
-  const chip = (href, label, on) => `<a class="chip" href="${href}"${on ? ' aria-current="page"' : ''}>${escapeHtml(label)}</a>`;
-  const chips = [chip('#/archiwum', 'wszystkie', !category)]
-    .concat(Object.entries(CATEGORY_LABELS).map(([key, label]) => chip(`#/archiwum?kat=${key}`, label, key === category)))
-    .join('');
+// Every edition, newest first, grouped by month. Old #/archiwum?kat=… links land here too.
+export function renderArchive(index) {
+  const editions = (index && index.editions) || [];
   const groups = [];
   for (const ed of editions) {
     const key = String(ed.date || '').slice(0, 7);
@@ -214,8 +211,7 @@ export function renderArchive(index, { category = null } = {}) {
     })
     .join('');
   return `<section class="archive"><header class="masthead"><h1>Poranna prasa AI</h1>${mastheadNav('archive')}</header>
-<nav class="chips">${chips}</nav>
-${body || '<p class="no-data">Brak wydań w tej kategorii.</p>'}</section>`;
+${body || '<p class="no-data">Brak wydań.</p>'}</section>`;
 }
 
 // Navigation under the paper's name: the current view is marked for screen readers and styling.

@@ -356,7 +356,7 @@ const finish = node({
 
 // Glossary: one Haiku call picks hard terms per story and explains new ones; known terms come from
 // glossary_terms. Any failure passes the edition on without terms (see n8n/lib/glossary.js).
-const T_GLOSSARY = 'GLOSSARY_TABLE_ID';
+const T_GLOSSARY = 'ZNGjyVYvonqJQGNK';
 
 const readGlossary = node({
   type: 'n8n-nodes-base.dataTable',

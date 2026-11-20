@@ -24,6 +24,12 @@ test('parseLmarena reads the official dataset rows (category overall), ranked by
   assert.ok(rows[0].score >= rows[1].score);
 });
 
+test('parseLmarena reads an area category when asked for it', () => {
+  const rows = parseLmarena(fixture('lmarena-area-polish.json'), 'polish');
+  assertRows(rows, 10);
+  assert.equal(parseLmarena(fixture('lmarena-area-polish.json')), null, 'no overall rows means no board');
+});
+
 test('parseLmarena ignores rows from other categories', () => {
   const input = JSON.stringify({
     rows: [

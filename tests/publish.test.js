@@ -97,7 +97,8 @@ test('publish workflow: the Monday mail shows who read the paper', () => {
 
 test('publish workflow: a failed or skipped GoatCounter call still sends the mail without the section', () => {
   const ranges = runCodeNode(rangesCode, { nodes: mailNodes('2026-11-23') }).map((i) => i.json);
-  for (const extra of [{ 'Visit ranges': ranges, 'GoatCounter stats': [{ statusCode: 401, body: {} }] }, { 'Visit ranges': [{ none: true }] }, {}]) {
+  const failed = (r) => ({ 'Visit ranges': ranges, 'GoatCounter stats': [r] });
+  for (const extra of [failed({ statusCode: 401, body: {} }), failed({ statusCode: 403, body: { error: 'forbidden' } }), failed({ statusCode: 500, body: 'oops' }), failed({ statusCode: 200, body: { stats: [] } }), failed({ kind: 'week', url: 'x' }), { 'Visit ranges': [{ none: true }] }, {}]) {
     const [{ json }] = runCodeNode(mailCode, { nodes: mailNodes('2026-11-23', extra) });
     assert.doesNotMatch(json.html, /Kto czytał/);
     assert.equal(json.to, 'owner@example.com');
@@ -117,4 +118,32 @@ test('publishTree writes glossary.json only when there is a glossary', () => {
   assert.ok(withGlossary.tree.some((f) => f.path === 'site/data/glossary.json'));
   const without = publishTree({ edition, indexRaw: null, profilesJson: null });
   assert.ok(!without.tree.some((f) => f.path === 'site/data/glossary.json'));
+});
+
+test('publish workflow: GitHub calls and the morning mail retry a transient failure', () => {
+  const src = readFileSync(new URL('../n8n/workflows/publish.workflow.js', import.meta.url), 'utf8');
+  for (const name of ['GitHub: main ref', 'GitHub: base commit', 'GitHub: current index', 'GitHub: new tree', 'GitHub: new commit', 'GitHub: move main', 'Send morning mail']) {
+    const at = src.indexOf(`name: '${name}'`);
+    assert.ok(at > 0, name);
+    const block = src.slice(at, src.indexOf('parameters:', at));
+    assert.match(block, /retryOnFail: true/, name);
+    assert.match(block, /maxTries: 3/, name);
+    assert.match(block, /waitBetweenTries: 5000/, name);
+  }
+});
+
+test('publish workflow: a failed index read stops the publish instead of wiping the archive', () => {
+  const run = (idx) => runCodeNode(codeNodeSource('n8n/workflows/publish.workflow.js', 'Build tree'), {
+    nodes: {
+      'Publish request': [{ date: '2026-11-19', edition, profiles_json: { profiles: [] }, remove_date: '' }],
+      'GitHub: current index': [idx],
+      'GitHub: main ref': [{ object: { sha: 'head1' } }],
+      'GitHub: base commit': [{ tree: { sha: 'tree0' } }],
+    },
+  });
+  for (const idx of [{ statusCode: 500, data: 'oops' }, { statusCode: 403, data: 'rate limited' }, {}]) {
+    assert.throws(() => run(idx), /index\.json/);
+  }
+  assert.equal(run({ statusCode: 404, data: 'Not Found' })[0].json.tree.length, 3);
+  assert.equal(run({ statusCode: 200, data: '{"editions":[]}' })[0].json.tree.length, 3);
 });

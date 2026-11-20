@@ -39,6 +39,8 @@ function buildAreas(responses, prevRows) {
   const missing = [];
   const writes = [];
   const earlier = Array.isArray(prevRows) ? prevRows.filter((r) => r && r.board && r.date) : [];
+  // A different number of answers means they cannot be matched to areas safely.
+  if (!Array.isArray(responses) || responses.length !== AREAS.length) return { areas, missing: AREAS.map((a) => a.key), writes };
   AREAS.forEach((a, i) => {
     const list = collapseVariants(parseLmarena((responses || [])[i], a.category));
     if (!Array.isArray(list) || !list.length) {

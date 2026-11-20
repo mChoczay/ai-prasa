@@ -44,6 +44,9 @@ const mainRef = node({
   version: 4.2,
   config: {
     name: 'GitHub: main ref',
+    retryOnFail: true,
+    maxTries: 3,
+    waitBetweenTries: 5000,
     parameters: {
       method: 'GET',
       url: REPO + '/git/ref/heads/main',
@@ -63,6 +66,9 @@ const baseCommit = node({
   version: 4.2,
   config: {
     name: 'GitHub: base commit',
+    retryOnFail: true,
+    maxTries: 3,
+    waitBetweenTries: 5000,
     parameters: {
       method: 'GET',
       url: expr(REPO + '/git/commits/{{ $json.object.sha }}'),
@@ -82,6 +88,9 @@ const currentIndex = node({
   version: 4.2,
   config: {
     name: 'GitHub: current index',
+    retryOnFail: true,
+    maxTries: 3,
+    waitBetweenTries: 5000,
     parameters: {
       method: 'GET',
       url: REPO + '/contents/site/data/index.json?ref=main',
@@ -112,7 +121,10 @@ const buildTree = node({
         INLINE('n8n/lib/news.js', 'n8n/lib/dates.js', 'n8n/lib/edition.js', 'n8n/lib/publish.js') +
         "const p = $('Publish request').first().json;\n" +
         "const idx = $('GitHub: current index').first().json;\n" +
-        "const indexRaw = Number(idx.statusCode) === 200 ? idx.data : null;\n" +
+        "const indexStatus = Number(idx.statusCode);\n" +
+        "// Only a missing index (404, first edition) may start a new one; any other failure would wipe the archive.\n" +
+        "if (indexStatus !== 200 && indexStatus !== 404) throw new Error('GitHub: could not read site/data/index.json (HTTP ' + (idx.statusCode || 'none') + ')');\n" +
+        "const indexRaw = indexStatus === 200 ? idx.data : null;\n" +
         "const built = publishTree({ edition: p.edition, indexRaw, profilesJson: p.profiles_json, glossaryJson: p.glossary_json || null, removeDate: p.remove_date || '' });\n" +
         "return [{ json: { head: $('GitHub: main ref').first().json.object.sha, base_tree: $('GitHub: base commit').first().json.tree.sha, tree: built.tree, message: built.message } }];\n",
     },
@@ -125,6 +137,9 @@ const newTree = node({
   version: 4.2,
   config: {
     name: 'GitHub: new tree',
+    retryOnFail: true,
+    maxTries: 3,
+    waitBetweenTries: 5000,
     parameters: {
       method: 'POST',
       url: REPO + '/git/trees',
@@ -147,6 +162,9 @@ const newCommit = node({
   version: 4.2,
   config: {
     name: 'GitHub: new commit',
+    retryOnFail: true,
+    maxTries: 3,
+    waitBetweenTries: 5000,
     parameters: {
       method: 'POST',
       url: REPO + '/git/commits',
@@ -169,6 +187,9 @@ const moveMain = node({
   version: 4.2,
   config: {
     name: 'GitHub: move main',
+    retryOnFail: true,
+    maxTries: 3,
+    waitBetweenTries: 5000,
     parameters: {
       method: 'PATCH',
       url: REPO + '/git/refs/heads/main',
@@ -304,6 +325,9 @@ const sendMail = node({
   version: 2.2,
   config: {
     name: 'Send morning mail',
+    retryOnFail: true,
+    maxTries: 3,
+    waitBetweenTries: 5000,
     parameters: {
       resource: 'message',
       operation: 'send',

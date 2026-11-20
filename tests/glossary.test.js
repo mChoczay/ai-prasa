@@ -84,3 +84,37 @@ test('the glossary schema asks for stories with idx and terms', () => {
   assert.deepEqual(schema.properties.stories.items.required, ['idx', 'terms']);
   assert.deepEqual(schema.properties.stories.items.properties.terms.items.required, ['term', 'explain']);
 });
+
+test('a story repeated in the answer keeps all its terms, up to three', () => {
+  const answer = { stories: [
+    { idx: 0, terms: [{ term: 'H200', explain: 'U.' }] },
+    { idx: 0, terms: [{ term: 'BIS', explain: 'B.' }, { term: 'H200', explain: '' }, { term: 'S-1', explain: 'S.' }, { term: 'IPO', explain: 'I.' }] },
+  ] };
+  const { edition: e } = mergeGlossary(edition(), answer, [], '2026-11-21');
+  assert.deepEqual(e.lead_story.terms, ['h200', 'bis', 's-1']);
+});
+
+test('a known term written with a space or dash before a long number reuses its entry', () => {
+  const known = [{ term_id: 'h200', term: 'H200', explain: 'Znane.', first_date: '2026-11-20' }];
+  const answer = { stories: [{ idx: 0, terms: [{ term: 'H 200', explain: 'Nowe.' }, { term: 'H-200', explain: 'Nowe.' }] }] };
+  const { edition: e, newRows } = mergeGlossary(edition(), answer, known, '2026-11-21');
+  assert.deepEqual(e.lead_story.terms, ['h200']);
+  assert.deepEqual(newRows, []);
+});
+
+test('short codes stay distinct and an exact match always wins', () => {
+  const known = [
+    { term_id: 'o-1', term: 'O-1', explain: 'Wiza.', first_date: '2026-11-20' },
+    { term_id: 's1', term: 'S1', explain: 'A.', first_date: '2026-11-20' },
+    { term_id: 's-1', term: 'S-1', explain: 'B.', first_date: '2026-11-20' },
+  ];
+  const answer = { stories: [{ idx: 0, terms: [{ term: 'o1', explain: 'Model OpenAI.' }, { term: 'S1', explain: '' }, { term: 'S-1', explain: '' }] }] };
+  const { edition: e, newRows } = mergeGlossary(edition(), answer, known, '2026-11-21');
+  assert.deepEqual(e.lead_story.terms, ['o1', 's1', 's-1']);
+  assert.deepEqual(newRows.map((r) => r.term_id), ['o1']);
+});
+
+test('the prompt skips empty lede and body parts', () => {
+  const e = { lead_story: { title: 'Sam tytuł', lede: '', body: '' }, stories: [] };
+  assert.ok(glossaryPrompt(e, []).includes('[0] Sam tytuł\n'));
+});

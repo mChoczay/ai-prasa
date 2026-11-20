@@ -19,7 +19,7 @@ function _oneLine(text, max) {
 
 function glossaryPrompt(edition, knownTerms, feedback = '') {
   const stories = _glossarySlots(edition)
-    .map((s, idx) => (s ? `[${idx}] ${_oneLine(s.title, 200)} — ${_oneLine(s.lede, 300)} — ${_oneLine(s.body, GLOSSARY_BODY_CHARS)}` : null))
+    .map((s, idx) => (s ? `[${idx}] ${[_oneLine(s.title, 200), _oneLine(s.lede, 300), _oneLine(s.body, GLOSSARY_BODY_CHARS)].filter(Boolean).join(' — ')}` : null))
     .filter(Boolean)
     .join('\n');
   const known = (knownTerms || []).map((r) => r && r.term).filter(Boolean);
@@ -36,6 +36,10 @@ function mergeGlossary(edition, answer, knownRows, date) {
   for (const r of knownRows || []) {
     if (r && r.term_id && r.term && r.explain) byId.set(String(r.term_id), { id: String(r.term_id), term: String(r.term), explain: String(r.explain) });
   }
+  // "H 200" and "H200" are the same term: only a dash before a number of two or more digits is dropped,
+  // so short codes stay apart (o1 vs O-1, S1 vs S-1). An exact id always wins.
+  const compact = (id) => id.replace(/([a-z])-(?=\d{2})/g, '$1');
+  const byCompact = new Map([...byId.keys()].map((id) => [compact(id), id]));
   const newRows = [];
   const used = new Set();
   const slots = _glossarySlots(e);
@@ -44,17 +48,19 @@ function mergeGlossary(edition, answer, knownRows, date) {
     const idx = entry && Number.isInteger(entry.idx) ? entry.idx : -1;
     const story = slots[idx];
     if (!story || !Array.isArray(entry.terms)) continue;
-    const ids = [];
+    const ids = Array.isArray(story.terms) ? story.terms : [];
     for (const t of entry.terms) {
       if (ids.length >= GLOSSARY_PER_STORY) break;
       const term = String((t && t.term) || '').trim();
-      const id = entityId(term);
+      const raw = entityId(term);
+      const id = byId.has(raw) ? raw : byCompact.get(compact(raw)) || raw;
       if (!term || !id || ids.includes(id)) continue;
       if (!used.has(id) && used.size >= GLOSSARY_PER_EDITION) continue;
       if (!byId.has(id)) {
         const explain = String((t && t.explain) || '').trim().slice(0, GLOSSARY_EXPLAIN_MAX);
         if (!explain) continue;
         byId.set(id, { id, term, explain });
+        byCompact.set(compact(id), id);
         newRows.push({ term_id: id, term, explain, first_date: date });
       }
       used.add(id);

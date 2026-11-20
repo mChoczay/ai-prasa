@@ -4,8 +4,9 @@ import { visitRanges, visitSummary } from '../n8n/lib/visits.js';
 
 const span = (r) => [r.kind, r.start, r.end];
 
+// GoatCounter counts the end hour itself, so a range ends at the last hour of Sunday (or of the month).
 test('a Monday edition asks for the past Warsaw week', () => {
-  assert.deepEqual(visitRanges('2026-11-23').map(span), [['week', '2026-11-15T23:00:00Z', '2026-11-22T23:00:00Z']]);
+  assert.deepEqual(visitRanges('2026-11-23').map(span), [['week', '2026-11-15T23:00:00Z', '2026-11-22T22:00:00Z']]);
 });
 
 test('other days ask for nothing', () => {
@@ -14,11 +15,11 @@ test('other days ask for nothing', () => {
 });
 
 test('a week across the autumn clock change starts in summer time and ends in winter time', () => {
-  assert.deepEqual(visitRanges('2026-10-26').map(span), [['week', '2026-10-18T22:00:00Z', '2026-10-25T23:00:00Z']]);
+  assert.deepEqual(visitRanges('2026-10-26').map(span), [['week', '2026-10-18T22:00:00Z', '2026-10-25T22:00:00Z']]);
 });
 
 test('the first of the month asks for the previous Warsaw month', () => {
-  assert.deepEqual(visitRanges('2026-12-01').map(span), [['month', '2026-10-31T23:00:00Z', '2026-11-30T23:00:00Z']]);
+  assert.deepEqual(visitRanges('2026-12-01').map(span), [['month', '2026-10-31T23:00:00Z', '2026-11-30T22:00:00Z']]);
 });
 
 test('a Monday that is also the first asks for both', () => {
@@ -51,4 +52,11 @@ test('a failed answer leaves its part out, and nothing left means null', () => {
   const both = visitSummary(visitRanges('2027-02-01'), [null, { total: 4 }]);
   assert.deepEqual(both, { month: { year: 2027, month: 1, total: 4 } });
   assert.equal(visitSummary([], []), null);
+});
+
+test('the first of February 2027 is a Monday: exact week and month ranges', () => {
+  assert.deepEqual(visitRanges('2027-02-01').map(span), [
+    ['week', '2027-01-24T23:00:00Z', '2027-01-31T22:00:00Z'],
+    ['month', '2026-12-31T23:00:00Z', '2027-01-31T22:00:00Z'],
+  ]);
 });

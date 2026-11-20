@@ -119,3 +119,20 @@ test('the reader with ratings on still escapes story data', () => {
   const html = renderReader(e, profiles, 1, { feedback: true, ratings: { 1: '"><script>' } });
   assert.ok(!html.includes('<script>'));
 });
+
+test('the reader bar has a short back link, the page counter and a progress line', () => {
+  const e = real();
+  const total = 1 + e.stories.length;
+  const html = renderReader(e, profiles, 5);
+  assert.match(html, /<a class="back" href="#\/2026-11-19">‹ 19 lis<\/a>/);
+  assert.ok(html.includes(`<span class="count">5 / ${total}</span>`));
+  assert.ok(html.includes('class="progress"'));
+  assert.ok(!html.includes('pierwsza strona'));
+  assert.ok(!html.includes('page-meta'));
+});
+
+test('reader pages keep a gap under the progress line when they do not open with a picture', () => {
+  const css = readFileSync(new URL('../site/styles.css', import.meta.url), 'utf8');
+  assert.match(css, /\.page-inner\s*\{[^}]*padding:\s*14px 16px 32px/);
+  assert.match(css, /\.page \.img-hero:first-child\s*\{[^}]*margin-top:\s*-14px/);
+});

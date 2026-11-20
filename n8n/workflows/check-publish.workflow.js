@@ -23,7 +23,7 @@ const testPayload = node({
       jsCode:
         "const MODE = 'publish';\n" +
         "const DATE = '2099-01-01';\n" +
-        'const sample = ' + JSONTEXT('site/data/2026-11-18.json') + ';\n' +
+        'const sample = ' + JSONTEXT('tests/fixtures/edition-2026-11-18.json') + ';\n' +
         "if (MODE === 'remove') return [{ json: { date: DATE, run_id: 'test-publish', remove_date: DATE, no_mail: true } }];\n" +
         "return [{ json: { date: DATE, run_id: 'test-publish', edition: { ...sample, date: DATE }, history: { topics: [], tags: [] }, no_mail: false } }];\n",
     },

@@ -6,7 +6,7 @@ import { imageFigure } from '../site/js/render.js';
 
 const load = (path) => JSON.parse(readFileSync(new URL(path, import.meta.url), 'utf8'));
 const real = () => load('./fixtures/edition-2026-11-19.json');
-const sample = () => load('../site/data/2026-11-18.json');
+const sample = () => load('./fixtures/edition-2026-11-18.json');
 const count = (html, needle) => html.split(needle).length - 1;
 
 test('front page links the lead and every story to its reader page', () => {
@@ -99,4 +99,25 @@ test('front page shows a supplement card that links to its reader page', () => {
   const html = renderFront(e, {});
   assert.ok(html.includes(`href="#/2026-11-19/${e.stories.length + 2}"`));
   assert.ok(html.includes('Tydzień w AI: Google prowadzi'));
+});
+
+test('the masthead carries the navigation with the edition marked as current', () => {
+  const html = renderFront(real(), {});
+  assert.ok(html.includes('class="mast-nav"'));
+  assert.match(html, /<a href="#\/"[^>]*aria-current="page"[^>]*>Wydanie/);
+  assert.ok(html.includes('href="#/archiwum"'));
+  assert.match(html, /class="dateline"/);
+});
+
+test('the page has no separate top bar any more', () => {
+  const index = readFileSync(new URL('../site/index.html', import.meta.url), 'utf8');
+  assert.doesNotMatch(index, /topbar/);
+});
+
+test('the company card has a close cross at the top instead of a button at the bottom', () => {
+  const index = readFileSync(new URL('../site/index.html', import.meta.url), 'utf8');
+  const dialog = index.slice(index.indexOf('<dialog id="profile-dialog"'), index.indexOf('</dialog>'));
+  assert.ok(dialog.includes('<button type="button" class="sheet-close" aria-label="Zamknij">×</button>'));
+  assert.ok(dialog.indexOf('sheet-close') < dialog.indexOf('id="profile-body"'));
+  assert.ok(!index.includes('method="dialog"'));
 });

@@ -16,6 +16,7 @@ import {
   NO_DATA,
   DISCLAIMER,
   CREDITS,
+  mastheadNav,
 } from './render.js';
 import { firstSentence, marketMood, marketTiles, rankingChanges, rankingNotes, readerPages, minutesLabel } from './shape.js';
 
@@ -125,8 +126,8 @@ export function renderFront(edition, profilesById) {
   const count = (e.lead_story ? 1 : 0) + stories.length;
   const list = stories.map((s, i) => storyRow(s, e.date, i + 2)).join('');
   return `<article class="front">
-<header class="masthead"><h1>Poranna prasa AI</h1>
-<p class="meta">${escapeHtml(longDate(e.date))} · ${topicsLabel(count)} · ${escapeHtml(minutesLabel(e))}${e.quiet_day ? ' · spokojny dzień' : ''}</p></header>
+<header class="masthead"><h1>Poranna prasa AI</h1>${mastheadNav('edition')}
+<p class="dateline">${escapeHtml(longDate(e.date))} · ${topicsLabel(count)} · ${escapeHtml(minutesLabel(e))}${e.quiet_day ? ' · spokojny dzień' : ''}</p></header>
 ${e.greeting ? `<p class="greeting">${escapeHtml(e.greeting)}</p>` : ''}
 <div class="columns">
 <div class="main">${e.lead_story ? leadCard(e.lead_story, e.date) : ''}

@@ -43,14 +43,8 @@ body {
 a { color: var(--accent); }
 main { max-width: 1100px; margin: 0 auto; padding: 0 16px 48px; }
 
-.topbar {
-  display: flex; gap: 16px; justify-content: center;
-  padding: 10px 16px; border-bottom: 1px solid var(--rule);
-  font: 14px/1.4 var(--sans);
-}
-.topbar a { text-decoration: none; }
 
-.masthead { text-align: center; padding: 24px 0 8px; border-bottom: 3px double var(--rule); }
+.masthead { text-align: center; padding: 24px 0 8px; }
 .masthead h1 { margin: 0; font-size: clamp(30px, 6vw, 48px); font-weight: 700; letter-spacing: 0.01em; }
 .meta { font: 13px/1.5 var(--sans); color: var(--ink-soft); margin: 4px 0; }
 /* front page and reader styles: see the sections at the end */
@@ -94,14 +88,9 @@ th:first-child, td:first-child { text-align: left; }
 .closing { font-style: italic; margin-top: 24px; }
 .credits { margin-top: 32px; padding-top: 12px; border-top: 1px solid var(--rule); font: 12px/1.6 var(--sans); color: var(--ink-soft); }
 
-.archive ul { list-style: none; padding: 0; }
-.archive li { padding: 8px 0; border-bottom: 1px solid var(--rule); }
-.filters { display: flex; flex-wrap: wrap; gap: 10px; font: 14px/1.6 var(--sans); }
-.filters .active { font-weight: 700; }
 
 dialog { max-width: min(520px, calc(100vw - 32px)); border: 1px solid var(--rule); border-radius: 12px; background: var(--paper); color: var(--ink); }
 dialog::backdrop { background: rgba(0, 0, 0, 0.4); }
-dialog .close { font: 14px var(--sans); }
 .loading, .error { font-family: var(--sans); text-align: center; padding: 40px 0; }
 
 /* ---------- Front page ---------- */
@@ -171,16 +160,17 @@ details > summary { cursor: pointer; }
 .profile-card .img-hero img { aspect-ratio: 16 / 9; }
 
 /* ---------- Reader ---------- */
-body.reading .topbar { display: none; }
 body.reading main { max-width: none; padding: 0; }
 .reader { position: relative; }
-.reader-bar { height: 44px; display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 0 16px; border-bottom: 1px solid var(--rule); font: 13px/1.4 var(--sans); color: var(--ink-soft); }
+.reader-bar { height: 44px; display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 0 16px; font: 13px/1.4 var(--sans); color: var(--ink-soft); }
 .reader-bar a { text-decoration: none; }
 .pages { display: flex; overflow-x: auto; overflow-y: hidden; scroll-snap-type: x mandatory; scrollbar-width: none; overscroll-behavior-x: contain; }
 .pages::-webkit-scrollbar { display: none; }
-.page { flex: 0 0 100%; scroll-snap-align: start; scroll-snap-stop: always; height: calc(100dvh - 44px); overflow-y: auto; }
-.page-inner { max-width: 680px; margin: 0 auto; padding: 0 16px 32px; }
+.page { flex: 0 0 100%; scroll-snap-align: start; scroll-snap-stop: always; height: calc(100dvh - 46px); overflow-y: auto; }
+.page-inner { max-width: 680px; margin: 0 auto; padding: 14px 16px 32px; }
 .page .img-hero { margin: 0 -16px 12px; }
+/* A page that opens with its picture keeps the picture flush under the progress line. */
+.page .img-hero:first-child { margin-top: -14px; }
 .page .img-hero img { border-radius: 0; }
 .page .img-hero figcaption { padding: 0 16px; }
 @media (min-width: 712px) {
@@ -188,7 +178,6 @@ body.reading main { max-width: none; padding: 0; }
   .page .img-hero img { border-radius: 10px; }
   .page .img-hero figcaption { padding: 0; }
 }
-.page-meta { font: 12px/1.4 var(--sans); color: var(--ink-soft); text-align: right; margin: 10px 0 4px; }
 .page h2 { font-size: clamp(24px, 6vw, 32px); line-height: 1.2; margin: 6px 0 8px; }
 .page .lede { font-size: 18px; line-height: 1.5; color: var(--ink-soft); }
 .page .body p:first-child::first-letter { float: left; font-size: 3.2em; line-height: 0.85; padding: 4px 6px 0 0; font-weight: 700; }
@@ -226,3 +215,45 @@ body.reading main { max-width: none; padding: 0; }
 .notice { margin: 8px auto; max-width: 680px; padding: 0 16px; font: 13px/1.5 var(--sans); color: var(--ink-soft); }
 /* Typing a note: the strip must not scroll sideways under the finger. */
 .reader.typing .pages { overflow-x: hidden; }
+
+/* Navigation in the masthead: small caps under the paper's name, the current view underlined in the accent. */
+.mast-nav { display: flex; justify-content: center; align-items: baseline; gap: 10px; margin: 10px 0 12px; font: 11px/1.4 var(--sans); letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-soft); }
+.mast-nav a { color: var(--ink-soft); text-decoration: none; padding-bottom: 2px; }
+.mast-nav a[aria-current="page"] { color: var(--ink); border-bottom: 1.5px solid var(--accent); }
+.dateline { margin: 0; padding: 4px 0; border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); font: 12px/1.5 var(--sans); color: var(--ink-soft); }
+
+/* Reader bar: short back link, page counter and a thin progress line under it. */
+.reader-bar .back, .reader-bar .count { color: var(--ink-soft); text-decoration: none; font: 13px/1.4 var(--sans); letter-spacing: 0.04em; }
+.progress { height: 2px; background: var(--rule); }
+.progress span { display: block; height: 2px; width: 0; background: var(--accent); transition: width 150ms ease-out; }
+@media (prefers-reduced-motion: reduce) { .progress span { transition: none; } }
+
+/* Archive: category chips scrolling sideways, month groups, a big day number beside each lead title. */
+.archive .masthead { padding-bottom: 4px; }
+.chips { display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; padding: 8px 0 12px; }
+.chips::-webkit-scrollbar { display: none; }
+.chip { flex: 0 0 auto; font: 12px/1.4 var(--sans); padding: 4px 10px; border: 1px solid var(--rule); border-radius: 999px; color: var(--ink-soft); text-decoration: none; }
+.chip[aria-current] { background: var(--ink); border-color: var(--ink); color: var(--paper); }
+.archive .month { margin: 18px 0 4px; font: 11px/1.4 var(--sans); letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-soft); }
+.archive .days { list-style: none; padding: 0; margin: 0; }
+.archive .days a { display: flex; gap: 12px; padding: 10px 0; border-top: 1px solid var(--rule); color: var(--ink); text-decoration: none; }
+.archive .day { display: flex; flex-direction: column; align-items: center; min-width: 36px; }
+.archive .day b { font: 22px/1 var(--serif); font-weight: 400; }
+.archive .day small { font: 11px/1.4 var(--sans); color: var(--ink-soft); }
+.archive .what { display: flex; flex-direction: column; gap: 3px; }
+.archive .title { font: 15px/1.35 var(--serif); }
+.archive .meta { font: 12px/1.4 var(--sans); color: var(--ink-soft); }
+
+/* Company card: no padding on the box (a click on it is a click on the backdrop), a sticky round cross,
+   and on phones a sheet that slides up from the bottom. */
+dialog { padding: 0; }
+#profile-body { padding: 0 18px 18px; }
+.sheet-close { position: sticky; top: 10px; float: right; z-index: 1; margin: 10px 10px 0 0; width: 32px; height: 32px; border: 0; border-radius: 50%; background: var(--card); color: var(--ink-soft); font: 20px/32px var(--sans); text-align: center; cursor: pointer; padding: 0; }
+.sheet-close:hover, .sheet-close:focus-visible { color: var(--ink); }
+#profile-body .profile-card { padding-top: 14px; }
+@media (max-width: 600px) {
+  dialog { width: 100%; max-width: 100%; margin: auto 0 0; max-height: 85dvh; border-radius: 16px 16px 0 0; border-bottom: 0; }
+  dialog[open] { animation: sheet-up 180ms ease-out; }
+}
+@keyframes sheet-up { from { transform: translateY(24px); opacity: 0.6; } to { transform: none; opacity: 1; } }
+@media (prefers-reduced-motion: reduce) { dialog[open] { animation: none; } }

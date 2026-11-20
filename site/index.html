@@ -11,14 +11,10 @@
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <nav class="topbar">
-    <a href="#/">Dzisiejsze wydanie</a>
-    <a href="#/archiwum">Archiwum</a>
-  </nav>
   <main id="app"><p class="loading">Wczytuję wydanie…</p></main>
   <dialog id="profile-dialog">
+    <button type="button" class="sheet-close" aria-label="Zamknij">×</button>
     <div id="profile-body"></div>
-    <form method="dialog"><button class="close">Zamknij</button></form>
   </dialog>
   <script type="module" src="js/app.js"></script>
 </body>

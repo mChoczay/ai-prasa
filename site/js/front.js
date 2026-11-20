@@ -18,9 +18,16 @@ import {
   CREDITS,
   mastheadNav,
 } from './render.js';
-import { firstSentence, marketMood, marketTiles, rankingAreas, pickArea, rankingNotes, readerPages, minutesLabel } from './shape.js';
+import { firstSentence, marketMood, marketTiles, rankingAreas, pickArea, rankingNotes, readerPages, minutesLabel, dateParts } from './shape.js';
 
 const BOARD_LABELS = Object.fromEntries(BOARDS);
+const PERIOD_LABELS = Object.freeze({ '1d': '1 dzień', '7d': '7 dni' });
+
+// "czw 19 lis" for a trading day; anything else as given.
+function tradingDay(dateStr) {
+  const p = dateParts(dateStr);
+  return p ? `${p.weekday} ${p.day} ${p.monthShort}` : String(dateStr || '');
+}
 
 function topicsLabel(n) {
   if (n === 1) return '1 temat';
@@ -47,7 +54,7 @@ function tile(t) {
   const c = pct(t.change);
   const type = escapeHtml(t.why_type);
   return `<details class="tile"><summary><span class="t-head"><span class="t-name">${escapeHtml(t.name)}</span><span class="t-chg ${c.cls}">${c.text}</span></span>
-<span class="t-per">${escapeHtml(t.period)}</span><span class="t-why"><span class="badge why-${type}">${escapeHtml(WHY_LABELS[t.why_type] || t.why_type)}</span> ${escapeHtml(t.why_short)}</span></summary>
+<span class="t-per">${escapeHtml(PERIOD_LABELS[t.period] || t.period)}</span><span class="t-why"><span class="badge why-${type}">${escapeHtml(WHY_LABELS[t.why_type] || t.why_type)}</span> ${escapeHtml(t.why_short)}</span></summary>
 <p>${escapeHtml(t.why)}</p>${sourcesList(t.sources)}</details>`;
 }
 
@@ -55,7 +62,7 @@ function marketSection(e) {
   const market = e.market || {};
   const tiles = marketTiles(e).map(tile).join('');
   const asOf = asOfDate(market);
-  return `<section class="market"><h3>Rynek${asOf ? ` <span class="as-of">notowania z ${escapeHtml(asOf)}</span>` : ''}</h3>
+  return `<section class="market"><h3>Rynek${asOf ? ` <span class="as-of">notowania z ${escapeHtml(tradingDay(asOf))}</span>` : ''}</h3>
 ${marketMood(market) ? `<p class="mood">${escapeHtml(marketMood(market))}</p>` : ''}
 ${tiles ? `<div class="tiles">${tiles}</div>` : ''}
 <details class="basket"><summary>cały koszyk</summary>${marketTable(market)}${market.commentary ? `<p>${escapeHtml(market.commentary)}</p>` : ''}</details>
@@ -109,10 +116,25 @@ export function selectArea(section, key) {
   return true;
 }
 
-function followUps(items, profilesById) {
+// "wczoraj" for the day before the edition, else "19 lis".
+function storyDay(storyDate, editionDate) {
+  const s = dateParts(storyDate);
+  if (!s) return String(storyDate || '');
+  const e = dateParts(editionDate);
+  if (e && Date.UTC(e.year, e.month - 1, e.day) - Date.UTC(s.year, s.month - 1, s.day) === 86_400_000) return 'wczoraj';
+  return `${s.day} ${s.monthShort}`;
+}
+
+function followUps(items, profilesById, editionDate) {
   if (!items || !items.length) return '';
+  const seen = new Set();
   const lis = items
-    .map((f) => `<li>${entityChip(f.entity_id, profilesById)} ${escapeHtml(f.move)}: pamiętasz „${escapeHtml(f.related_story)}” z ${escapeHtml(f.story_date)}?</li>`)
+    .filter((f) => f && !seen.has(f.entity_id) && seen.add(f.entity_id))
+    .slice(0, 3)
+    .map((f) => {
+      const day = storyDay(f.story_date, editionDate);
+      return `<li>${entityChip(f.entity_id, profilesById)} ${escapeHtml(f.move)}: pamiętasz „${escapeHtml(f.related_story)}” ${day === 'wczoraj' ? 'z wczoraj' : `z ${escapeHtml(day)}`}?</li>`;
+    })
     .join('');
   return `<section class="follow-ups"><h3>Sprawdzamy</h3><ul>${lis}</ul></section>`;
 }
@@ -159,7 +181,7 @@ ${e.greeting ? `<p class="greeting">${escapeHtml(e.greeting)}</p>` : ''}
 <div class="main">${e.lead_story ? leadCard(e.lead_story, e.date) : ''}
 ${list ? `<ol class="story-list">${list}</ol>` : ''}
 ${supplementCards(e)}</div>
-<aside class="side">${marketSection(e)}${followUps(e.follow_ups, profilesById)}${rankingsSection(e, area)}${rumors(e.rumors)}${poznaj(e.spotlight, profilesById)}</aside>
+<aside class="side">${marketSection(e)}${followUps(e.follow_ups, profilesById, e.date)}${rankingsSection(e, area)}${rumors(e.rumors)}${poznaj(e.spotlight, profilesById)}</aside>
 </div>
 ${e.closing ? `<p class="closing">${escapeHtml(e.closing)}</p>` : ''}
 ${CREDITS}

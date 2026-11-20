@@ -179,3 +179,30 @@ test('old editions without areas keep the notes visible and drop the moves list'
     assert.ok(at > -1 && at < html.indexOf('<details class="full">'), e.date);
   }
 });
+
+test('follow-ups show one line per company, at most three, with a readable date', () => {
+  const e = real();
+  e.follow_ups = [
+    { entity_id: 'googl', move: '−3,5%', related_story: 'Genie 4', story_date: '2026-11-18' },
+    { entity_id: 'googl', move: '−8,7%', related_story: 'Genie 4', story_date: '2026-11-18' },
+    { entity_id: 'nvda', move: '−3,3%', related_story: 'Intel 18A', story_date: '2026-11-15' },
+    { entity_id: 'amzn', move: '−3,9%', related_story: 'Intel 18A', story_date: '2026-11-18' },
+    { entity_id: 'meta', move: '−3,3%', related_story: 'Muse', story_date: '2026-11-18' },
+  ];
+  const html = renderFront(e, {});
+  const block = html.slice(html.indexOf('class="follow-ups"'), html.indexOf('</section>', html.indexOf('class="follow-ups"')));
+  assert.equal(count(block, '<li>'), 3);
+  assert.equal(count(block, 'Genie 4'), 1);
+  assert.ok(block.includes('z wczoraj') || block.includes('wczoraj'));
+  assert.ok(block.includes('15 lis'));
+  assert.ok(!block.includes('2026-11-'));
+});
+
+test('market dates and tile periods are written for people', () => {
+  const html = renderFront(real(), {});
+  const market = html.slice(html.indexOf('class="market"'), html.indexOf('</section>', html.indexOf('class="market"')));
+  assert.ok(!/notowania z [0-9]{4}-/.test(market), "no ISO date in the market header");
+  assert.match(market, /notowania z (pn|wt|śr|czw|pt|sob|ndz) [0-9]{1,2} [a-zźż]{3}/);
+  assert.ok(market.includes('7 dni'));
+  assert.ok(!market.includes('>7d<'));
+});

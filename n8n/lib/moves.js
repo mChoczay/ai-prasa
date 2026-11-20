@@ -76,7 +76,7 @@ function diffLeaderboard(prev, curr, { board, minShift = 2, topN = 20 }) {
   return moves;
 }
 
-function findFollowUps({ impactTags, moves, today, windowDays = 5 }) {
+function findFollowUps({ impactTags, moves, today, windowDays = 5, maxItems = 3 }) {
   const out = [];
   for (const move of moves || []) {
     const tags = (impactTags || [])
@@ -90,7 +90,11 @@ function findFollowUps({ impactTags, moves, today, windowDays = 5 }) {
       out.push({ entity_id: move.entity_id, move: String(move.change), related_story: tags[0].story_title, story_date: tags[0].date });
     }
   }
-  return out;
+  // One line per company (its biggest move), biggest first; ranking moves ("+2 (lmarena)") count as 0.
+  const size = (f) => Math.abs(Number(f.move)) || 0;
+  const best = new Map();
+  for (const f of out) if (!best.has(f.entity_id) || size(f) > size(best.get(f.entity_id))) best.set(f.entity_id, f);
+  return [...best.values()].sort((a, b) => size(b) - size(a)).slice(0, maxItems);
 }
 
 export { computeChanges, findBigMoves, diffLeaderboard, findFollowUps };

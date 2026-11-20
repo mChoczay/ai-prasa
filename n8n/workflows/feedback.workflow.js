@@ -31,7 +31,7 @@ const readSettings = node({
     parameters: {
       resource: 'row',
       operation: 'get',
-      dataTableId: { __rl: true, mode: 'id', value: 'FEEDBACK_SETTINGS_TABLE_ID', cachedResultName: 'feedback_settings' },
+      dataTableId: { __rl: true, mode: 'id', value: 'FwyBhGcpzlM0z4FO', cachedResultName: 'feedback_settings' },
       returnAll: false,
       limit: 1,
     },
@@ -80,7 +80,7 @@ const saveFeedback = node({
     parameters: {
       resource: 'row',
       operation: 'insert',
-      dataTableId: { __rl: true, mode: 'id', value: 'READER_FEEDBACK_TABLE_ID', cachedResultName: 'reader_feedback' },
+      dataTableId: { __rl: true, mode: 'id', value: 'sae3sA0e2UW0STfb', cachedResultName: 'reader_feedback' },
       columns: {
         mappingMode: 'defineBelow',
         value: {

@@ -179,7 +179,7 @@ const readFeedback = node({
     parameters: {
       resource: 'row',
       operation: 'get',
-      dataTableId: { __rl: true, mode: 'id', value: 'READER_FEEDBACK_TABLE_ID', cachedResultName: 'reader_feedback' },
+      dataTableId: { __rl: true, mode: 'id', value: 'sae3sA0e2UW0STfb', cachedResultName: 'reader_feedback' },
       matchType: 'allConditions',
       filters: { conditions: [{ keyName: 'createdAt', condition: 'gte', keyValue: expr("{{ $today.minus(35, 'days').toISO() }}") }] },
       returnAll: true,

@@ -211,7 +211,7 @@ const readFeedbackSettings = node({
     parameters: {
       resource: 'row',
       operation: 'get',
-      dataTableId: { __rl: true, mode: 'id', value: 'FEEDBACK_SETTINGS_TABLE_ID', cachedResultName: 'feedback_settings' },
+      dataTableId: { __rl: true, mode: 'id', value: 'FwyBhGcpzlM0z4FO', cachedResultName: 'feedback_settings' },
       returnAll: false,
       limit: 1,
     },

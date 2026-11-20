@@ -439,8 +439,12 @@ const glossaryDone = node({
       jsCode:
         INLINE('n8n/lib/news.js', 'n8n/lib/glossary.js') +
         "const finished = $('Finish edition').first().json;\n" +
-        "let known = [];\n" +
-        "try { known = $('Read glossary').all().map((i) => i.json).filter((r) => r && r.term_id); } catch (e) { known = []; }\n" +
+        "let read = [];\n" +
+        "let readFailed = false;\n" +
+        "try { read = $('Read glossary').all().map((i) => i.json || {}); } catch (e) { readFailed = true; }\n" +
+        "if (read.some((r) => r.error || (Object.keys(r).length > 0 && !r.term_id))) readFailed = true;\n" +
+        "if (readFailed) return [{ json: { ...finished, glossary_json: null, glossary_rows: [] } }];\n" +
+        "const known = read.filter((r) => r.term_id);\n" +
         "let answer = null;\n" +
         "try { const r = $('Glossary with Haiku').first().json; answer = r && r.ok ? r.data : null; } catch (e) { answer = null; }\n" +
         "let merged;\n" +
@@ -474,14 +478,15 @@ const saveGlossary = node({
     onError: 'continueRegularOutput',
     parameters: {
       resource: 'row',
-      operation: 'insert',
+      operation: 'upsert',
       dataTableId: { __rl: true, mode: 'id', value: T_GLOSSARY, cachedResultName: 'glossary_terms' },
+      matchType: 'allConditions',
+      filters: { conditions: [{ keyName: 'term_id', condition: 'eq', keyValue: expr('{{ $json.term_id }}') }] },
       columns: {
         mappingMode: 'defineBelow',
         value: { term_id: expr('{{ $json.term_id }}'), term: expr('{{ $json.term }}'), explain: expr('{{ $json.explain }}'), first_date: expr('{{ $json.first_date }}') },
         schema: [{ id: 'term_id', displayName: 'term_id', required: false, defaultMatch: false, display: true, type: 'string', canBeUsedToMatch: true }, { id: 'term', displayName: 'term', required: false, defaultMatch: false, display: true, type: 'string', canBeUsedToMatch: true }, { id: 'explain', displayName: 'explain', required: false, defaultMatch: false, display: true, type: 'string', canBeUsedToMatch: true }, { id: 'first_date', displayName: 'first_date', required: false, defaultMatch: false, display: true, type: 'string', canBeUsedToMatch: true }],
       },
-      options: { optimizeBulk: true },
     },
   },
   output: [{ id: 1 }],

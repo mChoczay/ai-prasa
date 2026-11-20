@@ -1,5 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
 import { codeNodeSource, runCodeNode } from './helpers/code-node.js';
 
 const WF = 'n8n/workflows/profiles.workflow.js';
@@ -141,4 +142,32 @@ test('a failed glossary call passes the edition on unchanged with the known glos
     assert.deepEqual(json.glossary_rows, []);
     assert.deepEqual(json.glossary_json.terms.map((t) => t.id), ['lsn']);
   }
+});
+
+test('a failed glossary read leaves glossary.json alone and saves nothing', () => {
+  const finish = finishJson();
+  for (const read of [[{ error: 'table unavailable' }], [{ json: 'x', statusCode: 500 }]]) {
+    const [{ json }] = runCodeNode(codeNodeSource(WF, 'Glossary done'), {
+      nodes: {
+        'Profiles request': [payload],
+        'Finish edition': [finish],
+        'Read glossary': read,
+        'Glossary with Haiku': [{ ok: true, data: { stories: [{ idx: 0, terms: [{ term: 'H200', explain: 'Układ.' }] }] } }],
+      },
+    });
+    assert.deepEqual(json.edition, finish.edition);
+    assert.equal(json.glossary_json, null);
+    assert.deepEqual(json.glossary_rows, []);
+  }
+  const [{ json: empty }] = runCodeNode(codeNodeSource(WF, 'Glossary done'), {
+    nodes: { 'Profiles request': [payload], 'Finish edition': [finish], 'Read glossary': [{}], 'Glossary with Haiku': [{ ok: true, data: { stories: [{ idx: 0, terms: [{ term: 'H200', explain: 'Układ.' }] }] } }] },
+  });
+  assert.deepEqual(empty.glossary_rows.map((r) => r.term_id), ['h200'], 'an empty table is not a failed read');
+});
+
+test('saving glossary terms updates an existing term instead of adding a duplicate', () => {
+  const src = readFileSync(new URL('../n8n/workflows/profiles.workflow.js', import.meta.url), 'utf8');
+  const block = src.slice(src.indexOf("name: 'Save glossary'"), src.indexOf('const relayCheck'));
+  assert.match(block, /operation: 'upsert'/);
+  assert.match(block, /keyName: 'term_id'/);
 });

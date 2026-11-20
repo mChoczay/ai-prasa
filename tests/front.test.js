@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { renderFront } from '../site/js/front.js';
-import { imageFigure } from '../site/js/render.js';
+import { imageFigure, escapeHtml as escapeText } from '../site/js/render.js';
 
 const load = (path) => JSON.parse(readFileSync(new URL(path, import.meta.url), 'utf8'));
 const real = () => load('./fixtures/edition-2026-11-19.json');
@@ -120,4 +120,62 @@ test('the company card has a close cross at the top instead of a button at the b
   assert.ok(dialog.includes('<button type="button" class="sheet-close" aria-label="Zamknij">×</button>'));
   assert.ok(dialog.indexOf('sheet-close') < dialog.indexOf('id="profile-body"'));
   assert.ok(!index.includes('method="dialog"'));
+});
+
+const areaRow = (rank, model, delta = null) => ({ rank, model, org: 'org' + rank, delta });
+function withAreas() {
+  const e = real();
+  e.rankings.notes = [{ board: 'aa', text: 'Notatka redakcji o AA.' }];
+  e.rankings.areas = [
+    { key: 'webdev', label: 'Programowanie', new_leader: false, rows: [areaRow(1, 'Fable'), areaRow(2, 'Opus', 2), areaRow(3, 'Sonnet', -1), areaRow(4, 'Newbie', 'new'), areaRow(5, 'Five'), areaRow(6, 'Six'), areaRow(7, 'Seven')] },
+    { key: 'polish', label: 'Po polsku', new_leader: true, rows: [areaRow(1, 'Argon'), areaRow(2, '<script>x</script>')] },
+  ];
+  return e;
+}
+const rankingsHtml = (html) => html.slice(html.indexOf('<section class="rankings">'), html.indexOf('</section>', html.indexOf('<section class="rankings">')));
+const areaList = (html, key) => {
+  const start = html.indexOf(`data-area="${key}"`, html.indexOf('class="area-list"'));
+  return html.slice(html.lastIndexOf('<ol', start), html.indexOf('</ol>', start));
+};
+
+test('rankings show area pills and the top five of the chosen area', () => {
+  const html = rankingsHtml(renderFront(withAreas(), {}));
+  assert.ok(html.includes('<h3>Rankingi</h3>'));
+  assert.equal(count(html, 'class="chip area-chip"'), 2);
+  assert.match(html, /<button type="button" class="chip area-chip" data-area="webdev" aria-pressed="true">Programowanie<\/button>/);
+  assert.match(html, /<button type="button" class="chip area-chip" data-area="polish" aria-pressed="false">Po polsku<\/button>/);
+  const web = areaList(html, 'webdev');
+  assert.ok(!web.includes(' hidden'));
+  assert.equal(count(web, '<li>'), 5);
+  assert.ok(web.includes('▲2') && web.includes('▼1') && web.includes('nowy'));
+  assert.ok(!web.includes('Six'));
+  const pl = areaList(html, 'polish');
+  assert.ok(pl.includes(' hidden'));
+  assert.ok(pl.includes('nowy lider'));
+  assert.ok(pl.includes('&lt;script&gt;') && !pl.includes('<script>'));
+  assert.ok(!html.includes('class="changes"'));
+  assert.match(html, /<details class="full"><summary>pełne rankingi<\/summary>[\s\S]*Notatka redakcji o AA\./);
+});
+
+test('rankings open the remembered area and ignore an unknown one', () => {
+  const pl = rankingsHtml(renderFront(withAreas(), {}, { area: 'polish' }));
+  assert.match(pl, /data-area="polish" aria-pressed="true"/);
+  assert.ok(areaList(pl, 'webdev').includes(' hidden'));
+  assert.ok(!areaList(pl, 'polish').includes(' hidden'));
+  const bad = rankingsHtml(renderFront(withAreas(), {}, { area: '"><img src=x>' }));
+  assert.match(bad, /data-area="webdev" aria-pressed="true"/);
+  assert.ok(!bad.includes('<img src=x>'));
+});
+
+test('old editions without areas keep the notes visible and drop the moves list', () => {
+  const empty = real();
+  empty.rankings.areas = [];
+  for (const e of [sample(), empty]) {
+    const html = rankingsHtml(renderFront(e, {}));
+    assert.ok(!html.includes('area-chip'), e.date);
+    assert.ok(!html.includes('class="changes"'), e.date);
+    const first = e.rankings.notes && e.rankings.notes.length ? e.rankings.notes[0].text : e.rankings.commentary.trim();
+    const at = html.indexOf(escapeText(first));
+    assert.ok(at > -1 && at < html.indexOf('<details class="full">'), e.date);
+  }
 });

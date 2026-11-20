@@ -152,8 +152,6 @@ details > summary { cursor: pointer; }
 .basket, .full { margin-top: 10px; font: 13px/1.5 var(--sans); }
 .basket > summary, .full > summary { color: var(--accent); }
 .note { margin: 4px 0; }
-.changes { list-style: none; padding: 0; }
-.changes li { padding: 4px 0; border-top: 1px dashed var(--rule); }
 .rumor { padding: 4px 0; font: 14px/1.5 var(--sans); }
 .poznaj { display: flex; gap: 10px; align-items: center; width: 100%; text-align: left; background: var(--paper); border: 1px solid var(--rule); border-radius: 10px; padding: 8px; margin-bottom: 6px; color: inherit; font: 13px/1.4 var(--sans); cursor: pointer; }
 .poznaj:hover, .poznaj:focus-visible { border-color: var(--accent); }
@@ -257,3 +255,13 @@ dialog { padding: 0; }
 }
 @keyframes sheet-up { from { transform: translateY(24px); opacity: 0.6; } to { transform: none; opacity: 1; } }
 @media (prefers-reduced-motion: reduce) { dialog[open] { animation: none; } }
+
+/* Rankings: area pills (buttons) and the chosen area's top five. */
+button.chip { background: none; cursor: pointer; }
+.chip[aria-pressed="true"] { background: var(--ink); border-color: var(--ink); color: var(--paper); }
+.area-list { margin: 0 0 8px; padding-left: 22px; font-family: var(--serif); font-size: 15px; }
+.area-list li { padding: 3px 0; }
+.area-list .org, .area-list .chg { font: 12px var(--sans); color: var(--ink-soft); }
+.area-list .chg.up { color: var(--up); }
+.area-list .chg.down { color: var(--down); }
+.area-list .new-leader { font: 11px var(--sans); color: var(--accent); }

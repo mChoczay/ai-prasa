@@ -18,7 +18,7 @@ import {
   CREDITS,
   mastheadNav,
 } from './render.js';
-import { firstSentence, marketMood, marketTiles, rankingChanges, rankingNotes, readerPages, minutesLabel } from './shape.js';
+import { firstSentence, marketMood, marketTiles, rankingAreas, pickArea, rankingNotes, readerPages, minutesLabel } from './shape.js';
 
 const BOARD_LABELS = Object.fromEntries(BOARDS);
 
@@ -62,25 +62,51 @@ ${tiles ? `<div class="tiles">${tiles}</div>` : ''}
 <p class="disclaimer">${DISCLAIMER}</p></section>`;
 }
 
-function changeText(c) {
-  if (c.delta === 'new') return `nowość, #${escapeHtml(c.rank)}`;
-  return c.delta > 0 ? `<span class="up">awans o ${c.delta}</span>, teraz #${escapeHtml(c.rank)}` : `<span class="down">spadek o ${Math.abs(c.delta)}</span>, teraz #${escapeHtml(c.rank)}`;
+function areaChange(delta) {
+  if (delta === 'new') return ' <span class="chg new">nowy</span>';
+  const d = Number(delta);
+  if (delta == null || !Number.isFinite(d) || d === 0) return '';
+  return d > 0 ? ` <span class="chg up">▲${d}</span>` : ` <span class="chg down">▼${-d}</span>`;
 }
 
-function rankingsSection(e) {
+function areaList(a, on) {
+  const rows = a.rows
+    .map((r, i) => `<li><span class="m">${escapeHtml(r.model)}</span> <span class="org">${escapeHtml(r.org)}</span>${areaChange(r.delta)}${i === 0 && a.new_leader ? ' <span class="new-leader">nowy lider</span>' : ''}</li>`)
+    .join('');
+  return `<ol class="area-list" data-area="${escapeHtml(a.key)}"${on ? '' : ' hidden'}>${rows}</ol>`;
+}
+
+function rankingsSection(e, area) {
   const notes = rankingNotes(e)
     .map((n) => `<p class="note">${n.board ? `<b>${escapeHtml(BOARD_LABELS[n.board] || n.board)}:</b> ` : ''}${escapeHtml(n.text)}</p>`)
     .join('');
-  const changes = rankingChanges(e)
-    .map((c) => {
-      const head = `<b>${escapeHtml(c.model)}</b> <span class="org">${escapeHtml(c.org)}</span> · ${escapeHtml(BOARD_LABELS[c.board])}: ${changeText(c)}`;
-      return c.why ? `<li><details><summary>${head}${c.why_short ? ` — ${escapeHtml(c.why_short)}` : ''}</summary><p>${escapeHtml(c.why)}</p></details></li>` : `<li>${head}</li>`;
-    })
-    .join('');
   const hasBoards = BOARDS.some(([key]) => Array.isArray((e.rankings || {})[key]) && e.rankings[key].length);
-  return `<section class="rankings"><h3>Rankingi · co się zmieniło</h3>
-${notes || (hasBoards ? '' : NO_DATA)}${changes ? `<ul class="changes">${changes}</ul>` : ''}
+  const areas = rankingAreas(e);
+  if (!areas.length) {
+    return `<section class="rankings"><h3>Rankingi</h3>
+${notes || (hasBoards ? '' : NO_DATA)}
 <details class="full"><summary>pełne rankingi</summary>${rankingBoards(e.rankings)}</details></section>`;
+  }
+  const chosen = pickArea(areas, area);
+  const chips = areas
+    .map((a) => `<button type="button" class="chip area-chip" data-area="${escapeHtml(a.key)}" aria-pressed="${a.key === chosen}">${escapeHtml(a.label)}</button>`)
+    .join('');
+  return `<section class="rankings"><h3>Rankingi</h3>
+<div class="chips" role="group" aria-label="Obszar">${chips}</div>
+${areas.map((a) => areaList(a, a.key === chosen)).join('')}
+<details class="full"><summary>pełne rankingi</summary>${notes}${rankingBoards(e.rankings)}</details></section>`;
+}
+
+// Browser and test helper: shows the chosen area's list and presses its pill; false for an unknown area.
+export function selectArea(section, key) {
+  if (!section) return false;
+  const chips = [...section.querySelectorAll('.area-chip')];
+  if (!chips.some((c) => c.dataset.area === key)) return false;
+  chips.forEach((c) => c.setAttribute('aria-pressed', String(c.dataset.area === key)));
+  section.querySelectorAll('.area-list').forEach((l) => {
+    l.hidden = l.dataset.area !== key;
+  });
+  return true;
 }
 
 function followUps(items, profilesById) {
@@ -120,7 +146,7 @@ function supplementCards(e) {
     .join('');
 }
 
-export function renderFront(edition, profilesById) {
+export function renderFront(edition, profilesById, { area = '' } = {}) {
   const e = edition;
   const stories = e.stories || [];
   const count = (e.lead_story ? 1 : 0) + stories.length;
@@ -133,7 +159,7 @@ ${e.greeting ? `<p class="greeting">${escapeHtml(e.greeting)}</p>` : ''}
 <div class="main">${e.lead_story ? leadCard(e.lead_story, e.date) : ''}
 ${list ? `<ol class="story-list">${list}</ol>` : ''}
 ${supplementCards(e)}</div>
-<aside class="side">${marketSection(e)}${followUps(e.follow_ups, profilesById)}${rankingsSection(e)}${rumors(e.rumors)}${poznaj(e.spotlight, profilesById)}</aside>
+<aside class="side">${marketSection(e)}${followUps(e.follow_ups, profilesById)}${rankingsSection(e, area)}${rumors(e.rumors)}${poznaj(e.spotlight, profilesById)}</aside>
 </div>
 ${e.closing ? `<p class="closing">${escapeHtml(e.closing)}</p>` : ''}
 ${CREDITS}

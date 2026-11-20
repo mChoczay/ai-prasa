@@ -1,7 +1,7 @@
 import { renderArchive, renderProfileCard, escapeHtml } from './render.js';
-import { renderFront } from './front.js';
+import { renderFront, selectArea } from './front.js';
 import { parseRoute, clampPage, renderReader, initReader } from './reader.js';
-import { readerPages, tabTitle } from './shape.js';
+import { readerPages, tabTitle, rankingAreas, pickArea } from './shape.js';
 import { loadConfig, saveConfig, clearConfig, storedRating, initFeedback } from './feedback.js';
 
 const app = document.getElementById('app');
@@ -46,6 +46,16 @@ const store = (() => {
     return null;
   }
 })();
+
+// The ranking area last opened on this device.
+const AREA_KEY = 'ppai.area';
+function storedArea() {
+  try {
+    return store ? store.getItem(AREA_KEY) : null;
+  } catch {
+    return null;
+  }
+}
 
 const notice = (text) => `<p class="notice" role="status">${escapeHtml(text)}</p>`;
 
@@ -114,7 +124,7 @@ async function route() {
       };
       return;
     }
-    app.innerHTML = (message ? notice(message) : '') + renderFront(edition, profilesById);
+    app.innerHTML = (message ? notice(message) : '') + renderFront(edition, profilesById, { area: pickArea(rankingAreas(edition), storedArea()) });
     document.title = tabTitle('front', edition);
     window.scrollTo(0, 0);
   } catch (err) {
@@ -124,6 +134,17 @@ async function route() {
 }
 
 app.addEventListener('click', (event) => {
+  const pill = event.target.closest('.area-chip');
+  if (pill) {
+    if (selectArea(pill.closest('.rankings'), pill.dataset.area)) {
+      try {
+        if (store) store.setItem(AREA_KEY, pill.dataset.area);
+      } catch {
+        // Not remembered; the switch still works.
+      }
+    }
+    return;
+  }
   const chip = event.target.closest('[data-entity]');
   if (!chip) return;
   const profile = profilesById[chip.dataset.entity];

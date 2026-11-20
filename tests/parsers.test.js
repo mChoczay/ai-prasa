@@ -127,3 +127,11 @@ test('collapseVariants keeps the best-ranked variant per base model and re-ranks
 test('collapseVariants passes null through', () => {
   assert.equal(collapseVariants(null), null);
 });
+
+test('parseLmarena reads boards that publish a score instead of a rating (agent arena)', () => {
+  const input = { rows: [
+    { row: { model_name: 'Agent B (Max)', organization: 'y', score: 1300, rank: 2, category: 'overall' } },
+    { row: { model_name: 'Agent A (Max)', organization: 'x', score: 1400, rank: 1, category: 'overall' } },
+  ] };
+  assert.deepEqual(parseLmarena(input).map((r) => [r.rank, r.model, r.score]), [[1, 'Agent A (Max)', 1400], [2, 'Agent B (Max)', 1300]]);
+});

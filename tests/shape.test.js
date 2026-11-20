@@ -8,7 +8,8 @@ import {
   marketMood,
   whyShort,
   marketTiles,
-  rankingChanges,
+  rankingAreas,
+  pickArea,
   rankingNotes,
   readerPages,
   minutesLabel,
@@ -65,24 +66,22 @@ test('marketTiles uses the one-day change when it is the bigger signal and skips
   assert.deepEqual(marketTiles({}), []);
 });
 
-test('rankingChanges lists new entries and moves of two or more places with their why', () => {
-  const edition = {
-    rankings: {
-      lmarena: [
-        { rank: 1, model: 'Gemini 4 Carbon', org: 'google', delta: null },
-        { rank: 2, model: 'Gemini 4 Neon', org: 'google', delta: 'new' },
-        { rank: 3, model: 'Claude Opus 5.5', org: 'anthropic', delta: 1 },
-        { rank: 4, model: 'Muse Wonder', org: 'meta', delta: -3 },
-      ],
-      aa: null,
-    },
-    big_moves: [{ entity_id: 'gemini-4-neon', board: 'lmarena', why: 'Premiera. Szczegóły.', why_short: 'nowy model Google', why_type: 'fakt' }],
-  };
-  assert.deepEqual(rankingChanges(edition).map((c) => [c.board, c.model, c.rank, c.delta, c.why_short]), [
-    ['lmarena', 'Gemini 4 Neon', 2, 'new', 'nowy model Google'],
-    ['lmarena', 'Muse Wonder', 4, -3, ''],
-  ]);
-  assert.deepEqual(rankingChanges(real), []);
+test('pickArea keeps a known stored area and falls back to the first', () => {
+  const areas = [{ key: 'webdev' }, { key: 'polish' }];
+  assert.equal(pickArea(areas, 'polish'), 'polish');
+  assert.equal(pickArea(areas, 'x'), 'webdev');
+  assert.equal(pickArea(areas, null), 'webdev');
+  assert.equal(pickArea([], 'x'), '');
+});
+
+test('rankingAreas keeps usable areas and their top five', () => {
+  const rows = [1, 2, 3, 4, 5, 6].map((rank) => ({ rank, model: 'M' + rank, org: 'o', delta: null }));
+  const e = { rankings: { areas: [{ key: 'webdev', label: 'Programowanie', new_leader: false, rows }, { key: 'x', label: 'X', rows: [] }, { label: 'no key', rows }, null] } };
+  const out = rankingAreas(e);
+  assert.deepEqual(out.map((a) => a.key), ['webdev']);
+  assert.equal(out[0].rows.length, 5);
+  assert.deepEqual(rankingAreas({ rankings: {} }), []);
+  assert.deepEqual(rankingAreas(null), []);
 });
 
 test('rankingNotes prefers notes and falls back to the commentary', () => {

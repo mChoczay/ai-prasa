@@ -283,3 +283,18 @@ test('the three editor prompts end with the reader feedback section only when th
   assert.equal(frontPrompt({ ...fArgs, feedback: '' }), fr);
   assert.equal(frontPrompt({ ...fArgs, feedback: FB }), `${fr}\n\n## Reader feedback\n${FB}`);
 });
+
+test('finalizeEdition carries the ranking areas, or an empty list without them', () => {
+  const checked = { greeting: 'g', lead_story: storyOut('L', 'https://news.example/1'), stories: [], market: { commentary: 'm' }, rankings: { commentary: 'r' }, rumors: [], big_moves: [], follow_ups: [], closing: 'c' };
+  const areas = [{ key: 'polish', label: 'Po polsku', new_leader: false, rows: [{ rank: 1, model: 'M', org: 'o', delta: null }] }];
+  const withAreas = finalizeEdition(checked, { date: '2026-11-21', generatedAt: 'x', numbers: { rankings: { areas } }, allowedMoveIds: [] });
+  assert.deepEqual(withAreas.rankings.areas, areas);
+  const without = finalizeEdition(checked, { date: '2026-11-21', generatedAt: 'x', numbers: { rankings: null }, allowedMoveIds: [] });
+  assert.deepEqual(without.rankings.areas, []);
+});
+
+test('the front prompt never shows the ranking areas to Claude', () => {
+  const numbers = { market: null, rankings: { lmarena: null, aa: null, hf_trending: null, areas: [{ key: 'polish', label: 'Po polsku', rows: [{ rank: 1, model: 'Area Only Model', org: 'x', delta: null }] }] }, big_moves: [], ranking_moves: [], follow_ups: [] };
+  const text = frontPrompt({ date: '2026-11-21', articles: [], written: { stories: [], rumors: [] }, numbers, candidates: [], leakers: [], entities: [], historyTitles: [] });
+  assert.ok(!text.includes('Area Only Model'));
+});

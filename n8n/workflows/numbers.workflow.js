@@ -145,6 +145,35 @@ const hfTrending = node({
   output: [{ statusCode: 200, body: [] }],
 });
 
+// Ranking areas (display only): one LMArena area leaderboard per request, see n8n/lib/areas.js.
+const areaList = node({
+  type: 'n8n-nodes-base.code',
+  version: 2,
+  config: {
+    name: 'Area requests',
+    parameters: {
+      mode: 'runOnceForAllItems',
+      jsCode: INLINE('n8n/lib/areas.js') + 'return areaRequests().map((r) => ({ json: r }));\n',
+    },
+  },
+  output: [{ key: 'webdev', url: 'https://datasets-server.huggingface.co/filter' }],
+});
+
+const areaBoards = node({
+  type: 'n8n-nodes-base.httpRequest',
+  version: 4.5,
+  config: {
+    name: 'LMArena areas',
+    onError: 'continueRegularOutput',
+    parameters: {
+      method: 'GET',
+      url: expr('{{ $json.url }}'),
+      options: { response: { response: { fullResponse: true, neverError: true, responseFormat: 'json' } }, timeout: 30000, batching: { batch: { batchSize: 1, batchInterval: 500 } } },
+    },
+  },
+  output: [{ statusCode: 200, body: { rows: [] } }],
+});
+
 const aaPageList = node({
   type: 'n8n-nodes-base.code',
   version: 2,
@@ -238,7 +267,7 @@ const computeNumbers = node({
     parameters: {
       mode: 'runOnceForAllItems',
       jsCode:
-        INLINE('n8n/lib/dates.js', 'n8n/lib/news.js', 'n8n/lib/parsers.js', 'n8n/lib/moves.js') +
+        INLINE('n8n/lib/dates.js', 'n8n/lib/news.js', 'n8n/lib/parsers.js', 'n8n/lib/moves.js', 'n8n/lib/areas.js') +
         "const date = $('Numbers request').first().json.date;\n" +
         "const ok = (item) => item && item.json && Number(item.json.statusCode) === 200 ? item.json.body : null;\n" +
         "const tickers = $('US tickers').all().map((i) => i.json);\n" +
@@ -282,6 +311,8 @@ const computeNumbers = node({
         "    return { ...r, delta };\n" +
         "  });\n" +
         "}\n" +
+        "const areaSet = buildAreas($('LMArena areas').all().map(ok), prevRows);\n" +
+        "rankings.areas = areaSet.areas;\n" +
         "const moveLog = $('Recent move log').all().map((i) => i.json).filter((r) => r.entity_id);\n" +
         "const bigMoves = findBigMoves({ snapshots: marketRows, moveLog, today: date });\n" +
         "const tags = $('Recent impact tags').all().map((i) => i.json).filter((r) => r.entity_id);\n" +
@@ -291,13 +322,14 @@ const computeNumbers = node({
         "const marketWrite = marketRows.map((r) => ({ date, ticker: r.ticker, close: r.close, change_1d: r.change_1d, change_7d: r.change_7d, change_30d: r.change_30d, last_trade_date: r.last_trade_date }));\n" +
         "const boardWrite = [];\n" +
         "for (const board of ['lmarena', 'aa', 'hf_trending']) for (const r of rankings[board] || []) boardWrite.push({ date, board, rank: r.rank, model: r.model, org: r.org, score: r.score });\n" +
+        "for (const r of areaSet.writes) boardWrite.push({ date, ...r });\n" +
         "const moveWrite = [\n" +
         "  { date, entity_id: '', kind: 'run' },\n" +
         "  ...bigMoves.map((m) => ({ date: m.log_date, entity_id: m.entity_id, kind: m.kind })),\n" +
         "  ...rankingMoves.map((m) => ({ date, entity_id: m.entity_id, kind: 'rank' })),\n" +
         "];\n" +
         "return [{ json: {\n" +
-        "  date, market, rankings, big_moves: bigMoves, ranking_moves: rankingMoves, follow_ups: followUps, leaderboard_top: leaderboardTop,\n" +
+        "  date, market, rankings, big_moves: bigMoves, ranking_moves: rankingMoves, follow_ups: followUps, leaderboard_top: leaderboardTop, areas_missing: areaSet.missing,\n" +
         "  writes: {\n" +
         "    market: marketWrite.length ? marketWrite : [{ date, ticker: '', close: 0, change_1d: null, change_7d: null, change_30d: null, last_trade_date: '' }],\n" +
         "    boards: boardWrite.length ? boardWrite : [{ date, board: 'none', rank: 0, model: '', org: '', score: 0 }],\n" +
@@ -470,6 +502,8 @@ export default workflow('ppai-numbers', 'PPAI · numbers')
   .to(watchlistCloses)
   .to(lmarena)
   .to(hfTrending)
+  .to(areaList)
+  .to(areaBoards)
   .to(aaPageList)
   .to(aaModels)
   .to(recentBoards)

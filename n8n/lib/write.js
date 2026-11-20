@@ -204,6 +204,7 @@ function finalizeEdition(checked, { date, generatedAt, numbers, allowedMoveIds }
       lmarena: rankings.lmarena || null,
       aa: rankings.aa || null,
       hf_trending: rankings.hf_trending || null,
+      areas: Array.isArray(rankings.areas) ? rankings.areas : [],
     },
     rumors: checked.rumors || [],
     big_moves: (checked.big_moves || []).filter((m) => allowed.has(m.entity_id)),

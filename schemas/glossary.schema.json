@@ -1,0 +1,32 @@
+{
+  "type": "object",
+  "description": "Hard terms per story with plain-language explanations.",
+  "properties": {
+    "stories": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "idx": { "type": "integer", "description": "The story's idx from the list." },
+          "terms": {
+            "type": "array",
+            "description": "1-3 terms; an empty list if the story has none worth explaining.",
+            "items": {
+              "type": "object",
+              "properties": {
+                "term": { "type": "string", "description": "The term as written in the story, short." },
+                "explain": { "type": "string", "description": "3-4 plain sentences in Polish; empty for a term already in the glossary." }
+              },
+              "required": ["term", "explain"],
+              "additionalProperties": false
+            }
+          }
+        },
+        "required": ["idx", "terms"],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": ["stories"],
+  "additionalProperties": false
+}

@@ -71,3 +71,35 @@ test('publish workflow: morning mail carries the ratings link from the feedback 
   assert.match(run([{ url: 'https://h.example/w', key: 'k' }]).html, /#\/oceny\?u=https%3A%2F%2Fh\.example%2Fw&amp;k=k/);
   assert.doesNotMatch(run([{}]).html, /oceny/);
 });
+
+const mailNodes = (date, extra = {}) => ({
+  'Publish request': [{ edition: { ...edition, date } }],
+  'Read settings': [{ notify_email: 'owner@example.com', site_url: 'https://example.github.io/site/' }],
+  ...extra,
+});
+const rangesCode = codeNodeSource('n8n/workflows/publish.workflow.js', 'Visit ranges');
+const mailCode = codeNodeSource('n8n/workflows/publish.workflow.js', 'Build morning mail');
+
+test('publish workflow: visit ranges ask GoatCounter only on Mondays and the 1st', () => {
+  const monday = runCodeNode(rangesCode, { nodes: mailNodes('2026-11-23') }).map((i) => i.json);
+  assert.equal(monday.length, 1);
+  assert.ok(monday[0].url.startsWith('https://api-prasa.goatcounter.com/api/v0/stats/total?'));
+  assert.deepEqual(runCodeNode(rangesCode, { nodes: mailNodes('2026-11-24') }).map((i) => i.json), [{ none: true }]);
+});
+
+test('publish workflow: the Monday mail shows who read the paper', () => {
+  const ranges = runCodeNode(rangesCode, { nodes: mailNodes('2026-11-23') }).map((i) => i.json);
+  const [{ json }] = runCodeNode(mailCode, { nodes: mailNodes('2026-11-23', { 'Visit ranges': ranges, 'GoatCounter stats': [{ statusCode: 200, body: { total: 6, stats: [] } }] }) });
+  assert.match(json.html, /Kto czytał/);
+  assert.match(json.html, /6 odwiedzających/);
+});
+
+test('publish workflow: a failed or skipped GoatCounter call still sends the mail without the section', () => {
+  const ranges = runCodeNode(rangesCode, { nodes: mailNodes('2026-11-23') }).map((i) => i.json);
+  for (const extra of [{ 'Visit ranges': ranges, 'GoatCounter stats': [{ statusCode: 401, body: {} }] }, { 'Visit ranges': [{ none: true }] }, {}]) {
+    const [{ json }] = runCodeNode(mailCode, { nodes: mailNodes('2026-11-23', extra) });
+    assert.doesNotMatch(json.html, /Kto czytał/);
+    assert.equal(json.to, 'owner@example.com');
+    assert.equal(json.subject, 'Poranna prasa AI: Lead');
+  }
+});

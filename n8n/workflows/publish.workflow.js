@@ -219,6 +219,57 @@ const readFeedbackSettings = node({
   output: [{ id: 1, url: 'https://n8n.example/webhook/x', key: 'k' }],
 });
 
+// Visitors for the morning mail (GoatCounter): only on Mondays (past week) and the 1st (past month).
+const visitRangesNode = node({
+  type: 'n8n-nodes-base.code',
+  version: 2,
+  config: {
+    name: 'Visit ranges',
+    parameters: {
+      mode: 'runOnceForAllItems',
+      jsCode:
+        INLINE('n8n/lib/visits.js') +
+        "const p = $('Publish request').first().json;\n" +
+        "const ranges = visitRanges(p.edition && p.edition.date);\n" +
+        "return ranges.length ? ranges.map((r) => ({ json: r })) : [{ json: { none: true } }];\n",
+    },
+  },
+  output: [{ none: true }],
+});
+
+const visitStatsCheck = ifElse({
+  version: 2.2,
+  config: {
+    name: 'Visit stats today?',
+    parameters: {
+      conditions: {
+        options: { caseSensitive: true, leftValue: '', typeValidation: 'loose', version: 2 },
+        conditions: [{ leftValue: expr('{{ !$json.none }}'), rightValue: true, operator: { type: 'boolean', operation: 'true', singleValue: true } }],
+        combinator: 'and',
+      },
+    },
+  },
+});
+
+// Read-only GoatCounter API key in an n8n Header Auth credential (Authorization: Bearer …); never in this repo.
+const goatStats = node({
+  type: 'n8n-nodes-base.httpRequest',
+  version: 4.5,
+  config: {
+    name: 'GoatCounter stats',
+    onError: 'continueRegularOutput',
+    parameters: {
+      method: 'GET',
+      url: expr('{{ $json.url }}'),
+      authentication: 'genericCredentialType',
+      genericAuthType: 'httpHeaderAuth',
+      options: { response: { response: { fullResponse: true, neverError: true, responseFormat: 'json' } }, timeout: 10000 },
+    },
+    credentials: { httpHeaderAuth: { id: 'GOATCOUNTER_CREDENTIAL_ID', name: 'GoatCounter' } },
+  },
+  output: [{ statusCode: 200, body: { total: 0, stats: [] } }],
+});
+
 const buildMail = node({
   type: 'n8n-nodes-base.code',
   version: 2,
@@ -227,12 +278,19 @@ const buildMail = node({
     parameters: {
       mode: 'runOnceForAllItems',
       jsCode:
-        INLINE('n8n/lib/email.js') +
+        INLINE('n8n/lib/email.js', 'n8n/lib/visits.js') +
         "const p = $('Publish request').first().json;\n" +
         "const s = $('Read settings').first().json;\n" +
         "let fb = {};\n" +
         "try { fb = $('Read feedback settings').first().json || {}; } catch (e) { fb = {}; }\n" +
-        "const mail = renderEmailHtml(p.edition, s.site_url, { feedbackUrl: typeof fb.url === 'string' ? fb.url : '', feedbackKey: typeof fb.key === 'string' ? fb.key : '' });\n" +
+        "let visits = null;\n" +
+        "try {\n" +
+        "  const ranges = $('Visit ranges').all().map((i) => i.json).filter((r) => r && r.url);\n" +
+        "  let bodies = [];\n" +
+        "  try { bodies = $('GoatCounter stats').all().map((i) => (i.json && Number(i.json.statusCode) === 200 ? i.json.body : null)); } catch (e) { bodies = []; }\n" +
+        "  visits = visitSummary(ranges, bodies);\n" +
+        "} catch (e) { visits = null; }\n" +
+        "const mail = renderEmailHtml(p.edition, s.site_url, { feedbackUrl: typeof fb.url === 'string' ? fb.url : '', feedbackKey: typeof fb.key === 'string' ? fb.key : '', visits });\n" +
         "return [{ json: { to: s.notify_email, subject: mail.subject, html: mail.html } }];\n",
     },
   },
@@ -375,7 +433,9 @@ export default workflow('ppai-publish', 'PPAI · publish')
   .to(newTree)
   .to(newCommit)
   .to(moveMain)
-  .to(sendMailCheck.onTrue(readFeedbackSettings.to(buildMail).to(sendMail)))
+  .to(sendMailCheck.onTrue(readFeedbackSettings.to(visitRangesNode).to(visitStatsCheck.onTrue(goatStats.to(buildMail)).onFalse(buildMail))))
+  .add(buildMail)
+  .to(sendMail)
   .add(moveMain)
   .to(clearTopics)
   .to(topicRows)

@@ -36,8 +36,9 @@ function mergeGlossary(edition, answer, knownRows, date) {
   for (const r of knownRows || []) {
     if (r && r.term_id && r.term && r.explain) byId.set(String(r.term_id), { id: String(r.term_id), term: String(r.term), explain: String(r.explain) });
   }
-  // "H 200" and "H200", "S1" and "S-1" are the same term.
-  const compact = (id) => id.replace(/-/g, '');
+  // "H 200" and "H200" are the same term: only a dash before a number of two or more digits is dropped,
+  // so short codes stay apart (o1 vs O-1, S1 vs S-1). An exact id always wins.
+  const compact = (id) => id.replace(/([a-z])-(?=\d{2})/g, '$1');
   const byCompact = new Map([...byId.keys()].map((id) => [compact(id), id]));
   const newRows = [];
   const used = new Set();
@@ -52,7 +53,7 @@ function mergeGlossary(edition, answer, knownRows, date) {
       if (ids.length >= GLOSSARY_PER_STORY) break;
       const term = String((t && t.term) || '').trim();
       const raw = entityId(term);
-      const id = byCompact.get(compact(raw)) || raw;
+      const id = byId.has(raw) ? raw : byCompact.get(compact(raw)) || raw;
       if (!term || !id || ids.includes(id)) continue;
       if (!used.has(id) && used.size >= GLOSSARY_PER_EDITION) continue;
       if (!byId.has(id)) {

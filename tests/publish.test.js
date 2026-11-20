@@ -131,3 +131,19 @@ test('publish workflow: GitHub calls and the morning mail retry a transient fail
     assert.match(block, /waitBetweenTries: 5000/, name);
   }
 });
+
+test('publish workflow: a failed index read stops the publish instead of wiping the archive', () => {
+  const run = (idx) => runCodeNode(codeNodeSource('n8n/workflows/publish.workflow.js', 'Build tree'), {
+    nodes: {
+      'Publish request': [{ date: '2026-11-19', edition, profiles_json: { profiles: [] }, remove_date: '' }],
+      'GitHub: current index': [idx],
+      'GitHub: main ref': [{ object: { sha: 'head1' } }],
+      'GitHub: base commit': [{ tree: { sha: 'tree0' } }],
+    },
+  });
+  for (const idx of [{ statusCode: 500, data: 'oops' }, { statusCode: 403, data: 'rate limited' }, {}]) {
+    assert.throws(() => run(idx), /index\.json/);
+  }
+  assert.equal(run({ statusCode: 404, data: 'Not Found' })[0].json.tree.length, 3);
+  assert.equal(run({ statusCode: 200, data: '{"editions":[]}' })[0].json.tree.length, 3);
+});

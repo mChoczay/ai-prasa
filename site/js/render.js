@@ -186,9 +186,8 @@ ${profile.why_it_matters ? `<p><strong>Dlaczego ważne:</strong> ${escapeHtml(pr
 
 const SUPPLEMENT_KINDS = Object.freeze({ weekly: 'Tydzień w AI', monthly: 'Miesiąc w AI' });
 
-// Archive: chips for categories, editions grouped by month (newest first, as in the index), each with
-// its day, the lead title and the reading time.
-// Every edition, newest first, grouped by month. Old #/archiwum?kat=… links land here too.
+// Archive: every edition, newest first (as in the index), grouped by month, each with its day, the lead
+// title and the reading time. Old #/archiwum?kat=… links land here too.
 export function renderArchive(index) {
   const editions = (index && index.editions) || [];
   const groups = [];

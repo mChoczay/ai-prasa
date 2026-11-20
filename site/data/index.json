@@ -1,6 +1,20 @@
 {
  "editions": [
   {
+   "date": "2026-11-20",
+   "kind": "daily",
+   "lead_title": "Anthropic debiutuje na Nasdaq jako „ANT”, wycena około 1,5 bln dolarów",
+   "minutes": 14,
+   "categories": [
+    "inwestycje",
+    "regulacje",
+    "narzedzia",
+    "modele",
+    "inne",
+    "gielda"
+   ]
+  },
+  {
    "date": "2026-11-19",
    "kind": "daily",
    "lead_title": "Genie 4: Google otwiera interaktywne światy z dźwiękiem i edycją w czasie rzeczywistym",

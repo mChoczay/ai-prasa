@@ -15,11 +15,7 @@
    "why_it_matters": "Jako jeden z trzech największych producentów pamięci DRAM i flash, SK hynix dostarcza komponenty kluczowe dla infrastruktury AI, a jego klientami są m.in. Nvidia i Microsoft.",
    "updated_at": "2026-11-19",
    "last_spotlight_at": null,
-   "image": {
-    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/24/SK_Hynix.svg/960px-SK_Hynix.svg.png?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-    "credit": "Wikimedia Commons",
-    "link": ""
-   }
+   "image": null
   },
   {
    "id": "005930.ks",
@@ -44,11 +40,7 @@
    "why_it_matters": "Jako największy producent pamięci i jeden z dwóch największych dostawców smartfonów, Samsung kontroluje kluczowe podzespoły, od których zależy rozwój infrastruktury AI.",
    "updated_at": "2026-11-19",
    "last_spotlight_at": null,
-   "image": {
-    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e2/Samsung_headquarters.jpg/960px-Samsung_headquarters.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-    "credit": "Wikimedia Commons",
-    "link": ""
-   }
+   "image": null
   },
   {
    "id": "aapl",
@@ -151,11 +143,7 @@
    "why_it_matters": "Architektura Arm jest podstawą większości procesorów w urządzeniach mobilnych i wbudowanych, a jej licencjobiorcy obejmują praktycznie całą branżę chipów, co daje firmie kluczową pozycję w infrastrukturze sprzętowej AI.",
    "updated_at": "2026-11-19",
    "last_spotlight_at": null,
-   "image": {
-    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/89/ARM-Cambridge.jpg/960px-ARM-Cambridge.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-    "credit": "Wikimedia Commons",
-    "link": ""
-   }
+   "image": null
   },
   {
    "id": "asml",
@@ -174,11 +162,7 @@
    "why_it_matters": "Bez sprzętu ASML nie da się produkować najnowocześniejszych chipów, więc firma stoi w samym centrum globalnego wyścigu o zaawansowane półprzewodniki i podlega ostrym kontrolom eksportu do Chin.",
    "updated_at": "2026-11-19",
    "last_spotlight_at": null,
-   "image": {
-    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/ae/ASML_headquarters_Veldhoven.jpg/960px-ASML_headquarters_Veldhoven.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-    "credit": "Wikimedia Commons",
-    "link": ""
-   }
+   "image": null
   },
   {
    "id": "avgo",
@@ -203,6 +187,79 @@
    }
   },
   {
+   "id": "claude-fable-5-1",
+   "type": "model",
+   "name": "Claude Fable 5.1",
+   "aliases": "Claude Fable,Claude 5.1",
+   "ticker": "",
+   "summary": "Claude Fable 5.1 to model z rodziny Claude, serii dużych modeli językowych tworzonych przez amerykańską firmę Anthropic. Według referencyjnego tekstu Claude Fable to wersja modelu Mythos z ostrzejszymi zabezpieczeniami, udostępniona szerokiej publiczności. W zestawieniach LMArena model zajmuje 5. miejsce, a w rankingu Artificial Analysis 14. miejsce.",
+   "owner": "Anthropic",
+   "key_products": [
+    "Claude Fable",
+    "Claude Mythos",
+    "Claude Code",
+    "Claude Duet"
+   ],
+   "why_it_matters": "Model z górnej części rankingów, należący do rodziny Claude, która jest wykorzystywana zarówno w chatbotach, jak i w agentycznych narzędziach do programowania.",
+   "updated_at": "2026-11-20",
+   "last_spotlight_at": null,
+   "image": null
+  },
+  {
+   "id": "claude-opus-4-6",
+   "type": "model",
+   "name": "Claude Opus 4.6",
+   "aliases": "",
+   "ticker": "",
+   "summary": "Claude Opus 4.6 to model z rodziny Claude, serii dużych modeli językowych (LLM) rozwijanych przez amerykańską firmę Anthropic. W ramach rodziny Claude Opus jest wariantem najbardziej zdolnym, w przeciwieństwie do mniejszego Haiku i pośredniego Sonnet. Model jest wykorzystywany zarówno w chatbotach, jak i w programowaniu wspomaganym AI oraz w agentowych narzędziach Anthropic.",
+   "owner": "Anthropic",
+   "key_products": [
+    "Claude Opus",
+    "Claude Code",
+    "Claude Duet"
+   ],
+   "why_it_matters": "Należy do czołowej rodziny modeli Claude, która w rankingu LMArena zajmuje 9. miejsce i konkuruje z najlepszymi modelami innych laboratoriów.",
+   "updated_at": "2026-11-20",
+   "last_spotlight_at": null,
+   "image": null
+  },
+  {
+   "id": "claude-opus-5",
+   "type": "model",
+   "name": "Claude Opus 5",
+   "aliases": "Opus 5",
+   "ticker": "",
+   "summary": "Claude Opus 5 to model z rodziny Claude, serii dużych modeli językowych (LLM) tworzonych przez amerykańską firmę Anthropic. Od Claude 3 każda generacja jest zwykle wydawana w trzech rozmiarach: Haiku (najmniej zdolny), Sonnet i Opus (najbardziej zdolny). Dostarczone dane z rankingów pokazują, że model zajmuje 6. miejsce na LMArena i 16. miejsce na Artificial Analysis, choć tekst referencyjny nie opisuje szczegółowo tej konkretnej wersji.",
+   "owner": "Anthropic",
+   "key_products": [
+    "Claude Opus",
+    "Claude Sonnet",
+    "Claude Haiku",
+    "Claude Code"
+   ],
+   "why_it_matters": "Opus to najmocniejszy poziom w rodzinie Claude, która konkuruje w czołówce modeli językowych i jest też wykorzystywana w programowaniu wspomaganym AI.",
+   "updated_at": "2026-11-20",
+   "last_spotlight_at": null,
+   "image": null
+  },
+  {
+   "id": "claude-opus-5-5",
+   "type": "model",
+   "name": "Claude Opus 5.5",
+   "aliases": "Claude Opus 5.5,Claude Opus,Opus 5.5",
+   "ticker": "",
+   "summary": "Claude Opus 5.5 to model z rodziny Claude, serii dużych modeli językowych (LLM) tworzonych przez amerykańską firmę Anthropic. W rodzinie Claude Opus jest wariantem najbardziej zdolnym, a model ten zajmuje wysokie miejsca w rankingach lmarena (#4) i Artificial Analysis (#5). Źródła nie opisują szczegółów tej konkretnej wersji poza pozycją w rankingach.",
+   "owner": "Anthropic",
+   "key_products": [
+    "Claude Code",
+    "Claude Duet"
+   ],
+   "why_it_matters": "Model z najwyższej półki Anthropic, który notowany jest w czołówce popularnych rankingów modeli, co pokazuje konkurencję w wyścigu o najlepsze modele AI.",
+   "updated_at": "2026-11-20",
+   "last_spotlight_at": null,
+   "image": null
+  },
+  {
    "id": "crwv",
    "type": "company",
    "name": "CoreWeave",
@@ -217,6 +274,86 @@
    ],
    "why_it_matters": "Firma jest jednym z kluczowych dostawców infrastruktury GPU dla obciążeń AI, a jej superkomputer dla Nvidia opisywany jest przez Nvidia jako najszybszy superkomputer AI na świecie.",
    "updated_at": "2026-11-19",
+   "last_spotlight_at": null,
+   "image": null
+  },
+  {
+   "id": "gemini-3-8-flash",
+   "type": "model",
+   "name": "Gemini 3.8 Flash",
+   "aliases": "Gemini Flash",
+   "ticker": "",
+   "summary": "Gemini 3.8 Flash to wariant z rodziny modeli Gemini, rozwijanej przez Google, czyli dużych modeli językowych obsługujących tekst, kod, obrazy, audio i wideo. Wariant Flash jest opisany jako szybszy i tańszy, wariant o wysokiej przepustowości, w przeciwieństwie do modeli Pro i Ultra przeznaczonych do złożonych zadań. Według podanych danych model zajmuje 10. miejsce w rankingu LMArena. Tekst referencyjny nie opisuje szczegółowo tej konkretnej wersji, więc informacje dotyczą głównie całej rodziny.",
+   "owner": "Google",
+   "key_products": [
+    "Gemini 3.8 Flash",
+    "Gemini Flash"
+   ],
+   "why_it_matters": "Jako szybki, tani wariant z wysoką przepustowością pokazuje, jak Google dąży do szerokiego udostępniania Gemini deweloperom, a pozycja 10. w rankingu LMArena pozwala porównać go z konkurencją.",
+   "updated_at": "2026-11-20",
+   "last_spotlight_at": null,
+   "image": null
+  },
+  {
+   "id": "gemini-4-argon",
+   "type": "model",
+   "name": "Gemini 4 Argon",
+   "aliases": "Google Gemini",
+   "ticker": "",
+   "summary": "Gemini 4 Argon to model z rodziny Gemini, którą rozwija Google. Źródła opisują tę rodzinę jako wielomodalne duże modele językowe, zasilające chatbota Gemini, a warianty różnią się wielkością i przeznaczeniem: od lekkich wersji na urządzenia (Nano) po modele o dużej mocy obliczeniowej (Pro, Ultra). Materiały nie opisują osobno wersji Argon, więc jej konkretne cechy trzeba sprawdzić w innym źródle. W rankingach LMArena zajmuje 2. miejsce, a w Artificial Analysis 12. miejsce.",
+   "owner": "Google",
+   "key_products": [
+    "Gemini Nano",
+    "Gemini Flash",
+    "Gemini Pro",
+    "Gemini Ultra",
+    "Gemini 1.5",
+    "Gemini 3"
+   ],
+   "why_it_matters": "Gemini to odpowiedź Google na ChatGPT od OpenAI, a jego modele należą do czołówki w rankingach, w których Google konkuruje o pozycję lidera w AI.",
+   "updated_at": "2026-11-20",
+   "last_spotlight_at": null,
+   "image": null
+  },
+  {
+   "id": "gemini-4-carbon",
+   "type": "model",
+   "name": "Gemini 4 Carbon",
+   "aliases": "",
+   "ticker": "",
+   "summary": "Gemini 4 Carbon to model AI od Google, o którym dostępne dane wskazują na wysoką pozycję w rankingach. Według zestawień LMArena zajmuje pierwsze miejsce, a według Artificial Analysis czwarte. Materiały referencyjne nie opisują jednak szczegółowo architektury, zastosowań ani możliwości tego konkretnego modelu.",
+   "owner": "Google",
+   "key_products": [],
+   "why_it_matters": "Model od Google osiąga czołowe wyniki w niezależnych rankingach, co czyni go istotnym punktem odniesienia w wyścigu o najlepsze modele AI.",
+   "updated_at": "2026-11-20",
+   "last_spotlight_at": null,
+   "image": null
+  },
+  {
+   "id": "gemini-4-hydrogen",
+   "type": "model",
+   "name": "Gemini 4 Hydrogen",
+   "aliases": "",
+   "ticker": "",
+   "summary": "Gemini 4 Hydrogen to model AI, który pojawia się w rankingach LMArena i Artificial Analysis, gdzie zajmuje odpowiednio 8. i 10. miejsce. Dane wskazują jako organizację twórcę Google. Referencyjny tekst o rodzinie Gemini nie opisuje tego konkretnego modelu, dlatego nie podajemy o nim szczegółów technicznych.",
+   "owner": "Google (według danych rankingów: organizacja Google)",
+   "key_products": [],
+   "why_it_matters": "Model znajduje się w czołówce niezależnych rankingów jakości, co świadczy o konkurencyjności modeli Google w wyścigu AI.",
+   "updated_at": "2026-11-20",
+   "last_spotlight_at": null,
+   "image": null
+  },
+  {
+   "id": "gemini-4-neon",
+   "type": "model",
+   "name": "Gemini 4 Neon",
+   "aliases": "",
+   "ticker": "",
+   "summary": "Według danych rankingowych Gemini 4 Neon zajmuje 3. miejsce zarówno na LMArena, jak i w Artificial Analysis, a jego organizacją jest Google. Dołączony opis z Wikipedii dotyczy rodziny modeli Gemini ogłoszonej w grudniu 2023 roku, a nie tej konkretnej wersji, więc nie potwierdza jej szczegółów. Brak w materiałach informacji o architekturze, możliwościach i dacie premiery tego modelu.",
+   "owner": "Google (wskazany jako organizacja w rankingach LMArena i Artificial Analysis)",
+   "key_products": [],
+   "why_it_matters": "Pozycja w czołówce dwóch niezależnych rankingów modeli wskazuje, że Gemini 4 Neon należy do ścisłej światowej konkurencji w AI, choć same rankingi nie mówią, w czym dokładnie model jest najlepszy.",
+   "updated_at": "2026-11-20",
    "last_spotlight_at": null,
    "image": null
   },
@@ -256,12 +393,8 @@
    ],
    "why_it_matters": "Intel to jeden z kluczowych graczy w rynku procesorów i układów dla serwerów i PC, a jego próba odzyskania pozycji w produkcji półprzewodników konkuruje bezpośrednio z liderem branży, TSMC.",
    "updated_at": "2026-11-19",
-   "last_spotlight_at": null,
-   "image": {
-    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/97/Intel_Headquarters_in_2023.jpg/960px-Intel_Headquarters_in_2023.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-    "credit": "Wikimedia Commons",
-    "link": ""
-   }
+   "last_spotlight_at": "2026-11-19",
+   "image": null
   },
   {
    "id": "meta",
@@ -332,11 +465,24 @@
    "why_it_matters": "Micron, jako jeden z trzech głównych dostawców pamięci HBM, odgrywa istotną rolę w dostarczaniu pamięci potrzebnej do budowy i działania układów AI, a w maju 2026 roku osiągnął wycenę 1 bln USD.",
    "updated_at": "2026-11-19",
    "last_spotlight_at": null,
-   "image": {
-    "url": "https://upload.wikimedia.org/wikipedia/commons/e/e2/MicronSanJose.png?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
-    "credit": "Wikimedia Commons",
-    "link": ""
-   }
+   "image": null
+  },
+  {
+   "id": "muse-wonder",
+   "type": "model",
+   "name": "Muse Wonder",
+   "aliases": "Muse Wonder",
+   "ticker": "",
+   "summary": "Muse to agent AI rozwijany przez Meta Platforms, zapowiedziany 8 września 2026 roku. Meta opisuje go jako osobistego agenta, który wykonuje długotrwałe zadania w imieniu użytkownika, zamiast odpowiadać na pojedyncze pytania jak chatbot. Agent korzysta z dużego modelu językowego (LLM) o tej samej nazwie i został wydany w Stanach Zjednoczonych na iOS, Androida i w przeglądarce.",
+   "owner": "Meta Platforms",
+   "key_products": [
+    "Muse (agent AI)",
+    "Muse (duży model językowy)"
+   ],
+   "why_it_matters": "Pokazuje przejście od czatbotów odpowiadających w jednej wymianie do agentów, którzy samodzielnie realizują wieloetapowe zadania, co jest ważnym kierunkiem wyścigu AI.",
+   "updated_at": "2026-11-20",
+   "last_spotlight_at": null,
+   "image": null
   },
   {
    "id": "nvda",
@@ -403,11 +549,7 @@
    "why_it_matters": "Palantir jest jednym z kluczowych dostawców platform do wdrażania analizy danych i AI w administracji publicznej, obronności i dużych przedsiębiorstwach, a jej produkt AIP pokazuje, jak firmy integrują modele AI z własnymi danymi.",
    "updated_at": "2026-11-19",
    "last_spotlight_at": null,
-   "image": {
-    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/9d/Palantir_1_2018-09-06.jpg/960px-Palantir_1_2018-09-06.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-    "credit": "Wikimedia Commons",
-    "link": ""
-   }
+   "image": null
   },
   {
    "id": "smci",
@@ -425,11 +567,7 @@
    "why_it_matters": "Dostarcza serwery, na których działa infrastruktura AI, więc jest jednym z ważnych dostawców sprzętu dla rozwoju sztucznej inteligencji.",
    "updated_at": "2026-11-19",
    "last_spotlight_at": null,
-   "image": {
-    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/1d/Super_Micro_Computer_Logo.svg/960px-Super_Micro_Computer_Logo.svg.png?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-    "credit": "Wikimedia Commons",
-    "link": ""
-   }
+   "image": null
   },
   {
    "id": "tsla",
@@ -446,11 +584,7 @@
    "why_it_matters": "Tesla stawia na autonomiczne taksówki oparte wyłącznie na kamerach, bez lidarów i radarów, a jej plany przewozów bez kierowcy są w centrum uwagi, także po audycie NHTSA dotyczącym certyfikacji Cybercaba.",
    "updated_at": "2026-11-19",
    "last_spotlight_at": null,
-   "image": {
-    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a7/Tesla_Cybercab_on_Interstate_280_near_Palo_Alto_dllu.jpg/960px-Tesla_Cybercab_on_Interstate_280_near_Palo_Alto_dllu.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-    "credit": "Wikimedia Commons",
-    "link": ""
-   }
+   "image": null
   },
   {
    "id": "tsm",

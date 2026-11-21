@@ -1,6 +1,20 @@
 {
  "editions": [
   {
+   "date": "2026-11-21",
+   "kind": "daily",
+   "lead_title": "Matematyk z Anthropic twierdzi, że z pomocą Claude'a dowiódł hipotezy Riemanna",
+   "minutes": 15,
+   "categories": [
+    "inne",
+    "gielda",
+    "modele",
+    "rankingi",
+    "narzedzia",
+    "regulacje"
+   ]
+  },
+  {
    "date": "2026-11-20",
    "kind": "daily",
    "lead_title": "Anthropic debiutuje na Nasdaq jako „ANT”, wycena około 1,5 bln dolarów",

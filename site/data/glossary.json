@@ -1,0 +1,59 @@
+{
+ "terms": [
+  {
+   "id": "adapter-lora",
+   "term": "adapter LoRA",
+   "explain": "To mała dodatkowa warstwa, którą dokleja się do dużego modelu, zamiast przerabiać cały model od nowa. Jest jak nakładka na narzędzie, dopasowująca je do konkretnej pracy. Zajmuje mało miejsca i jest tani w trenowaniu. W tym wpisie pozwala zwiększyć skuteczność modelu w jednym konkretnym środowisku agentowym bez zmiany jego głównych wag."
+  },
+  {
+   "id": "chain-of-thought",
+   "term": "chain of thought",
+   "explain": "To zapisywany krok po kroku tok rozumowania modelu, widoczny zanim poda odpowiedź. Można to porównać do pokazywania na kartce obliczeń, a nie tylko wyniku. Jest ważny, bo pozwala ludziom sprawdzić, czy model nie kombinuje czegoś niepokojącego. Tutaj autorzy zwracają uwagę, że nowa architektura z pętlą rozumuje bez zapisywania całego toku, co utrudnia tę kontrolę."
+  },
+  {
+   "id": "harness",
+   "term": "harness",
+   "explain": "To środowisko, w którym model pracuje jako agent: zestaw narzędzi, instrukcji i zasad, przez które wykonuje zadania. Można to porównać do stanowiska pracy, na którym model działa, a nie do samego mózgu. Ten sam model może radzić sobie lepiej lub gorzej zależnie od harnessu. Dlatego autorzy dopasowują do niego osobny adapter."
+  },
+  {
+   "id": "hipoteza-riemanna",
+   "term": "hipoteza Riemanna",
+   "explain": "To jedno z najsłynniejszych nierozwiązanych pytań matematyki, dotyczące rozmieszczenia liczb pierwszych, czyli liczb podzielnych tylko przez 1 i siebie. Można to porównać do szukania reguły w rozkładzie kamyków na plaży, której od ponad 160 lat nikt nie potrafi jednoznacznie udowodnić. Jest na liście Problemów Milenijnych, za których rozwiązanie grozi nagroda miliona dolarów. Dlatego wiadomość o ewentualnym dowodzie jest tak głośna, choć na razie nie został on potwierdzony przez niezależnych ekspertów."
+  },
+  {
+   "id": "horyzont-czasowy",
+   "term": "horyzont czasowy",
+   "explain": "To miara tego, jak długie zadanie model potrafi wykonać, wyrażona w czasie, który na nie potrzebuje człowiek. Można to porównać do pytania, czy praktykant poradzi sobie z zadaniem na godzinę, czy na cały tydzień pracy. Wykres pokazuje, że te długości rosną szybko. Ważne jest też to, że wyniki są dobre głównie tam, gdzie sukces da się łatwo sprawdzić automatycznie."
+  },
+  {
+   "id": "ipo",
+   "term": "IPO",
+   "explain": "Pierwsza oferta publiczna, czyli moment, w którym firma po raz pierwszy sprzedaje swoje akcje zwykłym inwestorom na giełdzie. Działa to trochę jak otwarcie sklepu dla każdego, kto chce kupić kawałek firmy. Tutaj chodzi o rekordowe 81,3 mld dolarów, a późniejszy spadek kursu pokazuje, jak nerwowo reaguje rynek na całą branżę AI."
+  },
+  {
+   "id": "kanarek",
+   "term": "kanarek",
+   "explain": "W tym kontekście to celowo podrzucony fałszywy sekret, np. klucz lub hasło, którego nikt nie powinien zobaczyć. Działa jak sygnalizator: jeśli gdzieś pojawi się, wiadomo, że dane wyciekły. Badacz rozsyłał takie unikalne sekrety, żeby sprawdzić, kto je odczyta. Każdy kanarek był przypisany do jednego konkretnego miejsca, więc wyciek można przypisać do dostawcy."
+  },
+  {
+   "id": "kimi-k2-5",
+   "term": "Kimi K2.5",
+   "explain": "To konkretny model językowy chińskiej firmy Moonshot AI, na którym Cursor zbudował swój model kodujący Composer 2. Dla czytelnika ważne jest to, że amerykański produkt opiera się na chińskim fundamencie. Właśnie to uruchomiło pytania komisji Kongresu o bezpieczeństwo i zależność od zagranicznych technologii."
+  },
+  {
+   "id": "mixture-of-experts",
+   "term": "Mixture-of-Experts",
+   "explain": "To sposób budowy modelu, w którym zamiast jednej wielkiej sieci pracuje wiele wyspecjalizowanych części, a na każde zapytanie uruchamiana jest tylko kilka z nich. Przypomina zespół ekspertów, z którego do konkretnego zadania wybiera się dwóch czy trzech najlepszych. Dzięki temu model jest pojemny, ale szybki i tańszy w działaniu. W tym przypadku aktywne jest tylko 3,4 mld z 26,4 mld parametrów."
+  },
+  {
+   "id": "open-weight",
+   "term": "open-weight",
+   "explain": "To modele, których gotowe wagi, czyli wyuczone parametry, są publicznie udostępnione do pobrania i uruchomienia. Można to porównać do przepisu opublikowanego w książce, który każdy może ugotować u siebie w domu. Różni się to od modeli dostępnych tylko przez płatne API. W tej sprawie chodzi o ryzyko, że firmy z USA korzystają z chińskich modeli tego typu."
+  },
+  {
+   "id": "router-ai",
+   "term": "router AI",
+   "explain": "To pośrednik, który odbiera zapytanie do modelu i decyduje, do którego dostawcy je wysłać. Działa jak dyspozytor w taksówkach, który kieruje kurs do właściwego kierowcy. Problem polega na tym, że aby wybrać dostawcę, router musi przeczytać treść zapytania, więc widzi w niej także hasła i klucze. Stąd ryzyko wycieku wrażliwych danych."
+  }
+ ]
+}

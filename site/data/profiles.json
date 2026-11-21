@@ -187,6 +187,24 @@
    }
   },
   {
+   "id": "claude-fable-5",
+   "type": "model",
+   "name": "Claude Fable 5",
+   "aliases": "",
+   "ticker": "",
+   "summary": "Claude to seria dużych modeli językowych amerykańskiej firmy Anthropic, wykorzystywana m.in. w chatbocie i w programowaniu wspomaganym AI. Claude Fable to wersja modelu Mythos z surowszymi zabezpieczeniami, udostępniona w 2026 roku szerokiej publiczności. Mythos wcześniej trafił tylko do wybranych firm i organizacji.",
+   "owner": "Anthropic",
+   "key_products": [
+    "Claude Fable",
+    "Claude Mythos",
+    "Claude Code"
+   ],
+   "why_it_matters": "Jest to jeden z najbardziej zaawansowanych modeli Anthropic dostępnych dla zwykłych użytkowników w wersji z dodatkowymi zabezpieczeniami.",
+   "updated_at": "2026-11-21",
+   "last_spotlight_at": null,
+   "image": null
+  },
+  {
    "id": "claude-fable-5-1",
    "type": "model",
    "name": "Claude Fable 5.1",
@@ -202,7 +220,7 @@
    ],
    "why_it_matters": "Model z górnej części rankingów, należący do rodziny Claude, która jest wykorzystywana zarówno w chatbotach, jak i w agentycznych narzędziach do programowania.",
    "updated_at": "2026-11-20",
-   "last_spotlight_at": null,
+   "last_spotlight_at": "2026-11-20",
    "image": null
   },
   {
@@ -220,6 +238,23 @@
    ],
    "why_it_matters": "Należy do czołowej rodziny modeli Claude, która w rankingu LMArena zajmuje 9. miejsce i konkuruje z najlepszymi modelami innych laboratoriów.",
    "updated_at": "2026-11-20",
+   "last_spotlight_at": null,
+   "image": null
+  },
+  {
+   "id": "claude-opus-4-7",
+   "type": "model",
+   "name": "Claude Opus 4.7",
+   "aliases": "",
+   "ticker": "",
+   "summary": "Claude to seria dużych modeli językowych firmy Anthropic, wydawanych od wersji 3 w trzech rozmiarach: Haiku (najmniejszy), Sonnet i Opus (najbardziej zdolny). Opus jest więc najmocniejszym wariantem w rodzinie Claude. Modele Claude służą zarówno jako chatbot, jak i w narzędziach agentowych, np. w Claude Code.",
+   "owner": "Anthropic",
+   "key_products": [
+    "Claude Opus",
+    "Claude Code"
+   ],
+   "why_it_matters": "Opus to najbardziej zdolny wariant Claude, konkurujący bezpośrednio z topowymi modelami innych laboratoriów.",
+   "updated_at": "2026-11-21",
    "last_spotlight_at": null,
    "image": null
   },
@@ -278,6 +313,56 @@
    "image": null
   },
   {
+   "id": "gemini-3-1-pro-preview",
+   "type": "model",
+   "name": "Gemini 3.1 Pro Preview",
+   "aliases": "Google Gemini",
+   "ticker": "",
+   "summary": "Gemini to model AI i chatbot Google, który może przetwarzać i generować tekst, kod, obrazy, audio i wideo. Warianty Pro i Ultra to modele o dużej mocy obliczeniowej, przeznaczone do złożonych zadań. Gemini jest dostępny w aplikacji mobilnej na Androida i przez platformę Vertex AI dla deweloperów.",
+   "owner": "Google",
+   "key_products": [
+    "Gemini Pro"
+   ],
+   "why_it_matters": "Wariant Pro to główna oferta Google do złożonych zadań, w której Google konkuruje z czołowymi modelami innych firm.",
+   "updated_at": "2026-11-21",
+   "last_spotlight_at": null,
+   "image": null
+  },
+  {
+   "id": "gemini-3-5-flash",
+   "type": "model",
+   "name": "Gemini 3.5 Flash",
+   "aliases": "Google Gemini",
+   "ticker": "",
+   "summary": "Gemini to model AI i chatbot Google, który może przetwarzać i generować tekst, kod, obrazy, audio i wideo. Google udostępnia rodzinę modeli w wariantach: Nano (na urządzenia), Flash (tańsze, o dużej przepustowości) oraz Pro i Ultra (do złożonych zadań). Wersje Flash są przeznaczone do szybkiego, taniego przetwarzania dużych ilości zapytań.",
+   "owner": "Google",
+   "key_products": [
+    "Gemini",
+    "Gemini Flash"
+   ],
+   "why_it_matters": "Wariant Flash pozwala Google konkurować ceną i szybkością działania w masowych zastosowaniach.",
+   "updated_at": "2026-11-21",
+   "last_spotlight_at": null,
+   "image": null
+  },
+  {
+   "id": "gemini-3-7-flash",
+   "type": "model",
+   "name": "Gemini 3.7 Flash",
+   "aliases": "Google Gemini",
+   "ticker": "",
+   "summary": "Gemini to model AI i chatbot Google, który może przetwarzać i generować tekst, kod, obrazy, audio i wideo. Google udostępnia rodzinę modeli w wariantach: Nano (na urządzenia), Flash (tańsze, o dużej przepustowości) oraz Pro i Ultra (do złożonych zadań). Wersje Flash są przeznaczone do szybkiego, taniego przetwarzania dużych ilości zapytań.",
+   "owner": "Google",
+   "key_products": [
+    "Gemini",
+    "Gemini Flash"
+   ],
+   "why_it_matters": "Wariant Flash pozwala Google konkurować ceną i szybkością działania w masowych zastosowaniach.",
+   "updated_at": "2026-11-21",
+   "last_spotlight_at": null,
+   "image": null
+  },
+  {
    "id": "gemini-3-8-flash",
    "type": "model",
    "name": "Gemini 3.8 Flash",
@@ -291,6 +376,22 @@
    ],
    "why_it_matters": "Jako szybki, tani wariant z wysoką przepustowością pokazuje, jak Google dąży do szerokiego udostępniania Gemini deweloperom, a pozycja 10. w rankingu LMArena pozwala porównać go z konkurencją.",
    "updated_at": "2026-11-20",
+   "last_spotlight_at": null,
+   "image": null
+  },
+  {
+   "id": "gemini-3-pro",
+   "type": "model",
+   "name": "Gemini 3 Pro",
+   "aliases": "Google Gemini",
+   "ticker": "",
+   "summary": "Gemini to model AI i chatbot Google, który może przetwarzać i generować tekst, kod, obrazy, audio i wideo. Warianty Pro i Ultra to modele o dużej mocy obliczeniowej, przeznaczone do złożonych zadań. Seria Gemini 3 została wydana w ciągu 2025 roku, a jej celem było m.in. ograniczenie halucynacji i poprawa zdolności w badaniach i programowaniu.",
+   "owner": "Google",
+   "key_products": [
+    "Gemini Pro"
+   ],
+   "why_it_matters": "Wariant Pro z serii Gemini 3 to główna oferta Google do złożonych zadań, w której Google konkuruje z czołowymi modelami innych firm.",
+   "updated_at": "2026-11-21",
    "last_spotlight_at": null,
    "image": null
   },
@@ -421,6 +522,23 @@
    }
   },
   {
+   "id": "mimo-v2-6-pro",
+   "type": "model",
+   "name": "MiMo-V2.6-Pro",
+   "aliases": "",
+   "ticker": "",
+   "summary": "Xiaomi MiMo to rodzina dużych modeli językowych (LLM) rozwijanych przez Xiaomi. Pierwszy model, MiMo-7B, pojawił się w kwietniu 2025 roku. Obecnie MiMo jest dostępny dla deweloperów przez usługę API i stanowi kluczowy model AI w ekosystemie Xiaomi \"Human x Car x Home\".",
+   "owner": "Xiaomi",
+   "key_products": [
+    "MiMo-7B",
+    "MiMo"
+   ],
+   "why_it_matters": "To przykład, jak chiński producent elektroniki buduje własne modele AI i udostępnia je deweloperom przez API.",
+   "updated_at": "2026-11-21",
+   "last_spotlight_at": null,
+   "image": null
+  },
+  {
    "id": "msft",
    "type": "company",
    "name": "Microsoft",
@@ -468,6 +586,38 @@
    "image": null
   },
   {
+   "id": "muse-spark-1-2",
+   "type": "model",
+   "name": "Muse Spark 1.2",
+   "aliases": "",
+   "ticker": "",
+   "summary": "Muse to agent AI rozwijany przez Meta Platforms, zapowiedziany 8 września 2026 roku. Meta opisuje go jako osobistego agenta zdolnego do wykonywania długotrwałych zadań w imieniu użytkownika, a nie tylko odpowiadania na pojedyncze pytania jak chatbot. Agent korzysta z dużego modelu językowego o tej samej nazwie i został wydany w USA na iOS, Androida i w przeglądarce.",
+   "owner": "Meta Platforms",
+   "key_products": [
+    "Muse"
+   ],
+   "why_it_matters": "Pokazuje, że Meta stawia na agentów AI wykonujących zadania w imieniu użytkownika, a nie tylko na czatboty.",
+   "updated_at": "2026-11-21",
+   "last_spotlight_at": null,
+   "image": null
+  },
+  {
+   "id": "muse-spark-1-3",
+   "type": "model",
+   "name": "Muse Spark 1.3",
+   "aliases": "",
+   "ticker": "",
+   "summary": "Muse to agent AI rozwijany przez Meta Platforms, zapowiedziany 8 września 2026 roku. Meta opisuje go jako osobistego agenta zdolnego do wykonywania długotrwałych zadań w imieniu użytkownika, a nie tylko odpowiadania na pojedyncze pytania jak chatbot. Agent korzysta z dużego modelu językowego o tej samej nazwie i został wydany w USA na iOS, Androida i w przeglądarce.",
+   "owner": "Meta Platforms",
+   "key_products": [
+    "Muse"
+   ],
+   "why_it_matters": "Pokazuje, że Meta stawia na agentów AI wykonujących zadania w imieniu użytkownika, a nie tylko na czatboty.",
+   "updated_at": "2026-11-21",
+   "last_spotlight_at": null,
+   "image": null
+  },
+  {
    "id": "muse-wonder",
    "type": "model",
    "name": "Muse Wonder",
@@ -500,7 +650,7 @@
    ],
    "why_it_matters": "Sprzęt NVIDIA, zwłaszcza akceleratory do centrów danych, jest kluczowy dla rozwoju i trenowania modeli AI, a jej rosnąca kapitalizacja, która w 2025 roku przekroczyła 4 i 5 bilionów dolarów, odzwierciedla ogromny popyt na tę infrastrukturę.",
    "updated_at": "2026-11-19",
-   "last_spotlight_at": null,
+   "last_spotlight_at": "2026-11-20",
    "image": {
     "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/75/2788-2888_San_Tomas_Expwy.jpg/960px-2788-2888_San_Tomas_Expwy.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
     "credit": "Coolcaesar / CC BY-SA 4.0, Wikimedia Commons",
@@ -548,6 +698,23 @@
    ],
    "why_it_matters": "Palantir jest jednym z kluczowych dostawców platform do wdrażania analizy danych i AI w administracji publicznej, obronności i dużych przedsiębiorstwach, a jej produkt AIP pokazuje, jak firmy integrują modele AI z własnymi danymi.",
    "updated_at": "2026-11-19",
+   "last_spotlight_at": null,
+   "image": null
+  },
+  {
+   "id": "qwen3-8-max",
+   "type": "model",
+   "name": "Qwen3.8-Max",
+   "aliases": "Tongyi Qianwen,通义千问",
+   "ticker": "",
+   "summary": "Qwen (Tongyi Qianwen) to rodzina modeli językowych rozwijanych przez Alibaba Cloud, w większości z otwartymi wagami. Najnowsza wersja to Qwen3.8, a jej model o 2,4 biliona parametrów był do 12 sierpnia 2026 roku drugim co do wielkości i mocy otwartym LLM i chińskim LLM, po Kimi K3. Mniejsze, destylowane wersje, jak Qwen3.8 27B, są wydawane na bardziej liberalnej licencji Apache.",
+   "owner": "Alibaba Cloud",
+   "key_products": [
+    "Qwen3.8",
+    "Qwen3.8 27B"
+   ],
+   "why_it_matters": "Qwen jest jednym z najmocniejszych chińskich modeli z otwartymi wagami i częstym punktem wyjścia dla społeczności open-source.",
+   "updated_at": "2026-11-21",
    "last_spotlight_at": null,
    "image": null
   },

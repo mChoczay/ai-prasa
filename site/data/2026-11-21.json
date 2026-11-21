@@ -1,0 +1,1578 @@
+{
+ "date": "2026-11-21",
+ "edition": "daily",
+ "generated_at": "2026-11-21T04:33:24.200Z",
+ "quiet_day": false,
+ "greeting": "Kiedy pracowałeś, rynek AI przeżył ciężki piątek, a z Anthropic wyszła wiadomość, która może zmienić matematykę, choć na razie czeka na weryfikację. Poniżej najpierw twierdzenie o hipotezie Riemanna, potem giełda i rankingi.",
+ "lead_story": {
+  "title": "Matematyk z Anthropic twierdzi, że z pomocą Claude'a dowiódł hipotezy Riemanna",
+  "category": "inne",
+  "status": "opinia",
+  "is_update": true,
+  "lede": "Levent Alpöge, matematyk z Anthropic, ogłosił dowód hipotezy Riemanna uzyskany we współpracy z Claude'em. Dowód nie został jeszcze niezależnie zweryfikowany, a Anthropic nie skomentował sprawy.",
+  "body": "Levent Alpöge, matematyk związany z Anthropic, opublikował na swojej stronie dokument, w którym pisze, że wraz z Claude'em odkrył dowód hipotezy Riemanna. Jak podaje The Verge, to jedno z siedmiu zadań z listy Problemów Milenijnych, sformułowane w 1859 roku, dotyczące rozmieszczenia liczb pierwszych i zer pewnej funkcji. Uchodzi za jeden z najważniejszych nierozwiązanych problemów matematyki.\n\nWarto od razu zaznaczyć, na jakim etapie jest sprawa. To twierdzenie jednego autora, opublikowane na jego własnej stronie. Nikt niezależny go nie zweryfikował, a Anthropic, według The Verge, nie komentuje i nie angażuje się w ogłoszenie. Redakcja serwisu zwróciła się do firmy o komentarz i na razie nie dostała odpowiedzi. Dlatego traktuję to jako opinię i zapowiedź autora, a nie potwierdzony wynik.\n\nAlpöge pisze, że metoda łatwo się rozszerza: obejmuje uogólnioną hipotezę Riemanna, a przy większej ilości czasu, jak się spodziewa, także rozszerzoną. Dodaje, że on i Claude sformalizowali argumenty bez dodatkowych założeń. Rozwiązanie jest przedstawione w Lean, czyli w języku asystenta dowodzenia, co w zasadzie pozwala maszynowo sprawdzić poprawność kroków. To ważny szczegół, ale sama obecność formalizacji nie zastępuje oceny społeczności matematyków, na przykład tego, czy sformalizowane twierdzenie faktycznie mówi to, co powinno.\n\nAlpöge opisuje też, że napisał do szefa Anthropic Dario Amodei późną niedzielną nocą i sugeruje, że wstrzymał publikację do czwartkowego debiutu giełdowego firmy. To kontekst, który The Verge przytacza za jego dokumentem.\n\nZasady Clay Mathematics Institute są jasne: rozwiązanie musi zostać opublikowane i przetrwać co najmniej dwa lata badania, w trakcie których ma zyskać ogólną akceptację światowej społeczności matematycznej, zanim w ogóle będzie rozważane do nagrody 1 mln dolarów. Przez ćwierć wieku od ustanowienia nagrody oficjalnie rozwiązano tylko jeden problem, hipotezę Poincarégo.\n\nTo także kontekst konkurencji. Według The Verge we wrześniu OpenAI ogłosiło rozwiązanie problemu Naviera-Stokesa, na co poświęciło miliony dolarów i uruchomiło 10 tys. agentów. Wynik uznaje się za wiarygodny, choć nie ma formalnego uznania, a sprawę komplikują zarzuty o wykorzystanie niepublikowanych prac matematyków, które OpenAI stanowczo odrzuca. Buckmaster, profesor NYU, twierdzi, że rozwiązanie poszło drogą, nad którą pracował z Alpögem z użyciem Codexa OpenAI i Claude'a.\n\nAnthropic w sierpniu przyznawał, że pracuje z Claude'em nad hipotezą Riemanna, zastrzegając wtedy: „Nie spodziewamy się, że techniki, których użył Claude, doprowadzą do udowodnienia hipotezy Riemanna”. Alpöge podaje też, że w lipcu z pomocą Claude'a rozwiązał hipotezę jakobianową. Zalew takich wyników zostawia matematyków w sytuacji, w której muszą nadążyć z weryfikacją.\n\nNa razie najrozsądniejsza postawa to cierpliwość: sprawdzenie dowodu zajmie dłużej niż cykl newsowy.",
+  "for_you": "Dla developera to sygnał, że modele zaczynają wspierać pracę badawczą z formalną weryfikacją w Lean, co pasuje do wzorca generuj i sprawdzaj maszynowo. Do czasu niezależnej weryfikacji nie opieraj żadnych wniosków na tym twierdzeniu.",
+  "sources": [
+   {
+    "name": "The Verge",
+    "url": "https://www.theverge.com/ai-artificial-intelligence/1010051/anthropic-riemann-hypothesis-millennium-prize-problem",
+    "primary": false
+   }
+  ],
+  "image_topic": "Riemann hypothesis",
+  "image": {
+   "url": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/11/gettyimages-2305894185.jpg?quality=90&strip=all&crop=0%2C10.732984293194%2C100%2C78.534031413613&w=1200",
+   "credit": "theverge.com",
+   "link": "https://www.theverge.com/ai-artificial-intelligence/1010051/anthropic-riemann-hypothesis-millennium-prize-problem"
+  },
+  "may_affect": [
+   "claude-opus-5-5",
+   "claude-fable-5-1"
+  ],
+  "disclaimer": null,
+  "image_fallback": null,
+  "terms": [
+   "hipoteza-riemanna"
+  ]
+ },
+ "stories": [
+  {
+   "title": "Anthropic traci prawie 9% pierwszego pełnego dnia na giełdzie, a technologie spadają razem z nim",
+   "category": "gielda",
+   "status": "potwierdzone",
+   "is_update": true,
+   "lede": "Akcje Anthropic zamknęły piątek 8,5% niżej, po cenie 97,17 dolara. Spadki objęły cały sektor AI, także producentów chipów i dostawców chmury.",
+   "body": "Kiedy pracowałeś, rynek dał pierwszą odpowiedź na debiut Anthropic. Według CNBC akcje otworzyły się na Nasdaq w czwartek po cenie 111,50 dolara, po tym jak firma zebrała 81,3 mld dolarów w największym IPO w historii. W kolejnych sesjach kurs osuwał się i zamknął na poziomie 97,17 dolara.\n\nCNBC wiąże ruch z szerszym niepokojem wokół handlu AI. Wymienia trzy czynniki: zaskakujące odejście Jensena Huanga ze stanowiska CEO Nvidii, pogorszenie nastrojów wokół centrów danych oraz obawy, że rosnące stopy procentowe zaszkodzą planom wielobilionowej rozbudowy infrastruktury. Nvidia i AMD straciły ponad 13%, a Amazon, Google i Microsoft także zamknęły niżej.\n\nFala objęła Azję. SoftBank, który zainwestował w OpenAI łącznie 64,6 mld dolarów i jest właścicielem Arm, spadł o 14,48%, najmocniej od sierpnia 2024. Kospi zamknął 5,21% niżej, SK hynix straciło 5,92%, Samsung 7,01%, a TSMC w Tajpej 4,76%.\n\nAnalitycy są podzieleni. Seaport Research ocenia akcje neutralnie i pisze, że spółka oczekuje od inwestorów „niesamowitego skoku wiary”, a do uzasadnienia wyceny potrzebuje znacznie szybszego wzrostu w ciągu dwóch lat. William Blair daje ocenę outperform, chwaląc efektywność firmy i potencjał długoterminowej rentowności, mimo ogromnych kosztów infrastruktury.\n\nWątek polityczny: sekretarz skarbu Scott Bessent nazwał Anthropic historią „tylko w Ameryce” i zaznaczył, że firma chętnie współpracuje przy testowaniu modeli przed premierą. Według CNBC Tom Brown, szef ds. mocy obliczeniowych, ma przekazać dużą darowiznę na konta inwestycyjne dla dzieci.\n\nWażne jest rozróżnienie: spadek Anthropic przypada na dzień szerokiej wyprzedaży technologii, więc nie da się go przypisać wyłącznie jednej spółce.",
+   "for_you": "Jeśli opierasz produkt na API Claude, na razie nic się nie zmienia technicznie. Warto jednak śledzić raporty spółki publicznej jako źródło informacji o kosztach i ryzyku dostawcy.",
+   "sources": [
+    {
+     "name": "CNBC",
+     "url": "https://www.cnbc.com/2026/11/20/anthropic-stock-ai-amd-nvidia.html",
+     "primary": false
+    },
+    {
+     "name": "CNBC (SoftBank)",
+     "url": "https://www.cnbc.com/2026/11/20/softbank-ai-tech-stocks-slide-anthropic-debut.html",
+     "primary": false
+    }
+   ],
+   "image_topic": "Anthropic",
+   "image": {
+    "url": "https://image.cnbcfm.com/api/v1/image/108556066-1795129874503-108556066-1795129228984-gettyimages-2305354070-ANTHROPIC_IPO.jpeg?v=1795144010&w=1920&h=1080",
+    "credit": "cnbc.com",
+    "link": "https://www.cnbc.com/2026/11/20/anthropic-stock-ai-amd-nvidia.html"
+   },
+   "may_affect": [
+    "nvda",
+    "amd",
+    "amzn",
+    "googl",
+    "msft",
+    "000660.ks",
+    "005930.ks",
+    "tsm",
+    "arm"
+   ],
+   "disclaimer": "To nie jest porada inwestycyjna.",
+   "image_fallback": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/75/2788-2888_San_Tomas_Expwy.jpg/960px-2788-2888_San_Tomas_Expwy.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+    "credit": "Coolcaesar / CC BY-SA 4.0, Wikimedia Commons",
+    "link": "https://commons.wikimedia.org/wiki/File:2788-2888_San_Tomas_Expwy.jpg"
+   },
+   "terms": [
+    "ipo"
+   ]
+  },
+  {
+   "title": "Inkling 2 Mini: otwarty model z pętlą warstw, który mieści się w laptopie",
+   "category": "modele",
+   "status": "potwierdzone",
+   "is_update": false,
+   "lede": "Thinking Machines wydało Inkling 2 Mini, otwarty model MoE o 26,4 mld parametrów, który zajmuje około 20 GB. Powtarza środkowe warstwy trzykrotnie, by lepiej rozumować przy mniejszej liczbie tokenów.",
+   "body": "Thinking Machines opublikowało Inkling 2 Mini z otwartymi wagami. To model Mixture-of-Experts z 26,4 mld parametrów łącznie i 3,4 mld aktywnych. Jego cechą wyróżniającą jest architektura z pętlą: 24 warstwy podzielono na cztery bloki po sześć, a dwa środkowe przechodzą przez obliczenia trzykrotnie. Dzięki temu model może rozumować dłużej bez zapisywania całego toku myśli, co według autorów wymaga uwagi przy monitorowaniu przez chain of thought. Wariant ze zmienną liczbą pętli, wydany obok jako materiał badawczy, zachowywał czytelny CoT, a model nie wykazywał wyższej skłonności do sabotażu w testach agentowych.\n\nWagi trenowano głównie natywnie w NVFP4, a cztery ostatnie warstwy w MXFP8. Całość to około 20 GB, więc działa lokalnie. Zespół uruchomił go offline na MacBooku Pro, gdzie w kilka minut zbudował symulator lotu.\n\nWyniki według firmy: prowadzi wśród otwartych modeli poniżej 100 mld parametrów na DeepSWE v1.1 (48,2%) i Vals Index v2.2 (46,5%). Prowadzi też na BrowseComp, DeepSearchQA i MCP Atlas dzięki skutecznemu użyciu wyszukiwania i narzędzi. W teście efektywności energetycznej Stanford Hazy Research na NVIDIA DGX Spark uzyskał 0,703, wobec 0,430 dla Qwen3.6-35B-A3B i 0,159 dla Gemma-4-26B-A4B.\n\nOgraniczenia są jasno opisane. Pętla nie zwiększa pojemności wiedzy, więc wynik na AA-Omniscience jest typowy dla tej wielkości. W czacie wieloturowym i przy wielu ograniczeniach w instrukcji (MultiChallenge 50,0%, ComplexConstraints v1.1 33,4%) ustępuje Qwen3.8-27B, a na CritPt v2 i HLE-Diamond większym modelom.\n\nModel jest dostępny w Tinker do inferencji i dostrajania. Wszystkie wyniki pochodzą od samego wydawcy.",
+   "for_you": "Jeśli budujesz lokalnych agentów kodujących, to kandydat do testów, zwłaszcza przy ograniczonej pamięci. Do czatu z wieloma ograniczeniami lepszy może być Qwen3.8-27B.",
+   "sources": [
+    {
+     "name": "Thinking Machines",
+     "url": "https://thinkingmachines.ai/news/inkling-2-mini/",
+     "primary": true
+    }
+   ],
+   "image_topic": "Mixture of experts",
+   "image": {
+    "url": "https://thinkingmachines.ai/news/inkling-2-mini/images/cover-social.png",
+    "credit": "thinkingmachines.ai",
+    "link": "https://thinkingmachines.ai/news/inkling-2-mini/"
+   },
+   "may_affect": [
+    "nvda"
+   ],
+   "disclaimer": null,
+   "image_fallback": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/75/2788-2888_San_Tomas_Expwy.jpg/960px-2788-2888_San_Tomas_Expwy.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+    "credit": "Coolcaesar / CC BY-SA 4.0, Wikimedia Commons",
+    "link": "https://commons.wikimedia.org/wiki/File:2788-2888_San_Tomas_Expwy.jpg"
+   },
+   "terms": [
+    "mixture-of-experts",
+    "chain-of-thought"
+   ]
+  },
+  {
+   "title": "METR aktualizuje wykres horyzontu czasowego: modele słabsze w zadaniach wymagających osądu",
+   "category": "rankingi",
+   "status": "potwierdzone",
+   "is_update": false,
+   "lede": "Nowy raport METR pokazuje dalszy wykładniczy wzrost w zadaniach weryfikowalnych, ale modele wciąż gorzej radzą sobie z zadaniami otwartymi. Opus 5.5 zbliża się do poprzeczki w projektowaniu ewaluacji.",
+   "body": "METR zaktualizowało swój wykres horyzontu czasowego, który często bywał błędnie interpretowany. Metoda polega na tym, że modele wykonują zadania wcześniej zrobione przez ludzi, a ich wynik określa długość zadań (mierzona czasem człowieka), które potrafią ukończyć. Dotychczasowy wykres pokazywał podwajanie tej długości mniej więcej co cztery miesiące.\n\nW nowej wersji dodano zadania o znacznie dłuższym szacowanym czasie oraz bardziej otwarte. To ważne, bo uczenie przez wzmacnianie działa najlepiej tam, gdzie sukces da się sprawdzić automatycznie, jak w kodowaniu i matematyce. Trudniej jest przy zadaniach takich jak wybór kierunku badań, a to one są kluczowe dla automatyzacji badań nad AI.\n\nWyniki, jak opisuje MIT Technology Review: w zadaniu projektowania nowych ewaluacji dla METR żadna z ewaluacji stworzonych przez modele nie została uznana przez pracowników za przydatną, mimo że najlepsze modele przewyższają większość ludzi w inżynierii oprogramowania. W ocenianiu argumentów filozoficznych modele także ustąpiły ludziom, choć pracownicy METR różnią się co do znaczenia tego zadania. Nowsze modele, np. Opus 5.5, osiągają poziom „borderline above the bar”, podczas gdy rok temu wszystkie były wyraźnie poniżej.\n\nEksperci cytowani w tekście są ostrożni. Sayash Kapoor ocenia, że „smak badawczy” może być wąskim gardłem, inni sądzą, że modele trenowane na zadaniach weryfikowalnych w końcu opanują otwarte. Najoung Kim zaznacza, że nie wiadomo, jak ekstrapolować obserwowaną poprawę, bo takich zadań w raporcie jest mało. OpenAI również napisało, że jego modele radzą sobie gorzej w realnych zadaniach pracowników niż w łatwiejszych, weryfikowalnych.\n\nTekst przypomina też niedawny, mocno zredagowany raport METR sugerujący, że AI mogło przyspieszać tempo postępu w Anthropic dwukrotnie.",
+   "for_you": "Wynik zgadza się z codziennym doświadczeniem: agenci świetnie kodują, ale ocena jakości i dobór kierunku nadal wymagają człowieka. Przy planowaniu automatyzacji warto zakładać ten podział.",
+   "sources": [
+    {
+     "name": "MIT Technology Review",
+     "url": "https://www.technologyreview.com/2026/11/20/1149399/the-most-misunderstood-graph-in-ai-just-got-a-major-update/",
+     "primary": false
+    }
+   ],
+   "image_topic": "METR",
+   "image": {
+    "url": "https://wp.technologyreview.com/wp-content/uploads/2026/11/metr2a.jpg?resize=1200,600",
+    "credit": "technologyreview.com",
+    "link": "https://www.technologyreview.com/2026/11/20/1149399/the-most-misunderstood-graph-in-ai-just-got-a-major-update/"
+   },
+   "may_affect": [
+    "claude-opus-5-5"
+   ],
+   "disclaimer": null,
+   "image_fallback": null,
+   "terms": [
+    "horyzont-czasowy"
+   ]
+  },
+  {
+   "title": "Harness adapters: adapter LoRA trenowany RL podnosi Qwen3.8-27B z 39% do 55% na Terminal-Bench 2.1",
+   "category": "narzedzia",
+   "status": "potwierdzone",
+   "is_update": false,
+   "lede": "Hugging Face pokazuje przepis na dopasowanie modelu do konkretnego harnessu agentowego przez RL. Przy zamrożonych wagach Qwen3.8-27B wynik rośnie z 39% do 55% pass@1, a zużycie tokenów spada z 2,9K do 1,5K na zadanie.",
+   "body": "Hugging Face opisuje metodę, w której zamiast wymieniać model, uczy się lekki adapter LoRA pod konkretny harness i rozkład zadań. Modele są zwykle optymalizowane ogólnie, więc w parze z danym harnessem tracą część skuteczności i efektywności. Przykład z wpisu: Qwen3.8-27B w harnessie pi ma na Terminal-Bench 2.1 wynik 39% przy średnio 2,9K tokenów na zadanie. Po dodaniu adaptera trenowanego RL wynik to 55% pass@1 i 1,5K tokenów. Według autorów to głównie efekt tego, że model mniej rozumuje, rzadziej woła narzędzia i częściej trafia za pierwszym razem.\n\nRóżnica wobec wielu frameworków RL: tam trenuje się reimplementację pętli agenta, tutaj harness działa dokładnie tak, jak jest dystrybuowany, a trener uczy się na tokenach zarejestrowanych przez proxy między harnessem a vLLM. Eksperyment obejmuje trzy harnessy: Pi 1.5.2, OpenCode 2.2.7 i Hermes Agent v0.22.6, z gotowymi obrazami Docker.\n\nDużą część wpisu zajmuje budowa zbioru zadań. Z około 59 000 zadań w formacie Harbor znalezionych na Hubie wybrano dwa źródła przeznaczone do treningu i dołożono trzecie, wygenerowane w Tasksmith (Repo2RLEnv): z 30 pull requestów powstały 24 zadania w 10 repozytoriach Pythona. Filtr odrzucał duplikaty, zadania oznaczone jako nie do treningu i 253 zadania z docelowych benchmarków. Walidację openenv validate przeszło 858 z 1127 kandydatów, a kontrole błędnych odpowiedzi wykryły m.in. weryfikator regex-log w Terminal-Bench 2.1, który akceptował złe wyniki.\n\nPonieważ GRPO porównuje próby w obrębie zadania, zadania zawsze rozwiązywane lub nigdy nie rozwiązywane nie dają sygnału. Z 442 ocenionych zadań Qwen3.8-27B rozwiązał 151 za każdym razem i 120 nigdy, a 171 zadań utworzyło zbiór kwalifikowany do treningu.",
+   "for_you": "Jeśli używasz jednego harnessu na stałe, trening adaptera może obniżyć koszt tokenów i podnieść skuteczność bez zmiany bazowego modelu. Przepis jest odtwarzalny na własnych zadaniach.",
+   "sources": [
+    {
+     "name": "Hugging Face",
+     "url": "https://huggingface.co/blog/harness-adapters-at-scale",
+     "primary": true
+    }
+   ],
+   "image_topic": "Hugging Face",
+   "image": {
+    "url": "https://huggingface.co/blog/assets/harness-adapters-at-scale/thumbnail.png",
+    "credit": "huggingface.co",
+    "link": "https://huggingface.co/blog/harness-adapters-at-scale"
+   },
+   "may_affect": [],
+   "disclaimer": null,
+   "image_fallback": null,
+   "terms": [
+    "adapter-lora",
+    "harness"
+   ]
+  },
+  {
+   "title": "Dwa miliony kanarków w łańcuchu dostaw AI: prompty wyciekają przez routery i hostingi",
+   "category": "inne",
+   "status": "potwierdzone",
+   "is_update": false,
+   "lede": "HD Moore z Dragos wysłał prawie dwa miliony promptów z unikalnymi sekretami przez sieć usług AI. Część trafiła do atakujących, resellerów i niezgodnych z zasadami scraperów.",
+   "body": "Badacz HD Moore, główny badacz Dragos, sprawdził, co dzieje się z wrażliwymi danymi wysyłanymi przez pośredników inferencji. Zebrał klucze AWS powiązane z pustymi kontami, hasła, unikalne adresy URL, nazwy DNS i odwołania do prywatnych repozytoriów git. Każdy sekret trafił do dokładnie jednego promptu u jednego dostawcy, a infrastrukturę odbierającą ruch kontrolował sam.\n\nPodstawowy problem: prompty są szyfrowane w tranzycie, ale odszyfrowywane na każdym przeskoku. Router AI, jak OpenRouter lub Vercel, czyta tekst, żeby wybrać dostawcę, a dalej zapytanie może trafić do innego routera i do różnych hostingów. Każdy z uczestników może logować prompt tak długo, jak pozwala jego polityka.\n\nNajpoważniejsze odkrycie to włamanie do trzech dostawców hostingu. W jednym przypadku atakujący użyli „kilkuset” kluczy AWS, a wszystkie żądania wysłane w kilku oknach czasowych pod koniec października zostały skradzione, także te odrzucone, zanim model je uruchomił, co wskazuje na kopiowanie przy wejściu do usługi. W dwóch pozostałych część skradzionych zapytań miała flagę ZDR, która nie pomogła. Klucze testowano w ciągu godzin i użyto ich „dziesiątki tysięcy” razy w wywołaniach AWS, w tym próbowano włączyć modele w Bedrock i dodać własnych użytkowników IAM.\n\nCześć sekretów przechwycili sami resellerzy, którzy kusili niskimi cenami i włączali logowanie. Kolejny wątek to chiński lab AI, którego systemy pobierały tajne adresy URL z ponad połowy promptów wysłanych do jego modeli między lipcem a październikiem, w tym z około dwóch trzecich żądań oznaczonych jako brak zbierania danych lub ZDR. Dotyczyło to też amerykańskich hostingów odsprzedających te modele.\n\nMoore uważa, że najskuteczniejsza ochrona to hostowanie modeli na własnych serwerach, co jest drogie. Alternatywą jest korzystanie bezpośrednio z dostawcy pierwszego rzędu.",
+   "for_you": "Jeśli kierujesz ruch przez routery lub tanich resellerów, nie wysyłaj tam kluczy, haseł ani prywatnych adresów, bo flaga ZDR nie jest gwarancją. Warto filtrować sekrety z promptów przed wysłaniem.",
+   "sources": [
+    {
+     "name": "Ars Technica",
+     "url": "https://arstechnica.com/security/2026/11/a-leaky-ai-supply-chain-is-exposing-secret-user-data-at-an-alarming-rate/",
+     "primary": false
+    }
+   ],
+   "image_topic": "OpenRouter",
+   "image": {
+    "url": "https://cdn.arstechnica.net/wp-content/uploads/2026/11/ai-privacy-leakage-1152x648.jpg",
+    "credit": "arstechnica.com",
+    "link": "https://arstechnica.com/security/2026/11/a-leaky-ai-supply-chain-is-exposing-secret-user-data-at-an-alarming-rate/"
+   },
+   "may_affect": [
+    "amzn"
+   ],
+   "disclaimer": null,
+   "image_fallback": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/3/33/Jeff_Bezos_2016.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
+    "credit": "U.S. Department of Defense photo by Senior Master Sgt. Adrian Cadiz / CC BY 2.0, Wikimedia Commons",
+    "link": "https://commons.wikimedia.org/wiki/File:Jeff_Bezos_2016.jpg"
+   },
+   "terms": [
+    "router-ai",
+    "kanarek"
+   ]
+  },
+  {
+   "title": "Cursor rozważa odejście od chińskich modeli. Raport Kongresu o chińskim AI w amerykańskim stosie",
+   "category": "regulacje",
+   "status": "potwierdzone",
+   "is_update": false,
+   "lede": "Cursor, należący do SpaceX, poinformował komisje Izby Reprezentantów, że rozważa rezygnację z chińskich modeli open-weight ze względu na ryzyko geopolityczne. Composer 2 powstał na Kimi K2.5.",
+   "body": "Według raportu dwóch komisji Izby Reprezentantów, dotyczącego bezpieczeństwa krajowego oraz chińskiej rywalizacji, który CNBC poznało przed publikacją, Cursor zamierza „zbadać wycofywanie” modeli open-weight opracowanych w Chinach. Cursor, który SpaceX przejęło w sierpniu przy domniemanej wycenie kapitału 60 mld dolarów, zbudował model kodujący Composer 2 na Kimi K2.5 od Moonshot AI. Ani Cursor, ani SpaceX nie odpowiedziały CNBC na prośbę o komentarz.\n\nRaport jest wynikiem wielomiesięcznego śledztwa w sprawie obecności chińskich modeli w amerykańskim stosie technologicznym. W badaniu uczestniczyły także Airbnb i DoorDash. Główne motywy adopcji to koszt, możliwość dostosowania oraz niemal czołowa wydajność, a USA nie mają konkurencyjnej alternatywy open-weight w cenie i jakości, jakich oczekuje rynek.\n\nRekomendacje obejmują krajową amerykańską inicjatywę open-weight, łączącą publiczną moc obliczeniową, wspólną infrastrukturę ewaluacji i „zgodny z prawem dostęp” do amerykańskich modeli czołowych na potrzeby treningu. Raport postuluje też rozszerzenie październikowego zakazu DeepSeek w federalnych agencjach cywilnych na wszystkie modele opracowane w Chinach w systemach federalnych i przy realizacji kontraktów federalnych.\n\nTło: Waszyngton obawia się też zdalnego dostępu chińskich firm do chipów Nvidii przez zagraniczne centra danych oraz destylacji. W poniedziałek BIS ogłosiło tymczasową regułę mającą zapobiegać takiemu dostępowi.\n\nTo na razie deklaracja rozważań i zalecenia komisji, a nie wiążące przepisy.",
+   "for_you": "Jeśli twój produkt korzysta z chińskich modeli open-weight, zwłaszcza w kontraktach z sektorem federalnym USA, warto przygotować plan zastępstwa. Ryzyko regulacyjne rośnie, choć przepisów jeszcze nie ma.",
+   "sources": [
+    {
+     "name": "CNBC",
+     "url": "https://www.cnbc.com/2026/11/20/cursor-chinese-ai-models-geopolitical-risk.html",
+     "primary": false
+    }
+   ],
+   "image_topic": "Cursor (code editor)",
+   "image": {
+    "url": "https://image.cnbcfm.com/api/v1/image/108295661-1776885403878-gettyimages-2271955278-boivin-notitle260422_npyod.jpeg?v=1776885479&w=1920&h=1080",
+    "credit": "cnbc.com",
+    "link": "https://www.cnbc.com/2026/11/20/cursor-chinese-ai-models-geopolitical-risk.html"
+   },
+   "may_affect": [
+    "nvda"
+   ],
+   "disclaimer": null,
+   "image_fallback": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/75/2788-2888_San_Tomas_Expwy.jpg/960px-2788-2888_San_Tomas_Expwy.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+    "credit": "Coolcaesar / CC BY-SA 4.0, Wikimedia Commons",
+    "link": "https://commons.wikimedia.org/wiki/File:2788-2888_San_Tomas_Expwy.jpg"
+   },
+   "terms": [
+    "open-weight",
+    "kimi-k2-5"
+   ]
+  }
+ ],
+ "market": {
+  "commentary": "Piątek był dniem przeceny całego sektora AI. Wszystkie 18 spółek z koszyka zamknęło dzień na minusie, najmocniej Arm (-14,09%), Nvidia (-14,01%), Micron (-13,89%) i AMD (-13,25%). CNBC wiąże spadki z pierwszym pełnym dniem notowań Anthropic, który zamknął się 8,5% niżej, oraz z ponad 2-procentowym spadkiem Nasdaq Composite. Przecena objęła też Azję: SoftBank miał najgorszy dzień od ponad dwóch lat. W ujęciu 30-dniowym Nvidia traci 43,45%, Intel 44,84%, a Super Micro 39,13%.",
+  "mood": "Wszystkie 18 spółek koszyka spadło, a dziewięć z nich o ponad 9% w jeden dzień.",
+  "disclaimer": "To nie jest porada inwestycyjna.",
+  "rows": [
+   {
+    "ticker": "NVDA",
+    "name": "NVIDIA",
+    "close": 125.53,
+    "change_1d": -14.01,
+    "change_7d": -22.92,
+    "change_30d": -43.45,
+    "last_trade_date": "2026-11-20"
+   },
+   {
+    "ticker": "MSFT",
+    "name": "Microsoft",
+    "close": 484.52,
+    "change_1d": -2.77,
+    "change_7d": -7.51,
+    "change_30d": -9.09,
+    "last_trade_date": "2026-11-20"
+   },
+   {
+    "ticker": "GOOGL",
+    "name": "Alphabet",
+    "close": 265.29,
+    "change_1d": -2.7,
+    "change_7d": -10.31,
+    "change_30d": -20.75,
+    "last_trade_date": "2026-11-20"
+   },
+   {
+    "ticker": "META",
+    "name": "Meta",
+    "close": 560.84,
+    "change_1d": -5.93,
+    "change_7d": -12.6,
+    "change_30d": -19.6,
+    "last_trade_date": "2026-11-20"
+   },
+   {
+    "ticker": "AMZN",
+    "name": "Amazon",
+    "close": 246.82,
+    "change_1d": -4.1,
+    "change_7d": -7.44,
+    "change_30d": -5.93,
+    "last_trade_date": "2026-11-20"
+   },
+   {
+    "ticker": "AAPL",
+    "name": "Apple",
+    "close": 342.56,
+    "change_1d": -1.9,
+    "change_7d": -3.85,
+    "change_30d": -0.42,
+    "last_trade_date": "2026-11-20"
+   },
+   {
+    "ticker": "TSM",
+    "name": "TSMC",
+    "close": 318.71,
+    "change_1d": -9.48,
+    "change_7d": -20.07,
+    "change_30d": -26.21,
+    "last_trade_date": "2026-11-20"
+   },
+   {
+    "ticker": "AMD",
+    "name": "AMD",
+    "close": 424.39,
+    "change_1d": -13.25,
+    "change_7d": -20.54,
+    "change_30d": -23.22,
+    "last_trade_date": "2026-11-20"
+   },
+   {
+    "ticker": "AVGO",
+    "name": "Broadcom",
+    "close": 304.41,
+    "change_1d": -12.19,
+    "change_7d": -12.28,
+    "change_30d": -9.88,
+    "last_trade_date": "2026-11-20"
+   },
+   {
+    "ticker": "ORCL",
+    "name": "Oracle",
+    "close": 101.19,
+    "change_1d": -8.48,
+    "change_7d": -19.27,
+    "change_30d": -21.64,
+    "last_trade_date": "2026-11-20"
+   },
+   {
+    "ticker": "PLTR",
+    "name": "Palantir",
+    "close": 143.49,
+    "change_1d": -6.63,
+    "change_7d": -14.58,
+    "change_30d": -28.87,
+    "last_trade_date": "2026-11-20"
+   },
+   {
+    "ticker": "CRWV",
+    "name": "CoreWeave",
+    "close": 39.51,
+    "change_1d": -12.02,
+    "change_7d": -25.64,
+    "change_30d": -36.09,
+    "last_trade_date": "2026-11-20"
+   },
+   {
+    "ticker": "ARM",
+    "name": "Arm",
+    "close": 152.2,
+    "change_1d": -14.09,
+    "change_7d": -20.12,
+    "change_30d": -32.83,
+    "last_trade_date": "2026-11-20"
+   },
+   {
+    "ticker": "ASML",
+    "name": "ASML",
+    "close": 1266.22,
+    "change_1d": -6.63,
+    "change_7d": -15.31,
+    "change_30d": -24.48,
+    "last_trade_date": "2026-11-20"
+   },
+   {
+    "ticker": "SMCI",
+    "name": "Super Micro",
+    "close": 21.65,
+    "change_1d": -9.19,
+    "change_7d": -19.41,
+    "change_30d": -39.13,
+    "last_trade_date": "2026-11-20"
+   },
+   {
+    "ticker": "TSLA",
+    "name": "Tesla",
+    "close": 345.82,
+    "change_1d": -7.64,
+    "change_7d": -11.38,
+    "change_30d": -10.52,
+    "last_trade_date": "2026-11-20"
+   },
+   {
+    "ticker": "INTC",
+    "name": "Intel",
+    "close": 51.28,
+    "change_1d": -7.97,
+    "change_7d": -14.05,
+    "change_30d": -44.84,
+    "last_trade_date": "2026-11-20"
+   },
+   {
+    "ticker": "MU",
+    "name": "Micron",
+    "close": 594.51,
+    "change_1d": -13.89,
+    "change_7d": -23.62,
+    "change_30d": -34.93,
+    "last_trade_date": "2026-11-20"
+   }
+  ],
+  "as_of": "2026-11-20"
+ },
+ "rankings": {
+  "commentary": "W LMArena pierwsze trzy miejsca zajmują modele Google z rodziny Gemini 4, a najwyżej z Anthropic jest Claude Opus 5.5. Artificial Analysis ma innego lidera: Claude Fable 5.2, przed GPT-6.2 Astra. Na Hugging Face dominuje świeży Inkling 2 Mini.",
+  "notes": [
+   {
+    "board": "lmarena",
+    "text": "Prowadzi Gemini 4 Carbon, a za nim Gemini 4 Argon i Neon, więc Google zajmuje trzy pierwsze miejsca."
+   },
+   {
+    "board": "aa",
+    "text": "Na czele Claude Fable 5.2 od Anthropic, drugie miejsce ma GPT-6.2 Astra od OpenAI, a trzecie Gemini 4 Neon."
+   },
+   {
+    "board": "hf_trending",
+    "text": "Inkling-2-Mini od Thinking Machines debiutuje na pierwszym miejscu, a jego wersja GGUF od unsloth wchodzi na piąte."
+   }
+  ],
+  "lmarena": [
+   {
+    "rank": 1,
+    "model": "Gemini 4 Carbon",
+    "org": "google",
+    "score": 1539.3081974827726,
+    "variant": "High",
+    "delta": null
+   },
+   {
+    "rank": 2,
+    "model": "Gemini 4 Argon",
+    "org": "google",
+    "score": 1527.5448522948343,
+    "variant": "High",
+    "delta": null
+   },
+   {
+    "rank": 3,
+    "model": "Gemini 4 Neon",
+    "org": "google",
+    "score": 1523.5532166015744,
+    "variant": "High",
+    "delta": null
+   },
+   {
+    "rank": 4,
+    "model": "Claude Opus 5.5",
+    "org": "anthropic",
+    "score": 1512.865228413885,
+    "variant": "High",
+    "delta": null
+   },
+   {
+    "rank": 5,
+    "model": "Claude Fable 5.1",
+    "org": "anthropic",
+    "score": 1512.4735632286672,
+    "variant": "Max",
+    "delta": null
+   },
+   {
+    "rank": 6,
+    "model": "Claude Opus 5",
+    "org": "anthropic",
+    "score": 1506.3644818549558,
+    "variant": "Max",
+    "delta": null
+   },
+   {
+    "rank": 7,
+    "model": "Muse Wonder",
+    "org": "meta",
+    "score": 1503.3155733721408,
+    "variant": "Max",
+    "delta": null
+   },
+   {
+    "rank": 8,
+    "model": "Gemini 4 Hydrogen",
+    "org": "google",
+    "score": 1501.7760000165435,
+    "variant": "High",
+    "delta": null
+   },
+   {
+    "rank": 9,
+    "model": "Claude Opus 4.6",
+    "org": "anthropic",
+    "score": 1501.4841057716892,
+    "variant": "High",
+    "delta": null
+   },
+   {
+    "rank": 10,
+    "model": "Gemini 3.8 Flash",
+    "org": "google",
+    "score": 1500.2489156723623,
+    "variant": "High",
+    "delta": null
+   },
+   {
+    "rank": 11,
+    "model": "Muse Spark 1.3",
+    "org": "meta",
+    "score": 1493.55876983511,
+    "variant": "Max",
+    "delta": null
+   },
+   {
+    "rank": 12,
+    "model": "MiMo-V2.6-Pro",
+    "org": "xiaomi",
+    "score": 1492.7069136884154,
+    "variant": null,
+    "delta": null
+   },
+   {
+    "rank": 13,
+    "model": "Claude Fable 5",
+    "org": "anthropic",
+    "score": 1491.8266867891527,
+    "variant": "High",
+    "delta": null
+   },
+   {
+    "rank": 14,
+    "model": "Claude Opus 4.7",
+    "org": "anthropic",
+    "score": 1489.894686684384,
+    "variant": "High",
+    "delta": null
+   },
+   {
+    "rank": 15,
+    "model": "Gemini 3.7 Flash",
+    "org": "google",
+    "score": 1489.3244054221184,
+    "variant": "High",
+    "delta": null
+   },
+   {
+    "rank": 16,
+    "model": "Qwen3.8-Max",
+    "org": "alibaba",
+    "score": 1485.3362182705957,
+    "variant": null,
+    "delta": null
+   },
+   {
+    "rank": 17,
+    "model": "Muse Spark 1.2",
+    "org": "meta",
+    "score": 1484.0246496302227,
+    "variant": "xHigh",
+    "delta": null
+   },
+   {
+    "rank": 18,
+    "model": "Gemini 3.5 Flash",
+    "org": "google",
+    "score": 1483.064770061757,
+    "variant": "High",
+    "delta": null
+   },
+   {
+    "rank": 19,
+    "model": "Gemini 3.1 Pro Preview",
+    "org": "google",
+    "score": 1480.085619154786,
+    "variant": null,
+    "delta": null
+   },
+   {
+    "rank": 20,
+    "model": "Gemini 3 Pro",
+    "org": "google",
+    "score": 1479.5354492147512,
+    "variant": null,
+    "delta": null
+   }
+  ],
+  "aa": [
+   {
+    "rank": 1,
+    "model": "Claude Fable 5.2",
+    "org": "Anthropic",
+    "score": 64.6,
+    "variant": "Max, Default Fallback",
+    "delta": null
+   },
+   {
+    "rank": 2,
+    "model": "GPT-6.2 Astra",
+    "org": "OpenAI",
+    "score": 62.1,
+    "variant": "Max",
+    "delta": null
+   },
+   {
+    "rank": 3,
+    "model": "Gemini 4 Neon",
+    "org": "Google",
+    "score": 61.4,
+    "variant": "Xhigh",
+    "delta": null
+   },
+   {
+    "rank": 4,
+    "model": "Gemini 4 Carbon",
+    "org": "Google",
+    "score": 60,
+    "variant": "High",
+    "delta": null
+   },
+   {
+    "rank": 5,
+    "model": "Claude Opus 5.5",
+    "org": "Anthropic",
+    "score": 59.1,
+    "variant": "Max, Default Fallback",
+    "delta": null
+   },
+   {
+    "rank": 6,
+    "model": "GPT-6.2 Sol",
+    "org": "OpenAI",
+    "score": 57.3,
+    "variant": "Max",
+    "delta": null
+   },
+   {
+    "rank": 7,
+    "model": "GPT-6 Astra",
+    "org": "OpenAI",
+    "score": 56.9,
+    "variant": "Max",
+    "delta": null
+   },
+   {
+    "rank": 8,
+    "model": "GPT-6.1 Sol",
+    "org": "OpenAI",
+    "score": 54.6,
+    "variant": "Max",
+    "delta": null
+   },
+   {
+    "rank": 9,
+    "model": "Claude Sonnet 5.5",
+    "org": "Anthropic",
+    "score": 54.5,
+    "variant": "Max, Default Fallback",
+    "delta": null
+   },
+   {
+    "rank": 10,
+    "model": "Gemini 4 Hydrogen",
+    "org": "Google",
+    "score": 53.9,
+    "variant": "Xhigh",
+    "delta": null
+   },
+   {
+    "rank": 11,
+    "model": "GPT-6.1 Terra",
+    "org": "OpenAI",
+    "score": 51.3,
+    "variant": "Max",
+    "delta": null
+   },
+   {
+    "rank": 12,
+    "model": "Gemini 4 Argon",
+    "org": "Google",
+    "score": 50.4,
+    "variant": "High",
+    "delta": null
+   },
+   {
+    "rank": 13,
+    "model": "Muse Wonder Full",
+    "org": "Meta",
+    "score": 50.1,
+    "variant": "Max",
+    "delta": null
+   },
+   {
+    "rank": 14,
+    "model": "Claude Fable 5.1",
+    "org": "Anthropic",
+    "score": 50,
+    "variant": "Xhigh, Default Fallback",
+    "delta": null
+   },
+   {
+    "rank": 15,
+    "model": "Kimi K3.1 Pro",
+    "org": "Kimi",
+    "score": 46.5,
+    "variant": null,
+    "delta": null
+   },
+   {
+    "rank": 16,
+    "model": "Claude Opus 5",
+    "org": "Anthropic",
+    "score": 44.2,
+    "variant": "Max",
+    "delta": null
+   },
+   {
+    "rank": 17,
+    "model": "GPT-6 Sol",
+    "org": "OpenAI",
+    "score": 44.2,
+    "variant": "Max",
+    "delta": null
+   },
+   {
+    "rank": 18,
+    "model": "Muse Wonder",
+    "org": "Meta",
+    "score": 43.6,
+    "variant": "Max",
+    "delta": null
+   },
+   {
+    "rank": 19,
+    "model": "Qwen4 Max",
+    "org": "Alibaba",
+    "score": 42.9,
+    "variant": null,
+    "delta": null
+   },
+   {
+    "rank": 20,
+    "model": "Muse Spark 1.3",
+    "org": "Meta",
+    "score": 36.6,
+    "variant": "Max",
+    "delta": null
+   }
+  ],
+  "hf_trending": [
+   {
+    "rank": 1,
+    "model": "thinkingmachines/Inkling-2-Mini",
+    "org": "thinkingmachines",
+    "score": 584,
+    "delta": "new"
+   },
+   {
+    "rank": 2,
+    "model": "higurashi-ai/Haru-4B",
+    "org": "higurashi-ai",
+    "score": 314,
+    "delta": null
+   },
+   {
+    "rank": 3,
+    "model": "harness-hub/Qwen3.8-27B-pi-adapted",
+    "org": "harness-hub",
+    "score": 295,
+    "delta": null
+   },
+   {
+    "rank": 4,
+    "model": "Sentinel7/h3",
+    "org": "Sentinel7",
+    "score": 289,
+    "delta": 7
+   },
+   {
+    "rank": 5,
+    "model": "unsloth/Inkling-2-Mini-GGUF",
+    "org": "unsloth",
+    "score": 243,
+    "delta": "new"
+   },
+   {
+    "rank": 6,
+    "model": "Qwen/Qwen3.8-27B",
+    "org": "Qwen",
+    "score": 228.5,
+    "delta": -3
+   },
+   {
+    "rank": 7,
+    "model": "Lightricks/LTX-2.5",
+    "org": "Lightricks",
+    "score": 182,
+    "delta": -3
+   },
+   {
+    "rank": 8,
+    "model": "tencent/Hy4-flash",
+    "org": "tencent",
+    "score": 178,
+    "delta": -2
+   },
+   {
+    "rank": 9,
+    "model": "sensenova/SenseNova-Loop-9B",
+    "org": "sensenova",
+    "score": 171,
+    "delta": -2
+   },
+   {
+    "rank": 10,
+    "model": "MiniMaxAI/MiniMax-H3-Image",
+    "org": "MiniMaxAI",
+    "score": 165.5,
+    "delta": -5
+   },
+   {
+    "rank": 11,
+    "model": "inworld/voice-isolator",
+    "org": "inworld",
+    "score": 165.5,
+    "delta": -2
+   },
+   {
+    "rank": 12,
+    "model": "apple/FastFrames-L",
+    "org": "apple",
+    "score": 161,
+    "delta": -2
+   },
+   {
+    "rank": 13,
+    "model": "chatrlabs/Qwen-Image-2.1-Uncensored-Omni-Quantized",
+    "org": "chatrlabs",
+    "score": 150,
+    "delta": -5
+   },
+   {
+    "rank": 14,
+    "model": "meituan-longcat/LongCat-Video-Avatar-1.6",
+    "org": "meituan-longcat",
+    "score": 125,
+    "delta": -2
+   },
+   {
+    "rank": 15,
+    "model": "apple/DepthPro2",
+    "org": "apple",
+    "score": 123,
+    "delta": "new"
+   },
+   {
+    "rank": 16,
+    "model": "n4ze3m/tiny-voca",
+    "org": "n4ze3m",
+    "score": 120.5,
+    "delta": -3
+   },
+   {
+    "rank": 17,
+    "model": "maxwell-model/Maxwell-V1-Flash",
+    "org": "maxwell-model",
+    "score": 108,
+    "delta": -2
+   },
+   {
+    "rank": 18,
+    "model": "unsloth/Qwen3.8-27B-GGUF",
+    "org": "unsloth",
+    "score": 105.5,
+    "delta": -4
+   },
+   {
+    "rank": 19,
+    "model": "DavidAU/Qwen3.8-27B-TURBO-Fable-Cold-Fusion-735-882-Heretic-Uncensored-NEO-CODER-MAX-MTP-GGUF",
+    "org": "DavidAU",
+    "score": 103.5,
+    "delta": -3
+   },
+   {
+    "rank": 20,
+    "model": "tencent/Hy4",
+    "org": "tencent",
+    "score": 96,
+    "delta": "new"
+   }
+  ],
+  "areas": [
+   {
+    "key": "webdev",
+    "label": "Programowanie",
+    "new_leader": false,
+    "rows": [
+     {
+      "rank": 1,
+      "model": "Claude Fable 5.2",
+      "org": "anthropic",
+      "delta": null
+     },
+     {
+      "rank": 2,
+      "model": "Claude Opus 5.5",
+      "org": "anthropic",
+      "delta": null
+     },
+     {
+      "rank": 3,
+      "model": "Claude Sonnet 5.5",
+      "org": "anthropic",
+      "delta": null
+     },
+     {
+      "rank": 4,
+      "model": "Gemini 4 Carbon",
+      "org": "google",
+      "delta": null
+     },
+     {
+      "rank": 5,
+      "model": "GPT-6.2 Astra",
+      "org": "openai",
+      "delta": 2
+     },
+     {
+      "rank": 6,
+      "model": "Gemini 4 Neon",
+      "org": "google",
+      "delta": -1
+     },
+     {
+      "rank": 7,
+      "model": "GPT-6 Astra",
+      "org": "openai",
+      "delta": -1
+     },
+     {
+      "rank": 8,
+      "model": "GPT-6.2 Sol",
+      "org": "openai",
+      "delta": null
+     },
+     {
+      "rank": 9,
+      "model": "Qwen4-Max",
+      "org": "alibaba",
+      "delta": null
+     },
+     {
+      "rank": 10,
+      "model": "GPT-6.1 Sol",
+      "org": "openai",
+      "delta": null
+     }
+    ]
+   },
+   {
+    "key": "agent",
+    "label": "Agenci",
+    "new_leader": false,
+    "rows": [
+     {
+      "rank": 1,
+      "model": "Claude Fable 5.2",
+      "org": "anthropic",
+      "delta": null
+     },
+     {
+      "rank": 2,
+      "model": "Claude Opus 5.5",
+      "org": "anthropic",
+      "delta": null
+     },
+     {
+      "rank": 3,
+      "model": "Gemini 4 Neon",
+      "org": "google",
+      "delta": null
+     },
+     {
+      "rank": 4,
+      "model": "Gemini 4 Carbon",
+      "org": "google",
+      "delta": null
+     },
+     {
+      "rank": 5,
+      "model": "Claude Sonnet 5.5",
+      "org": "anthropic",
+      "delta": null
+     },
+     {
+      "rank": 6,
+      "model": "GPT-6.2 Astra",
+      "org": "openai",
+      "delta": null
+     },
+     {
+      "rank": 7,
+      "model": "GPT-6 Astra",
+      "org": "openai",
+      "delta": null
+     },
+     {
+      "rank": 8,
+      "model": "Claude Fable 5.1",
+      "org": "anthropic",
+      "delta": null
+     },
+     {
+      "rank": 9,
+      "model": "Gemini 4 Hydrogen",
+      "org": "google",
+      "delta": null
+     },
+     {
+      "rank": 10,
+      "model": "GPT-6.2 Sol",
+      "org": "openai",
+      "delta": null
+     }
+    ]
+   },
+   {
+    "key": "writing",
+    "label": "Pisanie",
+    "new_leader": false,
+    "rows": [
+     {
+      "rank": 1,
+      "model": "Gemini 4 Carbon",
+      "org": "google",
+      "delta": null
+     },
+     {
+      "rank": 2,
+      "model": "Gemini 4 Argon",
+      "org": "google",
+      "delta": null
+     },
+     {
+      "rank": 3,
+      "model": "Claude Opus 5.5",
+      "org": "anthropic",
+      "delta": null
+     },
+     {
+      "rank": 4,
+      "model": "Gemini 4 Neon",
+      "org": "google",
+      "delta": null
+     },
+     {
+      "rank": 5,
+      "model": "Claude Fable 5.1",
+      "org": "anthropic",
+      "delta": null
+     },
+     {
+      "rank": 6,
+      "model": "Claude Fable 5.2",
+      "org": "anthropic",
+      "delta": null
+     },
+     {
+      "rank": 7,
+      "model": "Gemini 4 Hydrogen",
+      "org": "google",
+      "delta": null
+     },
+     {
+      "rank": 8,
+      "model": "Claude Opus 4.6",
+      "org": "anthropic",
+      "delta": null
+     },
+     {
+      "rank": 9,
+      "model": "Claude Fable 5",
+      "org": "anthropic",
+      "delta": null
+     },
+     {
+      "rank": 10,
+      "model": "Gemini 3.8 Flash",
+      "org": "google",
+      "delta": null
+     }
+    ]
+   },
+   {
+    "key": "polish",
+    "label": "Po polsku",
+    "new_leader": false,
+    "rows": [
+     {
+      "rank": 1,
+      "model": "Gemini 4 Argon",
+      "org": "google",
+      "delta": null
+     },
+     {
+      "rank": 2,
+      "model": "Claude Fable 5.1",
+      "org": "anthropic",
+      "delta": null
+     },
+     {
+      "rank": 3,
+      "model": "Muse Wonder",
+      "org": "meta",
+      "delta": null
+     },
+     {
+      "rank": 4,
+      "model": "Claude Opus 5",
+      "org": "anthropic",
+      "delta": null
+     },
+     {
+      "rank": 5,
+      "model": "Gemini 3.5 Flash",
+      "org": "google",
+      "delta": null
+     },
+     {
+      "rank": 6,
+      "model": "Claude Opus 5.5",
+      "org": "anthropic",
+      "delta": null
+     },
+     {
+      "rank": 7,
+      "model": "Gemini 3.8 Flash",
+      "org": "google",
+      "delta": null
+     },
+     {
+      "rank": 8,
+      "model": "Muse Spark 1.2",
+      "org": "meta",
+      "delta": null
+     },
+     {
+      "rank": 9,
+      "model": "Gemini 3.7 Flash",
+      "org": "google",
+      "delta": null
+     },
+     {
+      "rank": 10,
+      "model": "Gemini 3 Pro",
+      "org": "google",
+      "delta": null
+     }
+    ]
+   },
+   {
+    "key": "math",
+    "label": "Matematyka",
+    "new_leader": false,
+    "rows": [
+     {
+      "rank": 1,
+      "model": "Gemini 4 Neon",
+      "org": "google",
+      "delta": null
+     },
+     {
+      "rank": 2,
+      "model": "Gemini 4 Argon",
+      "org": "google",
+      "delta": null
+     },
+     {
+      "rank": 3,
+      "model": "Claude Fable 5.1",
+      "org": "anthropic",
+      "delta": null
+     },
+     {
+      "rank": 4,
+      "model": "Claude Opus 5",
+      "org": "anthropic",
+      "delta": null
+     },
+     {
+      "rank": 5,
+      "model": "Gemini 3.8 Flash",
+      "org": "google",
+      "delta": null
+     },
+     {
+      "rank": 6,
+      "model": "Claude Opus 5.5",
+      "org": "anthropic",
+      "delta": null
+     },
+     {
+      "rank": 7,
+      "model": "Claude Opus 4.6",
+      "org": "anthropic",
+      "delta": null
+     },
+     {
+      "rank": 8,
+      "model": "Claude Fable 5",
+      "org": "anthropic",
+      "delta": null
+     },
+     {
+      "rank": 9,
+      "model": "Gemini 4 Hydrogen",
+      "org": "google",
+      "delta": null
+     },
+     {
+      "rank": 10,
+      "model": "GLM-5.3-Flash",
+      "org": "zai",
+      "delta": null
+     }
+    ]
+   }
+  ]
+ },
+ "rumors": [
+  {
+   "title": "CrowdStrike miał rozmawiać o przejęciu Zscaler",
+   "body": "Według Bloomberga, którego cytuje CNBC, CrowdStrike prowadzi rozmowy o kupnie dostawcy zabezpieczeń Zscaler. Informacja jest niepotwierdzona: CrowdStrike odmówił komentarza, a Zscaler nie odpowiedział na pytanie CNBC. Po publikacji akcje Zscaler wzrosły o 18% w handlu posesyjnym, a CrowdStrike spadły o ponad 8%. Kapitalizacja CrowdStrike to około 235 mld dolarów, Zscaler około 32 mld. To raczej temat z pogranicza AI i cyberbezpieczeństwa, wart obserwacji, bo na razie to jedno źródło.",
+   "sources": [
+    {
+     "name": "CNBC",
+     "url": "https://www.cnbc.com/2026/11/20/zscaler-crowdstrike-deal.html",
+     "primary": false
+    }
+   ]
+  }
+ ],
+ "big_moves": [
+  {
+   "entity_id": "arm",
+   "board": "market",
+   "change": "1d -14,09%",
+   "why": "Spadek wpisuje się w przecenę całego sektora AI po debiucie Anthropic. CNBC wiąże piątkowe spadki technologii z tym debiutem, ale nie podaje przyczyny dotyczącej samego Arm.",
+   "why_type": "hipoteza",
+   "sources": [
+    {
+     "name": "CNBC",
+     "url": "https://www.cnbc.com/2026/11/20/anthropic-stock-ai-amd-nvidia.html",
+     "primary": false
+    }
+   ],
+   "why_short": "przecena całego sektora AI po debiucie Anthropic"
+  },
+  {
+   "entity_id": "nvda",
+   "board": "market",
+   "change": "1d -14,01%",
+   "why": "To ruch całego rynku AI, a nie wiadomość o samej Nvidii. CNBC opisuje piątkowe spadki technologii wraz z notowaniami Anthropic, jednak możliwe, że wpływ miały też inne czynniki, których źródła nie wskazują.",
+   "why_type": "hipoteza",
+   "sources": [
+    {
+     "name": "CNBC",
+     "url": "https://www.cnbc.com/2026/11/20/anthropic-stock-ai-amd-nvidia.html",
+     "primary": false
+    }
+   ],
+   "why_short": "szeroka wyprzedaż technologii po debiucie Anthropic"
+  },
+  {
+   "entity_id": "mu",
+   "board": "market",
+   "change": "1d -13,89%",
+   "why": "Spadek zbiegł się z szeroką wyprzedażą spółek AI. Brak źródła, które wiązałoby ruch Microna z konkretnym wydarzeniem; możliwe, że to efekt nastrojów w całym sektorze.",
+   "why_type": "hipoteza",
+   "sources": [
+    {
+     "name": "CNBC",
+     "url": "https://www.cnbc.com/2026/11/20/anthropic-stock-ai-amd-nvidia.html",
+     "primary": false
+    }
+   ],
+   "why_short": "możliwy efekt wyprzedaży całego sektora AI"
+  },
+  {
+   "entity_id": "amd",
+   "board": "market",
+   "change": "1d -13,25%",
+   "why": "Spadek AMD mieści się w przecenie sektora AI w dniu pierwszego pełnego handlu Anthropic. Źródło nie łączy go z osobnym zdarzeniem dotyczącym AMD.",
+   "why_type": "hipoteza",
+   "sources": [
+    {
+     "name": "CNBC",
+     "url": "https://www.cnbc.com/2026/11/20/anthropic-stock-ai-amd-nvidia.html",
+     "primary": false
+    }
+   ],
+   "why_short": "przecena sektora AI, bez osobnej wiadomości o AMD"
+  },
+  {
+   "entity_id": "meta",
+   "board": "market",
+   "change": "7d -12,6%",
+   "why": "Brak jednoznacznej przyczyny dla tygodniowego spadku. Możliwe, że wpłynęła przecena sektora, a w tle były doniesienia o obawach o prywatność wokół agenta Muse, ale żadne źródło nie łączy ich wprost ze spadkiem.",
+   "why_type": "brak",
+   "sources": [],
+   "why_short": "brak jednoznacznej przyczyny, szeroka przecena sektora"
+  },
+  {
+   "entity_id": "avgo",
+   "board": "market",
+   "change": "7d -12,28%",
+   "why": "Brak jednoznacznej przyczyny dla ruchu Broadcom. W piątek spółka spadła o 12,19% razem z całym sektorem, co może tłumaczyć większość tygodniowego spadku.",
+   "why_type": "hipoteza",
+   "sources": [
+    {
+     "name": "CNBC",
+     "url": "https://www.cnbc.com/2026/11/20/anthropic-stock-ai-amd-nvidia.html",
+     "primary": false
+    }
+   ],
+   "why_short": "niemal cały spadek przyszedł w piątek z sektorem"
+  },
+  {
+   "entity_id": "thinkingmachines-inkling-2-mini",
+   "board": "hf_trending",
+   "change": "nowy na #1",
+   "why": "Thinking Machines opublikowało Inkling 2 Mini, otwarty model MoE, który mieści się w laptopie. Premiera wprost tłumaczy wejście na szczyt listy.",
+   "why_type": "fakt",
+   "sources": [
+    {
+     "name": "Thinking Machines",
+     "url": "https://thinkingmachines.ai/news/inkling-2-mini/",
+     "primary": true
+    }
+   ],
+   "why_short": "premiera otwartego modelu Inkling 2 Mini"
+  },
+  {
+   "entity_id": "sentinel7-h3",
+   "board": "hf_trending",
+   "change": "z #11 na #4",
+   "why": "Brak jednoznacznej przyczyny w dostarczonych źródłach.",
+   "why_type": "brak",
+   "sources": [],
+   "why_short": "brak jednoznacznej przyczyny"
+  },
+  {
+   "entity_id": "unsloth-inkling-2-mini-gguf",
+   "board": "hf_trending",
+   "change": "nowy na #5",
+   "why": "To skwantyzowana wersja GGUF modelu Inkling 2 Mini, który prowadzi na liście. Możliwe, że zainteresowanie lokalnym uruchamianiem napędza oba wpisy.",
+   "why_type": "hipoteza",
+   "sources": [
+    {
+     "name": "Thinking Machines",
+     "url": "https://thinkingmachines.ai/news/inkling-2-mini/",
+     "primary": true
+    }
+   ],
+   "why_short": "wersja GGUF świeżo wydanego Inkling 2 Mini"
+  },
+  {
+   "entity_id": "qwen-qwen3-8-27b",
+   "board": "hf_trending",
+   "change": "z #3 na #6",
+   "why": "Możliwe, że spadek wynika z napływu nowych wydań, zwłaszcza Inkling 2 Mini i jego wersji GGUF, które wyprzedziły model.",
+   "why_type": "hipoteza",
+   "sources": [],
+   "why_short": "wyprzedzony przez nowe wydania Inkling"
+  },
+  {
+   "entity_id": "lightricks-ltx-2-5",
+   "board": "hf_trending",
+   "change": "z #4 na #7",
+   "why": "Brak jednoznacznej przyczyny; ranking przesunęły nowe wejścia.",
+   "why_type": "brak",
+   "sources": [],
+   "why_short": "brak jednoznacznej przyczyny, wejścia nowych modeli"
+  },
+  {
+   "entity_id": "tencent-hy4-flash",
+   "board": "hf_trending",
+   "change": "z #6 na #8",
+   "why": "Brak jednoznacznej przyczyny; to niewielki spadek wynikający z przesunięć na liście.",
+   "why_type": "brak",
+   "sources": [],
+   "why_short": "brak jednoznacznej przyczyny"
+  },
+  {
+   "entity_id": "sensenova-sensenova-loop-9b",
+   "board": "hf_trending",
+   "change": "z #7 na #9",
+   "why": "Brak jednoznacznej przyczyny; niewielki spadek po wejściu nowych modeli.",
+   "why_type": "brak",
+   "sources": [],
+   "why_short": "brak jednoznacznej przyczyny"
+  },
+  {
+   "entity_id": "minimaxai-minimax-h3-image",
+   "board": "hf_trending",
+   "change": "z #5 na #10",
+   "why": "Brak jednoznacznej przyczyny; model stracił pięć miejsc.",
+   "why_type": "brak",
+   "sources": [],
+   "why_short": "brak jednoznacznej przyczyny"
+  },
+  {
+   "entity_id": "inworld-voice-isolator",
+   "board": "hf_trending",
+   "change": "z #9 na #11",
+   "why": "Brak jednoznacznej przyczyny; wypadł z pierwszej dziesiątki.",
+   "why_type": "brak",
+   "sources": [],
+   "why_short": "brak jednoznacznej przyczyny"
+  },
+  {
+   "entity_id": "apple-fastframes-l",
+   "board": "hf_trending",
+   "change": "z #10 na #12",
+   "why": "Brak jednoznacznej przyczyny; wypadł z pierwszej dziesiątki.",
+   "why_type": "brak",
+   "sources": [],
+   "why_short": "brak jednoznacznej przyczyny"
+  },
+  {
+   "entity_id": "chatrlabs-qwen-image-2-1-uncensored-omni-quantized",
+   "board": "hf_trending",
+   "change": "z #8 na #13",
+   "why": "Brak jednoznacznej przyczyny; model stracił pięć miejsc.",
+   "why_type": "brak",
+   "sources": [],
+   "why_short": "brak jednoznacznej przyczyny"
+  },
+  {
+   "entity_id": "meituan-longcat-longcat-video-avatar-1-6",
+   "board": "hf_trending",
+   "change": "z #12 na #14",
+   "why": "Brak jednoznacznej przyczyny.",
+   "why_type": "brak",
+   "sources": [],
+   "why_short": "brak jednoznacznej przyczyny"
+  },
+  {
+   "entity_id": "apple-depthpro2",
+   "board": "hf_trending",
+   "change": "nowy na #15",
+   "why": "Brak jednoznacznej przyczyny w dostarczonych źródłach; to nowe wejście na listę.",
+   "why_type": "brak",
+   "sources": [],
+   "why_short": "brak jednoznacznej przyczyny, nowe wejście"
+  },
+  {
+   "entity_id": "n4ze3m-tiny-voca",
+   "board": "hf_trending",
+   "change": "z #13 na #16",
+   "why": "Brak jednoznacznej przyczyny.",
+   "why_type": "brak",
+   "sources": [],
+   "why_short": "brak jednoznacznej przyczyny"
+  },
+  {
+   "entity_id": "maxwell-model-maxwell-v1-flash",
+   "board": "hf_trending",
+   "change": "z #15 na #17",
+   "why": "Brak jednoznacznej przyczyny.",
+   "why_type": "brak",
+   "sources": [],
+   "why_short": "brak jednoznacznej przyczyny"
+  },
+  {
+   "entity_id": "unsloth-qwen3-8-27b-gguf",
+   "board": "hf_trending",
+   "change": "z #14 na #18",
+   "why": "Brak jednoznacznej przyczyny; możliwe, że to ruch podobny do bazowego Qwen3.8-27B, który także spadł.",
+   "why_type": "hipoteza",
+   "sources": [],
+   "why_short": "możliwy ruch razem z bazowym Qwen3.8-27B"
+  },
+  {
+   "entity_id": "davidau-qwen3-8-27b-turbo-fable-cold-fusion-735-882-heretic-uncensored-neo-coder-max-mtp-gguf",
+   "board": "hf_trending",
+   "change": "z #16 na #19",
+   "why": "Brak jednoznacznej przyczyny.",
+   "why_type": "brak",
+   "sources": [],
+   "why_short": "brak jednoznacznej przyczyny"
+  },
+  {
+   "entity_id": "tencent-hy4",
+   "board": "hf_trending",
+   "change": "nowy na #20",
+   "why": "Brak jednoznacznej przyczyny w dostarczonych źródłach; to nowe wejście na listę.",
+   "why_type": "brak",
+   "sources": [],
+   "why_short": "brak jednoznacznej przyczyny, nowe wejście"
+  },
+  {
+   "entity_id": "zyphra-zonos3-mini",
+   "board": "hf_trending",
+   "change": "wypadł z #17",
+   "why": "Brak jednoznacznej przyczyny; model wypadł z listy.",
+   "why_type": "brak",
+   "sources": [],
+   "why_short": "brak jednoznacznej przyczyny"
+  },
+  {
+   "entity_id": "facebook-sam3",
+   "board": "hf_trending",
+   "change": "wypadł z #18",
+   "why": "Brak jednoznacznej przyczyny; model wypadł z listy.",
+   "why_type": "brak",
+   "sources": [],
+   "why_short": "brak jednoznacznej przyczyny"
+  },
+  {
+   "entity_id": "black-forest-labs-flux-3-image-klein-comfy",
+   "board": "hf_trending",
+   "change": "wypadł z #19",
+   "why": "Brak jednoznacznej przyczyny; model wypadł z listy.",
+   "why_type": "brak",
+   "sources": [],
+   "why_short": "brak jednoznacznej przyczyny"
+  },
+  {
+   "entity_id": "thinkingmachines-inkling-2-small",
+   "board": "hf_trending",
+   "change": "wypadł z #20",
+   "why": "Możliwe, że wyparła go nowa wersja Mini tej samej rodziny, ale żadne źródło tego nie potwierdza.",
+   "why_type": "hipoteza",
+   "sources": [],
+   "why_short": "możliwe wyparcie przez nowy Inkling 2 Mini"
+  }
+ ],
+ "follow_ups": [
+  {
+   "entity_id": "nvda",
+   "move": "-14,01% w jeden dzień",
+   "related_story": "Anthropic debiutuje na Nasdaq jako „ANT”, wycena około 1,5 bln dolarów",
+   "story_date": "2026-11-20"
+  },
+  {
+   "entity_id": "amd",
+   "move": "-13,25% w jeden dzień",
+   "related_story": "Anthropic debiutuje na Nasdaq jako „ANT”, wycena około 1,5 bln dolarów",
+   "story_date": "2026-11-20"
+  },
+  {
+   "entity_id": "meta",
+   "move": "-12,6% w tydzień",
+   "related_story": "Agent Muse od Meta: wewnętrzne rozmowy pokazują obawy o prywatność",
+   "story_date": "2026-11-19"
+  }
+ ],
+ "closing": "W nadchodzących dniach warto obserwować, czy ktoś niezależny zabierze głos w sprawie dowodu Alpögego oraz jak zachowa się sektor po tak głębokiej przecenie. Warto też sprawdzić, czy Anthropic skomentuje ogłoszenie swojego matematyka.",
+ "weekly": null,
+ "monthly": null,
+ "spotlight": {
+  "company_id": "amd",
+  "model_id": "claude-opus-5-5"
+ },
+ "minutes": 15
+}

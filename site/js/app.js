@@ -6,7 +6,7 @@ import { readerPages, tabTitle, rankingAreas, pickArea } from './shape.js';
 import { loadConfig, saveConfig, clearConfig, storedRating, initFeedback } from './feedback.js';
 import { countVisit } from './visits.js';
 import { closesSheet } from './sheet.js';
-import { VULN_DEFAULTS, renderVulns, renderVulnList, normalizeVulnState, vulnCountText } from './vulns.js';
+import { VULN_DEFAULTS, renderVulns, renderVulnList, normalizeVulnState, vulnCountText, clearVulnState } from './vulns.js';
 
 const app = document.getElementById('app');
 const dialog = document.getElementById('profile-dialog');
@@ -197,6 +197,14 @@ async function route() {
 }
 
 app.addEventListener('click', (event) => {
+  if (event.target.closest('[data-vclear]')) {
+    vulnState = clearVulnState(vulnState);
+    saveVulnState();
+    app.innerHTML = renderVulns(vulnData, vulnState);
+    const search = app.querySelector('[data-vq]');
+    if (search) search.focus();
+    return;
+  }
   if (event.target.closest('[data-retry]')) {
     route();
     return;

@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { VULN_DEFAULTS, filterVulns, sortVulns, renderVulns, normalizeVulnState, vulnCountText } from '../site/js/vulns.js';
+import { VULN_DEFAULTS, filterVulns, sortVulns, renderVulns, normalizeVulnState, vulnCountText, clearVulnState } from '../site/js/vulns.js';
 import { parseRoute } from '../site/js/reader.js';
 import { mastheadNav } from '../site/js/render.js';
 import { tabTitle } from '../site/js/shape.js';
@@ -111,7 +111,8 @@ test('the Luki page has its route, menu entry and tab title', () => {
 test('review: entries no longer show a per-entry check date; the header explains the daily check', () => {
   const html = renderVulns(data(), VULN_DEFAULTS);
   assert.ok(!html.includes('sprawdzono'));
-  assert.ok(html.includes('Status sprawdzany codziennie w NVD i OSV.'));
+  assert.ok(html.includes('Status sprawdzany codziennie w publicznych bazach luk.'));
+  assert.ok(!html.includes('NVD'));
 });
 
 test('minor: a stored state is checked against the allowed values', () => {
@@ -144,4 +145,10 @@ test('an entry opens with a kicker in the paper style: status and severity', () 
   const patched = renderVulns(data(), { ...VULN_DEFAULTS, status: 'patched' });
   assert.match(patched, /<span class="vk-patched">załatana od 10\.08\.0<\/span> · <span class="vk-sev vk-high">wysoka<\/span>/);
   assert.match(renderVulns(data(), VULN_DEFAULTS), /<span class="vk-sev vk-none">nieznana<\/span>/);
+});
+
+test('nothing matching the filters offers a way back', () => {
+  const html = renderVulns(data(), { ...VULN_DEFAULTS, q: 'nic-takiego' });
+  assert.ok(html.includes('<p class="no-data">Nic nie pasuje do filtrów. <button type="button" class="vuln-clear" data-vclear>Wyczyść filtry</button></p>'));
+  assert.deepEqual(clearVulnState({ ...VULN_DEFAULTS, status: 'patched', severity: 'niska', q: 'x', sort: 'product', showPatched: true }), { ...VULN_DEFAULTS, sort: 'product', showPatched: true });
 });

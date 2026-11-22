@@ -43,7 +43,7 @@ test('Vulns prompt uses only planned editions that loaded, and skips when paused
   assert.equal(broken.skip, true);
 });
 
-test('Merge findings adds rows, marks loaded editions processed, survives a failed call and stops on credits', () => {
+test('Merge findings adds rows, marks loaded editions processed, and survives a failed call or a credits stop', () => {
   const prompt = { skip: false, loaded: ['2026-11-22'], editions: [edition('2026-11-22')] };
   const nodes = { 'Vulns prompt': [prompt], 'Read log': [{}] };
   const [ok] = run('Merge findings', { nodes, input: [{ ok: true, data: { vulns: [finding] } }] });
@@ -55,7 +55,9 @@ test('Merge findings adds rows, marks loaded editions processed, survives a fail
   assert.deepEqual(failed.processed, []);
   const [skipped] = run('Merge findings', { nodes: { 'Vulns prompt': [{ skip: true, loaded: [], editions: [] }], 'Read log': [{}] }, input: [{ skip: true }] });
   assert.deepEqual(skipped.processed, []);
-  assert.throws(() => run('Merge findings', { nodes, input: [{ error: { message: 'CREDITS: vulns HTTP 400' } }] }), /CREDITS:/);
+  const [paused] = run('Merge findings', { nodes, input: [{ error: { message: 'CREDITS: vulns HTTP 400' } }] });
+  assert.deepEqual(paused.processed, []);
+  assert.equal(paused.stop, 'CREDITS: vulns HTTP 400');
 });
 
 test('Check queue emits one item per CVE to look up, or a single none', () => {
@@ -146,4 +148,25 @@ test('review: network failures do not stop the run, and fewer checks run on a Ha
   assert.equal(busy.length, 5);
   const quiet = run('Check queue', { nodes: { 'Merge findings': [{ rows, changed: [], processed: [] }], 'Vulns prompt': [{ skip: true }] } });
   assert.equal(quiet.length, 8);
+});
+
+test('minor: answers stay paired with their CVE even when the queue has a gap', () => {
+  const row = (cve) => ({ vuln_key: cve, cve_id: cve, status: 'open', first_date: '2026-11-22', checked_at: '', fixed_in: '', severity: '' });
+  const osv = readFileSync(new URL('./fixtures/osv-CVE-2026-125396.json', import.meta.url), 'utf8');
+  const nodes = {
+    'Merge findings': [{ rows: [row('CVE-2026-1001'), row('CVE-2026-125396')], changed: [], processed: [] }],
+    'Check queue': [{ none: true }, { cve_id: 'CVE-2026-125396' }],
+    OSV: [{ statusCode: 404, data: '' }, { statusCode: 200, data: osv }],
+  };
+  const [out] = run('Apply checks', { nodes, input: [{ statusCode: 404, data: '' }, { statusCode: 404, data: '' }] });
+  const by = Object.fromEntries(out.rows.map((r) => [r.cve_id, r]));
+  assert.equal(by['CVE-2026-125396'].status, 'patched');
+  assert.equal(by['CVE-2026-1001'].checked_at, '');
+});
+
+test('minor: re-reading a day updates its vuln_runs row instead of adding one', () => {
+  const at = src.indexOf("name: 'Save runs'");
+  const block = src.slice(at, at + 900);
+  assert.match(block, /operation: 'upsert'/);
+  assert.match(block, /keyName: 'date'/);
 });

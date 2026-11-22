@@ -210,12 +210,13 @@ const mergeNode = node({
       jsCode:
         INLINE('n8n/lib/budget.js', 'n8n/lib/vulns.js') +
         "const results = $input.all().map((i) => i.json);\n" +
-        "const stop = pauseErrorOf(results);\n" +
-        "if (stop) throw new Error(stop);\n" +
+        "// A credits or key stop is already handled by PPAI · claude (pipeline paused, the morning run mails);\n" +
+        "// here it only means no findings today, so the free database checks still run.\n" +
+        "const stop = pauseErrorOf(results) || '';\n" +
         "const prompt = $('Vulns prompt').first().json;\n" +
         "const rows = $('Read log').all().map((i) => i.json).filter((r) => r && r.vuln_key);\n" +
         "const r = results[0] || {};\n" +
-        "if (prompt.skip || !r.ok) return [{ json: { rows, changed: [], processed: [] } }];\n" +
+        "if (prompt.skip || !r.ok) return [{ json: { rows, changed: [], processed: [], stop } }];\n" +
         "const answer = r.data || { vulns: [] };\n" +
         "const merged = mergeFindings(rows, answer, prompt.editions, new Date().toISOString());\n" +
         "const list = Array.isArray(answer.vulns) ? answer.vulns : [];\n" +
@@ -288,7 +289,8 @@ const applyNode = node({
         "const osvOut = $('OSV').all().map((i) => i.json);\n" +
         "const nvdOut = $input.all().map((i) => i.json);\n" +
         "const body = (res) => { if (!res || Number(res.statusCode) !== 200) return null; try { return typeof res.data === 'string' ? JSON.parse(res.data) : res.data; } catch (e) { return null; } };\n" +
-        "const results = queue.filter((q) => q.cve_id).map((q, i) => ({ cve_id: q.cve_id, osv: body(osvOut[i]), nvd: body(nvdOut[i]) }));\n" +
+        "// Pair by position first, then drop the placeholder, so a gap never shifts the answers.\n" +
+        "const results = queue.map((q, i) => ({ cve_id: q.cve_id, osv: body(osvOut[i]), nvd: body(nvdOut[i]) })).filter((x) => x.cve_id);\n" +
         "const checked = applyChecks(m.rows, results, new Date().toISOString());\n" +
         "const changed = new Map(m.changed.map((r) => [r.vuln_key, r]));\n" +
         "for (const r of checked.changed) changed.set(r.vuln_key, r);\n" +
@@ -392,8 +394,10 @@ const saveRuns = node({
     name: 'Save runs',
     parameters: {
       resource: 'row',
-      operation: 'insert',
+      operation: 'upsert',
       dataTableId: { __rl: true, mode: 'id', value: T_RUNS, cachedResultName: 'vuln_runs' },
+      matchType: 'allConditions',
+      filters: { conditions: [{ keyName: 'date', condition: 'eq', keyValue: expr('{{ $json.date }}') }] },
       columns: {
         mappingMode: 'defineBelow',
         value: { date: expr('{{ $json.date }}'), processed_at: expr('{{ $json.processed_at }}'), found: expr('{{ $json.found }}') },

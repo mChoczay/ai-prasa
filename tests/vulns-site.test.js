@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { VULN_DEFAULTS, filterVulns, sortVulns, renderVulns } from '../site/js/vulns.js';
+import { VULN_DEFAULTS, filterVulns, sortVulns, renderVulns, normalizeVulnState, vulnCountText } from '../site/js/vulns.js';
 import { parseRoute } from '../site/js/reader.js';
 import { mastheadNav } from '../site/js/render.js';
 import { tabTitle } from '../site/js/shape.js';
@@ -112,4 +112,18 @@ test('review: entries no longer show a per-entry check date; the header explains
   const html = renderVulns(data(), VULN_DEFAULTS);
   assert.ok(!html.includes('sprawdzono'));
   assert.ok(html.includes('Status sprawdzany codziennie w NVD i OSV.'));
+});
+
+test('minor: a stored state is checked against the allowed values', () => {
+  assert.deepEqual(normalizeVulnState({ status: 'gone', severity: 'ogromna', sort: 'random', showPatched: 'yes', q: 'x', extra: 1 }), { ...VULN_DEFAULTS, q: 'x' });
+  assert.deepEqual(normalizeVulnState({ status: 'patched', severity: 'unknown', sort: 'product', showPatched: true }), { ...VULN_DEFAULTS, status: 'patched', severity: 'unknown', sort: 'product', showPatched: true });
+  assert.deepEqual(normalizeVulnState(null), { ...VULN_DEFAULTS });
+  assert.deepEqual(normalizeVulnState('oops'), { ...VULN_DEFAULTS });
+});
+
+test('minor: the number of results is announced politely', () => {
+  assert.equal(vulnCountText(data(), VULN_DEFAULTS), 'Pokazano 4 z 4.');
+  assert.equal(vulnCountText(data(), { ...VULN_DEFAULTS, status: 'patched' }), 'Pokazano 1 z 4.');
+  assert.equal(vulnCountText(null, VULN_DEFAULTS), '');
+  assert.match(renderVulns(data(), { ...VULN_DEFAULTS, q: 'gpg' }), /<p class="vuln-count" aria-live="polite">Pokazano 1 z 4\.<\/p>/);
 });

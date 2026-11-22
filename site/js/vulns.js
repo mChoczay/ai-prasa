@@ -10,6 +10,26 @@ const STATUS_PILLS = [['all', 'Wszystkie'], ['open', 'Niezałatane'], ['patched'
 const SEVERITY_PILLS = [['all', 'Każda'], ['krytyczna', 'Krytyczna'], ['wysoka', 'Wysoka'], ['średnia', 'Średnia'], ['niska', 'Niska'], ['unknown', 'Nieznana']];
 const SORT_PILLS = [['newest', 'Najnowsze'], ['severity', 'Najpoważniejsze'], ['product', 'A–Z']];
 
+// A state from storage or a click, kept to the values the pills offer.
+export function normalizeVulnState(state) {
+  const s = state && typeof state === 'object' ? state : {};
+  const pick = (value, options, fallback) => (options.some(([v]) => v === value) ? value : fallback);
+  return {
+    status: pick(s.status, STATUS_PILLS, VULN_DEFAULTS.status),
+    severity: pick(s.severity, SEVERITY_PILLS, VULN_DEFAULTS.severity),
+    q: typeof s.q === 'string' ? s.q : '',
+    sort: pick(s.sort, SORT_PILLS, VULN_DEFAULTS.sort),
+    showPatched: s.showPatched === true,
+  };
+}
+
+// "Pokazano 3 z 4." for the live region; empty when the log is empty.
+export function vulnCountText(data, state) {
+  const all = (data && Array.isArray(data.vulns) ? data.vulns : []).filter(Boolean);
+  if (!all.length) return '';
+  return `Pokazano ${filterVulns(all, state).length} z ${all.length}.`;
+}
+
 const rank = (v) => (v.severity in SEVERITY_ORDER ? SEVERITY_ORDER[v.severity] : 4);
 const newest = (a, b) => String(b.first_date || '').localeCompare(String(a.first_date || '')) || String(a.cve_id).localeCompare(String(b.cve_id));
 
@@ -87,6 +107,7 @@ export function renderVulns(data, state) {
 <input type="search" class="vuln-search" data-vq placeholder="Szukaj programu lub CVE" aria-label="Szukaj programu lub CVE" value="${escapeHtml(s.q)}">
 <div class="chips" role="group" aria-label="Sortowanie">${pills('', SORT_PILLS, s.sort, 'data-vs')}</div>
 </div>
+<p class="vuln-count" aria-live="polite">${vulnCountText(data, s)}</p>
 <div class="vuln-list">${renderVulnList(data, s)}</div>
 <p class="vuln-agent"><a href="data/luki.md">plik dla agenta</a></p></section>`;
 }

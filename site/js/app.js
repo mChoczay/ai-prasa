@@ -5,7 +5,7 @@ import { readerPages, tabTitle, rankingAreas, pickArea } from './shape.js';
 import { loadConfig, saveConfig, clearConfig, storedRating, initFeedback } from './feedback.js';
 import { countVisit } from './visits.js';
 import { closesSheet } from './sheet.js';
-import { VULN_DEFAULTS, renderVulns, renderVulnList } from './vulns.js';
+import { VULN_DEFAULTS, renderVulns, renderVulnList, normalizeVulnState, vulnCountText } from './vulns.js';
 
 const app = document.getElementById('app');
 const dialog = document.getElementById('profile-dialog');
@@ -78,9 +78,16 @@ let vulnData = null;
 let vulnState = { ...VULN_DEFAULTS };
 try {
   const saved = store ? JSON.parse(store.getItem(VULN_KEY) || 'null') : null;
-  if (saved && typeof saved === 'object') vulnState = { ...VULN_DEFAULTS, ...saved, q: '' };
+  vulnState = normalizeVulnState({ ...saved, q: '' });
 } catch {
   // Defaults.
+}
+// The list and its announced count, after a filter, sort or search change.
+function refreshVulnList() {
+  const list = app.querySelector('.vuln-list');
+  if (list) list.innerHTML = renderVulnList(vulnData, vulnState);
+  const count = app.querySelector('.vuln-count');
+  if (count) count.textContent = vulnCountText(vulnData, vulnState);
 }
 function saveVulnState() {
   try {
@@ -115,19 +122,20 @@ async function route() {
     disposeReader = null;
   }
   document.body.classList.toggle('reading', r.view === 'reader');
+  // The Luki page needs only its own file, so it opens even when the edition index does not load.
+  if (r.view === 'vulns') {
+    try {
+      vulnData = await getJson('data/luki.json');
+    } catch {
+      vulnData = null;
+    }
+    app.innerHTML = renderVulns(vulnData, vulnState);
+    document.title = tabTitle('vulns');
+    window.scrollTo(0, 0);
+    return;
+  }
   try {
     const index = await loadCommon();
-    if (r.view === 'vulns') {
-      try {
-        vulnData = await getJson('data/luki.json');
-      } catch {
-        vulnData = null;
-      }
-      app.innerHTML = renderVulns(vulnData, vulnState);
-      document.title = tabTitle('vulns');
-      window.scrollTo(0, 0);
-      return;
-    }
     if (r.view === 'archive') {
       app.innerHTML = renderArchive(index);
       document.title = tabTitle('archive');
@@ -185,14 +193,15 @@ app.addEventListener('click', (event) => {
   const vf = event.target.closest('[data-vf]');
   const vs = event.target.closest('[data-vs]');
   if (vf || vs) {
-    if (vf) {
-      const [key, value] = vf.dataset.vf.split(':');
-      vulnState = { ...vulnState, [key]: value };
-    } else {
-      vulnState = { ...vulnState, sort: vs.dataset.vs };
-    }
+    const [key, value] = vf ? vf.dataset.vf.split(':') : ['sort', vs.dataset.vs];
+    vulnState = normalizeVulnState({ ...vulnState, [key]: value });
     saveVulnState();
-    app.innerHTML = renderVulns(vulnData, vulnState);
+    // Redraw the list and the pressed pills only, so the focus stays on the button that was pressed.
+    app.querySelectorAll(vf ? `[data-vf^="${key}:"]` : '[data-vs]').forEach((b) => {
+      const v = vf ? b.dataset.vf.split(':')[1] : b.dataset.vs;
+      b.setAttribute('aria-pressed', String(v === vulnState[key]));
+    });
+    refreshVulnList();
     return;
   }
   const pill = event.target.closest('.area-chip');
@@ -229,8 +238,7 @@ function openSheet() {
 app.addEventListener('input', (event) => {
   if (!event.target.matches('[data-vq]')) return;
   vulnState = { ...vulnState, q: event.target.value };
-  const list = app.querySelector('.vuln-list');
-  if (list) list.innerHTML = renderVulnList(vulnData, vulnState);
+  refreshVulnList();
 });
 
 // Opening or closing the patched entries is remembered too.

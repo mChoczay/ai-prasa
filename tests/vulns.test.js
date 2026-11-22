@@ -272,3 +272,24 @@ test('review: the agent file treats entries as data and builds read-only checks 
   assert.match(npm, /- `pip show requests`/);
   assert.match(npm, /- `docker images nginx`/);
 });
+
+const nvdWith = (text) => ({ vulnerabilities: [{ cve: { descriptions: [{ lang: 'en', value: text }], metrics: {}, references: [] } }] });
+
+test('minor: "before" followed by a date is not a fixed version', () => {
+  assert.deepEqual(nvdFacts(nvdWith('Reports received before 2026-01-05 were affected.')), { severity: '', patched: false, fixed_in: '' });
+  assert.deepEqual(nvdFacts(nvdWith('Fixed in builds before 2026.01 only.')), { severity: '', patched: false, fixed_in: '' });
+});
+
+test('minor: several fixed branches are all kept', () => {
+  assert.deepEqual(nvdFacts(nvdWith('Foo 1.x before 1.5.2 and 2.x before 2.3.1 allow a crash.')), { severity: '', patched: true, fixed_in: '1.5.2, 2.3.1' });
+});
+
+test('minor: an older edition read later becomes the first article', () => {
+  const later = mergeFindings([], { vulns: [gpgme()] }, [edition('2026-11-22')], NOW);
+  const older = edition('2026-11-20');
+  const { rows, changed } = mergeFindings(later.rows, { vulns: [gpgme({ story_ref: '2026-11-20#3' })] }, [older], NOW);
+  assert.equal(rows[0].first_date, '2026-11-20');
+  assert.equal(rows[0].story_date, '2026-11-20');
+  assert.equal(rows[0].story_n, 3);
+  assert.equal(changed.length, 1);
+});

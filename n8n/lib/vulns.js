@@ -106,7 +106,8 @@ function mergeFindings(rows, answer, editions, now) {
     }
     fill('summary', _vText(f.summary));
     fill('agent_text', _vText(f.agent_text));
-    if (!row.first_date) {
+    // The earliest article is the first one, even when an older edition is read later.
+    if (!row.first_date || story.date < row.first_date) {
       row.first_date = story.date;
       row.story_date = story.date;
       row.story_n = story.n;
@@ -191,8 +192,15 @@ function nvdFacts(body) {
   }
   const tagged = (cve.references || []).some((r) => r && Array.isArray(r.tags) && r.tags.includes('Patch'));
   const en = (cve.descriptions || []).find((d) => d && d.lang === 'en');
-  const m = /\bbefore (?:version )?(v?\d[\w.\-+~]*)/i.exec((en && en.value) || '');
-  const fixed = m ? _vVersion(m[1].replace(/[.,;:]+$/, '')) : '';
+  // Every "before X" (several branches: "1.x before 1.5.2 and 2.x before 2.3.1"), never a date.
+  const found = [];
+  const re = /\bbefore (?:version )?(v?\d[\w.\-+~]*)/gi;
+  let m;
+  while ((m = re.exec((en && en.value) || ''))) {
+    const v = _vVersion(m[1].replace(/[.,;:]+$/, ''));
+    if (v && !/^\d{4}[-./]\d{1,2}(?:[-./]\d{1,2})?$/.test(v) && !found.includes(v)) found.push(v);
+  }
+  const fixed = found.join(', ');
   return { severity, patched: tagged || Boolean(fixed), fixed_in: fixed };
 }
 

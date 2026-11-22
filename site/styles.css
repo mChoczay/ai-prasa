@@ -316,3 +316,4 @@ button.chip { background: none; cursor: pointer; }
 .vuln-agent { margin-top: 24px; font: 12px/1.5 var(--sans); }
 .vuln-agent a { color: var(--ink-soft); }
 .vuln-note { margin: 0 0 8px; font: 12px/1.5 var(--sans); color: var(--ink-soft); }
+.vuln-count { margin: 4px 0 0; font: 12px/1.5 var(--sans); color: var(--ink-soft); }

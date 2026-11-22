@@ -4,6 +4,7 @@ import { parseRoute, clampPage, renderReader, initReader } from './reader.js';
 import { readerPages, tabTitle, rankingAreas, pickArea } from './shape.js';
 import { loadConfig, saveConfig, clearConfig, storedRating, initFeedback } from './feedback.js';
 import { countVisit } from './visits.js';
+import { closesSheet } from './sheet.js';
 
 const app = document.getElementById('app');
 const dialog = document.getElementById('profile-dialog');
@@ -166,27 +167,34 @@ app.addEventListener('click', (event) => {
   if (termEl) {
     const term = termsById[termEl.dataset.term];
     dialogBody.innerHTML = term ? renderTermCard(term) : `<p>${escapeHtml(termEl.textContent)}</p>`;
-    dialog.showModal();
-    dialog.scrollTop = 0;
+    openSheet();
     return;
   }
   const chip = event.target.closest('[data-entity]');
   if (!chip) return;
   const profile = profilesById[chip.dataset.entity];
   dialogBody.innerHTML = profile ? renderProfileCard(profile) : `<p>${escapeHtml(chip.textContent)}</p>`;
-  dialog.showModal();
-  dialog.scrollTop = 0;
+  openSheet();
 });
 
-// The card closes with its cross, a tap on the dimmed backdrop (the dialog box itself has no padding,
-// so a click whose target is the dialog lands outside the content) or Esc (native).
-let pressedOnBackdrop = false;
+function openSheet() {
+  dialog.showModal();
+  const sheet = dialog.querySelector('.sheet');
+  if (sheet) sheet.scrollTop = 0;
+}
+
+// The card closes with its cross, a tap anywhere outside the card or Esc (native). The dimmed area is
+// the dialog itself with cursor: pointer, so iOS Safari sends it clicks (it can drop taps on ::backdrop).
+let pressedOn = null;
 dialog.addEventListener('pointerdown', (event) => {
-  pressedOnBackdrop = event.target === dialog;
+  pressedOn = event.target;
 });
 dialog.addEventListener('click', (event) => {
-  if ((event.target === dialog && pressedOnBackdrop) || event.target.closest('.sheet-close')) dialog.close();
-  pressedOnBackdrop = false;
+  if (closesSheet(pressedOn, event.target)) dialog.close();
+  pressedOn = null;
+});
+dialog.addEventListener('pointercancel', () => {
+  pressedOn = null;
 });
 
 // A story image that fails (blocked hotlink, 404) is swapped for its fallback once, then hidden.

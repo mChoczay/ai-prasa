@@ -54,6 +54,13 @@ function periodPrompt({ kind, date, topics, snapshots, numbers }) {
   return `Supplement: ${label}, ending ${date}.\n\n## Stories published in the period\n${stories}\n\n## Stock changes over the period\n${market}\n\n## Leaderboards, now vs. the start of the period\n${boards}`;
 }
 
+// The whole user message: one block per requested supplement, then the reader's notes once.
+function periodUserText({ kinds, date, topics, snapshots, numbers, feedback = '' }) {
+  const blocks = kinds.map((kind) => periodPrompt({ kind, date, topics, snapshots, numbers })).join('\n\n---\n\n');
+  const notes = String(feedback || '').trim();
+  return `${blocks}${notes ? `\n\n## Reader feedback\n${notes}` : ''}\n\nWrite one supplement per requested key: ${kinds.join(', ')}.`;
+}
+
 // One schema with a property per requested kind.
 function periodSchema(single, kinds) {
   const properties = {};
@@ -68,4 +75,4 @@ function addPeriods(edition, data, kinds) {
   return e;
 }
 
-export { periodKinds, periodPrompt, periodSchema, addPeriods };
+export { periodKinds, periodPrompt, periodUserText, periodSchema, addPeriods };

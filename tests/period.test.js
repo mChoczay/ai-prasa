@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { periodKinds, periodPrompt, periodSchema, addPeriods } from '../n8n/lib/period.js';
+import { periodKinds, periodPrompt, periodUserText, periodSchema, addPeriods } from '../n8n/lib/period.js';
 
 const numbers = {
   market: { rows: [{ name: 'NVIDIA', ticker: 'NVDA', change_7d: -13.11, change_30d: -30.46 }] },
@@ -45,4 +45,14 @@ test('periodSchema and addPeriods handle one or both supplements', () => {
   assert.equal(e.minutes, 15);
   assert.equal(e.supplement_minutes, 5);
   assert.equal(addPeriods({ date: 'x' }, {}, ['monthly']).monthly, null);
+});
+
+test('periodUserText joins the requested supplements and adds the reader feedback once', () => {
+  const both = periodUserText({ kinds: ['weekly', 'monthly'], date: '2026-12-01', topics, snapshots, numbers, feedback: 'Notes from the reader: krócej' });
+  assert.equal(both.split('Supplement: ').length - 1, 2);
+  assert.equal(both.split('## Reader feedback').length - 1, 1);
+  assert.match(both, /## Reader feedback\nNotes from the reader: krócej/);
+  assert.match(both, /Write one supplement per requested key: weekly, monthly\.$/);
+  const plain = periodUserText({ kinds: ['weekly'], date: '2026-11-22', topics, snapshots, numbers, feedback: '  ' });
+  assert.doesNotMatch(plain, /Reader feedback/);
 });

@@ -68,7 +68,7 @@ test('front prompt node and assemble node produce a checked daily edition and pi
     input: [{ ok: true, data: front }],
   });
   const e = json.edition;
-  assert.equal(json.next, 'profiles');
+  assert.equal(json.next, 'edit');
   assert.equal(e.date, '2026-11-19');
   assert.equal(e.lead_story.title, 'Lead');
   assert.equal(e.lead_story.disclaimer, 'To nie jest porada inwestycyjna.');

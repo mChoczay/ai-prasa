@@ -1,6 +1,6 @@
 import { workflow, node, trigger, ifElse, expr } from '@n8n/workflow-sdk';
 
-// Relay stage between front and profiles, only on Sundays (weekly) and the 1st (monthly): Sonnet writes
+// Relay stage between front and the editor, only on Sundays (weekly) and the 1st (monthly): Sonnet writes
 // "Tydzień w AI" / "Miesiąc w AI" from the published topics, stock changes and leaderboard snapshots.
 // A failed supplement is skipped (the daily edition still goes out), except a credits or auth stop.
 
@@ -145,14 +145,14 @@ const relayCheck = ifElse({
   },
 });
 
-const handToProfiles = node({
+const handToEditor = node({
   type: 'n8n-nodes-base.executeWorkflow',
   version: 1.2,
   config: {
-    name: 'Hand to profiles',
+    name: 'Hand to editor',
     parameters: {
       source: 'database',
-      workflowId: { __rl: true, mode: 'id', value: 'JlzjHDGeEemYMhQr', cachedResultName: 'PPAI · profiles' },
+      workflowId: { __rl: true, mode: 'id', value: 'PSOZYxd2bShSJf3H', cachedResultName: 'PPAI · redakcja' },
       mode: 'once',
       options: { waitForSubWorkflow: false },
     },
@@ -169,4 +169,4 @@ export default workflow('ppai-period', 'PPAI · period')
   .to(buildPrompt)
   .to(writePeriod)
   .to(addPeriodsNode)
-  .to(relayCheck.onTrue(handToProfiles).onFalse(returnPayload));
+  .to(relayCheck.onTrue(handToEditor).onFalse(returnPayload));

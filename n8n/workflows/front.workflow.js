@@ -2,7 +2,7 @@ import { workflow, node, trigger, switchCase, expr } from '@n8n/workflow-sdk';
 
 // Relay stage 3: Sonnet writes the greeting, lead, market and rankings commentary, "Dlaczego?" and the
 // closing; then the edition is assembled, checked (sources, statuses, disclaimers, quiet day) and given
-// its workflow-owned fields. Next: PPAI · period on Sundays / the 1st, otherwise PPAI · profiles.
+// its workflow-owned fields. Next: PPAI · period on Sundays / the 1st, otherwise PPAI · redakcja.
 
 const frontRequest = trigger({
   type: 'n8n-nodes-base.executeWorkflowTrigger',
@@ -89,7 +89,7 @@ const assemble = node({
         "const allowedMoveIds = capBigMoves(n.big_moves, 6).map((m) => m.entity_id).concat((n.ranking_moves || []).map((m) => m.entity_id));\n" +
         "const edition = finalizeEdition(checked.edition, { date: p.date, generatedAt: new Date().toISOString(), numbers: n, allowedMoveIds });\n" +
         "const flags = p.flags || {};\n" +
-        "const next = !p.relay ? 'stop' : flags.weekly || flags.monthly ? 'period' : 'profiles';\n" +
+        "const next = !p.relay ? 'stop' : flags.weekly || flags.monthly ? 'period' : 'edit';\n" +
         "return [{ json: {\n" +
         "  date: p.date, run_id: p.run_id, relay: p.relay, stop_after: p.stop_after || '', flags, next, edition,\n" +
         "  rule_errors: checked.errors, new_entity_names: checked.newEntityNames,\n" +
@@ -109,7 +109,7 @@ const route = switchCase({
       rules: {
         values: [
           { conditions: { options: { caseSensitive: true, leftValue: '', typeValidation: 'strict', version: 2 }, conditions: [{ leftValue: expr("{{ $('Front request').first().json.stop_after === 'front' ? 'stop' : $json.next }}"), rightValue: 'period', operator: { type: 'string', operation: 'equals' } }], combinator: 'and' }, renameOutput: true, outputKey: 'period' },
-          { conditions: { options: { caseSensitive: true, leftValue: '', typeValidation: 'strict', version: 2 }, conditions: [{ leftValue: expr("{{ $('Front request').first().json.stop_after === 'front' ? 'stop' : $json.next }}"), rightValue: 'profiles', operator: { type: 'string', operation: 'equals' } }], combinator: 'and' }, renameOutput: true, outputKey: 'profiles' },
+          { conditions: { options: { caseSensitive: true, leftValue: '', typeValidation: 'strict', version: 2 }, conditions: [{ leftValue: expr("{{ $('Front request').first().json.stop_after === 'front' ? 'stop' : $json.next }}"), rightValue: 'edit', operator: { type: 'string', operation: 'equals' } }], combinator: 'and' }, renameOutput: true, outputKey: 'profiles' },
           { conditions: { options: { caseSensitive: true, leftValue: '', typeValidation: 'strict', version: 2 }, conditions: [{ leftValue: expr("{{ $('Front request').first().json.stop_after === 'front' ? 'stop' : $json.next }}"), rightValue: 'stop', operator: { type: 'string', operation: 'equals' } }], combinator: 'and' }, renameOutput: true, outputKey: 'stop' },
         ],
       },
@@ -133,14 +133,14 @@ const handToPeriod = node({
   output: [{}],
 });
 
-const handToProfiles = node({
+const handToEditor = node({
   type: 'n8n-nodes-base.executeWorkflow',
   version: 1.2,
   config: {
-    name: 'Hand to profiles',
+    name: 'Hand to editor',
     parameters: {
       source: 'database',
-      workflowId: { __rl: true, mode: 'id', value: 'JlzjHDGeEemYMhQr', cachedResultName: 'PPAI · profiles' },
+      workflowId: { __rl: true, mode: 'id', value: 'PSOZYxd2bShSJf3H', cachedResultName: 'PPAI · redakcja' },
       mode: 'once',
       options: { waitForSubWorkflow: false },
     },
@@ -160,4 +160,4 @@ export default workflow('ppai-front', 'PPAI · front')
   .to(buildPrompt)
   .to(writeFront)
   .to(assemble)
-  .to(route.onCase(0, handToPeriod).onCase(1, handToProfiles).onCase(2, returnPayload));
+  .to(route.onCase(0, handToPeriod).onCase(1, handToEditor).onCase(2, returnPayload));

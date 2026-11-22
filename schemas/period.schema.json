@@ -3,11 +3,11 @@
   "description": "Weekly or monthly big-picture summary.",
   "properties": {
     "title": { "type": "string" },
-    "body": { "type": "string", "description": "Weekly 800-1200 words, monthly 1200-1500 words." },
-    "takeaways": { "type": "array", "description": "Exactly 3 things worth remembering.", "items": { "type": "string" } },
+    "body": { "type": "string", "description": "Weekly 450-650 words, monthly 800-1000 words, in 3-4 parts, each opening with a subhead paragraph that starts with '## '." },
+    "takeaways": { "type": "array", "description": "Exactly 3 things worth remembering, one sentence each.", "items": { "type": "string" } },
     "race_map": {
       "type": "array",
-      "description": "Who leads in which area.",
+      "description": "Who leads in which area, at most 6 rows.",
       "items": {
         "type": "object",
         "properties": {

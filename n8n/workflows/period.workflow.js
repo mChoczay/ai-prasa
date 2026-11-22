@@ -64,8 +64,8 @@ const buildPrompt = node({
         "const today = [p.edition.lead_story, ...(p.edition.stories || [])].filter(Boolean).map((s) => ({ date: p.date, title: s.title, summary: s.lede, category: s.category, status: s.status }));\n" +
         "const topics = $('Read recent topics').all().map((i) => i.json).filter((t) => t.title && t.date !== p.date).concat(today);\n" +
         "const snapshots = $('Read leaderboard snapshots').all().map((i) => i.json).filter((r) => r.board);\n" +
-        "const user = kinds.map((kind) => periodPrompt({ kind, date: p.date, topics, snapshots, numbers: p.numbers })).join('\\n\\n---\\n\\n');\n" +
-        "return [{ json: { kinds, user: user + '\\n\\nWrite one supplement per requested key: ' + kinds.join(', ') + '.', schema: periodSchema(SINGLE, kinds) } }];\n",
+        "const user = periodUserText({ kinds, date: p.date, topics, snapshots, numbers: p.numbers, feedback: p.feedback || '' });\n" +
+        "return [{ json: { kinds, user, schema: periodSchema(SINGLE, kinds) } }];\n",
     },
   },
   output: [{ kinds: ['weekly'], user: '...', schema: { type: 'object' } }],

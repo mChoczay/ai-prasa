@@ -26,6 +26,18 @@ test('period prompt includes the stored topics and today\'s stories, with a sche
   assert.match(json.user, /Stored story/);
   assert.match(json.user, /2026-11-22 \[modele, potwierdzone\] Today lead/);
   assert.match(json.user, /requested key: weekly\./);
+  assert.doesNotMatch(json.user, /Reader feedback/);
+});
+
+test('period prompt passes the reader feedback on', () => {
+  const [{ json }] = runCodeNode(codeNodeSource(WF, 'Build period prompt'), {
+    nodes: {
+      'Period request': [{ ...payload, feedback: 'Notes from the reader: ściana tekstu' }],
+      'Read recent topics': [{}],
+      'Read leaderboard snapshots': [{}],
+    },
+  });
+  assert.match(json.user, /## Reader feedback\nNotes from the reader: ściana tekstu/);
 });
 
 test('add supplements keeps the edition when the supplement failed, but stops on credits', () => {

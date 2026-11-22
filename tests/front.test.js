@@ -154,7 +154,7 @@ test('rankings show area pills and the top five of the chosen area', () => {
   assert.ok(pl.includes('nowy lider'));
   assert.ok(pl.includes('&lt;script&gt;') && !pl.includes('<script>'));
   assert.ok(!html.includes('class="changes"'));
-  assert.match(html, /<details class="full"><summary>pełne rankingi<\/summary>[\s\S]*Notatka redakcji o AA\./);
+  assert.match(html, /<details class="full"><summary>Pokaż pełne rankingi<\/summary>[\s\S]*Notatka redakcji o AA\./);
 });
 
 test('rankings open the remembered area and ignore an unknown one', () => {

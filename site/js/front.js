@@ -65,7 +65,7 @@ function marketSection(e) {
   return `<section class="market"><h3>Rynek${asOf ? ` <span class="as-of">notowania z ${escapeHtml(tradingDay(asOf))}</span>` : ''}</h3>
 ${marketMood(market) ? `<p class="mood">${escapeHtml(marketMood(market))}</p>` : ''}
 ${tiles ? `<div class="tiles">${tiles}</div>` : ''}
-<details class="basket"><summary>cały koszyk</summary>${marketTable(market)}${market.commentary ? `<p>${escapeHtml(market.commentary)}</p>` : ''}</details>
+<details class="basket"><summary>Pokaż cały koszyk</summary>${marketTable(market)}${market.commentary ? `<p>${escapeHtml(market.commentary)}</p>` : ''}</details>
 <p class="disclaimer">${DISCLAIMER}</p></section>`;
 }
 
@@ -92,7 +92,7 @@ function rankingsSection(e, area) {
   if (!areas.length) {
     return `<section class="rankings"><h3>Rankingi</h3>
 ${notes || (hasBoards ? '' : NO_DATA)}
-<details class="full"><summary>pełne rankingi</summary>${rankingBoards(e.rankings)}</details></section>`;
+<details class="full"><summary>Pokaż pełne rankingi</summary>${rankingBoards(e.rankings)}</details></section>`;
   }
   const chosen = pickArea(areas, area);
   const chips = areas
@@ -101,7 +101,7 @@ ${notes || (hasBoards ? '' : NO_DATA)}
   return `<section class="rankings"><h3>Rankingi</h3>
 <div class="chips" role="group" aria-label="Obszar">${chips}</div>
 ${areas.map((a) => areaList(a, a.key === chosen)).join('')}
-<details class="full"><summary>pełne rankingi</summary>${notes}${rankingBoards(e.rankings)}</details></section>`;
+<details class="full"><summary>Pokaż pełne rankingi</summary>${notes}${rankingBoards(e.rankings)}</details></section>`;
 }
 
 // Browser and test helper: shows the chosen area's list and presses its pill; false for an unknown area.
@@ -176,7 +176,7 @@ export function renderFront(edition, profilesById, { area = '' } = {}) {
   const list = stories.map((s, i) => storyRow(s, e.date, i + 2)).join('');
   return `<article class="front">
 <header class="masthead"><h1><a class="mast-home" href="#/">Poranna prasa AI</a></h1>${mastheadNav('edition')}
-<p class="dateline">${escapeHtml(longDate(e.date))} · ${topicsLabel(count)} · ${escapeHtml(minutesLabel(e))}${e.quiet_day ? ' · spokojny dzień' : ''}</p></header>
+<p class="dateline">${[escapeHtml(longDate(e.date)), topicsLabel(count), escapeHtml(minutesLabel(e)), e.quiet_day ? 'spokojny dzień' : ''].filter(Boolean).map((t) => `<span class="nb">${t}</span>`).join(' · ')}</p></header>
 ${e.greeting ? `<p class="greeting">${escapeHtml(e.greeting)}</p>` : ''}
 <div class="columns">
 <div class="main">${e.lead_story ? leadCard(e.lead_story, e.date) : ''}

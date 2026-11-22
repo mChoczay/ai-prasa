@@ -93,3 +93,34 @@ test('6: ranking area filters look like the masthead menu, not pills', () => {
   assert.match(c, /\.chip\[aria-pressed="true"\]\s*\{[^}]*border-bottom-color:\s*var\(--accent\)/);
   assert.doesNotMatch(c, /\.chip\[aria-pressed="true"\]\s*\{[^}]*background:\s*var\(--ink\)/);
 });
+
+test('one typeface: the small print uses the paper\'s serif too', () => {
+  const c = css();
+  assert.match(c, /--sans:\s*var\(--serif\)/);
+  assert.doesNotMatch(c, /system-ui/);
+});
+
+test('kickers are calm small caps, not accent blue', () => {
+  const c = css();
+  for (const sel of [String.raw`\.kicker`, String.raw`\.story-kicker`]) {
+    const rules = [...c.matchAll(new RegExp(String.raw`(?:^|\n)${sel}\s*\{([^}]*)\}`, 'g'))].map((m) => m[1]);
+    assert.ok(rules.length, sel);
+    for (const r of rules) assert.doesNotMatch(r, /color:\s*var\(--accent\)/, sel);
+  }
+});
+
+test('"cały koszyk" and "pełne rankingi" read as quiet text links without the blue triangle', () => {
+  const c = css();
+  assert.match(c, /\.basket > summary, \.full > summary\s*\{[^}]*list-style:\s*none[^}]*font-style:\s*italic[^}]*color:\s*var\(--ink-soft\)/);
+  assert.match(c, /\.basket > summary::-webkit-details-marker, \.full > summary::-webkit-details-marker\s*\{\s*display:\s*none/);
+  const html = renderFront(real(), {});
+  assert.ok(html.includes('<summary>Pokaż cały koszyk</summary>'));
+  assert.ok(html.includes('<summary>Pokaż pełne rankingi</summary>'));
+});
+
+test('dateline parts never break in the middle ("5 / min")', () => {
+  const html = renderFront(real(), {});
+  const line = html.slice(html.indexOf('<p class="dateline">'), html.indexOf('</p>', html.indexOf('<p class="dateline">')));
+  assert.match(line, /<span class="nb">[^<]*min[^<]*<\/span>/);
+  assert.match(css(), /\.nb\s*\{\s*white-space:\s*nowrap/);
+});

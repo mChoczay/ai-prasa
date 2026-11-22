@@ -1,14 +1,39 @@
 {
  "terms": [
   {
+   "id": "dsafer",
+   "term": "-dSAFER",
+   "explain": "To tryb Ghostscripta, czyli programu do przetwarzania plików PostScript i PDF, który ogranicza, do czego dokument może mieć dostęp. Działa jak piaskownica, czyli wydzielony obszar, w którym kod ma dozwolone tylko określone czynności. Problem polega na tym, że spreparowany plik może wydostać się z tej piaskownicy. Stąd ryzyko wykonania poleceń w systemie serwera."
+  },
+  {
    "id": "adapter-lora",
    "term": "adapter LoRA",
    "explain": "To mała dodatkowa warstwa, którą dokleja się do dużego modelu, zamiast przerabiać cały model od nowa. Jest jak nakładka na narzędzie, dopasowująca je do konkretnej pracy. Zajmuje mało miejsca i jest tani w trenowaniu. W tym wpisie pozwala zwiększyć skuteczność modelu w jednym konkretnym środowisku agentowym bez zmiany jego głównych wag."
   },
   {
+   "id": "asgi-i-wsgi",
+   "term": "ASGI i WSGI",
+   "explain": "To standardowe interfejsy, dzięki którym serwer WWW może uruchamiać aplikacje napisane w Pythonie. Można je porównać do uniwersalnej wtyczki, która pozwala podłączyć dowolne urządzenie do gniazdka. WSGI jest starszy i obsługuje żądania synchronicznie, a ASGI jest nowszy i radzi sobie też z połączeniami w czasie rzeczywistym. Muru ma być serwerem, który obsłuży oba te standardy."
+  },
+  {
+   "id": "autonomiczna-bron",
+   "term": "autonomiczna broń",
+   "explain": "To systemy uzbrojenia, które same wybierają i atakują cele, bez bezpośredniej decyzji człowieka w każdym momencie. Można to porównać do samochodu, który sam decyduje, kiedy i gdzie hamować, ale z dużo poważniejszymi skutkami. Dlatego państwa i organizacje, takie jak Czerwony Krzyż, chcą ustalić wiążące zasady jej użycia. Na razie w Genewie udało się tylko uzgodnić, że trzeba o tym rozmawiać."
+  },
+  {
    "id": "chain-of-thought",
    "term": "chain of thought",
    "explain": "To zapisywany krok po kroku tok rozumowania modelu, widoczny zanim poda odpowiedź. Można to porównać do pokazywania na kartce obliczeń, a nie tylko wyniku. Jest ważny, bo pozwala ludziom sprawdzić, czy model nie kombinuje czegoś niepokojącego. Tutaj autorzy zwracają uwagę, że nowa architektura z pętlą rozumuje bez zapisywania całego toku, co utrudnia tę kontrolę."
+  },
+  {
+   "id": "dostawcy-inferencji",
+   "term": "dostawcy inferencji",
+   "explain": "To firmy, które hostują modele AI na własnych serwerach i odpowiadają na zapytania, np. wysyłane przez OpenRouter. Przez ich systemy przechodzą Twoje dane, więc to, co z nimi robią, ma znaczenie. W tej historii chodzi o to, że część z nich mogła nie przestrzegać deklarowanych zasad ochrony danych. Sam OpenRouter według komunikatu nie został zhakowany."
+  },
+  {
+   "id": "double-free",
+   "term": "double free",
+   "explain": "To błąd polegający na tym, że program dwukrotnie zwalnia ten sam fragment pamięci. Przypomina to dwukrotne wyrzucenie tego samego pudełka, po którym system gubi się w zarządzaniu miejscem. Taki błąd może prowadzić do uszkodzenia danych, a w gorszym przypadku pozwolić atakującemu przejąć kontrolę nad programem. W tej historii wystarczy specjalnie przygotowany klucz, by go wywołać."
   },
   {
    "id": "harness",
@@ -41,6 +66,11 @@
    "explain": "To konkretny model językowy chińskiej firmy Moonshot AI, na którym Cursor zbudował swój model kodujący Composer 2. Dla czytelnika ważne jest to, że amerykański produkt opiera się na chińskim fundamencie. Właśnie to uruchomiło pytania komisji Kongresu o bezpieczeństwo i zależność od zagranicznych technologii."
   },
   {
+   "id": "lean",
+   "term": "Lean",
+   "explain": "To język programowania i narzędzie, w którym dowody matematyczne zapisuje się w formie kodu, który komputer może sprawdzić krok po kroku. Działa trochę jak kompilator, który odrzuca błędne dowody zamiast błędnego programu. Dzięki temu poprawność dowodu nie zależy tylko od zaufania do autora. Społeczność potwierdziła, że ten ogromny dowód jest w tym systemie poprawny."
+  },
+  {
    "id": "mixture-of-experts",
    "term": "Mixture-of-Experts",
    "explain": "To sposób budowy modelu, w którym zamiast jednej wielkiej sieci pracuje wiele wyspecjalizowanych części, a na każde zapytanie uruchamiana jest tylko kilka z nich. Przypomina zespół ekspertów, z którego do konkretnego zadania wybiera się dwóch czy trzech najlepszych. Dzięki temu model jest pojemny, ale szybki i tańszy w działaniu. W tym przypadku aktywne jest tylko 3,4 mld z 26,4 mld parametrów."
@@ -51,9 +81,19 @@
    "explain": "To modele, których gotowe wagi, czyli wyuczone parametry, są publicznie udostępnione do pobrania i uruchomienia. Można to porównać do przepisu opublikowanego w książce, który każdy może ugotować u siebie w domu. Różni się to od modeli dostępnych tylko przez płatne API. W tej sprawie chodzi o ryzyko, że firmy z USA korzystają z chińskich modeli tego typu."
   },
   {
+   "id": "openpgp",
+   "term": "OpenPGP",
+   "explain": "To powszechnie używany standard szyfrowania i podpisywania wiadomości oraz plików, znany m.in. z programu GnuPG. Działa na zasadzie kluczy: jeden służy do zabezpieczania, drugi do sprawdzania autentyczności. Biblioteka GPGME pozwala aplikacjom korzystać z tego standardu bez implementowania go od zera. Dlatego błąd w GPGME dotyka wielu programów, które podpisują lub weryfikują dane."
+  },
+  {
    "id": "router-ai",
    "term": "router AI",
    "explain": "To pośrednik, który odbiera zapytanie do modelu i decyduje, do którego dostawcy je wysłać. Działa jak dyspozytor w taksówkach, który kieruje kurs do właściwego kierowcy. Problem polega na tym, że aby wybrać dostawcę, router musi przeczytać treść zapytania, więc widzi w niej także hasła i klucze. Stąd ryzyko wycieku wrażliwych danych."
+  },
+  {
+   "id": "use-after-free",
+   "term": "use-after-free",
+   "explain": "To rodzaj błędu w programie, w którym kod korzysta z obszaru pamięci po tym, jak został już zwolniony. Można to porównać do oddania klucza do mieszkania i dalszego wchodzenia do środka, bo ktoś inny może już tam zamieszkać. Atakujący może wykorzystać ten moment, by wstrzyknąć własne dane lub polecenia. W tej historii właśnie taki błąd pozwala wyjść z zabezpieczeń Ghostscripta."
   }
  ]
 }

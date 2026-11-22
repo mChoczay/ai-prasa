@@ -1,6 +1,17 @@
 {
  "editions": [
   {
+   "date": "2026-11-22",
+   "kind": "daily",
+   "lead_title": "OpenRouter: incydenty z przetwarzaniem danych u dostawców inferencji",
+   "minutes": 11,
+   "categories": [
+    "narzedzia",
+    "inne",
+    "regulacje"
+   ]
+  },
+  {
    "date": "2026-11-21",
    "kind": "daily",
    "lead_title": "Matematyk z Anthropic twierdzi, że z pomocą Claude'a dowiódł hipotezy Riemanna",

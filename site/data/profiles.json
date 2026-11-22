@@ -90,7 +90,7 @@
    ],
    "why_it_matters": "AMD jest jednym z nielicznych dostawców zaawansowanych procesorów i akceleratorów GPU, a jego układy trafiają do serwerów, centrów danych i komputerów, co czyni je ważnym graczem w wyścigu o moc obliczeniową dla AI.",
    "updated_at": "2026-11-19",
-   "last_spotlight_at": null,
+   "last_spotlight_at": "2026-11-21",
    "image": {
     "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/11/2485_Augustine_Drive_headquarters_in_Santa_Clara%2C_California.jpg/960px-2485_Augustine_Drive_headquarters_in_Santa_Clara%2C_California.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
     "credit": "Coolcaesar / CC BY-SA 4.0, Wikimedia Commons",
@@ -224,6 +224,25 @@
    "image": null
   },
   {
+   "id": "claude-fable-5-2",
+   "type": "model",
+   "name": "Claude Fable 5.2",
+   "aliases": "Claude Fable",
+   "ticker": "",
+   "summary": "Claude Fable to wersja modelu Claude Mythos z mocniejszymi zabezpieczeniami, udostępniona szerokiej publiczności w 2026 roku. Claude to seria dużych modeli językowych Anthropic, używanych w czacie i w programowaniu wspomaganym AI, a także w agentowych narzędziach, takich jak Claude Code. Model jest też wykorzystywany w matematyce, m.in. do automatycznego dowodzenia twierdzeń w Lean.",
+   "owner": "Anthropic",
+   "key_products": [
+    "Claude Fable",
+    "Claude Mythos",
+    "Claude Code",
+    "Claude Duet"
+   ],
+   "why_it_matters": "Należy do czołowej rodziny modeli Anthropic, która wyznacza poziom w rozwoju agentów i zastosowaniach naukowych.",
+   "updated_at": "2026-11-22",
+   "last_spotlight_at": null,
+   "image": null
+  },
+  {
    "id": "claude-opus-4-6",
    "type": "model",
    "name": "Claude Opus 4.6",
@@ -291,6 +310,22 @@
    ],
    "why_it_matters": "Model z najwyższej półki Anthropic, który notowany jest w czołówce popularnych rankingów modeli, co pokazuje konkurencję w wyścigu o najlepsze modele AI.",
    "updated_at": "2026-11-20",
+   "last_spotlight_at": "2026-11-21",
+   "image": null
+  },
+  {
+   "id": "claude-sonnet-5-5",
+   "type": "model",
+   "name": "Claude Sonnet 5.5",
+   "aliases": "Sonnet 5.5",
+   "ticker": "",
+   "summary": "Claude Sonnet 5.5 to model z serii Claude firmy Anthropic. Od Claude 3 każda generacja jest zwykle wydawana w trzech rozmiarach: Haiku, Sonnet i Opus, przy czym Sonnet jest środkowym wariantem. Dane referencyjne nie opisują konkretnych zdolności tej wersji.",
+   "owner": "Anthropic",
+   "key_products": [
+    "Claude Sonnet 5.5"
+   ],
+   "why_it_matters": "Reprezentuje średni poziom w linii Claude, który łączy zdolności i koszt, co jest ważne dla wdrożeń w firmach.",
+   "updated_at": "2026-11-22",
    "last_spotlight_at": null,
    "image": null
   },
@@ -479,6 +514,110 @@
    }
   },
   {
+   "id": "gpt-6-1-sol",
+   "type": "model",
+   "name": "GPT-6.1 Sol",
+   "aliases": "Sol",
+   "ticker": "",
+   "summary": "GPT-6.1 Sol to model z rodziny GPT-6.1, czyli dużych modeli językowych OpenAI. Został wydany 29 września 2026 roku, a jego odpowiednik GPT-6.1 Terra pojawił się 26 października 2026 roku. Dane referencyjne nie opisują szczegółowo jego możliwości.",
+   "owner": "OpenAI",
+   "key_products": [
+    "GPT-6.1 Sol",
+    "GPT-6.1 Terra"
+   ],
+   "why_it_matters": "Jest częścią linii GPT-6.1, która uzupełniała główną rodzinę GPT-6 od OpenAI jesienią 2026 roku.",
+   "updated_at": "2026-11-22",
+   "last_spotlight_at": null,
+   "image": null
+  },
+  {
+   "id": "gpt-6-1-terra",
+   "type": "model",
+   "name": "GPT-6.1 Terra",
+   "aliases": "Terra",
+   "ticker": "",
+   "summary": "GPT-6.1 Terra to model z rodziny GPT-6.1, czyli dużych modeli językowych OpenAI. Został wydany 26 października 2026 roku, miesiąc po GPT-6.1 Sol. Dane referencyjne nie opisują szczegółowo jego możliwości.",
+   "owner": "OpenAI",
+   "key_products": [
+    "GPT-6.1 Terra",
+    "GPT-6.1 Sol"
+   ],
+   "why_it_matters": "Jest kolejnym wydaniem w linii GPT-6.1 i pokazuje tempo, w jakim OpenAI publikuje nowe modele.",
+   "updated_at": "2026-11-22",
+   "last_spotlight_at": null,
+   "image": null
+  },
+  {
+   "id": "gpt-6-2-astra",
+   "type": "model",
+   "name": "GPT-6.2 Astra",
+   "aliases": "Astra",
+   "ticker": "",
+   "summary": "GPT-6.2 Astra to model OpenAI z rodziny GPT-6, wprowadzony 18 listopada 2026 roku. Jest przeznaczony do wymagających zadań zawodowych, takich jak dokumenty, prezentacje, arkusze, kod i badania naukowe. Jego ceny w API obniżono o 20 procent w porównaniu z GPT-6 Astra.",
+   "owner": "OpenAI",
+   "key_products": [
+    "GPT-6.2 Astra",
+    "GPT-6 Astra"
+   ],
+   "why_it_matters": "Jest flagowym wariantem dla pracy zawodowej w ofercie OpenAI i pokazuje, że firma konkuruje także ceną.",
+   "updated_at": "2026-11-22",
+   "last_spotlight_at": null,
+   "image": null
+  },
+  {
+   "id": "gpt-6-2-sol",
+   "type": "model",
+   "name": "GPT-6.2 Sol",
+   "aliases": "Sol",
+   "ticker": "",
+   "summary": "GPT-6.2 Sol to model OpenAI wprowadzony 18 listopada 2026 roku razem z GPT-6.2 Astra. Jest przeznaczony do codziennych zadań i rutynowej pracy wieloetapowej. Należy do rodziny GPT-6 rozwijanej przez OpenAI.",
+   "owner": "OpenAI",
+   "key_products": [
+    "GPT-6.2 Sol",
+    "GPT-6 Sol"
+   ],
+   "why_it_matters": "Stanowi wariant ogólnego przeznaczenia w ofercie OpenAI, obok wariantu do trudniejszej pracy zawodowej.",
+   "updated_at": "2026-11-22",
+   "last_spotlight_at": null,
+   "image": null
+  },
+  {
+   "id": "gpt-6-astra",
+   "type": "model",
+   "name": "GPT-6 Astra",
+   "aliases": "Astra",
+   "ticker": "",
+   "summary": "GPT-6 Astra to model OpenAI z rodziny GPT-6, udostępniony szerokiej publiczności 4 września 2026 roku. Jest pierwszym z modeli tej rodziny, które trafiły do użytkowników. Później została wydana jego wersja GPT-6.2 Astra z tańszym API.",
+   "owner": "OpenAI",
+   "key_products": [
+    "GPT-6 Astra",
+    "GPT-6.2 Astra"
+   ],
+   "why_it_matters": "Otworzył rodzinę GPT-6 dla publiczności i jest punktem odniesienia dla kolejnych wydań OpenAI.",
+   "updated_at": "2026-11-22",
+   "last_spotlight_at": null,
+   "image": null
+  },
+  {
+   "id": "gpt-6-sol",
+   "type": "model",
+   "name": "GPT-6 Sol",
+   "aliases": "Sol",
+   "ticker": "",
+   "summary": "GPT-6 Sol to model z rodziny GPT-6 firmy OpenAI, udostępniony 22 września 2026 roku razem z GPT-6 Luna. Rodzina GPT-6 obejmuje też GPT-6 Astra i GPT-6 Instant. Dane referencyjne nie opisują szczegółowo zdolności tego wariantu.",
+   "owner": "OpenAI",
+   "key_products": [
+    "GPT-6 Sol",
+    "GPT-6 Luna",
+    "GPT-6 Astra",
+    "GPT-6 Instant"
+   ],
+   "why_it_matters": "Jest jednym z pierwszych modeli nowej generacji GPT-6 i wyznacza kierunek OpenAI na jesień 2026 roku.",
+   "updated_at": "2026-11-22",
+   "last_spotlight_at": null,
+   "image": null
+  },
+  {
    "id": "intc",
    "type": "company",
    "name": "Intel",
@@ -495,6 +634,24 @@
    "why_it_matters": "Intel to jeden z kluczowych graczy w rynku procesorów i układów dla serwerów i PC, a jego próba odzyskania pozycji w produkcji półprzewodników konkuruje bezpośrednio z liderem branży, TSMC.",
    "updated_at": "2026-11-19",
    "last_spotlight_at": "2026-11-19",
+   "image": null
+  },
+  {
+   "id": "kimi-k3-1-pro",
+   "type": "model",
+   "name": "Kimi K3.1 Pro",
+   "aliases": "Kimi",
+   "ticker": "",
+   "summary": "Kimi to seria modeli językowych i chatbot rozwijany przez chińską firmę Moonshot AI. Kimi K3, wydany w lipcu 2026 roku, jest największym modelem o otwartych wagach, liczącym 2,8 biliona parametrów. Dane referencyjne nie opisują osobno wariantu K3.1 Pro.",
+   "owner": "Moonshot AI",
+   "key_products": [
+    "Kimi K3",
+    "Kimi K2",
+    "Kimi Code"
+   ],
+   "why_it_matters": "Jest jednym z najpotężniejszych chińskich modeli o otwartych wagach, a jego wersje były bazą dla modeli amerykańskich firm.",
+   "updated_at": "2026-11-22",
+   "last_spotlight_at": null,
    "image": null
   },
   {
@@ -631,6 +788,26 @@
    ],
    "why_it_matters": "Pokazuje przejście od czatbotów odpowiadających w jednej wymianie do agentów, którzy samodzielnie realizują wieloetapowe zadania, co jest ważnym kierunkiem wyścigu AI.",
    "updated_at": "2026-11-20",
+   "last_spotlight_at": null,
+   "image": null
+  },
+  {
+   "id": "muse-wonder-full",
+   "type": "model",
+   "name": "Muse Wonder Full",
+   "aliases": "Muse Wonder",
+   "ticker": "",
+   "summary": "Muse to rodzina dużych modeli językowych rozwijana przez Meta Superintelligence Labs od kwietnia 2026 roku, jako następca otwartych modeli Llama. Muse Wonder został zaprezentowany w październiku 2026 roku jako konkurent największych modeli Anthropic i OpenAI. Dane referencyjne nie opisują osobno wariantu o nazwie Full.",
+   "owner": "Meta Superintelligence Labs (Meta)",
+   "key_products": [
+    "Muse Wonder",
+    "Muse Spark",
+    "Muse Code",
+    "Muse Glimmer",
+    "Muse Spark Open"
+   ],
+   "why_it_matters": "Pokazuje, że Meta chce być w ścisłej czołówce modeli zamkniętych, nie tylko otwartych.",
+   "updated_at": "2026-11-22",
    "last_spotlight_at": null,
    "image": null
   },

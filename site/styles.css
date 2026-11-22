@@ -296,3 +296,22 @@ button.chip { background: none; cursor: pointer; }
 .race th { width: 34%; padding-right: 12px; font-weight: 400; font-size: 12px; letter-spacing: 0.04em; color: var(--ink-soft); }
 .race strong { display: block; font-weight: 600; color: var(--ink); }
 .race span { display: block; font-size: 13px; color: var(--ink-soft); }
+
+/* Luki: the vulnerability log, with filter pills, a search box and one card per CVE. */
+.vulns-head { margin: 14px 0 6px; font: 600 15px/1.4 var(--sans); }
+.vuln-controls .chips { padding: 4px 0; }
+.vuln-search { width: 100%; margin: 6px 0; font: 16px/1.4 var(--sans); color: var(--ink); background: var(--paper); border: 1px solid var(--rule); border-radius: 8px; padding: 8px 10px; }
+.vuln { padding: 12px 0; border-top: 1px solid var(--rule); }
+.vuln h3 { margin: 6px 0 4px; font: 600 16px/1.35 var(--serif); }
+.vuln p { margin: 0 0 4px; }
+.vuln-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+.pill { font: 11px/1.4 var(--sans); padding: 2px 8px; border-radius: 999px; border: 1px solid var(--rule); color: var(--ink-soft); }
+.vuln-open { color: var(--down); border-color: var(--down); }
+.vuln-patched { color: var(--up); border-color: var(--up); }
+.sev-crit, .sev-high { color: var(--down); }
+.vuln-meta { font: 12px/1.5 var(--sans); color: var(--ink-soft); }
+.vuln-meta a { color: var(--ink-soft); }
+.vulns details.patched { margin-top: 10px; }
+.vulns details.patched > summary { cursor: pointer; padding: 10px 0; font: 13px/1.4 var(--sans); color: var(--ink-soft); }
+.vuln-agent { margin-top: 24px; font: 12px/1.5 var(--sans); }
+.vuln-agent a { color: var(--ink-soft); }

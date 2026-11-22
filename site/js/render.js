@@ -228,5 +228,5 @@ ${body || '<p class="no-data">Brak wydań.</p>'}</section>`;
 // Navigation under the paper's name: the current view is marked for screen readers and styling.
 export function mastheadNav(active) {
   const link = (href, label, on) => `<a href="${href}"${on ? ' aria-current="page"' : ''}>${label}</a>`;
-  return `<nav class="mast-nav">${link('#/', 'Wydanie', active === 'edition')}<span aria-hidden="true">·</span>${link('#/archiwum', 'Archiwum', active === 'archive')}</nav>`;
+  return `<nav class="mast-nav">${link('#/', 'Wydanie', active === 'edition')}<span aria-hidden="true">·</span>${link('#/archiwum', 'Archiwum', active === 'archive')}<span aria-hidden="true">·</span>${link('#/luki', 'Luki', active === 'vulns')}</nav>`;
 }

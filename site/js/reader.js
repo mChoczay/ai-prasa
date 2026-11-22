@@ -3,7 +3,7 @@ import {
   escapeHtml,
   paragraphs,
   statusBadge,
-  categoryBadge,
+  categoryLabel,
   sourcesList,
   entityChip,
   termChip,
@@ -27,6 +27,7 @@ export function parseRoute(hash) {
     return { view: 'feedback', date: null, page: null, category: null, url, key, off: q.get('off') === '1' || (!url && !key) };
   }
   if (parts[0] === 'luki') return { view: 'vulns', date: null, page: null, category: null };
+  if (parts[0] === 'o-gazecie') return { view: 'about', date: null, page: null, category: null };
   if (parts[0] === 'archiwum') {
     // Old ?kat= links still open the archive; there is no filter any more.
     return { view: 'archive', date: null, page: null, category: null };
@@ -45,14 +46,59 @@ function pageTitle(edition, p) {
   return p.kind === 'story' ? p.story.title : edition[p.kind].title;
 }
 
+// Marks the first appearance of each term or company in already-escaped paragraph HTML as a button
+// (the same cards open from it). Only plain text between tags is searched; entities such as &lt; and
+// text already inside a button are skipped, and a match must stand as a whole word.
+function markInline(html, marks) {
+  const reEscape = (t) => t.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  let out = html;
+  for (const m of marks) {
+    const needle = escapeHtml(m.text);
+    if (!needle) continue;
+    const re = new RegExp(`(?<![\\p{L}\\p{N}])${reEscape(needle)}(?![\\p{L}\\p{N}])`, 'iu');
+    let done = false;
+    let inButton = false;
+    out = out
+      .split(/(<[^>]+>)/)
+      .map((part) => {
+        if (part.startsWith('<')) {
+          if (/^<button\b/.test(part)) inButton = true;
+          if (/^<\/button>/.test(part)) inButton = false;
+          return part;
+        }
+        if (done || inButton) return part;
+        return part
+          .split(/(&#?\w+;)/)
+          .map((piece) => {
+            if (done || piece.startsWith('&')) return piece;
+            const hit = re.exec(piece);
+            if (!hit) return piece;
+            done = true;
+            return `${piece.slice(0, hit.index)}<button type="button" class="inline-term" ${m.attr}>${hit[0]}</button>${piece.slice(hit.index + hit[0].length)}`;
+          })
+          .join('');
+      })
+      .join('');
+  }
+  return out;
+}
+
 function storyBody(s, profilesById, termsById) {
   const chips = (s.may_affect || []).map((id) => entityChip(id, profilesById)).join(' ');
   const terms = (Array.isArray(s.terms) ? s.terms : []).map((id) => termChip(id, termsById)).filter(Boolean).join(' · ');
+  const marks = [
+    ...(Array.isArray(s.terms) ? s.terms : [])
+      .filter((id) => termsById && termsById[id])
+      .map((id) => ({ text: termsById[id].term, attr: `data-term="${escapeHtml(id)}"` })),
+    ...(s.may_affect || [])
+      .filter((id) => profilesById && profilesById[id])
+      .map((id) => ({ text: profilesById[id].name, attr: `data-entity="${escapeHtml(id)}"` })),
+  ];
   return `${imageFigure(s.image, s.image_fallback, { size: 'hero', link: true })}
-<div class="badges">${categoryBadge(s.category)}${statusBadge(s.status)}${s.is_update ? '<span class="badge update">aktualizacja</span>' : ''}</div>
+<p class="story-kicker">${categoryLabel(s.category)} · ${statusBadge(s.status)}${s.is_update ? ' · aktualizacja' : ''}</p>
 <h2>${escapeHtml(s.title)}</h2>
 <p class="lede">${escapeHtml(s.lede)}</p>
-<div class="body">${paragraphs(s.body)}</div>
+<div class="body">${markInline(paragraphs(s.body), marks)}</div>
 ${s.for_you ? `<p class="for-you"><strong>Dla Ciebie:</strong> ${escapeHtml(s.for_you)}</p>` : ''}
 ${chips ? `<p class="may-affect">Może dotyczyć: ${chips}</p>` : ''}
 ${terms ? `<p class="terms">Pojęcia: ${terms}</p>` : ''}

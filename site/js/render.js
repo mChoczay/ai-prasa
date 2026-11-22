@@ -65,8 +65,21 @@ export function pct(n) {
   return n > 0 ? { text: `+${body}`, cls: 'up' } : { text: `−${body}`, cls: 'down' };
 }
 
+// The story's status as small caps text in the kicker style (red for a rumour, grey for an opinion).
 export function statusBadge(status) {
-  return `<span class="badge status-${escapeHtml(status)}">${escapeHtml(status)}</span>`;
+  return `<span class="status status-${escapeHtml(status)}">${escapeHtml(status)}</span>`;
+}
+
+// What went wrong in plain words, and a way to try again.
+export function renderError({ offline = false } = {}) {
+  const why = offline
+    ? '<p class="error">Brak połączenia z internetem.</p><p>Sprawdź Wi-Fi albo dane komórkowe i spróbuj jeszcze raz.</p>'
+    : '<p class="error">Nie udało się wczytać wydania.</p><p>Strona chwilowo nie odpowiada. Zwykle wystarczy spróbować ponownie za moment.</p>';
+  return `<section class="error-page">${why}<p><button type="button" class="retry" data-retry>Spróbuj ponownie</button></p><p><a href="#/archiwum">Przejdź do archiwum</a></p></section>`;
+}
+
+export function categoryLabel(category) {
+  return escapeHtml(CATEGORY_LABELS[category] || category);
 }
 
 export function categoryBadge(category) {
@@ -221,12 +234,12 @@ export function renderArchive(index) {
       return `<h3 class="month">${p ? `${p.monthName} ${p.year}` : escapeHtml(g.key)}</h3><ul class="days">${g.items.map(row).join('')}</ul>`;
     })
     .join('');
-  return `<section class="archive"><header class="masthead"><h1>Poranna prasa AI</h1>${mastheadNav('archive')}</header>
+  return `<section class="archive"><header class="masthead"><h1><a class="mast-home" href="#/">Poranna prasa AI</a></h1>${mastheadNav('archive')}</header>
 ${body || '<p class="no-data">Brak wydań.</p>'}</section>`;
 }
 
 // Navigation under the paper's name: the current view is marked for screen readers and styling.
 export function mastheadNav(active) {
   const link = (href, label, on) => `<a href="${href}"${on ? ' aria-current="page"' : ''}>${label}</a>`;
-  return `<nav class="mast-nav">${link('#/', 'Wydanie', active === 'edition')}<span aria-hidden="true">·</span>${link('#/archiwum', 'Archiwum', active === 'archive')}<span aria-hidden="true">·</span>${link('#/luki', 'Luki', active === 'vulns')}</nav>`;
+  return `<nav class="mast-nav">${link('#/', 'Wydanie', active === 'edition')}<span aria-hidden="true">·</span>${link('#/archiwum', 'Archiwum', active === 'archive')}<span aria-hidden="true">·</span>${link('#/luki', 'Luki', active === 'vulns')}<span aria-hidden="true">·</span>${link('#/o-gazecie', 'O gazecie', active === 'about')}</nav>`;
 }

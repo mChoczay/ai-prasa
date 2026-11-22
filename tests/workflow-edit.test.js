@@ -60,3 +60,9 @@ test('front and period hand the edition to the editor instead of profiles', () =
     assert.doesNotMatch(wf, /cachedResultName: 'PPAI · profiles'/, file);
   }
 });
+
+test('the editor stage edits only the stories; supplements are edited in the period stage', () => {
+  const withWeekly = { ...payload, edition: { ...payload.edition, weekly: { title: 'Tydzień', body: 'b', takeaways: [], race_map: [] } } };
+  const [{ json }] = runCodeNode(codeNodeSource(WF, 'Build edit prompt'), { nodes: { 'Edit request': [withWeekly] } });
+  assert.doesNotMatch(json.user, /### Supplement/);
+});

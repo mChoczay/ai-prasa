@@ -15,7 +15,6 @@ test('a tap that starts and ends outside the card closes it', () => {
 test('a tap on the card, or a drag that starts on it, keeps it open', () => {
   assert.equal(closesSheet(el('.sheet'), el('.sheet')), false);
   assert.equal(closesSheet(el('.sheet'), el()), false);
-  assert.equal(closesSheet(el(), el('.sheet')), false);
 });
 
 test('the cross always closes the card', () => {

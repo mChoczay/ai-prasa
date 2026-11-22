@@ -1,7 +1,8 @@
 import { workflow, node, trigger, ifElse, expr } from '@n8n/workflow-sdk';
 
 // Relay stage between front (or period) and profiles: Sonnet as the managing editor rewrites today's
-// ledes, bodies, "Dla Ciebie" and supplements for readability. Every text that fails a check (new
+// ledes, bodies and "Dla Ciebie" for readability (the supplements are edited in the period stage, so
+// that neither call comes near the 180 s limit). Every text that fails a check (new
 // numbers, too short or too long, missing fields) keeps the reporter's version; a failed call passes the
 // edition on unchanged, except a credits or auth stop.
 
@@ -23,7 +24,7 @@ const buildPrompt = node({
         INLINE('n8n/lib/news.js', 'n8n/lib/dates.js', 'n8n/lib/edition.js', 'n8n/lib/edit.js') +
         'const SCHEMA = ' + JSONTEXT('schemas/edit.schema.json') + ';\n' +
         "const p = $('Edit request').first().json;\n" +
-        "return [{ json: { user: editPrompt(p.edition, p.feedback || ''), schema: SCHEMA } }];\n",
+        "return [{ json: { user: editPrompt(p.edition, p.feedback || '', { supplements: false }), schema: SCHEMA } }];\n",
     },
   },
   output: [{ user: '...', schema: { type: 'object' } }],

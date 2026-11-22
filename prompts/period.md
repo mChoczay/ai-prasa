@@ -6,7 +6,7 @@ The reader skims this on a phone. A wall of text or a list of every story of the
 
 Write:
 - `title`: a short headline for the period (at most 10 words).
-- `body`: weekly 450-650 words, monthly 800-1000 words, in 3-4 parts. Each part starts with its own paragraph holding only a subhead line: "## " and 1-4 words (for example "## Rynek", "## Wyścig modeli", "## Dla Ciebie"). Under each subhead 1-3 paragraphs of 2-4 short sentences, separated by blank lines.
+- `body`: weekly 450-650 words, monthly 800-1000 words, in 3-4 parts. Each part starts with its own paragraph holding only a subhead line: "## " and 1-4 words (for example "## Rynek", "## Wyścig modeli", "## Co z tego wynika"). Under each subhead 1-3 paragraphs of 2-4 short sentences, separated by blank lines.
   - Lead with the one or two threads that mattered most and explain why, then the trend in models and on the market, then what it means for the reader's work.
   - Mention only the stories that serve a thread; most of the period's stories should not appear at all.
   - Use few numbers: at most 8 in the whole body, only those that carry the point.

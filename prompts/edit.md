@@ -9,15 +9,15 @@ The reader knows software development and AI well (models, APIs, agents, coding 
 - Short sentences, active voice, concrete subjects. Paragraphs of 2-4 sentences, separated by a blank line.
 - Explain jargon outside development and AI as above, once per text.
 - Keep the warm, calm second-person voice ("Kiedy pracowałeś…") and plain, natural Polish. No exclamation marks, no hype.
-- Shorter is welcome: a text may lose up to half its length if that is what it takes. Never make a text noticeably longer than it was.
+- Shorter is welcome: a text may lose up to half its length if that is what it takes. Never make a text noticeably longer than it was; the lede and "Dla Ciebie" stay short.
 
 ## What you never do
-- Never add a fact, number, name or quote that is not already in that text. Every number you keep stays exactly as written (you may drop numbers).
+- Never add a fact, number, name or quote about the story that is not already in that text. A plain half-sentence saying what a term means is not a new fact and is welcome. Every number you keep stays exactly as written, with its unit (you may drop numbers).
 - Never change the meaning, the hedging (rumor, hypothesis, "możliwe, że…") or who said what.
 - Never add investment advice or price predictions.
 
 ## Fields
-- For each story (by `idx`) return `lede` (at most 2 short sentences; it must make sense on its own under the title), `body` and `for_you` (1-3 sentences).
+- For each story (by `idx`) return `lede` (at most 2 short sentences; it must make sense on its own under the title), `body` and `for_you` (1-3 sentences; an empty string when the story has none).
 - For each supplement return `kind` as given, `title`, `body` and the same number of `takeaways`. Supplement bodies are split into parts by subhead lines: a paragraph that is only "## " and a few words. Keep the parts and their subheads (you may reword a subhead). If a supplement has no subheads, add 3-4. A supplement body is a synthesis, not a list of the period's stories: cut any item-by-item recap down to what serves the main threads.
 - Return every story idx and every supplement you were given.
 

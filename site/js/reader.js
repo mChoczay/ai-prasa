@@ -59,13 +59,18 @@ ${s.disclaimer ? `<p class="disclaimer">${escapeHtml(s.disclaimer)}</p>` : ''}
 ${sourcesList(s.sources)}`;
 }
 
-// Supplement text: blocks starting with "## " are subheads, the rest are paragraphs.
+// Supplement text: a block starting with "## " (or "### ") opens with a subhead line; the rest of the
+// block, if any, is its first paragraph.
 function supplementParagraphs(text) {
   return String(text || '')
     .split(/\n{2,}/)
     .map((p) => p.trim())
     .filter(Boolean)
-    .map((p) => (p.startsWith('## ') ? `<h3>${escapeHtml(p.slice(3).trim())}</h3>` : paragraphs(p)))
+    .map((p) => {
+      const head = /^#{2,3} (.*)(?:\n([\s\S]*))?$/.exec(p);
+      if (!head) return paragraphs(p);
+      return `<h3>${escapeHtml(head[1].trim())}</h3>${paragraphs(head[2] || '')}`;
+    })
     .join('');
 }
 

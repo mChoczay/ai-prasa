@@ -15,13 +15,22 @@ Uwagi z tabeli `reader_feedback` (22 lis) i decyzje właściciela:
 
 Sztafeta: front → [period] → **redakcja** → profiles → publish. Osobne wykonanie (180 s), +1 wykonanie dziennie.
 
+Praca jest podzielona, żeby żadne wywołanie nie zbliżyło się do limitu 180 s (wydanie przekazywane jest „bez czekania”, więc przekroczony czas oznacza utracone wydanie):
+- etap **redakcja** poprawia teksty dnia (leady, treści, „Dla Ciebie”);
+- dodatki (tydzień, miesiąc) poprawia drugie wywołanie redaktora w etapie **period**, zaraz po ich napisaniu.
+
+Próba na wydaniu z 22 lis (teksty + duży dodatek w jednym wywołaniu): 57 s, $0,11. Po podziale każde wywołanie ma mniej niż połowę tego.
+
 - Wejście modelu: każdy tekst z `idx`, tytułem, leadem, treścią i „Dla Ciebie”; dodatki z tytułem, treścią i wnioskami; uwagi czytelnika.
 - Wyjście: `{ stories: [{ idx, lede, body, for_you }], supplements: [{ kind, title, body, takeaways }] }`.
-- Model: Sonnet 5.5, effort medium. Koszt ok. $0,08 dziennie (≈ $2,4 miesięcznie; razem ok. $10 z $15).
-- **Bezpieczniki** (na każdy tekst osobno; jeśli nie przejdzie, zostaje wersja oryginalna):
-  - treść niepusta, długość 40–115% oryginału w słowach;
-  - każda liczba w nowym tekście występuje w oryginale (tytuł, lead, treść, „Dla Ciebie”; dla dodatku także tabela i wnioski) — redaktor nie może dopisać liczb;
-  - dodatek: ten sam rodzaj (`weekly`/`monthly`), dokładnie tyle samo wniosków.
+- Model: Sonnet 5.5, effort low. Koszt ok. $0,10 dziennie (≈ $3 miesięcznie; razem ok. $10,5 z $15).
+- **Bezpieczniki** (na każdy tekst osobno, zawsze względem oryginału; jeśli nie przejdzie, zostaje wersja oryginalna):
+  - treść niepusta, długość 40–125% oryginału w słowach (125%, bo objaśnienia pojęć dokładają kilka słów);
+  - lead i „Dla Ciebie” najwyżej 1,5× oryginału albo 45 słów; puste „Dla Ciebie” zostaje puste;
+  - każda liczba w nowym tekście występuje w oryginale razem z jednostką (mln/mld/bln/tys/%/USD/zł, także zapisane słownie: „17 milionów” = „17 mln”); „2 mln” → „2 mld” albo zgubiona jednostka to nowa liczba;
+  - powtórzony `idx` albo rodzaj dodatku jest pomijany;
+  - dodatek: ten sam rodzaj (`weekly`/`monthly`), tyle samo wniosków, nie mniej śródtytułów niż min(oryginał, 3).
+- Czego bezpieczniki nie złapią: odwrócenia kierunku („spadek” → „wzrost”), przeniesienia liczby na inną firmę, liczb pisanych słowami. Tego pilnuje prompt redaktora; regex tego nie rozstrzygnie.
 - Błąd wywołania, brak kredytów → pauza jak w innych etapach; każdy inny błąd → wydanie idzie dalej bez redakcji.
 - Po redakcji przeliczane są minuty czytania.
 

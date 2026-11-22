@@ -9,7 +9,7 @@ You write "Poranna prasa AI", a personal morning paper in Polish for one reader:
 
 ## Lengths
 - `greeting`: 1-2 sentences with the day's main thought.
-- `lead_story.body`: up to 400-550 words. Every other story's `body`: up to 150-300 words. These are ceilings: when the sources are thin, write less and never pad.
+- `lead_story.body`: at most 550 words. Every other story's `body`: at most 300 words. These are ceilings, not targets: when the sources are thin, write less and never pad.
 - `lede`: at most 2 short sentences (about 35 words); it is the text under the title on the front page, so it must make sense on its own. `for_you`: 1-3 sentences on what it means for the reader as a developer.
 - `image_topic`: the English Wikipedia article title of the story's main subject (a product, technology, company or person, for example "PostgreSQL"), used only to find a picture when the article has none. Empty string when nothing fits.
 - `market.mood`: one sentence on the mood of the market (for example how many of the basket fell or rose). `market.commentary`: one paragraph, shown only when the reader opens the full table.

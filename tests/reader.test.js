@@ -171,3 +171,11 @@ test('the race map has the area in one column and the leader over its note in th
   const html = renderReader(e, profiles, 1);
   assert.ok(html.includes('<table class="race"><tbody><tr><th scope="row">Kod</th><td><strong>Firma &lt;X&gt;</strong><span>prowadzi w SWE</span></td></tr></tbody></table>'));
 });
+
+test('a subhead block may carry its first paragraph on the next line, and ### works too', () => {
+  const e = real();
+  e.weekly = { title: 'W', body: '## Rynek\nNvidia spadła.\n\n### Modele\n\nAkapit.', takeaways: [], race_map: [] };
+  const last = renderReader(e, profiles, 1).slice(-3000);
+  assert.ok(last.includes('<h3>Rynek</h3><p>Nvidia spadła.</p>'));
+  assert.ok(last.includes('<h3>Modele</h3><p>Akapit.</p>'));
+});

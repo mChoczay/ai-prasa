@@ -15,8 +15,9 @@ const edition = () => ({
   supplement_minutes: 2,
 });
 
-test('numbersIn finds whole numbers with their decimal parts', () => {
-  assert.deepEqual(numbersIn('Wersja 2.3.1, spadek 22,92% i 17 mln.'), ['2.3.1', '22,92', '17']);
+test('numbersIn finds numbers with their decimal parts and a normalised unit', () => {
+  assert.deepEqual(numbersIn('Wersja 2.3.1, spadek 22,92% i 17 mln.'), ['2.3.1', '22,92 %', '17 mln']);
+  assert.deepEqual(numbersIn('17 milionów linii, 1,5 bln dolarów, 879 tys. chipów, 115,84 mld USD, 3 procent'), ['17 mln', '1,5 bln', '879 tys', '115,84 mld', '3 %']);
   assert.deepEqual(numbersIn('bez liczb'), []);
 });
 
@@ -54,7 +55,7 @@ test('an edit that adds a number keeps the original text', () => {
   const answer = { stories: [{ idx: 1, lede: 'Krótko.', body: `Luka dotyczy 40 tys. serwerów. ${words(55)}`, for_you: 'x' }], supplements: [] };
   const { edition: e, report } = applyEdits(edition(), answer);
   assert.equal(e.stories[0].body, edition().stories[0].body);
-  assert.deepEqual(report.kept, ['story 1: new number 40']);
+  assert.deepEqual(report.kept, ['story 1: new number 40 tys']);
 });
 
 test('numbers may come from the title, and supplements may use numbers from their table', () => {
@@ -102,4 +103,61 @@ test('the edit schema asks for stories by idx and supplements by kind', () => {
   assert.deepEqual(schema.required, ['stories', 'supplements']);
   assert.deepEqual(schema.properties.stories.items.required, ['idx', 'lede', 'body', 'for_you']);
   assert.deepEqual(schema.properties.supplements.items.properties.kind.enum, ['weekly', 'monthly']);
+});
+
+test('a number with another unit, or without its unit, is a new number', () => {
+  const body = (head) => `${head} ${words(98)}`;
+  const mld = applyEdits(edition(), { stories: [{ idx: 0, lede: 'l', body: body('Badacze wysłali 2 mld promptów.'), for_you: 'f' }], supplements: [] });
+  assert.deepEqual(mld.report.kept, ['story 0: new number 2 mld']);
+  const bare = applyEdits(edition(), { stories: [{ idx: 0, lede: 'l', body: body('Badacze wysłali 2 prompty.'), for_you: 'f' }], supplements: [] });
+  assert.deepEqual(bare.report.kept, ['story 0: new number 2']);
+  const spelled = applyEdits(edition(), { stories: [{ idx: 0, lede: 'l', body: body('Badacze wysłali 2 miliony promptów.'), for_you: 'f' }], supplements: [] });
+  assert.deepEqual(spelled.report.kept, []);
+});
+
+test('a repeated idx or kind is ignored, so guards always compare with the original', () => {
+  const answer = {
+    stories: [
+      { idx: 0, lede: 'l', body: `Badacze wysłali 2 mln promptów. ${words(50)}`, for_you: 'f' },
+      { idx: 0, lede: 'l', body: `Badacze wysłali 2 mln promptów. ${words(15)}`, for_you: 'f' },
+    ],
+    supplements: [
+      { kind: 'weekly', title: 'T', body: `Spadek o 22,92%. ${words(120)}`, takeaways: ['a', 'b', 'c'] },
+      { kind: 'weekly', title: 'T2', body: words(50), takeaways: ['a', 'b', 'c'] },
+    ],
+  };
+  const { edition: e, report } = applyEdits(edition(), answer);
+  assert.equal(e.lead_story.body.split(' ').length, 55);
+  assert.equal(e.weekly.title, 'T');
+  assert.deepEqual(report.kept, ['story 0: repeated', 'weekly: repeated']);
+});
+
+test('the lede and "Dla Ciebie" may not grow without limit, and an empty "Dla Ciebie" stays empty', () => {
+  const long = applyEdits(edition(), { stories: [{ idx: 1, lede: words(60), body: `Luka w wersji 2.3.1. ${words(50)}`, for_you: 'f' }], supplements: [] });
+  assert.deepEqual(long.report.kept, ['story 1: lede 60 words']);
+  const longFor = applyEdits(edition(), { stories: [{ idx: 1, lede: 'l', body: `Luka w wersji 2.3.1. ${words(50)}`, for_you: words(50) }], supplements: [] });
+  assert.deepEqual(longFor.report.kept, ['story 1: for_you 50 words']);
+  const e0 = edition();
+  e0.stories[0].for_you = '';
+  const invented = applyEdits(e0, { stories: [{ idx: 1, lede: 'l', body: `Luka w wersji 2.3.1. ${words(50)}`, for_you: 'Zmyślone zdanie.' }], supplements: [] });
+  assert.equal(invented.edition.stories[0].for_you, '');
+  assert.deepEqual(invented.report.kept, []);
+});
+
+test('a supplement edit may not drop its subheads', () => {
+  const e0 = edition();
+  e0.weekly.body = `## Rynek\n\nSpadek o 22,92%. ${words(100)}\n\n## Modele\n\n${words(100)}`;
+  const flat = applyEdits(e0, { stories: [], supplements: [{ kind: 'weekly', title: 'T', body: `Spadek o 22,92%. ${words(150)}`, takeaways: ['a', 'b', 'c'] }] });
+  assert.deepEqual(flat.report.kept, ['weekly: 0 subheads of 2']);
+  const kept = applyEdits(e0, { stories: [], supplements: [{ kind: 'weekly', title: 'T', body: `## Rynek\nSpadek o 22,92%. ${words(80)}\n\n### Modele\n\n${words(70)}`, takeaways: ['a', 'b', 'c'] }] });
+  assert.deepEqual(kept.report.kept, []);
+});
+
+test('editPrompt can carry only the stories or only the supplements', () => {
+  const storiesOnly = editPrompt(edition(), '', { supplements: false });
+  assert.match(storiesOnly, /### Story idx 0/);
+  assert.doesNotMatch(storiesOnly, /### Supplement/);
+  const supplementsOnly = editPrompt(edition(), '', { stories: false });
+  assert.doesNotMatch(supplementsOnly, /### Story/);
+  assert.match(supplementsOnly, /### Supplement weekly/);
 });

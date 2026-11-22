@@ -38,3 +38,13 @@ Próba na wydaniu z 22 lis (teksty + duży dodatek w jednym wywołaniu): 57 s, $
 
 - Śródtytuły: akapit dodatku zaczynający się od `## ` to `<h3>`.
 - Tabela „Kto prowadzi”: obszar w pierwszej kolumnie, w drugiej lider pogrubiony, a pod nim notatka.
+
+## Po recenzji (22 lis)
+
+Naprawione: podział redakcji (limit czasu), jednostki w bezpieczniku liczb, porównanie zawsze z oryginałem, powtórzone `idx`, limity leadu i „Dla Ciebie”, utrata śródtytułów, śródtytuł z tekstem w następnej linii, sprzeczność w edit.md (objaśnienie pojęcia ≠ nowy fakt), „najwyżej 550/300 słów” w write.md.
+
+Odłożone (drobne):
+- w froncie przełącznik ma wciąż `outputKey: 'profiles'` dla trasy `edit` (tylko etykieta), a komentarz `stop_after` w daily nie wymienia `edit`;
+- brak testu, że wartości przełącznika frontu zgadzają się z `next` z „Assemble edition”;
+- odrzucone poprawki redaktora (`edit_kept`) widać tylko w danych wykonania, nie w mailu ani w logu;
+- `readingMinutes` liczy `##` jako słowo (kosmetyka).

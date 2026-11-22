@@ -50,7 +50,7 @@ const editWithSonnet = node({
           user: expr('{{ $json.user }}'),
           schema: expr('{{ $json.schema }}'),
           effort: 'low',
-          max_tokens: 16000,
+          max_tokens: 10000,
         },
         schema: [
           { id: 'run_id', displayName: 'run_id', required: false, defaultMatch: false, display: true, type: 'string', canBeUsedToMatch: true },

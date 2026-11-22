@@ -225,8 +225,8 @@ body.reading main { max-width: none; padding: 0; }
 
 /* Reader bar: short back link, page counter and a thin progress line under it. */
 .reader-bar .count { color: var(--ink-soft); text-decoration: none; font: 13px/1.4 var(--sans); letter-spacing: 0.04em; }
-/* Back to the edition: clear, in the ink colour, with a finger-sized target. */
-.reader-bar .back { color: var(--ink); text-decoration: none; font: 600 15px/1.4 var(--sans); display: inline-flex; align-items: center; min-height: 44px; padding-right: 12px; }
+/* The paper's name leads back to the edition, as a logo does; finger-sized target. */
+.reader-bar .back { color: var(--ink); text-decoration: none; font: 700 18px/1 var(--serif); display: inline-flex; align-items: center; min-height: 44px; padding-right: 12px; }
 .reader-bar .back:hover, .reader-bar .back:focus-visible { color: var(--accent); }
 .progress { height: 2px; background: var(--rule); }
 .progress span { display: block; height: 2px; width: 0; background: var(--accent); transition: width 150ms ease-out; }

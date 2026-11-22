@@ -1,7 +1,7 @@
 import { workflow, node, trigger, ifElse, expr } from '@n8n/workflow-sdk';
 
 // PPAI · luki: the vulnerability log, apart from the edition relay. Every morning at 06:30 it reads the
-// published editions of the last week it has not read yet (at most 2), has Haiku name their CVEs, looks up
+// published editions of the last week it has not read yet (the 2 oldest that exist), has Haiku name their CVEs, looks up
 // at most 10 CVEs in OSV and NVD (7 s apart), saves the rows, and commits site/data/luki.json and luki.md
 // when they changed. "Run for a date" re-reads one edition by hand.
 
@@ -100,7 +100,7 @@ const planRun = node({
         "const today = /^\\d{4}-\\d{2}-\\d{2}$/.test(given) ? given : new Intl.DateTimeFormat('en-CA', { timeZone: 'Europe/Warsaw' }).format(new Date());\n" +
         "const state = $('Read state').first().json || {};\n" +
         "const done = $('Read runs').all().map((i) => i.json && i.json.date).filter(Boolean);\n" +
-        "const dates = given === today ? [today] : editionDatesToRead(today, done);\n" +
+        "const dates = given === today ? [today] : editionDatesToRead(today, done, { max: 7 });\n" +
         "const base = { today, dates, paused: state.paused === true };\n" +
         "return (dates.length ? dates : [today]).map((d) => ({ json: { ...base, fetch: d } }));\n",
     },
@@ -138,6 +138,7 @@ const vulnsPromptNode = node({
         "  try { e = typeof f.data === 'string' ? JSON.parse(f.data) : f.data; } catch (err) { e = null; }\n" +
         "  if (e && e.date === p.fetch) editions.push(e);\n" +
         "});\n" +
+        "editions.splice(2);\n" +
         "const loaded = editions.map((e) => e.date);\n" +
         "return [{ json: { skip: editions.length === 0, loaded, editions, user: editions.length ? vulnsPrompt(editions) : '', schema: SCHEMA } }];\n",
     },

@@ -21,7 +21,7 @@ test('Plan run reads the given date, or the unprocessed days of the last week', 
   assert.equal(manual[0].today, '2026-11-22');
   assert.equal(manual[0].paused, false);
   const scheduled = run('Plan run', { nodes: { 'Read state': [{ paused: true }], 'Read runs': [{}] } });
-  assert.ok(scheduled.length >= 1 && scheduled.length <= 2);
+  assert.ok(scheduled.length >= 1 && scheduled.length <= 7);
   assert.equal(scheduled[0].paused, true);
   assert.match(scheduled[0].fetch, /^\d{4}-\d{2}-\d{2}$/);
 });
@@ -123,4 +123,14 @@ test('the workflow runs at 06:30, waits 7 s between NVD calls, uses Haiku throug
   assert.match(src, /operation: 'upsert'/);
   assert.match(src, /keyName: 'vuln_key'/);
   assert.match(src, /workflow\('ppai-vulns', 'PPAI · luki'\)/);
+});
+
+test('days without an edition do not block newer ones: every unread day is fetched, the 2 oldest that loaded are read', () => {
+  const plan = run('Plan run', { nodes: { 'Read state': [{ paused: false }], 'Read runs': [{}] } });
+  assert.equal(plan.length, 7);
+  const dates = ['2026-11-16', '2026-11-17', '2026-11-18', '2026-11-19', '2026-11-20'];
+  const p = dates.map((d) => ({ today: '2026-11-22', dates, paused: false, fetch: d }));
+  const f = [{ statusCode: 404, data: '' }, { statusCode: 404, data: '' }, { statusCode: 200, data: JSON.stringify(edition('2026-11-18')) }, { statusCode: 200, data: JSON.stringify(edition('2026-11-19')) }, { statusCode: 200, data: JSON.stringify(edition('2026-11-20')) }];
+  const [out] = run('Vulns prompt', { nodes: { 'Plan run': p }, input: f });
+  assert.deepEqual(out.loaded, ['2026-11-18', '2026-11-19']);
 });

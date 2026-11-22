@@ -23,7 +23,7 @@ test('cleanup deletes rows older than 60 days from each growing table, and nothi
     assert.match(block, /operation: 'deleteRows'/, name);
     assert.match(block, /keyName: 'createdAt', condition: 'lt', keyValue: expr\("\{\{ \$today\.minus\(60, 'days'\)\.toISO\(\) \}\}"\)/, name);
   }
-  for (const keep of ['topics_history', 'cost_ledger', 'reader_feedback', 'entity_profiles', 'glossary_terms']) {
+  for (const keep of ['topics_history', 'cost_ledger', 'reader_feedback', 'entity_profiles', 'glossary_terms', 'vuln_log', 'vuln_runs']) {
     assert.ok(!src.includes(`cachedResultName: '${keep}'`), `${keep} is kept`);
   }
 });

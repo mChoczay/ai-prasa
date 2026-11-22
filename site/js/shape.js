@@ -111,6 +111,7 @@ export function dateParts(dateStr) {
 export function tabTitle(view, edition, page) {
   const e = edition || {};
   if (view === 'archive') return 'Archiwum · Prasa AI';
+  if (view === 'vulns') return 'Luki · Prasa AI';
   if (view === 'front') {
     const p = dateParts(e.date);
     return p ? `Prasa AI · ${p.weekday} ${p.day} ${p.monthShort}` : 'Prasa AI';

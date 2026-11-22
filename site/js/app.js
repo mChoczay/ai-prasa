@@ -5,6 +5,7 @@ import { readerPages, tabTitle, rankingAreas, pickArea } from './shape.js';
 import { loadConfig, saveConfig, clearConfig, storedRating, initFeedback } from './feedback.js';
 import { countVisit } from './visits.js';
 import { closesSheet } from './sheet.js';
+import { VULN_DEFAULTS, renderVulns, renderVulnList, normalizeVulnState, vulnCountText } from './vulns.js';
 
 const app = document.getElementById('app');
 const dialog = document.getElementById('profile-dialog');
@@ -71,6 +72,31 @@ function storedArea() {
   }
 }
 
+// The Luki page: its data and the filters last used on this device (the search text is not kept).
+const VULN_KEY = 'ppai.luki';
+let vulnData = null;
+let vulnState = { ...VULN_DEFAULTS };
+try {
+  const saved = store ? JSON.parse(store.getItem(VULN_KEY) || 'null') : null;
+  vulnState = normalizeVulnState({ ...saved, q: '' });
+} catch {
+  // Defaults.
+}
+// The list and its announced count, after a filter, sort or search change.
+function refreshVulnList() {
+  const list = app.querySelector('.vuln-list');
+  if (list) list.innerHTML = renderVulnList(vulnData, vulnState);
+  const count = app.querySelector('.vuln-count');
+  if (count) count.textContent = vulnCountText(vulnData, vulnState);
+}
+function saveVulnState() {
+  try {
+    if (store) store.setItem(VULN_KEY, JSON.stringify({ ...vulnState, q: '' }));
+  } catch {
+    // Not remembered.
+  }
+}
+
 // One visit per page load on the published site (local previews are not counted); hash navigation inside
 // the site is not counted again.
 if (location.hostname === 'mchoczay.github.io') countVisit(store);
@@ -96,6 +122,18 @@ async function route() {
     disposeReader = null;
   }
   document.body.classList.toggle('reading', r.view === 'reader');
+  // The Luki page needs only its own file, so it opens even when the edition index does not load.
+  if (r.view === 'vulns') {
+    try {
+      vulnData = await getJson('data/luki.json');
+    } catch {
+      vulnData = null;
+    }
+    app.innerHTML = renderVulns(vulnData, vulnState);
+    document.title = tabTitle('vulns');
+    window.scrollTo(0, 0);
+    return;
+  }
   try {
     const index = await loadCommon();
     if (r.view === 'archive') {
@@ -152,6 +190,20 @@ async function route() {
 }
 
 app.addEventListener('click', (event) => {
+  const vf = event.target.closest('[data-vf]');
+  const vs = event.target.closest('[data-vs]');
+  if (vf || vs) {
+    const [key, value] = vf ? vf.dataset.vf.split(':') : ['sort', vs.dataset.vs];
+    vulnState = normalizeVulnState({ ...vulnState, [key]: value });
+    saveVulnState();
+    // Redraw the list and the pressed pills only, so the focus stays on the button that was pressed.
+    app.querySelectorAll(vf ? `[data-vf^="${key}:"]` : '[data-vs]').forEach((b) => {
+      const v = vf ? b.dataset.vf.split(':')[1] : b.dataset.vs;
+      b.setAttribute('aria-pressed', String(v === vulnState[key]));
+    });
+    refreshVulnList();
+    return;
+  }
   const pill = event.target.closest('.area-chip');
   if (pill) {
     if (selectArea(pill.closest('.rankings'), pill.dataset.area)) {
@@ -182,6 +234,19 @@ function openSheet() {
   const sheet = dialog.querySelector('.sheet');
   if (sheet) sheet.scrollTop = 0;
 }
+
+app.addEventListener('input', (event) => {
+  if (!event.target.matches('[data-vq]')) return;
+  vulnState = { ...vulnState, q: event.target.value };
+  refreshVulnList();
+});
+
+// Opening or closing the patched entries is remembered too.
+app.addEventListener('toggle', (event) => {
+  if (!event.target.matches || !event.target.matches('details.patched')) return;
+  vulnState = { ...vulnState, showPatched: event.target.open };
+  saveVulnState();
+}, true);
 
 // The card closes with its cross, a tap anywhere outside the card or Esc (native). The dimmed area is
 // the dialog itself with cursor: pointer, so iOS Safari sends it clicks (it can drop taps on ::backdrop).

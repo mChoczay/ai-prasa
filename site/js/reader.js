@@ -26,6 +26,7 @@ export function parseRoute(hash) {
     // Only a bare link or off=1 turns ratings off; a cut-off link does nothing.
     return { view: 'feedback', date: null, page: null, category: null, url, key, off: q.get('off') === '1' || (!url && !key) };
   }
+  if (parts[0] === 'luki') return { view: 'vulns', date: null, page: null, category: null };
   if (parts[0] === 'archiwum') {
     // Old ?kat= links still open the archive; there is no filter any more.
     return { view: 'archive', date: null, page: null, category: null };

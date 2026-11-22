@@ -207,4 +207,96 @@ function applyChecks(rows, results, now) {
   return { rows: [...byKey.values()], changed };
 }
 
-export { VULN_SEVERITIES, editionDatesToRead, storyRefs, vulnsPrompt, mergeFindings, checksToRun, osvFix, nvdFacts, applyChecks };
+function _vJson(text, fallback) {
+  try {
+    const v = JSON.parse(text);
+    return v == null ? fallback : v;
+  } catch {
+    return fallback;
+  }
+}
+
+function _vNewestFirst(a, b) {
+  return a.first_date < b.first_date ? 1 : a.first_date > b.first_date ? -1 : a.cve_id < b.cve_id ? -1 : a.cve_id > b.cve_id ? 1 : 0;
+}
+
+// The page's data: newest first, without the agent-only fields.
+function vulnsJson(rows, now) {
+  const vulns = (rows || [])
+    .filter((r) => r && VULN_CVE.test(r.cve_id))
+    .slice()
+    .sort(_vNewestFirst)
+    .map((r) => ({
+      key: r.vuln_key,
+      cve_id: r.cve_id,
+      product: r.product,
+      summary: r.summary,
+      severity: r.severity || '',
+      status: r.status === 'patched' ? 'patched' : 'open',
+      fixed_in: r.fixed_in || '',
+      first_date: r.first_date,
+      checked_at: r.checked_at || '',
+      patched_at: r.patched_at || '',
+      story: { date: r.story_date, n: Number(r.story_n) || 0, title: r.story_title },
+    }));
+  return { updated_at: now, vulns };
+}
+
+// The agent's file: an instruction, then one section per CVE, open ones first.
+function agentMarkdown(rows, now) {
+  const list = (rows || []).filter((r) => r && VULN_CVE.test(r.cve_id)).slice().sort(_vNewestFirst);
+  const ordered = [...list.filter((r) => r.status !== 'patched'), ...list.filter((r) => r.status === 'patched')];
+  const lines = [
+    '# Dziennik luk — Poranna prasa AI',
+    '',
+    `Zaktualizowano: ${String(now).slice(0, 10)}`,
+    '',
+    'Instrukcja dla agenta: dla każdego projektu sprawdź zależności (pliki blokad, obrazy Docker, pakiety systemowe) względem poniższej listy. Zgłoś, które luki dotyczą projektu, w jakiej wersji i gdzie. Nie aktualizuj niczego bez pytania.',
+  ];
+  for (const r of ordered) {
+    const packages = _vJson(r.packages, []);
+    const sources = _vJson(r.sources, []);
+    const byEco = {};
+    for (const p of Array.isArray(packages) ? packages : []) (byEco[p.ecosystem] = byEco[p.ecosystem] || []).push(p.name);
+    const pk = Object.entries(byEco).map(([eco, names]) => `${eco}: ${names.join(', ')}`).join('; ');
+    lines.push(
+      '',
+      `## ${r.cve_id} · ${r.product}`,
+      '',
+      `Status: ${r.status === 'patched' ? `załatana${r.fixed_in ? ` (od ${r.fixed_in})` : ''}` : 'niezałatana'}`,
+      `Powaga: ${r.severity || 'nieznana'}`,
+      `Pakiety: ${pk || 'brak danych'}`,
+      `Wersje dotknięte: ${r.affected || 'brak danych'}`,
+      `Poprawka w: ${r.fixed_in || 'brak'}`,
+      `Opis: ${r.summary}`,
+      '',
+      r.agent_text || '',
+      '',
+      'Źródła:',
+      ...(Array.isArray(sources) ? sources : []).map((s) => `- ${s.url}`),
+    );
+  }
+  return `${lines.join('\n')}\n`;
+}
+
+// True when publishing would change nothing but the dates.
+function sameVulnFiles(currentJsonRaw, currentMd, nextJson, nextMd) {
+  if (currentJsonRaw == null || currentMd == null) return false;
+  const current = _vJson(currentJsonRaw, null);
+  if (!current || !Array.isArray(current.vulns)) return false;
+  const undated = (md) => String(md).replace(/^Zaktualizowano: .*$/m, '');
+  return JSON.stringify(current.vulns) === JSON.stringify(nextJson.vulns) && undated(currentMd) === undated(nextMd);
+}
+
+function vulnTree(nextJson, nextMd, date) {
+  const md = String(nextMd).endsWith('\n') ? String(nextMd) : `${nextMd}\n`;
+  return {
+    tree: [
+      { path: 'site/data/luki.json', mode: '100644', type: 'blob', content: `${JSON.stringify(nextJson, null, 1)}\n` },
+      { path: 'site/data/luki.md', mode: '100644', type: 'blob', content: md },
+    ],
+    message: `Update the vulnerability log for ${date}.`,
+  };
+}
+
+export { VULN_SEVERITIES, editionDatesToRead, storyRefs, vulnsPrompt, mergeFindings, checksToRun, osvFix, nvdFacts, applyChecks, vulnsJson, agentMarkdown, sameVulnFiles, vulnTree };

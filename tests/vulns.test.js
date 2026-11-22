@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
-import { editionDatesToRead, storyRefs, vulnsPrompt, mergeFindings, checksToRun, osvFix, nvdFacts, applyChecks } from '../n8n/lib/vulns.js';
+import { editionDatesToRead, storyRefs, vulnsPrompt, mergeFindings, checksToRun, osvFix, nvdFacts, applyChecks, vulnsJson, agentMarkdown, sameVulnFiles, vulnTree } from '../n8n/lib/vulns.js';
 
 const NOW = '2026-11-23T05:30:00.000Z';
 const story = (title, extra = {}) => ({ title, lede: `Lead ${title}.`, body: `Treść ${title}.`, sources: [{ name: 's', url: `https://example.com/${encodeURIComponent(title)}` }], ...extra });
@@ -172,4 +172,62 @@ test('applyChecks patches with evidence, keeps the status without it, and always
   assert.equal(by['CVE-2026-1004'].severity_source, 'nvd');
   assert.equal(by['CVE-2026-1005'].checked_at, '');
   assert.deepEqual(changed.map((r) => r.cve_id).sort(), ['CVE-2026-1001', 'CVE-2026-1002', 'CVE-2026-1003', 'CVE-2026-1004']);
+});
+
+const twoRows = () => {
+  const { rows } = mergeFindings([], { vulns: [finding(), gpgme({ story_ref: '2026-11-22#3' })] }, [edition()], NOW);
+  const older = { ...rows.find((r) => r.cve_id === 'CVE-2026-125396'), first_date: '2026-11-20', story_date: '2026-11-20' };
+  return [older, rows.find((r) => r.cve_id === 'CVE-2026-129975')];
+};
+
+test('vulnsJson lists entries for the page, newest first, without agent-only fields', () => {
+  const data = vulnsJson(twoRows(), NOW);
+  assert.equal(data.updated_at, NOW);
+  assert.deepEqual(data.vulns.map((v) => v.cve_id), ['CVE-2026-129975', 'CVE-2026-125396']);
+  const gs = data.vulns[1];
+  assert.deepEqual(Object.keys(gs).sort(), ['checked_at', 'cve_id', 'first_date', 'fixed_in', 'key', 'patched_at', 'product', 'severity', 'status', 'story', 'summary'].sort());
+  assert.deepEqual(gs.story, { date: '2026-11-20', n: 2, title: 'Upload2Shell: luka w Ghostscripcie' });
+  assert.equal(gs.status, 'patched');
+});
+
+test('agentMarkdown gives an agent everything per CVE, open ones first', () => {
+  const md = agentMarkdown(twoRows(), NOW);
+  assert.ok(md.startsWith('# Dziennik luk — Poranna prasa AI\n'));
+  assert.match(md, /^Zaktualizowano: 2026-11-23$/m);
+  assert.match(md, /nie aktualizuj niczego bez pytania/i);
+  assert.ok(md.indexOf('## CVE-2026-129975 · GPGME') < md.indexOf('## CVE-2026-125396 · Ghostscript'));
+  const gs = md.slice(md.indexOf('## CVE-2026-125396'));
+  assert.match(gs, /Status: załatana \(od 10\.08\.0\)/);
+  assert.match(gs, /Powaga: nieznana/);
+  assert.match(gs, /Pakiety: apt: ghostscript/);
+  assert.match(gs, /Wersje dotknięte: przed 10\.08\.0/);
+  assert.match(gs, /Poprawka w: 10\.08\.0/);
+  assert.match(gs, /### Jak wykryć\n`dpkg -l ghostscript`/);
+  assert.match(gs, /Źródła:\n- https:\/\/example\.com\//);
+  assert.match(md.slice(md.indexOf('## CVE-2026-129975')), /Status: niezałatana/);
+});
+
+test('sameVulnFiles ignores the dates and notices any real change', () => {
+  const rows = twoRows();
+  const json = vulnsJson(rows, NOW);
+  const md = agentMarkdown(rows, NOW);
+  const later = '2026-11-24T05:30:00.000Z';
+  assert.equal(sameVulnFiles(JSON.stringify(json), md, vulnsJson(rows, later), agentMarkdown(rows, later)), true);
+  const patched = rows.map((r) => (r.cve_id === 'CVE-2026-129975' ? { ...r, status: 'patched', fixed_in: '2.3.1' } : r));
+  assert.equal(sameVulnFiles(JSON.stringify(json), md, vulnsJson(patched, later), agentMarkdown(patched, later)), false);
+  assert.equal(sameVulnFiles(null, null, json, md), false);
+  assert.equal(sameVulnFiles('{oops', md, json, md), false);
+});
+
+test('vulnTree writes both files with the dated message', () => {
+  const rows = twoRows();
+  const { tree, message } = vulnTree(vulnsJson(rows, NOW), agentMarkdown(rows, NOW), '2026-11-23');
+  assert.equal(message, 'Update the vulnerability log for 2026-11-23.');
+  assert.deepEqual(tree.map((t) => t.path), ['site/data/luki.json', 'site/data/luki.md']);
+  for (const t of tree) {
+    assert.equal(t.mode, '100644');
+    assert.equal(t.type, 'blob');
+    assert.ok(t.content.endsWith('\n'));
+  }
+  assert.equal(JSON.parse(tree[0].content).vulns.length, 2);
 });

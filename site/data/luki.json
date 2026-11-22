@@ -1,0 +1,22 @@
+{
+ "updated_at": "2026-11-22T22:48:53.147Z",
+ "vulns": [
+  {
+   "key": "CVE-2026-121481",
+   "cve_id": "CVE-2026-121481",
+   "product": "OpenSSL",
+   "summary": "Błąd przepełnienia bufora w funkcji EVP_EncodeBlock() może zostać wywołany przez niepoprawne dane wejściowe, a według autora poprawki da się go uruchomić z linii poleceń.",
+   "severity": "średnia",
+   "status": "open",
+   "fixed_in": "",
+   "first_date": "2026-11-20",
+   "checked_at": "2026-11-22T22:48:51.636Z",
+   "patched_at": "",
+   "story": {
+    "date": "2026-11-20",
+    "n": 5,
+    "title": "OpenSSL: poprawka przepełnienia bufora w EVP_EncodeBlock() budzi spór o sposób naprawy"
+   }
+  }
+ ]
+}

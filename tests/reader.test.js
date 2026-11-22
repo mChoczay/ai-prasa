@@ -148,3 +148,26 @@ test('a story shows its known terms under the article', () => {
   assert.ok(!renderReader(e, profiles, 1, { terms }).includes('class="terms"'));
   assert.ok(!renderReader(real(), profiles, 1).includes('class="terms"'));
 });
+
+test('supplement paragraphs starting with "## " become subheads, escaped', () => {
+  const e = real();
+  e.weekly = { title: 'W', body: '## Rynek\n\nAkapit o rynku.\n\n## <b>Modele</b>\n\nAkapit o modelach.', takeaways: [], race_map: [] };
+  const html = renderReader(e, profiles, 1);
+  const last = html.slice(html.lastIndexOf('class="page"'));
+  assert.ok(last.includes('<h3>Rynek</h3><p>Akapit o rynku.</p>'));
+  assert.ok(last.includes('<h3>&lt;b&gt;Modele&lt;/b&gt;</h3>'));
+  assert.ok(!last.includes('##'));
+});
+
+test('story bodies keep "## " as text, not as a subhead', () => {
+  const e = real();
+  e.lead_story.body = '## nie nagłówek';
+  assert.ok(renderReader(e, profiles, 1).includes('<p>## nie nagłówek</p>'));
+});
+
+test('the race map has the area in one column and the leader over its note in the other', () => {
+  const e = real();
+  e.weekly = { title: 'W', body: 'b', takeaways: [], race_map: [{ area: 'Kod', leader: 'Firma <X>', note: 'prowadzi w SWE' }] };
+  const html = renderReader(e, profiles, 1);
+  assert.ok(html.includes('<table class="race"><tbody><tr><th scope="row">Kod</th><td><strong>Firma &lt;X&gt;</strong><span>prowadzi w SWE</span></td></tr></tbody></table>'));
+});

@@ -59,14 +59,24 @@ ${s.disclaimer ? `<p class="disclaimer">${escapeHtml(s.disclaimer)}</p>` : ''}
 ${sourcesList(s.sources)}`;
 }
 
+// Supplement text: blocks starting with "## " are subheads, the rest are paragraphs.
+function supplementParagraphs(text) {
+  return String(text || '')
+    .split(/\n{2,}/)
+    .map((p) => p.trim())
+    .filter(Boolean)
+    .map((p) => (p.startsWith('## ') ? `<h3>${escapeHtml(p.slice(3).trim())}</h3>` : paragraphs(p)))
+    .join('');
+}
+
 function supplementBody(p, label) {
   const takeaways = (p.takeaways || []).map((t) => `<li>${escapeHtml(t)}</li>`).join('');
   const race = (p.race_map || [])
-    .map((r) => `<tr><td>${escapeHtml(r.area)}</td><td>${escapeHtml(r.leader)}</td><td>${escapeHtml(r.note)}</td></tr>`)
+    .map((r) => `<tr><th scope="row">${escapeHtml(r.area)}</th><td><strong>${escapeHtml(r.leader)}</strong><span>${escapeHtml(r.note)}</span></td></tr>`)
     .join('');
-  return `<p class="kicker">${label}</p><h2>${escapeHtml(p.title)}</h2><div class="body">${paragraphs(p.body)}</div>
+  return `<p class="kicker">${label}</p><h2>${escapeHtml(p.title)}</h2><div class="body">${supplementParagraphs(p.body)}</div>
 ${takeaways ? `<h4>Warto zapamiętać</h4><ol>${takeaways}</ol>` : ''}
-${race ? `<h4>Kto prowadzi</h4><table><tbody>${race}</tbody></table>` : ''}`;
+${race ? `<h4>Kto prowadzi</h4><table class="race"><tbody>${race}</tbody></table>` : ''}`;
 }
 
 export function renderReader(edition, profilesById, page, { feedback = false, ratings = {}, terms = {} } = {}) {

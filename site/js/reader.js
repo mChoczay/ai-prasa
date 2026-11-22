@@ -100,7 +100,7 @@ export function renderReader(edition, profilesById, page, { feedback = false, ra
     })
     .join('');
   return `<div class="reader" data-page="${escapeHtml(page)}">
-<header class="reader-bar"><a class="back" href="#/${escapeHtml(e.date)}" aria-label="${escapeHtml(backLabel(e.date))}">‹ ${escapeHtml(shortDate(e.date))}</a><span class="count">${escapeHtml(page)} / ${total}</span></header>
+<header class="reader-bar"><a class="back" href="#/${escapeHtml(e.date)}" aria-label="${escapeHtml(backLabel(e.date))}">← Wydanie</a><span class="count">${escapeHtml(page)} / ${total}</span></header>
 <div class="progress"><span></span></div>
 <button class="arrow arrow-prev" data-step="-1" aria-label="poprzednia strona">‹</button>
 <div class="pages">${sections}</div>
@@ -176,7 +176,3 @@ function backLabel(dateStr) {
   return p ? `Wróć do wydania z ${p.day} ${_MONTHS_GENITIVE[p.month - 1]}` : 'Wróć do wydania';
 }
 
-function shortDate(dateStr) {
-  const p = dateParts(dateStr);
-  return p ? `${p.day} ${p.monthShort}` : String(dateStr || '');
-}

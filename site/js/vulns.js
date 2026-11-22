@@ -64,14 +64,15 @@ function openLabel(n) {
 }
 
 function item(v) {
+  // A kicker like the paper's category line: "NIEZAŁATANA · WYSOKA".
   const status = v.status === 'patched'
-    ? `<span class="pill vuln-patched">${v.fixed_in ? `załatana od ${escapeHtml(v.fixed_in)}` : 'załatana'}</span>`
-    : '<span class="pill vuln-open">niezałatana</span>';
-  const sev = `<span class="pill sev sev-${SEVERITY_CLASS[v.severity] || 'none'}">${escapeHtml(v.severity in SEVERITY_ORDER ? v.severity : 'nieznana')}</span>`;
+    ? `<span class="vk-patched">${v.fixed_in ? `załatana od ${escapeHtml(v.fixed_in)}` : 'załatana'}</span>`
+    : '<span class="vk-open">niezałatana</span>';
+  const sev = `<span class="vk-sev vk-${SEVERITY_CLASS[v.severity] || 'none'}">${escapeHtml(v.severity in SEVERITY_ORDER ? v.severity : 'nieznana')}</span>`;
   const meta = [shortDay(v.first_date)].filter(Boolean);
   const story = v.story || {};
   if (story.date && Number(story.n) > 0) meta.push(`<a href="#/${escapeHtml(story.date)}/${escapeHtml(story.n)}">czytaj artykuł ›</a>`);
-  return `<article class="vuln"><p class="vuln-tags">${status}${sev}</p><h3>${escapeHtml(v.product)} · ${escapeHtml(v.cve_id)}</h3><p>${escapeHtml(v.summary)}</p><p class="vuln-meta">${meta.join(' · ')}</p></article>`;
+  return `<article class="vuln"><p class="vuln-kicker">${status} · ${sev}</p><h3>${escapeHtml(v.product)} · ${escapeHtml(v.cve_id)}</h3><p>${escapeHtml(v.summary)}</p><p class="vuln-meta">${meta.join(' · ')}</p></article>`;
 }
 
 // The list alone, so typing in the search box can redraw it without touching the input.
@@ -88,10 +89,13 @@ export function renderVulnList(data, state) {
   return open.map(item).join('') + fold;
 }
 
-function pills(kind, options, current, attr) {
-  return options
-    .map(([value, label]) => `<button type="button" class="chip" ${attr}="${kind ? `${kind}:` : ''}${escapeHtml(value)}" aria-pressed="${value === current}">${label}</button>`)
+// One filter group in the style of the masthead nav: a small label, then text buttons, the chosen one
+// underlined in the accent.
+function filterGroup(label, kind, options, current, attr) {
+  const buttons = options
+    .map(([value, text]) => `<button type="button" class="vf" ${attr}="${kind ? `${kind}:` : ''}${escapeHtml(value)}" aria-pressed="${value === current}">${text}</button>`)
     .join('');
+  return `<div class="vuln-filter" role="group" aria-label="${label}"><span class="vf-label">${label}</span><span class="vf-options">${buttons}</span></div>`;
 }
 
 export function renderVulns(data, state) {
@@ -102,10 +106,10 @@ export function renderVulns(data, state) {
 <h2 class="vulns-head">Luki · ${openLabel(open)}</h2>
 <p class="vuln-note">Status sprawdzany codziennie w NVD i OSV.</p>
 <div class="vuln-controls">
-<div class="chips" role="group" aria-label="Status">${pills('status', STATUS_PILLS, s.status, 'data-vf')}</div>
-<div class="chips" role="group" aria-label="Powaga">${pills('severity', SEVERITY_PILLS, s.severity, 'data-vf')}</div>
+${filterGroup('Status', 'status', STATUS_PILLS, s.status, 'data-vf')}
+${filterGroup('Powaga', 'severity', SEVERITY_PILLS, s.severity, 'data-vf')}
+${filterGroup('Kolejność', '', SORT_PILLS, s.sort, 'data-vs')}
 <input type="search" class="vuln-search" data-vq placeholder="Szukaj programu lub CVE" aria-label="Szukaj programu lub CVE" value="${escapeHtml(s.q)}">
-<div class="chips" role="group" aria-label="Sortowanie">${pills('', SORT_PILLS, s.sort, 'data-vs')}</div>
 </div>
 <p class="vuln-count" aria-live="polite">${vulnCountText(data, s)}</p>
 <div class="vuln-list">${renderVulnList(data, s)}</div>

@@ -224,7 +224,10 @@ body.reading main { max-width: none; padding: 0; }
 .dateline { margin: 0; padding: 4px 0; border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); font: 12px/1.5 var(--sans); color: var(--ink-soft); }
 
 /* Reader bar: short back link, page counter and a thin progress line under it. */
-.reader-bar .back, .reader-bar .count { color: var(--ink-soft); text-decoration: none; font: 13px/1.4 var(--sans); letter-spacing: 0.04em; }
+.reader-bar .count { color: var(--ink-soft); text-decoration: none; font: 13px/1.4 var(--sans); letter-spacing: 0.04em; }
+/* Back to the edition: clear, in the ink colour, with a finger-sized target. */
+.reader-bar .back { color: var(--ink); text-decoration: none; font: 600 15px/1.4 var(--sans); display: inline-flex; align-items: center; min-height: 44px; padding-right: 12px; }
+.reader-bar .back:hover, .reader-bar .back:focus-visible { color: var(--accent); }
 .progress { height: 2px; background: var(--rule); }
 .progress span { display: block; height: 2px; width: 0; background: var(--accent); transition: width 150ms ease-out; }
 @media (prefers-reduced-motion: reduce) { .progress span { transition: none; } }
@@ -297,23 +300,30 @@ button.chip { background: none; cursor: pointer; }
 .race strong { display: block; font-weight: 600; color: var(--ink); }
 .race span { display: block; font-size: 13px; color: var(--ink-soft); }
 
-/* Luki: the vulnerability log, with filter pills, a search box and one card per CVE. */
-.vulns-head { margin: 14px 0 6px; font: 600 15px/1.4 var(--sans); }
-.vuln-controls .chips { padding: 4px 0; }
-.vuln-search { width: 100%; margin: 6px 0; font: 16px/1.4 var(--sans); color: var(--ink); background: var(--paper); border: 1px solid var(--rule); border-radius: 8px; padding: 8px 10px; }
-.vuln { padding: 12px 0; border-top: 1px solid var(--rule); }
-.vuln h3 { margin: 6px 0 4px; font: 600 16px/1.35 var(--serif); }
+/* Luki: the vulnerability log in the paper's own type: filters like the masthead nav (small caps, the
+   chosen one underlined in the accent), a ruled search line, and a kicker over each entry. */
+.vulns-head { margin: 18px 0 2px; font: 600 22px/1.25 var(--serif); }
+.vuln-note { margin: 0 0 12px; font: 12px/1.5 var(--sans); color: var(--ink-soft); }
+.vuln-controls { border-top: 1px solid var(--rule); padding: 6px 0 4px; }
+.vuln-filter { display: grid; grid-template-columns: 84px 1fr; align-items: baseline; padding: 4px 0; }
+.vf-options { display: flex; flex-wrap: wrap; gap: 0 14px; }
+.vf-label { font: 600 10px/1.4 var(--sans); letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-soft); }
+.vf { font: 11px/1.4 var(--sans); letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-soft); background: none; border: 0; border-bottom: 1.5px solid transparent; padding: 6px 0 2px; cursor: pointer; }
+.vf:hover, .vf:focus-visible { color: var(--ink); }
+.vf[aria-pressed="true"] { color: var(--ink); border-bottom-color: var(--accent); }
+.vuln-search { width: 100%; margin: 8px 0 0; font: italic 16px/1.4 var(--serif); color: var(--ink); background: transparent; border: 0; border-bottom: 1px solid var(--rule); border-radius: 0; padding: 6px 0; }
+.vuln-search:focus { outline: none; border-bottom-color: var(--accent); }
+.vuln { padding: 14px 0; border-top: 1px solid var(--rule); }
+.vuln:first-child { border-top: 0; }
+.vuln h3 { margin: 4px 0 4px; font: 600 17px/1.35 var(--serif); }
 .vuln p { margin: 0 0 4px; }
-.vuln-tags { display: flex; flex-wrap: wrap; gap: 6px; }
-.pill { font: 11px/1.4 var(--sans); padding: 2px 8px; border-radius: 999px; border: 1px solid var(--rule); color: var(--ink-soft); }
-.vuln-open { color: var(--down); border-color: var(--down); }
-.vuln-patched { color: var(--up); border-color: var(--up); }
-.sev-crit, .sev-high { color: var(--down); }
+.vuln-kicker { font: 600 11px/1.4 var(--sans); letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-soft); }
+.vk-open, .vk-crit, .vk-high { color: var(--down); }
+.vk-patched { color: var(--up); }
 .vuln-meta { font: 12px/1.5 var(--sans); color: var(--ink-soft); }
-.vuln-meta a { color: var(--ink-soft); }
-.vulns details.patched { margin-top: 10px; }
-.vulns details.patched > summary { cursor: pointer; padding: 10px 0; font: 13px/1.4 var(--sans); color: var(--ink-soft); }
+.vuln-meta a { color: var(--accent); text-decoration: none; }
+.vulns details.patched { margin-top: 6px; border-top: 1px solid var(--rule); }
+.vulns details.patched > summary { cursor: pointer; padding: 12px 0; font: 11px/1.4 var(--sans); letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-soft); }
 .vuln-agent { margin-top: 24px; font: 12px/1.5 var(--sans); }
 .vuln-agent a { color: var(--ink-soft); }
-.vuln-note { margin: 0 0 8px; font: 12px/1.5 var(--sans); color: var(--ink-soft); }
 .vuln-count { margin: 4px 0 0; font: 12px/1.5 var(--sans); color: var(--ink-soft); }

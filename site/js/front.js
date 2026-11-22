@@ -143,7 +143,8 @@ function rumors(list) {
   const items = (list || [])
     .map((r) => `<details class="rumor"><summary>${statusBadge('plotka')} ${escapeHtml(r.title)}</summary><p>${escapeHtml(r.body)}</p>${sourcesList(r.sources)}</details>`)
     .join('');
-  return `<section class="rumors"><h3>Plotki i przecieki</h3>${items || '<p class="no-data">Dziś cisza.</p>'}</section>`;
+  // An empty section is left out rather than saying there is nothing in it.
+  return items ? `<section class="rumors"><h3>Plotki i przecieki</h3>${items}</section>` : '';
 }
 
 function poznaj(spotlight, profilesById) {
@@ -174,7 +175,7 @@ export function renderFront(edition, profilesById, { area = '' } = {}) {
   const count = (e.lead_story ? 1 : 0) + stories.length;
   const list = stories.map((s, i) => storyRow(s, e.date, i + 2)).join('');
   return `<article class="front">
-<header class="masthead"><h1>Poranna prasa AI</h1>${mastheadNav('edition')}
+<header class="masthead"><h1><a class="mast-home" href="#/">Poranna prasa AI</a></h1>${mastheadNav('edition')}
 <p class="dateline">${escapeHtml(longDate(e.date))} · ${topicsLabel(count)} · ${escapeHtml(minutesLabel(e))}${e.quiet_day ? ' · spokojny dzień' : ''}</p></header>
 ${e.greeting ? `<p class="greeting">${escapeHtml(e.greeting)}</p>` : ''}
 <div class="columns">

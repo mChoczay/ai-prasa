@@ -1,4 +1,5 @@
-import { renderArchive, renderProfileCard, renderTermCard, escapeHtml } from './render.js';
+import { renderArchive, renderProfileCard, renderTermCard, renderError, escapeHtml } from './render.js';
+import { renderAbout } from './about.js';
 import { renderFront, selectArea } from './front.js';
 import { parseRoute, clampPage, renderReader, initReader } from './reader.js';
 import { readerPages, tabTitle, rankingAreas, pickArea } from './shape.js';
@@ -23,7 +24,7 @@ async function getJson(path) {
 
 function showError() {
   document.title = tabTitle('error');
-  app.innerHTML = '<p class="error">Nie udało się wczytać wydania.</p><p><a href="#/archiwum">Przejdź do archiwum</a></p>';
+  app.innerHTML = renderError({ offline: navigator.onLine === false });
 }
 
 async function loadCommon() {
@@ -122,6 +123,12 @@ async function route() {
     disposeReader = null;
   }
   document.body.classList.toggle('reading', r.view === 'reader');
+  if (r.view === 'about') {
+    app.innerHTML = renderAbout();
+    document.title = tabTitle('about');
+    window.scrollTo(0, 0);
+    return;
+  }
   // The Luki page needs only its own file, so it opens even when the edition index does not load.
   if (r.view === 'vulns') {
     try {
@@ -190,6 +197,10 @@ async function route() {
 }
 
 app.addEventListener('click', (event) => {
+  if (event.target.closest('[data-retry]')) {
+    route();
+    return;
+  }
   const vf = event.target.closest('[data-vf]');
   const vs = event.target.closest('[data-vs]');
   if (vf || vs) {

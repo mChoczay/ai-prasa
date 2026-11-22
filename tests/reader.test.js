@@ -48,7 +48,7 @@ test('reader pages show status, chips, the disclaimer and http(s)-only sources, 
   ];
   const html = renderReader(e, profiles, 1);
   assert.ok(html.includes('&lt;img src=x onerror=alert(1)&gt;'));
-  assert.match(html, /class="badge status-potwierdzone"/);
+  assert.match(html, /class="status status-potwierdzone"/);
   assert.match(html, /Może dotyczyć: <button class="entity" data-entity="nvda">NVIDIA<\/button>/);
   assert.ok(html.includes('To nie jest porada inwestycyjna.'));
   assert.ok(!html.includes('javascript:'));

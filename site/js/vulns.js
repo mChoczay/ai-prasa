@@ -102,7 +102,7 @@ export function renderVulns(data, state) {
   const s = { ...VULN_DEFAULTS, ...(state || {}) };
   const all = (data && Array.isArray(data.vulns) ? data.vulns : []).filter(Boolean);
   const open = all.filter((v) => v.status !== 'patched').length;
-  return `<section class="vulns"><header class="masthead"><h1>Poranna prasa AI</h1>${mastheadNav('vulns')}</header>
+  return `<section class="vulns"><header class="masthead"><h1><a class="mast-home" href="#/">Poranna prasa AI</a></h1>${mastheadNav('vulns')}</header>
 <h2 class="vulns-head">Luki · ${openLabel(open)}</h2>
 <p class="vuln-note">Status sprawdzany codziennie w NVD i OSV.</p>
 <div class="vuln-controls">

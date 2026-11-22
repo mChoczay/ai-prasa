@@ -51,9 +51,11 @@ main { max-width: 1100px; margin: 0 auto; padding: 0 16px 48px; }
 
 .badges { display: flex; flex-wrap: wrap; gap: 6px; }
 .badge { font: 11px/1.6 var(--sans); padding: 1px 8px; border-radius: 6px; background: var(--cat-bg); color: var(--cat-fg); }
-.status-potwierdzone { background: var(--ok-bg); color: var(--ok-fg); }
-.status-plotka { background: var(--rumor-bg); color: var(--rumor-fg); }
-.status-opinia, .update { background: var(--opinion-bg); color: var(--opinion-fg); }
+/* A story's status as small caps text: green when confirmed, red for a rumour, grey for an opinion. */
+.status { font: 600 11px/1.4 var(--sans); letter-spacing: 0.08em; text-transform: uppercase; }
+.status-potwierdzone { color: var(--up); }
+.status-plotka { color: var(--down); }
+.status-opinia { color: var(--ink-soft); }
 
 .entity {
   font: 13px/1.4 var(--sans); color: var(--accent); background: transparent;
@@ -261,8 +263,10 @@ body.reading main { max-width: none; padding: 0; }
 @media (prefers-reduced-motion: reduce) { dialog[open] .sheet { animation: none; } }
 
 /* Rankings: area pills (buttons) and the chosen area's top five. */
-button.chip { background: none; cursor: pointer; }
-.chip[aria-pressed="true"] { background: var(--ink); border-color: var(--ink); color: var(--paper); }
+/* Ranking areas switch like the masthead menu: small caps, the chosen one underlined in the accent. */
+button.chip { background: none; border: 0; border-bottom: 1.5px solid transparent; border-radius: 0; padding: 6px 0 2px; font: 11px/1.4 var(--sans); letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-soft); cursor: pointer; }
+.rankings .chips { gap: 14px; }
+.chip[aria-pressed="true"] { color: var(--ink); border-bottom-color: var(--accent); }
 .area-list { margin: 0 0 8px; padding-left: 22px; font-family: var(--serif); font-size: 15px; }
 .area-list li { padding: 3px 0; }
 .area-list .org, .area-list .chg { font: 12px var(--sans); color: var(--ink-soft); }
@@ -327,3 +331,25 @@ button.chip { background: none; cursor: pointer; }
 .vuln-agent { margin-top: 24px; font: 12px/1.5 var(--sans); }
 .vuln-agent a { color: var(--ink-soft); }
 .vuln-count { margin: 4px 0 0; font: 12px/1.5 var(--sans); color: var(--ink-soft); }
+
+/* The paper's name in every masthead leads to today's edition, as a logo does. */
+.mast-home { color: inherit; text-decoration: none; }
+.mast-home:hover, .mast-home:focus-visible { color: var(--accent); }
+
+/* O gazecie: plain text pages with a legend of the paper's labels. */
+.about h2 { margin: 26px 0 8px; font: 600 20px/1.3 var(--serif); }
+.about p { margin: 0 0 12px; }
+.legend { margin: 0 0 12px; }
+.legend dt { margin-top: 12px; font: 600 11px/1.4 var(--sans); letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-soft); }
+.legend dd { margin: 2px 0 0; }
+.note-strong { padding: 10px 12px; border-left: 3px solid var(--accent); background: var(--card); }
+
+/* Reader: the category and status line over the title, and terms or companies marked in the text. */
+.story-kicker { margin: 4px 0 0; font: 600 11px/1.4 var(--sans); letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); }
+button.inline-term { font: inherit; color: inherit; background: none; border: 0; border-bottom: 1px dotted var(--accent); border-radius: 0; padding: 0; text-align: inherit; cursor: pointer; }
+button.inline-term:hover, button.inline-term:focus-visible { color: var(--accent); }
+
+/* Error screen: what happened and a way to try again. */
+.error-page { text-align: center; padding: 40px 16px; font: 15px/1.5 var(--sans); }
+.error-page .error { padding: 0; font: 600 20px/1.3 var(--serif); }
+.retry { font: 600 15px/1.4 var(--sans); color: var(--paper); background: var(--accent); border: 0; border-radius: 8px; padding: 10px 20px; cursor: pointer; }

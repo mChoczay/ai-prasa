@@ -1,0 +1,39 @@
+{
+  "type": "object",
+  "description": "Security vulnerabilities with a CVE id named in today's stories.",
+  "properties": {
+    "vulns": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "cve_id": { "type": "string", "description": "The CVE id exactly as written, e.g. CVE-2026-125396." },
+          "product": { "type": "string", "description": "The affected program or library, short." },
+          "packages": {
+            "type": "array",
+            "description": "Package names a developer would find in a project, by ecosystem; empty if none is named or obvious.",
+            "items": {
+              "type": "object",
+              "properties": {
+                "ecosystem": { "type": "string", "enum": ["npm", "pypi", "maven", "nuget", "go", "cargo", "apt", "rpm", "docker", "other"] },
+                "name": { "type": "string" }
+              },
+              "required": ["ecosystem", "name"],
+              "additionalProperties": false
+            }
+          },
+          "affected": { "type": "string", "description": "Affected versions as the story states them; empty if not stated." },
+          "fixed_in": { "type": "string", "description": "The first fixed version as the story states it; empty if no fix is named." },
+          "severity_article": { "type": "string", "enum": ["krytyczna", "wysoka", "średnia", "niska", ""], "description": "Only when the story gives a rating or a CVSS score." },
+          "summary": { "type": "string", "description": "One plain Polish sentence." },
+          "agent_text": { "type": "string", "description": "Polish Markdown for an agent: '### Jak wykryć' and '### Co zrobić'." },
+          "story_ref": { "type": "string", "description": "The story's ref from the input, e.g. 2026-11-22#3." }
+        },
+        "required": ["cve_id", "product", "packages", "affected", "fixed_in", "severity_article", "summary", "agent_text", "story_ref"],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": ["vulns"],
+  "additionalProperties": false
+}

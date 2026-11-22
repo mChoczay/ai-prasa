@@ -1,6 +1,74 @@
 {
- "updated_at": "2026-11-22T22:48:53.147Z",
+ "updated_at": "2026-11-22T22:50:13.566Z",
  "vulns": [
+  {
+   "key": "CVE-2026-114727",
+   "cve_id": "CVE-2026-114727",
+   "product": "Roundcube",
+   "summary": "Załącznik z niebezpiecznym typem obrazu może wywołać konwersję przez ImageMagick, która z kolei uruchamia Ghostscript i może wykonać polecenia atakującego.",
+   "severity": "wysoka",
+   "status": "patched",
+   "fixed_in": "1.6.20",
+   "first_date": "2026-11-22",
+   "checked_at": "2026-11-22T22:50:11.720Z",
+   "patched_at": "2026-11-22T22:50:11.720Z",
+   "story": {
+    "date": "2026-11-22",
+    "n": 3,
+    "title": "Upload2Shell: luka w Ghostscripcie otwiera RCE w Google, WordPressie i Debianie"
+   }
+  },
+  {
+   "key": "CVE-2026-125396",
+   "cve_id": "CVE-2026-125396",
+   "product": "Ghostscript",
+   "summary": "Spreparowany dokument, np. czcionka Type 1 w PDF lub pliku PostScript, może wyjść z piaskownicy Ghostscripta i wykonać polecenia z uprawnieniami procesu renderującego.",
+   "severity": "wysoka",
+   "status": "patched",
+   "fixed_in": "Ghostscript 10.08.0 (upstream); Debian 10.05.1~dfsg-1+deb13u3",
+   "first_date": "2026-11-22",
+   "checked_at": "2026-11-22T22:50:11.720Z",
+   "patched_at": "2026-11-22T22:49:41.370Z",
+   "story": {
+    "date": "2026-11-22",
+    "n": 3,
+    "title": "Upload2Shell: luka w Ghostscripcie otwiera RCE w Google, WordPressie i Debianie"
+   }
+  },
+  {
+   "key": "CVE-2026-129975",
+   "cve_id": "CVE-2026-129975",
+   "product": "GPGME",
+   "summary": "Spreparowany klucz OpenPGP z bardzo długim identyfikatorem użytkownika powoduje podwójne zwolnienie pamięci, co może wykraść dane z aplikacji, a nie da się wykluczyć zdalnego wykonania kodu.",
+   "severity": "krytyczna",
+   "status": "patched",
+   "fixed_in": "2.3.1",
+   "first_date": "2026-11-22",
+   "checked_at": "2026-11-22T22:50:11.720Z",
+   "patched_at": "2026-11-22T22:49:41.370Z",
+   "story": {
+    "date": "2026-11-22",
+    "n": 4,
+    "title": "GPGME 2.3.1: krytyczny double free, wystarczy spreparowany klucz OpenPGP"
+   }
+  },
+  {
+   "key": "CVE-2026-65640",
+   "cve_id": "CVE-2026-65640",
+   "product": "WordPress Core (upload)",
+   "summary": "Użytkownik z uprawnieniem do uploadu plików może wykorzystać ścieżkę uploadu WordPressa, by przez konwersję obrazu uruchomić polecenia na serwerze.",
+   "severity": "wysoka",
+   "status": "open",
+   "fixed_in": "",
+   "first_date": "2026-11-22",
+   "checked_at": "2026-11-22T22:50:11.720Z",
+   "patched_at": "",
+   "story": {
+    "date": "2026-11-22",
+    "n": 3,
+    "title": "Upload2Shell: luka w Ghostscripcie otwiera RCE w Google, WordPressie i Debianie"
+   }
+  },
   {
    "key": "CVE-2026-121481",
    "cve_id": "CVE-2026-121481",
@@ -10,7 +78,7 @@
    "status": "open",
    "fixed_in": "",
    "first_date": "2026-11-20",
-   "checked_at": "2026-11-22T22:48:51.636Z",
+   "checked_at": "2026-11-22T22:50:11.720Z",
    "patched_at": "",
    "story": {
     "date": "2026-11-20",

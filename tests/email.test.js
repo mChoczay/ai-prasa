@@ -91,3 +91,11 @@ test('a week across two months names both months', () => {
   const visits = { week: { first: '2026-09-28', last: '2026-10-04', total: 1, days: [1, 0, 0, 0, 0, 0, 0] } };
   assert.ok(renderEmailHtml(edition(), SITE, { visits }).html.includes('Tydzień 28 wrz – 4 paź: 1 odwiedzających'));
 });
+
+test('the mail gives the date in words, not as 2026-11-22', () => {
+  const e = { date: '2026-11-22', greeting: 'g', lead_story: { title: 'T', status: 'potwierdzone' }, stories: [], minutes: 11 };
+  const { html } = renderEmailHtml(e, 'https://example.github.io/site/');
+  assert.ok(html.includes('niedziela, 22 listopada 2026 · ok. 11 min czytania'));
+  assert.ok(!html.includes('>2026-11-22'));
+  assert.ok(renderEmailHtml({ ...e, date: 'zły' }, 'https://example.github.io/site/').html.includes('zły'));
+});

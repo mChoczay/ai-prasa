@@ -1,5 +1,17 @@
 // Morning and error e-mails. Dependency-free: inlined into n8n Code nodes.
 
+const _MAIL_WEEKDAYS = ['niedziela', 'poniedziałek', 'wtorek', 'środa', 'czwartek', 'piątek', 'sobota'];
+const _MAIL_MONTHS = ['stycznia', 'lutego', 'marca', 'kwietnia', 'maja', 'czerwca', 'lipca', 'sierpnia', 'września', 'października', 'listopada', 'grudnia'];
+
+// "niedziela, 22 listopada 2026" for 2026-11-22; anything else as given.
+function _mailDate(dateStr) {
+  const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(String(dateStr || ''));
+  if (!m) return String(dateStr || '');
+  const [y, mo, d] = [Number(m[1]), Number(m[2]), Number(m[3])];
+  const day = new Date(Date.UTC(y, mo - 1, d)).getUTCDay();
+  return `${_MAIL_WEEKDAYS[day]}, ${d} ${_MAIL_MONTHS[mo - 1]} ${y}`;
+}
+
 function escapeHtml(value) {
   if (value == null) return '';
   return String(value)
@@ -56,7 +68,7 @@ function renderEmailHtml(edition, siteUrl, { feedbackUrl = '', feedbackKey = '',
     .join('');
   const href = `${siteUrl}#/${edition.date}`;
   const html = _shell(`<h1 style="text-align:center;font-size:30px;margin:0 0 4px;">Poranna prasa AI</h1>
-<p style="text-align:center;font:13px Arial,sans-serif;color:#5b5750;margin:0 0 20px;">${escapeHtml(edition.date)}${edition.minutes ? ` · ok. ${escapeHtml(edition.minutes)} min czytania` : ''}</p>
+<p style="text-align:center;font:13px Arial,sans-serif;color:#5b5750;margin:0 0 20px;">${escapeHtml(_mailDate(edition.date))}${edition.minutes ? ` · ok. ${escapeHtml(edition.minutes)} min czytania` : ''}</p>
 <p style="font-style:italic;">${escapeHtml(edition.greeting)}</p>
 <ul style="padding-left:18px;">${items}</ul>
 <p style="text-align:center;margin:28px 0;"><a href="${escapeHtml(href)}" style="display:inline-block;background:#2f4a7a;color:#ffffff;text-decoration:none;padding:10px 22px;border-radius:8px;font:15px Arial,sans-serif;">Czytaj wydanie</a></p>${_visitsBlock(visits)}${

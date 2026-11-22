@@ -23,6 +23,11 @@ export function normalizeVulnState(state) {
   };
 }
 
+// Back to every entry: status, severity and search reset; the sort order and the fold stay.
+export function clearVulnState(state) {
+  return { ...normalizeVulnState(state), status: 'all', severity: 'all', q: '' };
+}
+
 // "Pokazano 3 z 4." for the live region; empty when the log is empty.
 export function vulnCountText(data, state) {
   const all = (data && Array.isArray(data.vulns) ? data.vulns : []).filter(Boolean);
@@ -81,7 +86,7 @@ export function renderVulnList(data, state) {
   const all = (data && Array.isArray(data.vulns) ? data.vulns : []).filter(Boolean);
   if (!all.length) return '<p class="no-data">Na razie żadnych luk w dzienniku.</p>';
   const shown = sortVulns(filterVulns(all, s), s.sort);
-  if (!shown.length) return '<p class="no-data">Nic nie pasuje do filtrów.</p>';
+  if (!shown.length) return '<p class="no-data">Nic nie pasuje do filtrów. <button type="button" class="vuln-clear" data-vclear>Wyczyść filtry</button></p>';
   if (s.status !== 'all') return shown.map(item).join('');
   const open = shown.filter((v) => v.status !== 'patched');
   const patched = shown.filter((v) => v.status === 'patched');
@@ -104,7 +109,7 @@ export function renderVulns(data, state) {
   const open = all.filter((v) => v.status !== 'patched').length;
   return `<section class="vulns"><header class="masthead"><h1><a class="mast-home" href="#/">Poranna prasa AI</a></h1>${mastheadNav('vulns')}</header>
 <h2 class="vulns-head">Luki · ${openLabel(open)}</h2>
-<p class="vuln-note">Status sprawdzany codziennie w NVD i OSV.</p>
+<p class="vuln-note">Status sprawdzany codziennie w publicznych bazach luk.</p>
 <div class="vuln-controls">
 ${filterGroup('Status', 'status', STATUS_PILLS, s.status, 'data-vf')}
 ${filterGroup('Powaga', 'severity', SEVERITY_PILLS, s.severity, 'data-vf')}

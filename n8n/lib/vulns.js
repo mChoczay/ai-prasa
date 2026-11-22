@@ -109,4 +109,102 @@ function mergeFindings(rows, answer, editions, now) {
   return { rows: [...byKey.values()], changed: [...changed].map((k) => byKey.get(k)) };
 }
 
-export { VULN_SEVERITIES, editionDatesToRead, storyRefs, vulnsPrompt, mergeFindings };
+const VULN_OLD_DAYS = 180;
+const VULN_OLD_RECHECK_DAYS = 7;
+const _VULN_NVD_SEVERITY = Object.freeze({ CRITICAL: 'krytyczna', HIGH: 'wysoka', MEDIUM: 'średnia', LOW: 'niska' });
+
+function _vDays(fromIso, toIso) {
+  return (Date.parse(toIso) - Date.parse(fromIso)) / _VULN_DAY_MS;
+}
+
+// CVEs to look up this run: never checked first (any status, for severity), then open ones by the oldest
+// check. Open entries first written about long ago are looked up at most weekly.
+function checksToRun(rows, now, max = 10) {
+  const list = (rows || []).filter((r) => r && VULN_CVE.test(r.cve_id));
+  const byKey = (a, b) => (a < b ? -1 : a > b ? 1 : 0);
+  const fresh = list.filter((r) => !r.checked_at).sort((a, b) => byKey(a.first_date, b.first_date) || byKey(a.cve_id, b.cve_id));
+  const open = list
+    .filter((r) => r.checked_at && r.status === 'open')
+    .filter((r) => !(r.first_date && _vDays(`${r.first_date}T00:00:00.000Z`, now) > VULN_OLD_DAYS && _vDays(r.checked_at, now) < VULN_OLD_RECHECK_DAYS))
+    .sort((a, b) => byKey(a.checked_at, b.checked_at) || byKey(a.cve_id, b.cve_id));
+  return [...fresh, ...open].slice(0, max).map((r) => r.cve_id);
+}
+
+function _vVersion(value) {
+  const v = _vText(value);
+  if (!v || /^[0-9a-f]{40}$/i.test(v)) return '';
+  return /^v?\d+(?:[.\-+~_][\w]+)*$/.test(v) ? v : '';
+}
+
+// OSV: any `fixed` event means a fix exists; the version comes only from version-like values (git ranges
+// list commit hashes, with the version in database_specific.extracted_events).
+function osvFix(body) {
+  const none = { patched: false, fixed_in: '' };
+  if (!body || typeof body !== 'object' || !Array.isArray(body.affected)) return none;
+  let patched = false;
+  let version = '';
+  for (const a of body.affected) {
+    for (const r of (a && a.ranges) || []) {
+      const lists = [r.events || []];
+      for (const x of (r.database_specific && r.database_specific.extracted_events) || []) lists.push(x.range || []);
+      for (const events of lists) {
+        for (const ev of events) {
+          if (!ev || !ev.fixed) continue;
+          patched = true;
+          if (!version) version = _vVersion(ev.fixed);
+        }
+      }
+    }
+  }
+  return { patched, fixed_in: version };
+}
+
+// NVD: severity from the newest CVSS metric, a reference tagged "Patch", and "before X" in the description.
+function nvdFacts(body) {
+  const none = { severity: '', patched: false, fixed_in: '' };
+  const cve = body && typeof body === 'object' && Array.isArray(body.vulnerabilities) && body.vulnerabilities[0] && body.vulnerabilities[0].cve;
+  if (!cve) return none;
+  let severity = '';
+  const metrics = cve.metrics || {};
+  for (const key of ['cvssMetricV40', 'cvssMetricV31', 'cvssMetricV30', 'cvssMetricV2']) {
+    const m = Array.isArray(metrics[key]) ? metrics[key][0] : null;
+    const raw = m && ((m.cvssData && m.cvssData.baseSeverity) || m.baseSeverity);
+    if (raw && _VULN_NVD_SEVERITY[String(raw).toUpperCase()]) {
+      severity = _VULN_NVD_SEVERITY[String(raw).toUpperCase()];
+      break;
+    }
+  }
+  const tagged = (cve.references || []).some((r) => r && Array.isArray(r.tags) && r.tags.includes('Patch'));
+  const en = (cve.descriptions || []).find((d) => d && d.lang === 'en');
+  const m = /\bbefore (?:version )?(v?\d[\w.\-+~]*)/i.exec((en && en.value) || '');
+  const fixed = m ? _vVersion(m[1].replace(/[.,;:]+$/, '')) : '';
+  return { severity, patched: tagged || Boolean(fixed), fixed_in: fixed };
+}
+
+// Database answers applied to the rows. Every looked-up row gets its check date; a row is patched only on
+// evidence and never reopened; NVD severity wins over the article's.
+function applyChecks(rows, results, now) {
+  const byKey = new Map((rows || []).map((r) => [r.vuln_key, { ...r }]));
+  const changed = [];
+  for (const res of results || []) {
+    const row = res && byKey.get(_vText(res.cve_id).toUpperCase());
+    if (!row) continue;
+    const osv = osvFix(res.osv);
+    const nvd = nvdFacts(res.nvd);
+    row.checked_at = now;
+    if (nvd.severity) {
+      row.severity = nvd.severity;
+      row.severity_source = 'nvd';
+    }
+    if (!row.fixed_in) row.fixed_in = osv.fixed_in || nvd.fixed_in || '';
+    if (row.status === 'open' && (osv.patched || nvd.patched)) {
+      row.status = 'patched';
+      row.status_source = osv.patched ? 'osv' : 'nvd';
+      row.patched_at = now;
+    }
+    if (!changed.includes(row)) changed.push(row);
+  }
+  return { rows: [...byKey.values()], changed };
+}
+
+export { VULN_SEVERITIES, editionDatesToRead, storyRefs, vulnsPrompt, mergeFindings, checksToRun, osvFix, nvdFacts, applyChecks };

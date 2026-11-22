@@ -127,3 +127,21 @@ test('minor: the number of results is announced politely', () => {
   assert.equal(vulnCountText(null, VULN_DEFAULTS), '');
   assert.match(renderVulns(data(), { ...VULN_DEFAULTS, q: 'gpg' }), /<p class="vuln-count" aria-live="polite">Pokazano 1 z 4\.<\/p>/);
 });
+
+test('Luki filters look like the masthead nav, with a label per group, not pills', () => {
+  const html = renderVulns(data(), VULN_DEFAULTS);
+  assert.ok(!html.includes('class="chip"'));
+  assert.ok(!html.includes('class="pill'));
+  assert.match(html, /<div class="vuln-filter" role="group" aria-label="Status"><span class="vf-label">Status<\/span>/);
+  assert.match(html, /<span class="vf-label">Powaga<\/span>/);
+  assert.match(html, /<span class="vf-label">Kolejność<\/span>/);
+  assert.match(html, /<button type="button" class="vf" data-vf="status:all" aria-pressed="true">Wszystkie<\/button>/);
+});
+
+test('an entry opens with a kicker in the paper style: status and severity', () => {
+  const open = renderVulns(data(), VULN_DEFAULTS);
+  assert.match(open, /<p class="vuln-kicker"><span class="vk-open">niezałatana<\/span> · <span class="vk-sev vk-crit">krytyczna<\/span><\/p><h3>GPGME/);
+  const patched = renderVulns(data(), { ...VULN_DEFAULTS, status: 'patched' });
+  assert.match(patched, /<span class="vk-patched">załatana od 10\.08\.0<\/span> · <span class="vk-sev vk-high">wysoka<\/span>/);
+  assert.match(renderVulns(data(), VULN_DEFAULTS), /<span class="vk-sev vk-none">nieznana<\/span>/);
+});

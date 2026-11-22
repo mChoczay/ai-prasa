@@ -124,7 +124,7 @@ test('the reader bar has a short back link, the page counter and a progress line
   const e = real();
   const total = 1 + e.stories.length;
   const html = renderReader(e, profiles, 5);
-  assert.ok(html.includes('<a class="back" href="#/2026-11-19" aria-label="Wróć do wydania z 19 listopada">‹ 19 lis</a>'));
+  assert.ok(html.includes('<a class="back" href="#/2026-11-19" aria-label="Wróć do wydania z 19 listopada">← Wydanie</a>'));
   assert.ok(html.includes(`<span class="count">5 / ${total}</span>`));
   assert.ok(html.includes('class="progress"'));
   assert.ok(!html.includes('pierwsza strona'));
@@ -178,4 +178,9 @@ test('a subhead block may carry its first paragraph on the next line, and ### wo
   const last = renderReader(e, profiles, 1).slice(-3000);
   assert.ok(last.includes('<h3>Rynek</h3><p>Nvidia spadła.</p>'));
   assert.ok(last.includes('<h3>Modele</h3><p>Akapit.</p>'));
+});
+
+test('the back link reads clearly in the ink colour, not as a small grey date', () => {
+  const css = readFileSync(new URL('../site/styles.css', import.meta.url), 'utf8');
+  assert.match(css, /\.reader-bar \.back\s*\{[^}]*color:\s*var\(--ink\)[^}]*font:\s*600 15px/);
 });

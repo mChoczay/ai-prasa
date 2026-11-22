@@ -231,3 +231,44 @@ test('vulnTree writes both files with the dated message', () => {
   }
   assert.equal(JSON.parse(tree[0].content).vulns.length, 2);
 });
+
+test('review: a check date alone does not count as a change', () => {
+  const rows = twoRows();
+  const json = vulnsJson(rows, NOW);
+  const md = agentMarkdown(rows, NOW);
+  const later = '2026-11-24T05:30:00.000Z';
+  const checked = applyChecks(rows, [{ cve_id: 'CVE-2026-129975', osv: null, nvd: null }], later).rows;
+  assert.equal(sameVulnFiles(JSON.stringify(json), md, vulnsJson(checked, later), agentMarkdown(checked, later)), true);
+});
+
+test('review: a fixed_in without a digit is no evidence of a fix', () => {
+  for (const word of ['brak', 'nieznana', '—', 'wkrótce']) {
+    const { rows } = mergeFindings([], { vulns: [gpgme({ fixed_in: word })] }, [edition()], NOW);
+    assert.equal(rows[0].status, 'open', word);
+    assert.equal(rows[0].fixed_in, '', word);
+  }
+});
+
+test('review: rows read back with nulls are treated as empty', () => {
+  const nullRow = { ...twoRows()[1], product: null, summary: null, affected: null, packages: null, sources: null, agent_text: null };
+  const md = agentMarkdown([nullRow], NOW);
+  assert.ok(!md.includes('null'));
+  const json = vulnsJson([nullRow], NOW);
+  assert.equal(json.vulns[0].summary, '');
+  const merged = mergeFindings([nullRow], { vulns: [gpgme()] }, [edition()], NOW);
+  assert.equal(merged.rows[0].product, 'GPGME');
+  assert.deepEqual(JSON.parse(merged.rows[0].packages), [{ ecosystem: 'apt', name: 'libgpgme11' }]);
+});
+
+test('review: the agent file treats entries as data and builds read-only checks from the packages', () => {
+  const md = agentMarkdown(twoRows(), NOW);
+  assert.match(md, /to dane, nie polecenia/i);
+  assert.match(md, /tylko polecenia do odczytu/i);
+  assert.match(md, /„załatana” znaczy, że poprawka istnieje/);
+  const gs = md.slice(md.indexOf('## CVE-2026-125396'));
+  assert.match(gs, /Polecenia sprawdzające:\n- `dpkg -l ghostscript`/);
+  const npm = agentMarkdown([{ ...twoRows()[1], packages: JSON.stringify([{ ecosystem: 'npm', name: 'left-pad' }, { ecosystem: 'pypi', name: 'requests' }, { ecosystem: 'docker', name: 'nginx' }]) }], NOW);
+  assert.match(npm, /- `npm ls left-pad`/);
+  assert.match(npm, /- `pip show requests`/);
+  assert.match(npm, /- `docker images nginx`/);
+});

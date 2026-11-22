@@ -48,7 +48,7 @@ function item(v) {
     ? `<span class="pill vuln-patched">${v.fixed_in ? `załatana od ${escapeHtml(v.fixed_in)}` : 'załatana'}</span>`
     : '<span class="pill vuln-open">niezałatana</span>';
   const sev = `<span class="pill sev sev-${SEVERITY_CLASS[v.severity] || 'none'}">${escapeHtml(v.severity in SEVERITY_ORDER ? v.severity : 'nieznana')}</span>`;
-  const meta = [shortDay(v.first_date), v.checked_at ? `sprawdzono ${shortDay(v.checked_at)}` : ''].filter(Boolean);
+  const meta = [shortDay(v.first_date)].filter(Boolean);
   const story = v.story || {};
   if (story.date && Number(story.n) > 0) meta.push(`<a href="#/${escapeHtml(story.date)}/${escapeHtml(story.n)}">czytaj artykuł ›</a>`);
   return `<article class="vuln"><p class="vuln-tags">${status}${sev}</p><h3>${escapeHtml(v.product)} · ${escapeHtml(v.cve_id)}</h3><p>${escapeHtml(v.summary)}</p><p class="vuln-meta">${meta.join(' · ')}</p></article>`;
@@ -80,6 +80,7 @@ export function renderVulns(data, state) {
   const open = all.filter((v) => v.status !== 'patched').length;
   return `<section class="vulns"><header class="masthead"><h1>Poranna prasa AI</h1>${mastheadNav('vulns')}</header>
 <h2 class="vulns-head">Luki · ${openLabel(open)}</h2>
+<p class="vuln-note">Status sprawdzany codziennie w NVD i OSV.</p>
 <div class="vuln-controls">
 <div class="chips" role="group" aria-label="Status">${pills('status', STATUS_PILLS, s.status, 'data-vf')}</div>
 <div class="chips" role="group" aria-label="Powaga">${pills('severity', SEVERITY_PILLS, s.severity, 'data-vf')}</div>

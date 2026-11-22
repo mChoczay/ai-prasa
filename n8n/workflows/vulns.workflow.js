@@ -113,6 +113,7 @@ const fetchEditions = node({
   version: 4.2,
   config: {
     name: 'Fetch editions',
+    onError: 'continueRegularOutput',
     parameters: { method: 'GET', url: expr("{{ '" + SITE + "data/' + $json.fetch + '.json?t=' + $now.toMillis() }}"), options: { timeout: 15000, response: { response: { fullResponse: true, neverError: true, responseFormat: 'text' } } } },
   },
   output: [{ statusCode: 200, data: '{}' }],
@@ -235,7 +236,10 @@ const checkQueue = node({
       jsCode:
         INLINE('n8n/lib/vulns.js') +
         "const m = $('Merge findings').first().json;\n" +
-        "const ids = checksToRun(m.rows, new Date().toISOString(), 10);\n" +
+        "// On a day Haiku ran, fewer lookups keep the run well inside 180 s.\n" +
+        "let haiku = false;\n" +
+        "try { haiku = $('Vulns prompt').first().json.skip === false; } catch (e) { haiku = false; }\n" +
+        "const ids = checksToRun(m.rows, new Date().toISOString(), haiku ? 5 : 10);\n" +
         "return ids.length ? ids.map((cve_id) => ({ json: { cve_id } })) : [{ json: { none: true } }];\n",
     },
   },
@@ -247,6 +251,7 @@ const osv = node({
   version: 4.2,
   config: {
     name: 'OSV',
+    onError: 'continueRegularOutput',
     parameters: { method: 'GET', url: expr("{{ 'https://api.osv.dev/v1/vulns/' + ($json.cve_id || 'none') }}"), sendHeaders: true, headerParameters: UA, options: { timeout: 15000, response: { response: { fullResponse: true, neverError: true, responseFormat: 'text' } } } },
   },
   output: [{ statusCode: 200, data: '{}' }],
@@ -257,12 +262,13 @@ const nvd = node({
   version: 4.2,
   config: {
     name: 'NVD',
+    onError: 'continueRegularOutput',
     parameters: {
       method: 'GET',
       url: expr("{{ 'https://services.nvd.nist.gov/rest/json/cves/2.0?cveId=' + ($('Check queue').all()[$itemIndex].json.cve_id || 'none') }}"),
       sendHeaders: true,
       headerParameters: UA,
-      options: { timeout: 20000, batching: { batch: { batchSize: 1, batchInterval: 7000 } }, response: { response: { fullResponse: true, neverError: true, responseFormat: 'text' } } },
+      options: { timeout: 10000, batching: { batch: { batchSize: 1, batchInterval: 7000 } }, response: { response: { fullResponse: true, neverError: true, responseFormat: 'text' } } },
     },
   },
   output: [{ statusCode: 200, data: '{}' }],

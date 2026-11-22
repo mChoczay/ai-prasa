@@ -134,3 +134,16 @@ test('days without an edition do not block newer ones: every unread day is fetch
   const [out] = run('Vulns prompt', { nodes: { 'Plan run': p }, input: f });
   assert.deepEqual(out.loaded, ['2026-11-18', '2026-11-19']);
 });
+
+test('review: network failures do not stop the run, and fewer checks run on a Haiku day', () => {
+  for (const name of ['Fetch editions', 'OSV', 'NVD']) {
+    const at = src.indexOf(`name: '${name}'`);
+    assert.match(src.slice(at, at + 200), /onError: 'continueRegularOutput'/, name);
+  }
+  assert.match(src, /timeout: 10000, batching/);
+  const rows = Array.from({ length: 8 }, (_, i) => ({ vuln_key: `CVE-2026-10${i}0`, cve_id: `CVE-2026-10${i}0`, status: 'open', first_date: '2026-11-22', checked_at: '' }));
+  const busy = run('Check queue', { nodes: { 'Merge findings': [{ rows, changed: [], processed: [] }], 'Vulns prompt': [{ skip: false }] } });
+  assert.equal(busy.length, 5);
+  const quiet = run('Check queue', { nodes: { 'Merge findings': [{ rows, changed: [], processed: [] }], 'Vulns prompt': [{ skip: true }] } });
+  assert.equal(quiet.length, 8);
+});

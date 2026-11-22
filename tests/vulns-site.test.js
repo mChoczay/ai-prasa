@@ -36,7 +36,7 @@ test('an entry shows its status, severity, product, CVE, summary, dates and arti
   assert.ok(html.includes('Ghostscript · CVE-2026-125396'));
   assert.ok(html.includes('Plik PDF może uruchomić polecenia.'));
   assert.ok(html.includes('21 lis'));
-  assert.ok(html.includes('sprawdzono 23 lis'));
+
   assert.ok(html.includes('href="#/2026-11-22/3"'));
   const open = renderVulns(data(), VULN_DEFAULTS);
   assert.ok(open.includes('niezałatana'));
@@ -106,4 +106,10 @@ test('the Luki page has its route, menu entry and tab title', () => {
   assert.match(mastheadNav('vulns'), /<a href="#\/luki" aria-current="page">Luki<\/a>/);
   assert.match(mastheadNav('archive'), /<a href="#\/luki">Luki<\/a>/);
   assert.equal(tabTitle('vulns'), 'Luki · Prasa AI');
+});
+
+test('review: entries no longer show a per-entry check date; the header explains the daily check', () => {
+  const html = renderVulns(data(), VULN_DEFAULTS);
+  assert.ok(!html.includes('sprawdzono'));
+  assert.ok(html.includes('Status sprawdzany codziennie w NVD i OSV.'));
 });

@@ -315,3 +315,4 @@ button.chip { background: none; cursor: pointer; }
 .vulns details.patched > summary { cursor: pointer; padding: 10px 0; font: 13px/1.4 var(--sans); color: var(--ink-soft); }
 .vuln-agent { margin-top: 24px; font: 12px/1.5 var(--sans); }
 .vuln-agent a { color: var(--ink-soft); }
+.vuln-note { margin: 0 0 8px; font: 12px/1.5 var(--sans); color: var(--ink-soft); }

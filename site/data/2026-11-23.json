@@ -1,0 +1,1290 @@
+{
+ "date": "2026-11-23",
+ "edition": "daily",
+ "generated_at": "2026-11-23T04:32:51.631Z",
+ "quiet_day": false,
+ "greeting": "Kiedy pracowałeś, OpenAI opublikowało tekst o tym, że postęp w AI warto mierzyć perplexity, a giełda w piątek mocno spadła. Poniżej jedno i drugie, bez ściany tekstu.",
+ "lead_story": {
+  "title": "OpenAI publikuje własne pomiary perplexity i chce, by stały się wspólną miarą postępu",
+  "category": "rankingi",
+  "status": "opinia",
+  "is_update": false,
+  "lede": "OpenAI proponuje, by porównywać modele przez perplexity, czyli jakość przewidywania kolejnego tokena. Firma ujawnia własne wyniki od GPT-3.5 i łączy je z pojawianiem się nowych zdolności.",
+  "body": "To esej autora z firmy, a nie ogłoszenie produktu. Jego teza: nowoczesne AI nie powstaje jak klasyczne oprogramowanie, z wielu technik pisanych pod konkretne zadania. Większość inteligencji pochodzi z jednego procesu, czyli trenowania predyktora na ogromnym korpusie danych. Prompting, finetuning i uczenie ze wzmocnieniem tylko wydobywają to, co model już w sobie ma.\n\nMiarą tego procesu jest perplexity, równoważnie cross-entropy loss. Pokazuje, jak dobrze model przewiduje kolejny token na zbiorze, którego nie widział w treningu. Im niższa wartość, tym lepiej. Według autora miara ta od lat pozostaje niemal niezmieniona, w przeciwieństwie do benchmarków, które szybko się nasycają. Przykład to benchmarki z czasów GPT-4, dziś w większości wysycone.\n\nOpenAI podaje progi mierzone log-perplexity na swoim głównym zbiorze ewaluacyjnym. GPT-3.5, z wynikiem około 0,99, prowadził płynną rozmowę i stał się podstawą pierwszego ChatGPT. GPT-4, z wynikiem około 0,91, dobrze rozumował krok po kroku, co zmotywowało budowę modeli rozumujących. Poniżej 0,8 firma widzi zdolności ważne w cyberbezpieczeństwie i matematyce. Autor podkreśla, że z góry nie było jasne, iż pojawią się akurat przy takich progach.\n\nNajmocniejszy fragment dotyczy matematyki. Od ponad roku OpenAI zadaje modelom otwarte problemy matematyczne. Po przejściu na model z log-perplexity około 0,76 zaczęły pojawiać się przełomowe wyniki, a rozwiązania długo rozważanych pytań padały w jednym wątku na Slacku jedno po drugim. Autor wnioskuje, że już od 2027 roku możemy zobaczyć lawinę podstawowych postępów w pretrainingu, czyli wstępnym trenowaniu modeli. Uważa, że postępy w alignmencie i monitorowaniu raczej nie nadążą za tym tempem.\n\nKrytykuje też ujęcie „pełnej rekurencyjnej samoulepszalności”, czyli całkowicie zautomatyzowanego rozwoju bez nadzoru człowieka. Takiego stanu należy według niego unikać. Ważniejszy jest pojedynczy skok: udział AI w badaniach algorytmicznych nad pretrainingiem.\n\nOpenAI proponuje wspólną miarę ogólnej inteligencji, niezależną od stopnia automatyzacji rozwoju. Ujawnienie własnych pomiarów daje konkurencji jasny obraz jej pozycji, ale firma uważa, że pilność wspólnych standardów bezpieczeństwa przeważa. Spodziewa się kolejnych przełomowych zdolności w oknie około 0,68–0,7 i przyznaje, że nie wie, jakie to będą zdolności ani czy dziś je testujemy.\n\nTo stanowisko jednej firmy, a wartości dotyczą jej wewnętrznego zbioru. Inni nie porównają się bez własnych pomiarów na tych samych danych. Nie wiadomo, czy któryś konkurent przyjmie propozycję.",
+  "for_you": "Perplexity na wspólnym zbiorze mogłoby być uczciwszą miarą niż szybko nasycające się benchmarki, ale dziś porównać można tylko modele OpenAI. Przy wyborze modelu liczą się nadal testy na Twoich zadaniach.",
+  "sources": [
+   {
+    "name": "OpenAI: Perplexity and Intelligence",
+    "url": "https://openai.com/index/perplexity-and-intelligence",
+    "primary": true
+   }
+  ],
+  "image_topic": "Perplexity",
+  "image": {
+   "url": "https://images.ctfassets.net/kftzwdyauwt9/6rIIhCRSKrhIfe385Onmcz/aca2d190553c62fd5d49efb5d5ce1eb6/perplexity-and-intelligence-social.png?w=1600&h=900&fit=fill",
+   "credit": "openai.com",
+   "link": "https://openai.com/index/perplexity-and-intelligence"
+  },
+  "may_affect": [
+   "gpt-6-2-astra",
+   "gpt-6-2-sol",
+   "claude-fable-5-2",
+   "gemini-4-carbon"
+  ],
+  "disclaimer": null,
+  "image_fallback": null,
+  "terms": [
+   "perplexity",
+   "cross-entropy-loss"
+  ]
+ },
+ "stories": [
+  {
+   "title": "Localcode: lokalny agent do kodowania na Macu, instalowany jedną komendą",
+   "category": "narzedzia",
+   "status": "potwierdzone",
+   "is_update": false,
+   "lede": "Open source'owy Localcode uruchamia agenta kodującego na modelach działających lokalnie na Macu. Sam dobiera model do ilości pamięci komputera.",
+   "body": "Kiedy pracowałeś, na GitHubie pojawił się Localcode, narzędzie do agentowego kodowania, które instaluje się na Macu jedną komendą. Pobiera modele z Hugging Face i uruchamia je lokalnie.\n\nDo wyboru jest 12 modeli i 169 wariantów kwantyzacji, czyli wersji modelu o zmniejszonej precyzji liczb, dzięki której mieści się w mniejszej pamięci. Gwiazdka wskazuje najmocniejszy model, który zmieści się w pamięci Twojego Maca. Pobieranie idzie równolegle i można je wznowić po przerwaniu. Modele przełączasz poleceniem /models.\n\nSzybkość zapewnia dekodowanie spekulatywne. Gemma 4, Qwen 3.6, Muse Glimmer i Qwen 3.8 generują tokeny z własnym drafterem producenta, czyli mniejszym modelem pomocniczym pobieranym razem z głównym. Jądra GPU serwera modelu są prekompilowane, więc pierwszy start jest szybszy.\n\nDziałający model podłączysz do innych lokalnych aplikacji. Otwórz /server albo wpisz localcode api, a dostaniesz endpoint zgodny z API OpenAI.\n\nInferencja odbywa się lokalnie. Sieć działa tylko przy pobieraniu modeli, w narzędziach web_search i web_fetch oraz w serwerach MCP, które sam dodasz. Autorzy nazywają projekt pierwszym krokiem do uruchamiania osobistego AI na każdym urządzeniu.\n\nNie wiadomo, jak jakość kodu z lokalnych modeli wypada przy modelach w chmurze. Nie ma żadnych benchmarków.",
+   "for_you": "Jeśli chcesz agenta kodującego bez wysyłania kodu do chmury, sprawdź go na własnym projekcie. Endpoint zgodny z OpenAI pozwoli podpiąć go pod narzędzia, których już używasz.",
+   "sources": [
+    {
+     "name": "GitHub: mjwsolo/localcode",
+     "url": "https://github.com/mjwsolo/localcode",
+     "primary": true
+    }
+   ],
+   "image_topic": "Hugging Face",
+   "image": {
+    "url": "https://opengraph.githubassets.com/66a9f905f812234c72d0dd53d4aadec91ee685e9774e2bfbd71cfee2f887d069/mjwsolo/localcode",
+    "credit": "github.com",
+    "link": "https://github.com/mjwsolo/localcode"
+   },
+   "may_affect": [],
+   "disclaimer": null,
+   "image_fallback": null,
+   "terms": [
+    "kwantyzacja",
+    "dekodowanie-spekulatywne"
+   ]
+  },
+  {
+   "title": "Nango: czego nauczyła obsługa autoryzacji dla ponad tysiąca API",
+   "category": "narzedzia",
+   "status": "opinia",
+   "is_update": false,
+   "lede": "Zespół open source'owego Nango opisuje, jak OAuth psuje się w praktyce u różnych dostawców. Jeden błąd w zapisie tokenów kosztował klientów ponowną autoryzację.",
+   "body": "Nango to projekt open source łączący aplikacje i agentów z zewnętrznymi API. Obsługa tokenów rośnie tam z około 400 do ponad 1000 API, a zespół opisał wnioski.\n\nPunkt wyjścia to incydent z maja 2025. Błędny warunek w PR sprawił, że odświeżone tokeny nie trafiały do bazy. Poprawka zajęła niecałe dwie godziny, ale w tym czasie zadania odświeżyły i odrzuciły tokeny setek połączeń. Airtable i Atlassian unieważniają stary refresh token od razu po wydaniu nowego, a Salesforce i Slack robią to samo przy włączonej rotacji. Użytkownicy musieli przejść ekran zgody od nowa. Dlatego Nango traktuje refresh tokeny jak pieniądze, nie cache: nowy token zapisuje się przed czymkolwiek innym.\n\nDostawcy różnią się mocno. Airtable po nieudanym odświeżeniu starym tokenem unieważnia całą autoryzację aplikacji. Xero pozwala powtórzyć żądanie ze starym tokenem przez 30 minut. Dlatego odświeżenia są szeregowane per połączenie za pomocą rozproszonej blokady.\n\nExact Online odrzuca odświeżenie wykonane więcej niż 30 sekund przed wygaśnięciem, a Nango odświeżało 15 minut wcześniej, więc dodano bufory per dostawca. RFC 6749 czyni expires_in opcjonalnym. Zendesk zwraca je tylko na żądanie, a Salesforce w ogóle, więc trzeba pytać osobny endpoint introspekcji. Teraz Nango odświeża nieaktywne dane cronem.\n\nBłąd autoryzacji często nie zwraca 401. Z około 935 dostawców w rejestrze tylko 276 ma endpoint do sprawdzenia ważności danych. Zmiany po stronie dostawców, jak u Figmy czy Shopify, wychodzą zwykle po awarii, a 16% commitów do konfiguracji to poprawki. Rejestr jest publicznym plikiem YAML.",
+   "for_you": "Jeśli budujesz integracje albo agentów łączących się z cudzymi API, zapisuj nowy refresh token przed wszystkim innym i serializuj odświeżenia. Rejestr Nango to gotowa ściąga z dziwactw dostawców.",
+   "sources": [
+    {
+     "name": "Nango",
+     "url": "https://nango.dev/blog/lessons-from-operating-api-auth-for-900-apis/",
+     "primary": true
+    }
+   ],
+   "image_topic": "OAuth",
+   "image": {
+    "url": "https://cdn.sanity.io/images/7yse5usn/production/3c399a96bf3e292ee10595e55c6598da8b0be60f-1674x940.jpg",
+    "credit": "nango.dev",
+    "link": "https://nango.dev/blog/lessons-from-operating-api-auth-for-900-apis/"
+   },
+   "may_affect": [],
+   "disclaimer": null,
+   "image_fallback": null,
+   "terms": [
+    "oauth",
+    "refresh-token"
+   ]
+  },
+  {
+   "title": "Vibe coding trafia do sprzętu: telewizory, aparaty i syntezatory przepisywane przez LLM",
+   "category": "inne",
+   "status": "opinia",
+   "is_update": false,
+   "lede": "The Verge opisuje użytkowników, którzy za pomocą Claude Code lub Codexa przerabiają oprogramowanie własnych urządzeń. Branża odpowiada blokadami i DRM.",
+   "body": "Według felietonu The Verge modele językowe nie dały hakerom nowych możliwości, ale zrobiły je łatwymi. Wystarczy poprosić Claude Code lub Codex o modyfikację sprzętu.\n\nPrzykład to Gathin T., deweloper z Indii. Jego telewizor Xiaomi z Android TV był pełen reklam. Po kilku zmianach uprawnień i włączeniu debugowania USB Claude Code przejął kontrolę nad telewizorem w tej samej sieci Wi-Fi. W półtorej godziny usunął reklamy i uprościł interfejs. Projekt CleanYourTV stał się jednym z popularniejszych repozytoriów na GitHubie. Gathin zaznacza, że tak łatwo jest tylko na Androidzie, który działa w wielu urządzeniach, od zmywarek po samochody.\n\nAutor wskazuje trzy obszary. Fotografowie dodają do aparatów nowe tryby nagrywania, wyższe rozdzielczości i profile kolorów. W muzyce tani M-Vave FM-1 stał się celem niestandardowego firmware'u, a producent wydał własny, otwarty. Gracze dekompilują gry i rozszerzają konsole, a jeden z nich uruchomił płyty PlayStation 2 na PlayStation 5.\n\nBranża gier reaguje. Luke Dicken, były szef AI w Take-Two, przewiduje w rozmowie z Kotaku bardziej inwazyjne DRM, czyli zabezpieczenia przed kopiowaniem i modyfikacją, rozwiązania na poziomie platform i więcej streamingu. Producenci sprzętu będą mocniej blokować systemy i częściej sięgać po drogę prawną.\n\nJest też ryzyko. Po wgraniu firmware'u napisanego przez AI producent nie pomoże w razie problemów, a urządzenie może zostać bezużyteczne. Felieton to opinia autora, nie badanie rynku.",
+   "for_you": "Jako programista masz narzędzia, które obniżają próg wejścia do reverse engineeringu. Zanim zmodyfikujesz firmware drogiego urządzenia, zrób kopię i zostaw sobie drogę powrotu.",
+   "sources": [
+    {
+     "name": "The Verge",
+     "url": "https://www.theverge.com/column/1039139/vibe-coding-gadgets-tv-camera",
+     "primary": true
+    }
+   ],
+   "image_topic": "Android TV",
+   "image": {
+    "url": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/11/AI_vibe_coding_hacker_hardware.jpg?quality=90&strip=all&crop=0%2C10.732984293194%2C100%2C78.534031413613&w=1200",
+    "credit": "theverge.com",
+    "link": "https://www.theverge.com/column/1039139/vibe-coding-gadgets-tv-camera"
+   },
+   "may_affect": [],
+   "disclaimer": null,
+   "image_fallback": null,
+   "terms": [
+    "vibe-coding",
+    "drm"
+   ]
+  },
+  {
+   "title": "Foundation Future Industries: pracownicy tracą ubezpieczenie, finansowanie wciąż niepewne",
+   "category": "inwestycje",
+   "status": "potwierdzone",
+   "is_update": false,
+   "lede": "Startup robotów humanoidalnych wspierany przez Erica Trumpa poinformował pracowników o utracie świadczeń zdrowotnych. Ostatnia wypłata była 15 października.",
+   "body": "Według notatki zdobytej przez CNBC pracownicy Foundation Future Industries dowiedzieli się, że ich ubezpieczenie przez Rippling wygasło wstecznie od października. Firma zaoferowała COBRA, czyli amerykański mechanizm pozwalający czasowo zachować ubezpieczenie po jego utracie, z pełną składką płaconą z własnej kieszeni. Startup obiecuje zwrot składek i szuka nowego dostawcy świadczeń.\n\nFoundation obwinia Rippling. Rippling odpowiada, że klient, który przez kilka miesięcy nie spełnia zobowiązań płacowych i świadczeniowych, dostaje ostrzeżenie, a potem jest wyłączany. Ostatnia wypłata odbyła się 15 października. Termin 30 listopada oznacza trzeci cykl bez pensji.\n\nOd sierpnia firma szuka pożyczki pomostowej, czyli krótkiego finansowania na przetrwanie do większej inwestycji. Rozmawia z trzema lub czterema funduszami, w tym z Tribe Capital. Chodzi o dotrwanie do możliwej inwestycji 150 mln dolarów od południowokoreańskiego konglomeratu Base Group, która może nastąpić w grudniu lub styczniu. Base potwierdził Reuterowi, że rozważa inwestycję, ale nie jest ona sfinalizowana. Według Nowego Jorku Timesa Base zapłacił w 2025 roku Trump Organization 2 mln dolarów, co wzbudziło zastrzeżenia demokratycznych senatorów.\n\nCNBC pisało wcześniej o pożyczce 4,6 mln dolarów, którą współzałożyciel Sankaet Pathak pobrał z firmy. Według informatorów frekwencja w biurze w San Francisco mocno spadła, a część osób szuka pracy. Pathak rozważa zaoferowanie udziałów, a dział HR miał ostrzegać przed skargami do stanu Kalifornia. Firma nie odpowiedziała na prośbę o komentarz.",
+   "for_you": "To przykład, jak głośne obietnice w robotyce humanoidalnej mogą rozmijać się z kondycją finansową. Oceniając takie firmy jako pracodawcę lub partnera, patrz na dane o wypłatach, nie tylko na demonstracje.",
+   "sources": [
+    {
+     "name": "CNBC",
+     "url": "https://www.cnbc.com/2026/11/22/foundation-future-industries-health-benefits-payroll-base-group.html",
+     "primary": true
+    }
+   ],
+   "image_topic": "Humanoid robot",
+   "image": {
+    "url": "https://image.cnbcfm.com/api/v1/image/108314199-1780134094393-Phantom_work2.png?v=1780135127&w=1920&h=1080",
+    "credit": "cnbc.com",
+    "link": "https://www.cnbc.com/2026/11/22/foundation-future-industries-health-benefits-payroll-base-group.html"
+   },
+   "may_affect": [],
+   "disclaimer": "To nie jest porada inwestycyjna.",
+   "image_fallback": null,
+   "terms": [
+    "cobra"
+   ]
+  },
+  {
+   "title": "Seria awarii w USA: Microsoft i rząd ostrzegają, że będą kolejne",
+   "category": "inne",
+   "status": "potwierdzone",
+   "is_update": false,
+   "lede": "Po awarii lotnictwa, wielodniowej awarii Outlooka i problemach JPMorgan urzędnicy mówią, że to nie koniec. Dyrektor wywiadu i prezes Microsoftu łączą to z modernizacją systemów pod AI.",
+   "body": "W ostatnim tygodniu USA doświadczyły ogólnokrajowego wstrzymania lotów przez FAA, wielodniowej awarii Outlooka i awarii bankowej w JPMorgan Chase. FAA, czyli amerykański urząd lotnictwa, podała, że ground stop wywołały aktualizacje routerów, które zalały system danymi. Microsoft tłumaczy awarię Outlooka problemem podczas wcześniejszej rozbudowy przepustowości sieci. Urzędnicy w dużej mierze odrzucają tezę o skoordynowanym ataku, także z użyciem AI.\n\nDyrektor wywiadu narodowego Jay Clayton powiedział w CNN, że Amerykanie powinni być przygotowani na duże inwestycje w modernizację i cyberbezpieczeństwo oraz na wyboje przy każdej zmianie technologicznej. Zbliża się Święto Dziękczynienia, jeden z najbardziej intensywnych tygodni podróży.\n\nPrezes Microsoftu Brad Smith mówił w Face the Nation ostrzej. Według niego trzeba być przygotowanym na nadchodzące miesiące, bo cała infrastruktura informacyjna świata jest właśnie unowocześniana. Dodał, że AI ułatwia znajdowanie błędów w kodzie. Można je potem załatać albo wykorzystać do włamania.\n\nSekretarz skarbu Scott Bessent uspokajał, że klienci banków nie powinni się martwić. Porównał łatki do szczepionki: ramię może boleć, ale odporność rośnie.\n\nThe Verge wskazuje też na wzrost ataków na systemy rządowe i komercyjne, m.in. USDA, JPMorgan i sieci supermarketów. Jego tekst zawierał pierwotnie literówkę sugerującą, że awarie miały przyczynę w cyberatakach, i został poprawiony. Obecnie nic nie wskazuje, że do któregoś z tych zdarzeń doprowadził atak.",
+   "for_you": "Jeśli utrzymujesz usługi zależne od dostawców chmurowych i poczty, sprawdź plany awaryjne i zależność od jednego dostawcy. Fala łatek wywołanych przez AI może zwiększyć liczbę zmian i ryzyko błędów w infrastrukturze.",
+   "sources": [
+    {
+     "name": "The Verge",
+     "url": "https://www.theverge.com/tech/1039851/major-tech-outages",
+     "primary": false
+    },
+    {
+     "name": "CNBC",
+     "url": "https://www.cnbc.com/2026/11/22/jay-clayton-tech-outages-faa-microsoft-thanksgiving.html",
+     "primary": false
+    }
+   ],
+   "image_topic": "Microsoft Outlook",
+   "image": {
+    "url": "https://platform.theverge.com/wp-content/uploads/sites/2/chorus/uploads/chorus_asset/file/23318433/akrales_220309_4977_0182.jpg?quality=90&strip=all&crop=0%2C10.732984293194%2C100%2C78.534031413613&w=1200",
+    "credit": "theverge.com",
+    "link": "https://www.theverge.com/tech/1039851/major-tech-outages"
+   },
+   "may_affect": [
+    "msft"
+   ],
+   "disclaimer": null,
+   "image_fallback": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d6/Aerial_Microsoft_West_Campus_August_2009.jpg/960px-Aerial_Microsoft_West_Campus_August_2009.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+    "credit": "Jelson25 / Public domain, Wikimedia Commons",
+    "link": "https://commons.wikimedia.org/wiki/File:Aerial_Microsoft_West_Campus_August_2009.jpg"
+   },
+   "terms": [
+    "ground-stop"
+   ]
+  }
+ ],
+ "market": {
+  "commentary": "Ostatnie zamknięcie, 20 listopada, przyniosło spadki w całym koszyku. NVIDIA straciła 14,01%, Arm 14,09%, Micron 13,89%, a AMD 13,25%. Najmniej spadły Apple (1,9%), Alphabet (2,7%) i Microsoft (2,77%). Spadki widać też w ujęciu 30-dniowym, np. NVIDIA minus 43,45%, Intel minus 44,84%, Super Micro minus 39,13%. Żadne z dostarczonych źródeł nie wiąże dzisiejszego ruchu z jednym wydarzeniem, więc to ruch całego rynku, a nie wiadomość o jednej spółce.",
+  "mood": "Wszystkie 18 spółek z koszyka spadło, a największe straty poniosły producenci chipów.",
+  "disclaimer": "To nie jest porada inwestycyjna.",
+  "rows": [
+   {
+    "ticker": "NVDA",
+    "name": "NVIDIA",
+    "close": 125.53,
+    "change_1d": -14.01,
+    "change_7d": -22.92,
+    "change_30d": -43.45,
+    "last_trade_date": "2026-11-20"
+   },
+   {
+    "ticker": "MSFT",
+    "name": "Microsoft",
+    "close": 484.52,
+    "change_1d": -2.77,
+    "change_7d": -7.51,
+    "change_30d": -9.09,
+    "last_trade_date": "2026-11-20"
+   },
+   {
+    "ticker": "GOOGL",
+    "name": "Alphabet",
+    "close": 265.29,
+    "change_1d": -2.7,
+    "change_7d": -10.31,
+    "change_30d": -20.75,
+    "last_trade_date": "2026-11-20"
+   },
+   {
+    "ticker": "META",
+    "name": "Meta",
+    "close": 560.84,
+    "change_1d": -5.93,
+    "change_7d": -12.6,
+    "change_30d": -19.6,
+    "last_trade_date": "2026-11-20"
+   },
+   {
+    "ticker": "AMZN",
+    "name": "Amazon",
+    "close": 246.82,
+    "change_1d": -4.1,
+    "change_7d": -7.44,
+    "change_30d": -5.93,
+    "last_trade_date": "2026-11-20"
+   },
+   {
+    "ticker": "AAPL",
+    "name": "Apple",
+    "close": 342.56,
+    "change_1d": -1.9,
+    "change_7d": -3.85,
+    "change_30d": -0.42,
+    "last_trade_date": "2026-11-20"
+   },
+   {
+    "ticker": "TSM",
+    "name": "TSMC",
+    "close": 318.71,
+    "change_1d": -9.48,
+    "change_7d": -20.07,
+    "change_30d": -26.21,
+    "last_trade_date": "2026-11-20"
+   },
+   {
+    "ticker": "AMD",
+    "name": "AMD",
+    "close": 424.39,
+    "change_1d": -13.25,
+    "change_7d": -20.54,
+    "change_30d": -23.22,
+    "last_trade_date": "2026-11-20"
+   },
+   {
+    "ticker": "AVGO",
+    "name": "Broadcom",
+    "close": 304.41,
+    "change_1d": -12.19,
+    "change_7d": -12.28,
+    "change_30d": -9.88,
+    "last_trade_date": "2026-11-20"
+   },
+   {
+    "ticker": "ORCL",
+    "name": "Oracle",
+    "close": 101.19,
+    "change_1d": -8.48,
+    "change_7d": -19.27,
+    "change_30d": -21.64,
+    "last_trade_date": "2026-11-20"
+   },
+   {
+    "ticker": "PLTR",
+    "name": "Palantir",
+    "close": 143.49,
+    "change_1d": -6.63,
+    "change_7d": -14.58,
+    "change_30d": -28.87,
+    "last_trade_date": "2026-11-20"
+   },
+   {
+    "ticker": "CRWV",
+    "name": "CoreWeave",
+    "close": 39.51,
+    "change_1d": -12.02,
+    "change_7d": -25.64,
+    "change_30d": -36.09,
+    "last_trade_date": "2026-11-20"
+   },
+   {
+    "ticker": "ARM",
+    "name": "Arm",
+    "close": 152.2,
+    "change_1d": -14.09,
+    "change_7d": -20.12,
+    "change_30d": -32.83,
+    "last_trade_date": "2026-11-20"
+   },
+   {
+    "ticker": "ASML",
+    "name": "ASML",
+    "close": 1266.22,
+    "change_1d": -6.63,
+    "change_7d": -15.31,
+    "change_30d": -24.48,
+    "last_trade_date": "2026-11-20"
+   },
+   {
+    "ticker": "SMCI",
+    "name": "Super Micro",
+    "close": 21.65,
+    "change_1d": -9.19,
+    "change_7d": -19.41,
+    "change_30d": -39.13,
+    "last_trade_date": "2026-11-20"
+   },
+   {
+    "ticker": "TSLA",
+    "name": "Tesla",
+    "close": 345.82,
+    "change_1d": -7.64,
+    "change_7d": -11.38,
+    "change_30d": -10.52,
+    "last_trade_date": "2026-11-20"
+   },
+   {
+    "ticker": "INTC",
+    "name": "Intel",
+    "close": 51.28,
+    "change_1d": -7.97,
+    "change_7d": -14.05,
+    "change_30d": -44.84,
+    "last_trade_date": "2026-11-20"
+   },
+   {
+    "ticker": "MU",
+    "name": "Micron",
+    "close": 594.51,
+    "change_1d": -13.89,
+    "change_7d": -23.62,
+    "change_30d": -34.93,
+    "last_trade_date": "2026-11-20"
+   }
+  ],
+  "as_of": "2026-11-20"
+ },
+ "rankings": {
+  "commentary": "W LMArena pierwsze trzy miejsca zajmują modele Gemini 4. W Artificial Analysis prowadzi Claude Fable 5.2 przed GPT-6.2 Astra. Na Hugging Face dominuje rodzina Inkling-2-Mini.",
+  "notes": [
+   {
+    "board": "lmarena",
+    "text": "Gemini 4 Carbon, Argon i Neon zajmują miejsca 1–3, a najwyżej z Anthropic jest Claude Opus 5.5 na czwartym."
+   },
+   {
+    "board": "aa",
+    "text": "Claude Fable 5.2 prowadzi przed GPT-6.2 Astra, a Gemini 4 Neon jest trzeci."
+   },
+   {
+    "board": "hf_trending",
+    "text": "Inkling-2-Mini zajmuje miejsca 1 i 2, a jego nieocenzurowana wersja GGUF awansowała na szóste."
+   }
+  ],
+  "lmarena": [
+   {
+    "rank": 1,
+    "model": "Gemini 4 Carbon",
+    "org": "google",
+    "score": 1538.8733656178997,
+    "variant": "High",
+    "delta": null
+   },
+   {
+    "rank": 2,
+    "model": "Gemini 4 Argon",
+    "org": "google",
+    "score": 1527.6707454486746,
+    "variant": "High",
+    "delta": null
+   },
+   {
+    "rank": 3,
+    "model": "Gemini 4 Neon",
+    "org": "google",
+    "score": 1522.8896905416118,
+    "variant": "High",
+    "delta": null
+   },
+   {
+    "rank": 4,
+    "model": "Claude Opus 5.5",
+    "org": "anthropic",
+    "score": 1514.1182801107798,
+    "variant": "High",
+    "delta": null
+   },
+   {
+    "rank": 5,
+    "model": "Claude Fable 5.1",
+    "org": "anthropic",
+    "score": 1511.7703155455783,
+    "variant": "Max",
+    "delta": null
+   },
+   {
+    "rank": 6,
+    "model": "Claude Opus 5",
+    "org": "anthropic",
+    "score": 1506.1795360065344,
+    "variant": "Max",
+    "delta": null
+   },
+   {
+    "rank": 7,
+    "model": "Muse Wonder",
+    "org": "meta",
+    "score": 1503.6619735295121,
+    "variant": "Max",
+    "delta": null
+   },
+   {
+    "rank": 8,
+    "model": "Gemini 4 Hydrogen",
+    "org": "google",
+    "score": 1502.1451228167848,
+    "variant": "High",
+    "delta": null
+   },
+   {
+    "rank": 9,
+    "model": "Claude Opus 4.6",
+    "org": "anthropic",
+    "score": 1501.5275016749329,
+    "variant": "High",
+    "delta": null
+   },
+   {
+    "rank": 10,
+    "model": "Gemini 3.8 Flash",
+    "org": "google",
+    "score": 1500.8803494450558,
+    "variant": "High",
+    "delta": null
+   },
+   {
+    "rank": 11,
+    "model": "Muse Spark 1.3",
+    "org": "meta",
+    "score": 1492.9022275319262,
+    "variant": "Max",
+    "delta": null
+   },
+   {
+    "rank": 12,
+    "model": "MiMo-V2.6-Pro",
+    "org": "xiaomi",
+    "score": 1492.8697235495856,
+    "variant": null,
+    "delta": null
+   },
+   {
+    "rank": 13,
+    "model": "Claude Fable 5",
+    "org": "anthropic",
+    "score": 1491.7552175389037,
+    "variant": "High",
+    "delta": null
+   },
+   {
+    "rank": 14,
+    "model": "Claude Opus 4.7",
+    "org": "anthropic",
+    "score": 1489.8288192461714,
+    "variant": "High",
+    "delta": null
+   },
+   {
+    "rank": 15,
+    "model": "Gemini 3.7 Flash",
+    "org": "google",
+    "score": 1489.1400216744582,
+    "variant": "High",
+    "delta": null
+   },
+   {
+    "rank": 16,
+    "model": "Qwen3.8-Max",
+    "org": "alibaba",
+    "score": 1484.9138435273762,
+    "variant": null,
+    "delta": null
+   },
+   {
+    "rank": 17,
+    "model": "Muse Spark 1.2",
+    "org": "meta",
+    "score": 1483.5168032483698,
+    "variant": "xHigh",
+    "delta": null
+   },
+   {
+    "rank": 18,
+    "model": "Gemini 3.5 Flash",
+    "org": "google",
+    "score": 1482.809520861872,
+    "variant": "High",
+    "delta": null
+   },
+   {
+    "rank": 19,
+    "model": "Gemini 3.1 Pro Preview",
+    "org": "google",
+    "score": 1480.0053904777624,
+    "variant": null,
+    "delta": null
+   },
+   {
+    "rank": 20,
+    "model": "Gemini 3 Pro",
+    "org": "google",
+    "score": 1479.731647527069,
+    "variant": null,
+    "delta": null
+   }
+  ],
+  "aa": [
+   {
+    "rank": 1,
+    "model": "Claude Fable 5.2",
+    "org": "Anthropic",
+    "score": 64.6,
+    "variant": "Max, Default Fallback",
+    "delta": null
+   },
+   {
+    "rank": 2,
+    "model": "GPT-6.2 Astra",
+    "org": "OpenAI",
+    "score": 62.1,
+    "variant": "Max",
+    "delta": null
+   },
+   {
+    "rank": 3,
+    "model": "Gemini 4 Neon",
+    "org": "Google",
+    "score": 61.4,
+    "variant": "Xhigh",
+    "delta": null
+   },
+   {
+    "rank": 4,
+    "model": "Gemini 4 Carbon",
+    "org": "Google",
+    "score": 60,
+    "variant": "High",
+    "delta": null
+   },
+   {
+    "rank": 5,
+    "model": "Claude Opus 5.5",
+    "org": "Anthropic",
+    "score": 59.1,
+    "variant": "Max, Default Fallback",
+    "delta": null
+   },
+   {
+    "rank": 6,
+    "model": "GPT-6.2 Sol",
+    "org": "OpenAI",
+    "score": 57.3,
+    "variant": "Max",
+    "delta": null
+   },
+   {
+    "rank": 7,
+    "model": "GPT-6 Astra",
+    "org": "OpenAI",
+    "score": 56.9,
+    "variant": "Max",
+    "delta": null
+   },
+   {
+    "rank": 8,
+    "model": "GPT-6.1 Sol",
+    "org": "OpenAI",
+    "score": 54.6,
+    "variant": "Max",
+    "delta": null
+   },
+   {
+    "rank": 9,
+    "model": "Claude Sonnet 5.5",
+    "org": "Anthropic",
+    "score": 54.5,
+    "variant": "Max, Default Fallback",
+    "delta": null
+   },
+   {
+    "rank": 10,
+    "model": "Gemini 4 Hydrogen",
+    "org": "Google",
+    "score": 53.9,
+    "variant": "Xhigh",
+    "delta": null
+   },
+   {
+    "rank": 11,
+    "model": "GPT-6.1 Terra",
+    "org": "OpenAI",
+    "score": 51.3,
+    "variant": "Max",
+    "delta": null
+   },
+   {
+    "rank": 12,
+    "model": "Gemini 4 Argon",
+    "org": "Google",
+    "score": 50.4,
+    "variant": "High",
+    "delta": null
+   },
+   {
+    "rank": 13,
+    "model": "Muse Wonder Full",
+    "org": "Meta",
+    "score": 50.1,
+    "variant": "Max",
+    "delta": null
+   },
+   {
+    "rank": 14,
+    "model": "Claude Fable 5.1",
+    "org": "Anthropic",
+    "score": 50,
+    "variant": "Xhigh, Default Fallback",
+    "delta": null
+   },
+   {
+    "rank": 15,
+    "model": "Kimi K3.1 Pro",
+    "org": "Kimi",
+    "score": 46.5,
+    "variant": null,
+    "delta": null
+   },
+   {
+    "rank": 16,
+    "model": "Claude Opus 5",
+    "org": "Anthropic",
+    "score": 44.2,
+    "variant": "Max",
+    "delta": null
+   },
+   {
+    "rank": 17,
+    "model": "GPT-6 Sol",
+    "org": "OpenAI",
+    "score": 44.2,
+    "variant": "Max",
+    "delta": null
+   },
+   {
+    "rank": 18,
+    "model": "Muse Wonder",
+    "org": "Meta",
+    "score": 43.6,
+    "variant": "Max",
+    "delta": null
+   },
+   {
+    "rank": 19,
+    "model": "Qwen4 Max",
+    "org": "Alibaba",
+    "score": 42.9,
+    "variant": null,
+    "delta": null
+   },
+   {
+    "rank": 20,
+    "model": "Muse Spark 1.3",
+    "org": "Meta",
+    "score": 36.6,
+    "variant": "Max",
+    "delta": null
+   }
+  ],
+  "hf_trending": [
+   {
+    "rank": 1,
+    "model": "thinkingmachines/Inkling-2-Mini",
+    "org": "thinkingmachines",
+    "score": 954,
+    "delta": null
+   },
+   {
+    "rank": 2,
+    "model": "unsloth/Inkling-2-Mini-GGUF",
+    "org": "unsloth",
+    "score": 827,
+    "delta": null
+   },
+   {
+    "rank": 3,
+    "model": "inworld/voice-isolator",
+    "org": "inworld",
+    "score": 485,
+    "delta": null
+   },
+   {
+    "rank": 4,
+    "model": "tencent/Hy4-flash",
+    "org": "tencent",
+    "score": 425,
+    "delta": null
+   },
+   {
+    "rank": 5,
+    "model": "harness-hub/Qwen3.8-27B-pi-adapted",
+    "org": "harness-hub",
+    "score": 333,
+    "delta": null
+   },
+   {
+    "rank": 6,
+    "model": "AtomicChat/Inkling-2-Mini-Uncensored-GGUF",
+    "org": "AtomicChat",
+    "score": 308.7,
+    "delta": 6
+   },
+   {
+    "rank": 7,
+    "model": "higurashi-ai/Haru-4B",
+    "org": "higurashi-ai",
+    "score": 276,
+    "delta": null
+   },
+   {
+    "rank": 8,
+    "model": "apple/DepthPro2",
+    "org": "apple",
+    "score": 254,
+    "delta": 3
+   },
+   {
+    "rank": 9,
+    "model": "Qwen/Qwen3.8-27B",
+    "org": "Qwen",
+    "score": 202.5,
+    "delta": null
+   },
+   {
+    "rank": 10,
+    "model": "sensenova/SenseNova-Loop-9B",
+    "org": "sensenova",
+    "score": 196,
+    "delta": null
+   },
+   {
+    "rank": 11,
+    "model": "apple/FastFrames-L",
+    "org": "apple",
+    "score": 183.5,
+    "delta": -6
+   },
+   {
+    "rank": 12,
+    "model": "SulphurAI/Sulphur-3",
+    "org": "SulphurAI",
+    "score": 176,
+    "delta": 7
+   },
+   {
+    "rank": 13,
+    "model": "Lightricks/LTX-2.5",
+    "org": "Lightricks",
+    "score": 172,
+    "delta": -3
+   },
+   {
+    "rank": 14,
+    "model": "chatrlabs/Qwen-Image-2.1-Uncensored-Omni-Quantized",
+    "org": "chatrlabs",
+    "score": 156.5,
+    "delta": null
+   },
+   {
+    "rank": 15,
+    "model": "meituan-longcat/LongCat-Video-Avatar-1.6",
+    "org": "meituan-longcat",
+    "score": 136.5,
+    "delta": null
+   },
+   {
+    "rank": 16,
+    "model": "MiniMaxAI/MiniMax-H3-Image",
+    "org": "MiniMaxAI",
+    "score": 127.5,
+    "delta": -3
+   },
+   {
+    "rank": 17,
+    "model": "maxwell-model/Maxwell-V1-Flash",
+    "org": "maxwell-model",
+    "score": 116.5,
+    "delta": null
+   },
+   {
+    "rank": 18,
+    "model": "DavidAU/Qwen3.8-27B-TURBO-Fable-Cold-Fusion-735-882-Heretic-Uncensored-NEO-CODER-MAX-MTP-GGUF",
+    "org": "DavidAU",
+    "score": 104,
+    "delta": null
+   },
+   {
+    "rank": 19,
+    "model": "RadixArk/DaisyRose-27B",
+    "org": "RadixArk",
+    "score": 102.5,
+    "delta": "new"
+   },
+   {
+    "rank": 20,
+    "model": "facebook/sam-3d-body-dinov3",
+    "org": "facebook",
+    "score": 95,
+    "delta": "new"
+   }
+  ],
+  "areas": [
+   {
+    "key": "webdev",
+    "label": "Programowanie",
+    "new_leader": false,
+    "rows": [
+     {
+      "rank": 1,
+      "model": "Claude Fable 5.2",
+      "org": "anthropic",
+      "delta": null
+     },
+     {
+      "rank": 2,
+      "model": "Claude Opus 5.5",
+      "org": "anthropic",
+      "delta": null
+     },
+     {
+      "rank": 3,
+      "model": "Claude Sonnet 5.5",
+      "org": "anthropic",
+      "delta": null
+     },
+     {
+      "rank": 4,
+      "model": "Gemini 4 Carbon",
+      "org": "google",
+      "delta": null
+     },
+     {
+      "rank": 5,
+      "model": "Gemini 4 Neon",
+      "org": "google",
+      "delta": 1
+     },
+     {
+      "rank": 6,
+      "model": "GPT-6 Astra",
+      "org": "openai",
+      "delta": 1
+     },
+     {
+      "rank": 7,
+      "model": "GPT-6.2 Astra",
+      "org": "openai",
+      "delta": -2
+     },
+     {
+      "rank": 8,
+      "model": "GPT-6.2 Sol",
+      "org": "openai",
+      "delta": null
+     },
+     {
+      "rank": 9,
+      "model": "Qwen4-Max",
+      "org": "alibaba",
+      "delta": null
+     },
+     {
+      "rank": 10,
+      "model": "GPT-6.1 Sol",
+      "org": "openai",
+      "delta": null
+     }
+    ]
+   },
+   {
+    "key": "agent",
+    "label": "Agenci",
+    "new_leader": false,
+    "rows": [
+     {
+      "rank": 1,
+      "model": "Claude Fable 5.2",
+      "org": "anthropic",
+      "delta": null
+     },
+     {
+      "rank": 2,
+      "model": "Claude Opus 5.5",
+      "org": "anthropic",
+      "delta": null
+     },
+     {
+      "rank": 3,
+      "model": "Gemini 4 Neon",
+      "org": "google",
+      "delta": null
+     },
+     {
+      "rank": 4,
+      "model": "Gemini 4 Carbon",
+      "org": "google",
+      "delta": null
+     },
+     {
+      "rank": 5,
+      "model": "Claude Sonnet 5.5",
+      "org": "anthropic",
+      "delta": null
+     },
+     {
+      "rank": 6,
+      "model": "GPT-6 Astra",
+      "org": "openai",
+      "delta": 1
+     },
+     {
+      "rank": 7,
+      "model": "GPT-6.2 Astra",
+      "org": "openai",
+      "delta": -1
+     },
+     {
+      "rank": 8,
+      "model": "Gemini 4 Hydrogen",
+      "org": "google",
+      "delta": 1
+     },
+     {
+      "rank": 9,
+      "model": "Claude Fable 5.1",
+      "org": "anthropic",
+      "delta": -1
+     },
+     {
+      "rank": 10,
+      "model": "GPT-6.2 Sol",
+      "org": "openai",
+      "delta": null
+     }
+    ]
+   },
+   {
+    "key": "writing",
+    "label": "Pisanie",
+    "new_leader": false,
+    "rows": [
+     {
+      "rank": 1,
+      "model": "Gemini 4 Carbon",
+      "org": "google",
+      "delta": null
+     },
+     {
+      "rank": 2,
+      "model": "Claude Opus 5.5",
+      "org": "anthropic",
+      "delta": 1
+     },
+     {
+      "rank": 3,
+      "model": "Gemini 4 Argon",
+      "org": "google",
+      "delta": -1
+     },
+     {
+      "rank": 4,
+      "model": "Gemini 4 Neon",
+      "org": "google",
+      "delta": null
+     },
+     {
+      "rank": 5,
+      "model": "Claude Fable 5.1",
+      "org": "anthropic",
+      "delta": null
+     },
+     {
+      "rank": 6,
+      "model": "Claude Fable 5.2",
+      "org": "anthropic",
+      "delta": null
+     },
+     {
+      "rank": 7,
+      "model": "Gemini 4 Hydrogen",
+      "org": "google",
+      "delta": null
+     },
+     {
+      "rank": 8,
+      "model": "Claude Opus 4.6",
+      "org": "anthropic",
+      "delta": null
+     },
+     {
+      "rank": 9,
+      "model": "Gemini 3.8 Flash",
+      "org": "google",
+      "delta": 1
+     },
+     {
+      "rank": 10,
+      "model": "Claude Fable 5",
+      "org": "anthropic",
+      "delta": -1
+     }
+    ]
+   },
+   {
+    "key": "polish",
+    "label": "Po polsku",
+    "new_leader": false,
+    "rows": [
+     {
+      "rank": 1,
+      "model": "Gemini 4 Argon",
+      "org": "google",
+      "delta": null
+     },
+     {
+      "rank": 2,
+      "model": "Claude Fable 5.1",
+      "org": "anthropic",
+      "delta": null
+     },
+     {
+      "rank": 3,
+      "model": "Muse Wonder",
+      "org": "meta",
+      "delta": null
+     },
+     {
+      "rank": 4,
+      "model": "Claude Opus 5",
+      "org": "anthropic",
+      "delta": null
+     },
+     {
+      "rank": 5,
+      "model": "Gemini 3.5 Flash",
+      "org": "google",
+      "delta": null
+     },
+     {
+      "rank": 6,
+      "model": "Claude Opus 5.5",
+      "org": "anthropic",
+      "delta": null
+     },
+     {
+      "rank": 7,
+      "model": "Gemini 3.8 Flash",
+      "org": "google",
+      "delta": null
+     },
+     {
+      "rank": 8,
+      "model": "Muse Spark 1.2",
+      "org": "meta",
+      "delta": null
+     },
+     {
+      "rank": 9,
+      "model": "Gemini 3.7 Flash",
+      "org": "google",
+      "delta": null
+     },
+     {
+      "rank": 10,
+      "model": "Gemini 3 Pro",
+      "org": "google",
+      "delta": null
+     }
+    ]
+   },
+   {
+    "key": "math",
+    "label": "Matematyka",
+    "new_leader": true,
+    "rows": [
+     {
+      "rank": 1,
+      "model": "Gemini 4 Argon",
+      "org": "google",
+      "delta": 1
+     },
+     {
+      "rank": 2,
+      "model": "Gemini 4 Neon",
+      "org": "google",
+      "delta": -1
+     },
+     {
+      "rank": 3,
+      "model": "Claude Fable 5.1",
+      "org": "anthropic",
+      "delta": null
+     },
+     {
+      "rank": 4,
+      "model": "Claude Opus 5",
+      "org": "anthropic",
+      "delta": null
+     },
+     {
+      "rank": 5,
+      "model": "Gemini 3.8 Flash",
+      "org": "google",
+      "delta": null
+     },
+     {
+      "rank": 6,
+      "model": "Claude Opus 5.5",
+      "org": "anthropic",
+      "delta": null
+     },
+     {
+      "rank": 7,
+      "model": "Gemini 4 Hydrogen",
+      "org": "google",
+      "delta": 2
+     },
+     {
+      "rank": 8,
+      "model": "Claude Opus 4.6",
+      "org": "anthropic",
+      "delta": -1
+     },
+     {
+      "rank": 9,
+      "model": "Claude Fable 5",
+      "org": "anthropic",
+      "delta": -1
+     },
+     {
+      "rank": 10,
+      "model": "Gemini 3.7 Flash",
+      "org": "google",
+      "delta": 1
+     }
+    ]
+   }
+  ]
+ },
+ "rumors": [],
+ "big_moves": [
+  {
+   "entity_id": "atomicchat-inkling-2-mini-uncensored-gguf",
+   "board": "hf_trending",
+   "change": "z #12 na #6",
+   "why": "Możliwe, że to efekt popularności samego Inkling-2-Mini, który zajmuje pierwsze miejsca listy. Żadne źródło nie łączy awansu z konkretnym zdarzeniem.",
+   "why_type": "hipoteza",
+   "sources": [],
+   "why_short": "możliwy efekt popularności Inkling-2-Mini"
+  },
+  {
+   "entity_id": "apple-depthpro2",
+   "board": "hf_trending",
+   "change": "z #11 na #8",
+   "why": "Brak jednoznacznej przyczyny w dostępnych źródłach.",
+   "why_type": "brak",
+   "sources": [],
+   "why_short": "brak jednoznacznej przyczyny"
+  },
+  {
+   "entity_id": "apple-fastframes-l",
+   "board": "hf_trending",
+   "change": "z #5 na #11",
+   "why": "Brak jednoznacznej przyczyny. Spadki na tej liście bywają skutkiem wypierania przez nowsze modele.",
+   "why_type": "brak",
+   "sources": [],
+   "why_short": "brak jednoznacznej przyczyny"
+  },
+  {
+   "entity_id": "sulphurai-sulphur-3",
+   "board": "hf_trending",
+   "change": "z #19 na #12",
+   "why": "Brak jednoznacznej przyczyny w dostępnych źródłach.",
+   "why_type": "brak",
+   "sources": [],
+   "why_short": "brak jednoznacznej przyczyny"
+  },
+  {
+   "entity_id": "lightricks-ltx-2-5",
+   "board": "hf_trending",
+   "change": "z #10 na #13",
+   "why": "Brak jednoznacznej przyczyny w dostępnych źródłach.",
+   "why_type": "brak",
+   "sources": [],
+   "why_short": "brak jednoznacznej przyczyny"
+  },
+  {
+   "entity_id": "minimaxai-minimax-h3-image",
+   "board": "hf_trending",
+   "change": "z #13 na #16",
+   "why": "Brak jednoznacznej przyczyny w dostępnych źródłach.",
+   "why_type": "brak",
+   "sources": [],
+   "why_short": "brak jednoznacznej przyczyny"
+  },
+  {
+   "entity_id": "radixark-daisyrose-27b",
+   "board": "hf_trending",
+   "change": "nowy na #19",
+   "why": "Brak jednoznacznej przyczyny w dostępnych źródłach.",
+   "why_type": "brak",
+   "sources": [],
+   "why_short": "brak jednoznacznej przyczyny"
+  },
+  {
+   "entity_id": "facebook-sam-3d-body-dinov3",
+   "board": "hf_trending",
+   "change": "nowy na #20",
+   "why": "Brak jednoznacznej przyczyny w dostępnych źródłach.",
+   "why_type": "brak",
+   "sources": [],
+   "why_short": "brak jednoznacznej przyczyny"
+  },
+  {
+   "entity_id": "n4ze3m-tiny-voca",
+   "board": "hf_trending",
+   "change": "wypadł z #16",
+   "why": "Brak jednoznacznej przyczyny w dostępnych źródłach.",
+   "why_type": "brak",
+   "sources": [],
+   "why_short": "brak jednoznacznej przyczyny"
+  },
+  {
+   "entity_id": "unsloth-qwen3-8-27b-gguf",
+   "board": "hf_trending",
+   "change": "wypadł z #20",
+   "why": "Brak jednoznacznej przyczyny w dostępnych źródłach.",
+   "why_type": "brak",
+   "sources": [],
+   "why_short": "brak jednoznacznej przyczyny"
+  }
+ ],
+ "follow_ups": [],
+ "closing": "W nadchodzących dniach warto sprawdzić, czy ktoś odpowie na propozycję OpenAI własnymi pomiarami perplexity oraz czy rynek złapie oddech po piątkowych spadkach. Wciąż aktualne są też ostrzeżenia o kolejnych awariach przed świątecznymi podróżami.",
+ "weekly": null,
+ "monthly": null,
+ "spotlight": {
+  "company_id": "msft",
+  "model_id": "gpt-6-2-astra"
+ },
+ "minutes": 10,
+ "supplement_minutes": 0
+}

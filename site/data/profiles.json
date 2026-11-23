@@ -14,7 +14,7 @@
    ],
    "why_it_matters": "Jako jeden z trzech największych producentów pamięci DRAM i flash, SK hynix dostarcza komponenty kluczowe dla infrastruktury AI, a jego klientami są m.in. Nvidia i Microsoft.",
    "updated_at": "2026-11-19",
-   "last_spotlight_at": null,
+   "last_spotlight_at": "2026-11-22",
    "image": null
   },
   {
@@ -201,7 +201,7 @@
    ],
    "why_it_matters": "Jest to jeden z najbardziej zaawansowanych modeli Anthropic dostępnych dla zwykłych użytkowników w wersji z dodatkowymi zabezpieczeniami.",
    "updated_at": "2026-11-21",
-   "last_spotlight_at": null,
+   "last_spotlight_at": "2026-11-22",
    "image": null
   },
   {
@@ -894,6 +894,24 @@
    "updated_at": "2026-11-21",
    "last_spotlight_at": null,
    "image": null
+  },
+  {
+   "id": "qwen4-max",
+   "type": "model",
+   "name": "Qwen4 Max",
+   "aliases": "Qwen,Tongyi Qianwen,通义千问",
+   "ticker": "",
+   "summary": "Dostarczony tekst źródłowy nie opisuje modelu Qwen4 Max, więc nie można potwierdzić jego parametrów ani możliwości. Opisuje natomiast rodzinę Qwen (通义千问), czyli modele językowe o głównie otwartych wagach, rozwijane przez Alibaba Cloud. Najnowsza wersja z tekstu to Qwen3.8, a model o 2,4 bln parametrów był drugim co do wielkości i mocy otwartym LLM po Kimi K3 (stan na 12 sierpnia 2026).",
+   "owner": "Alibaba Cloud",
+   "key_products": [],
+   "why_it_matters": "Z tekstu nie wynika bezpośrednio rola Qwen4 Max w wyścigu AI; rodzina Qwen jest jednak jedną z najważniejszych otwartych serii modeli z Chin.",
+   "updated_at": "2026-11-23",
+   "last_spotlight_at": null,
+   "image": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/50/Qwen_3_chatbot_example_screenshot.webp/960px-Qwen_3_chatbot_example_screenshot.webp?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+    "credit": "Software: Alibaba Cloud Screenshot: VulcanSphere / Public domain, Wikimedia Commons",
+    "link": "https://commons.wikimedia.org/wiki/File:Qwen_3_chatbot_example_screenshot.webp"
+   }
   },
   {
    "id": "smci",

@@ -26,6 +26,21 @@
    "explain": "To zapisywany krok po kroku tok rozumowania modelu, widoczny zanim poda odpowiedź. Można to porównać do pokazywania na kartce obliczeń, a nie tylko wyniku. Jest ważny, bo pozwala ludziom sprawdzić, czy model nie kombinuje czegoś niepokojącego. Tutaj autorzy zwracają uwagę, że nowa architektura z pętlą rozumuje bez zapisywania całego toku, co utrudnia tę kontrolę."
   },
   {
+   "id": "cobra",
+   "term": "COBRA",
+   "explain": "COBRA to amerykański mechanizm, który pozwala zachować ubezpieczenie zdrowotne przez pewien czas po utracie pracy. Osoba płaci wtedy pełną składkę z własnej kieszeni, bez dopłaty pracodawcy. W tej historii pracownicy dostali tę możliwość, ale za pełną cenę, choć ubezpieczenie wygasło wstecznie."
+  },
+  {
+   "id": "cross-entropy-loss",
+   "term": "cross-entropy loss",
+   "explain": "Cross-entropy loss to funkcja straty, czyli wynik, który pokazuje, jak bardzo model się myli podczas treningu. Model dostaje kary za przewidywanie złych kolejnych tokenów, a trening polega na tym, żeby kary były jak najmniejsze. Według autora eseju to ta sama wartość, co perplexity, tylko zapisana w innej skali."
+  },
+  {
+   "id": "dekodowanie-spekulatywne",
+   "term": "dekodowanie spekulatywne",
+   "explain": "Dekodowanie spekulatywne to sposób przyspieszania odpowiedzi modelu. Mały, szybki model zgaduje kilka kolejnych słów naraz, a duży model tylko je sprawdza zamiast generować każde od zera. Efekt jest taki, jak gdy szybki pomocnik szkicuje tekst, a redaktor go zatwierdza, zamiast pisać wszystko samodzielnie."
+  },
+  {
    "id": "dostawcy-inferencji",
    "term": "dostawcy inferencji",
    "explain": "To firmy, które hostują modele AI na własnych serwerach i odpowiadają na zapytania, np. wysyłane przez OpenRouter. Przez ich systemy przechodzą Twoje dane, więc to, co z nimi robią, ma znaczenie. W tej historii chodzi o to, że część z nich mogła nie przestrzegać deklarowanych zasad ochrony danych. Sam OpenRouter według komunikatu nie został zhakowany."
@@ -34,6 +49,16 @@
    "id": "double-free",
    "term": "double free",
    "explain": "To błąd polegający na tym, że program dwukrotnie zwalnia ten sam fragment pamięci. Przypomina to dwukrotne wyrzucenie tego samego pudełka, po którym system gubi się w zarządzaniu miejscem. Taki błąd może prowadzić do uszkodzenia danych, a w gorszym przypadku pozwolić atakującemu przejąć kontrolę nad programem. W tej historii wystarczy specjalnie przygotowany klucz, by go wywołać."
+  },
+  {
+   "id": "drm",
+   "term": "DRM",
+   "explain": "DRM to zabezpieczenia cyfrowe, które mają chronić treści i oprogramowanie przed kopiowaniem lub zmianami. Działa jak zamek, który producent zakłada na sprzęt, żeby użytkownik nie mógł go przerobić. W artykule to właśnie tą blokadą branża odpowiada na przeróbki sprzętu."
+  },
+  {
+   "id": "ground-stop",
+   "term": "ground stop",
+   "explain": "Ground stop to decyzja urzędu lotnictwa o wstrzymaniu wszystkich lotów na danym obszarze, zwykle na kilka godzin. Samoloty pozostają na lotniskach, dopóki problem nie zostanie usunięty. W tym przypadku FAA wstrzymała loty w całym kraju przez awarię systemów danych."
   },
   {
    "id": "harness",
@@ -66,6 +91,11 @@
    "explain": "To konkretny model językowy chińskiej firmy Moonshot AI, na którym Cursor zbudował swój model kodujący Composer 2. Dla czytelnika ważne jest to, że amerykański produkt opiera się na chińskim fundamencie. Właśnie to uruchomiło pytania komisji Kongresu o bezpieczeństwo i zależność od zagranicznych technologii."
   },
   {
+   "id": "kwantyzacja",
+   "term": "kwantyzacja",
+   "explain": "Kwantyzacja to zmniejszenie precyzji liczb, z których zbudowany jest model. Działa trochę jak zapisywanie zdjęcia w niższej jakości: plik jest mniejszy, ale obraz traci trochę szczegółów. Dzięki temu duży model mieści się w pamięci zwykłego laptopa, a Localcode pokazuje ich aż 169 wariantów."
+  },
+  {
    "id": "lean",
    "term": "Lean",
    "explain": "To język programowania i narzędzie, w którym dowody matematyczne zapisuje się w formie kodu, który komputer może sprawdzić krok po kroku. Działa trochę jak kompilator, który odrzuca błędne dowody zamiast błędnego programu. Dzięki temu poprawność dowodu nie zależy tylko od zaufania do autora. Społeczność potwierdziła, że ten ogromny dowód jest w tym systemie poprawny."
@@ -74,6 +104,11 @@
    "id": "mixture-of-experts",
    "term": "Mixture-of-Experts",
    "explain": "To sposób budowy modelu, w którym zamiast jednej wielkiej sieci pracuje wiele wyspecjalizowanych części, a na każde zapytanie uruchamiana jest tylko kilka z nich. Przypomina zespół ekspertów, z którego do konkretnego zadania wybiera się dwóch czy trzech najlepszych. Dzięki temu model jest pojemny, ale szybki i tańszy w działaniu. W tym przypadku aktywne jest tylko 3,4 mld z 26,4 mld parametrów."
+  },
+  {
+   "id": "oauth",
+   "term": "OAuth",
+   "explain": "OAuth to standard, dzięki któremu aplikacja dostaje dostęp do Twojego konta w innym serwisie bez znajomości hasła. Zamiast hasła użytkownik klika zgodę, a serwis wydaje aplikacji specjalny klucz. Dzięki temu można odebrać dostęp w każdej chwili, nie zmieniając hasła."
   },
   {
    "id": "open-weight",
@@ -86,6 +121,16 @@
    "explain": "To powszechnie używany standard szyfrowania i podpisywania wiadomości oraz plików, znany m.in. z programu GnuPG. Działa na zasadzie kluczy: jeden służy do zabezpieczania, drugi do sprawdzania autentyczności. Biblioteka GPGME pozwala aplikacjom korzystać z tego standardu bez implementowania go od zera. Dlatego błąd w GPGME dotyka wielu programów, które podpisują lub weryfikują dane."
   },
   {
+   "id": "perplexity",
+   "term": "perplexity",
+   "explain": "Perplexity to miara tego, jak bardzo model jest zaskoczony, widząc nowy tekst. Im niższa wartość, tym lepiej model przewiduje kolejne słowo lub fragment. Na co dzień to trochę jak test: ile razy zgadujący musiałby zgadywać, zanim trafi właściwe słowo. W tym artykule OpenAI proponuje, żeby ta jedna liczba była wspólnym sposobem porównywania postępu modeli."
+  },
+  {
+   "id": "refresh-token",
+   "term": "refresh token",
+   "explain": "Refresh token to długowieczny klucz, którym aplikacja odnawia krótkotrwały dostęp do konta, bez ponownego logowania użytkownika. Działa jak karta stałego klienta, na podstawie której wydaje się nowe jednorazowe przepustki. W tym artykule błąd w zapisie takich kluczy zmusił użytkowników do ponownej zgody na dostęp."
+  },
+  {
    "id": "router-ai",
    "term": "router AI",
    "explain": "To pośrednik, który odbiera zapytanie do modelu i decyduje, do którego dostawcy je wysłać. Działa jak dyspozytor w taksówkach, który kieruje kurs do właściwego kierowcy. Problem polega na tym, że aby wybrać dostawcę, router musi przeczytać treść zapytania, więc widzi w niej także hasła i klucze. Stąd ryzyko wycieku wrażliwych danych."
@@ -94,6 +139,11 @@
    "id": "use-after-free",
    "term": "use-after-free",
    "explain": "To rodzaj błędu w programie, w którym kod korzysta z obszaru pamięci po tym, jak został już zwolniony. Można to porównać do oddania klucza do mieszkania i dalszego wchodzenia do środka, bo ktoś inny może już tam zamieszkać. Atakujący może wykorzystać ten moment, by wstrzyknąć własne dane lub polecenia. W tej historii właśnie taki błąd pozwala wyjść z zabezpieczeń Ghostscripta."
+  },
+  {
+   "id": "vibe-coding",
+   "term": "vibe coding",
+   "explain": "Vibe coding to pisanie oprogramowania przez opisywanie, czego się chce, zamiast pisania kodu ręcznie. Programista ufa agentowi AI i sprawdza efekt, a nie każdą linijkę. W tym artykule ten sam sposób pracy służy do przerabiania cudzych urządzeń."
   }
  ]
 }

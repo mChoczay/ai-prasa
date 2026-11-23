@@ -1,6 +1,18 @@
 {
  "editions": [
   {
+   "date": "2026-11-23",
+   "kind": "daily",
+   "lead_title": "OpenAI publikuje własne pomiary perplexity i chce, by stały się wspólną miarą postępu",
+   "minutes": 10,
+   "categories": [
+    "rankingi",
+    "narzedzia",
+    "inne",
+    "inwestycje"
+   ]
+  },
+  {
    "date": "2026-11-22",
    "kind": "daily",
    "lead_title": "OpenRouter: incydenty z przetwarzaniem danych u dostawców inferencji",

@@ -56,6 +56,16 @@
    "explain": "DRM to zabezpieczenia cyfrowe, które mają chronić treści i oprogramowanie przed kopiowaniem lub zmianami. Działa jak zamek, który producent zakłada na sprzęt, żeby użytkownik nie mógł go przerobić. W artykule to właśnie tą blokadą branża odpowiada na przeróbki sprzętu."
   },
   {
+   "id": "ebpf",
+   "term": "eBPF",
+   "explain": "To technologia Linuksa, która pozwala wstawić małe, bezpieczne programy w wybrane miejsca działającego systemu, bez jego restartu. Działa jak sprytny czujnik założony na konkretnych drzwiach, który przepuszcza jednych gości, a innych zatrzymuje. W tej historii to właśnie dzięki niej można tymczasowo zablokować lukę, zanim pojawi się poprawka."
+  },
+  {
+   "id": "exploit",
+   "term": "exploit",
+   "explain": "To gotowy sposób wykorzystania błędu w programie, który pozwala komuś zrobić coś, na co nie powinien mieć zgody. Przypomina wytrych dopasowany do zamka z usterką. W tej historii ochrona polega na zablokowaniu dokładnie tej operacji, której exploit używa."
+  },
+  {
    "id": "ground-stop",
    "term": "ground stop",
    "explain": "Ground stop to decyzja urzędu lotnictwa o wstrzymaniu wszystkich lotów na danym obszarze, zwykle na kilka godzin. Samoloty pozostają na lotniskach, dopóki problem nie zostanie usunięty. W tym przypadku FAA wstrzymała loty w całym kraju przez awarię systemów danych."
@@ -91,6 +101,11 @@
    "explain": "To konkretny model językowy chińskiej firmy Moonshot AI, na którym Cursor zbudował swój model kodujący Composer 2. Dla czytelnika ważne jest to, że amerykański produkt opiera się na chińskim fundamencie. Właśnie to uruchomiło pytania komisji Kongresu o bezpieczeństwo i zależność od zagranicznych technologii."
   },
   {
+   "id": "klasyfikator",
+   "term": "klasyfikator",
+   "explain": "To program, który ocenia dane i przypisuje im etykietę, na przykład „bezpieczne” albo „podejrzane”. Działa podobnie jak kontroler na lotnisku, który sprawdza każdego pasażera osobno. W tej historii klasyfikatory oceniają pojedyncze zapytania, więc łatwo przeoczają atak rozłożony na wiele małych kroków."
+  },
+  {
    "id": "kwantyzacja",
    "term": "kwantyzacja",
    "explain": "Kwantyzacja to zmniejszenie precyzji liczb, z których zbudowany jest model. Działa trochę jak zapisywanie zdjęcia w niższej jakości: plik jest mniejszy, ale obraz traci trochę szczegółów. Dzięki temu duży model mieści się w pamięci zwykłego laptopa, a Localcode pokazuje ich aż 169 wariantów."
@@ -101,6 +116,11 @@
    "explain": "To język programowania i narzędzie, w którym dowody matematyczne zapisuje się w formie kodu, który komputer może sprawdzić krok po kroku. Działa trochę jak kompilator, który odrzuca błędne dowody zamiast błędnego programu. Dzięki temu poprawność dowodu nie zależy tylko od zaufania do autora. Społeczność potwierdziła, że ten ogromny dowód jest w tym systemie poprawny."
   },
   {
+   "id": "looped-transformer",
+   "term": "looped transformer",
+   "explain": "To rodzaj sieci neuronowej, w której ta sama grupa warstw działa kilka razy pod rząd, a każdy kolejny przebieg poprawia wynik poprzedniego. Przypomina pętlę, w której ktoś wielokrotnie przerabia ten sam szkic, zamiast pisać kolejne strony. Dzięki temu model może być „głębszy” bez dokładania nowych parametrów. W tej historii to nowość Z.ai, a takie modele pojawiają się dopiero od niedawna."
+  },
+  {
    "id": "mixture-of-experts",
    "term": "Mixture-of-Experts",
    "explain": "To sposób budowy modelu, w którym zamiast jednej wielkiej sieci pracuje wiele wyspecjalizowanych części, a na każde zapytanie uruchamiana jest tylko kilka z nich. Przypomina zespół ekspertów, z którego do konkretnego zadania wybiera się dwóch czy trzech najlepszych. Dzięki temu model jest pojemny, ale szybki i tańszy w działaniu. W tym przypadku aktywne jest tylko 3,4 mld z 26,4 mld parametrów."
@@ -109,6 +129,11 @@
    "id": "oauth",
    "term": "OAuth",
    "explain": "OAuth to standard, dzięki któremu aplikacja dostaje dostęp do Twojego konta w innym serwisie bez znajomości hasła. Zamiast hasła użytkownik klika zgodę, a serwis wydaje aplikacji specjalny klucz. Dzięki temu można odebrać dostęp w każdej chwili, nie zmieniając hasła."
+  },
+  {
+   "id": "obwod-kwantowy",
+   "term": "obwód kwantowy",
+   "explain": "To zestaw kroków, które mówią komputerowi kwantowemu, jakie operacje ma wykonać, podobnie jak przepis mówi kucharzowi, co ma zrobić po kolei. Jego jakość decyduje o tym, czy obliczenie w ogóle zmieści się w możliwościach dzisiejszego sprzętu. W tej historii agenci poprawiają takie przepisy, a potem dowodzą matematycznie, że działają poprawnie."
   },
   {
    "id": "open-weight",
@@ -131,6 +156,11 @@
    "explain": "Refresh token to długowieczny klucz, którym aplikacja odnawia krótkotrwały dostęp do konta, bez ponownego logowania użytkownika. Działa jak karta stałego klienta, na podstawie której wydaje się nowe jednorazowe przepustki. W tym artykule błąd w zapisie takich kluczy zmusił użytkowników do ponownej zgody na dostęp."
   },
   {
+   "id": "reverse-acquihire",
+   "term": "reverse acquihire",
+   "explain": "To sposób przejęcia firmy, w którym duża spółka kupuje technologię i zatrudnia założycieli oraz zespół, ale nie przejmuje samej firmy w całości. Można to porównać do wykupienia od piekarni przepisu i całej załogi, bez kupowania samego lokalu i szyldu. Takie umowy bywają pod lupą regulatorów, bo omijają część formalności przy przejęciach."
+  },
+  {
    "id": "router-ai",
    "term": "router AI",
    "explain": "To pośrednik, który odbiera zapytanie do modelu i decyduje, do którego dostawcy je wysłać. Działa jak dyspozytor w taksówkach, który kieruje kurs do właściwego kierowcy. Problem polega na tym, że aby wybrać dostawcę, router musi przeczytać treść zapytania, więc widzi w niej także hasła i klucze. Stąd ryzyko wycieku wrażliwych danych."
@@ -144,6 +174,11 @@
    "id": "vibe-coding",
    "term": "vibe coding",
    "explain": "Vibe coding to pisanie oprogramowania przez opisywanie, czego się chce, zamiast pisania kodu ręcznie. Programista ufa agentowi AI i sprawdza efekt, a nie każdą linijkę. W tym artykule ten sam sposób pracy służy do przerabiania cudzych urządzeń."
+  },
+  {
+   "id": "zero-data-retention",
+   "term": "zero data retention",
+   "explain": "To zasada, w której dostawca usługi nie zapisuje danych klienta ani na chwilę dłużej, niż trzeba, by odpowiedzieć na zapytanie. Działa jak restauracja, która po wydaniu dania wyrzuca zamówienie ze swojego zeszytu. W tej historii oznacza to, że nowa ochrona przed nadużyciami musi działać na danych zostających u klienta."
   }
  ]
 }

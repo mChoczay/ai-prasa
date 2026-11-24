@@ -1,0 +1,968 @@
+{
+ "date": "2026-11-24",
+ "edition": "daily",
+ "generated_at": "2026-11-24T04:32:57.811Z",
+ "quiet_day": false,
+ "greeting": "Dzień dobry. Kiedy pracowałeś, Anthropic dołożył do Claude'a agentów do przeglądu i zatwierdzania pull requestów, a na giełdzie Nvidia po powrocie Huanga odbiła o 31%, ciągnąc za sobą cały sektor.",
+ "lead_story": {
+  "title": "Claude Ship: agenci Anthropic poprawiają i zatwierdzają pull requesty",
+  "category": "narzedzia",
+  "status": "potwierdzone",
+  "is_update": true,
+  "lede": "Anthropic uruchamia w becie Claude Ship z dwoma agentami: PR Steward poprawia pull requesty, a Claude Approvals może zatwierdzać rutynowe zmiany. Produkt jest dla planów Team i Enterprise i działa z GitHubem.",
+  "body": "Anthropic rozszerza Claude'a z recenzowania kodu o jego poprawianie i zatwierdzanie. Nowy produkt, Claude Ship, trafia dziś do bety. Tworzą go dwaj agenci.\n\nPierwszy to PR Steward. Według Anthropic wkracza, gdy pull request ma czerwone testy w CI, konflikty przy scalaniu albo uwagi z review. Uwagi mogą pochodzić z funkcji Code Review, z innych narzędzi albo od członków zespołu. Agent zostawia komentarze z opisem zmian, więc autor widzi, co się stało z jego gałęzią, zanim ktoś ją scali.\n\nDrugi to Claude Approvals. Zatwierdza rutynowe zmiany, ale tylko wtedy, gdy pozwala na to polityka organizacji. To zespół, a nie model, decyduje, co jest rutyną. Agent może brać pod uwagę wyniki Code Review oraz własne klasyfikatory zespołu, opisane zwykłym językiem. Można więc napisać regułę w rodzaju „zmiany tylko w dokumentacji” i oprzeć na niej automatyczną akceptację.\n\nCode Review zapowiedziano w marcu, a w październiku trafiło do ogólnej dostępności. Claude Ship zamyka pętlę: jeden mechanizm znajduje problemy, drugi je naprawia, trzeci może przepuścić zmianę dalej. Człowiek przesuwa się z roli wykonawcy poprawek do roli autora zasad.\n\nClaude Ship obsługują klienci Claude Team i Enterprise, a repozytoria muszą być na GitHubie. Nie wiadomo, ile to kosztuje, jakie są limity ani jak agenci radzą sobie z dużymi repozytoriami i zależnościami między serwisami.\n\nNajwiększe pytanie dotyczy zaufania. Model, który napisał poprawkę, i model, który ją zatwierdza, mogą mieć te same słabe punkty. Rozsądny początek to wąski zakres, na przykład formatowanie, drobne poprawki zależności i dokumentacja, z człowiekiem przy zmianach w logice i bezpieczeństwie.",
+  "for_you": "Jeśli twój zespół ma Team lub Enterprise i repozytoria na GitHubie, przetestuj PR Stewarda na mało krytycznym repo. Zacznij od wąskiej polityki dla Claude Approvals i sprawdzaj, co agent zatwierdza.",
+  "sources": [
+   {
+    "name": "The Verge",
+    "url": "https://www.theverge.com/ai-artificial-intelligence/1040134/anthropic-claude-ship-ai-pull-requests",
+    "primary": false
+   }
+  ],
+  "image_topic": "Anthropic",
+  "image": {
+   "url": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/07/STKB364_CLAUDE_2_C_96d15c-1.jpg?quality=90&strip=all&crop=0%2C10.732984293194%2C100%2C78.534031413613&w=1200",
+   "credit": "theverge.com",
+   "link": "https://www.theverge.com/ai-artificial-intelligence/1040134/anthropic-claude-ship-ai-pull-requests"
+  },
+  "may_affect": [
+   "claude-opus-5-5",
+   "claude-fable-5-2",
+   "claude-sonnet-5-5",
+   "msft"
+  ],
+  "disclaimer": null,
+  "image_fallback": {
+   "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d6/Aerial_Microsoft_West_Campus_August_2009.jpg/960px-Aerial_Microsoft_West_Campus_August_2009.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+   "credit": "Jelson25 / Public domain, Wikimedia Commons",
+   "link": "https://commons.wikimedia.org/wiki/File:Aerial_Microsoft_West_Campus_August_2009.jpg"
+  }
+ },
+ "stories": [
+  {
+   "title": "Huang wraca na stanowisko szefa Nvidii, akcje rosną o 31%",
+   "category": "gielda",
+   "status": "potwierdzone",
+   "is_update": true,
+   "lede": "Zarząd Nvidii jednogłośnie przywrócił Jensena Huanga na stanowisko prezesa. Akcje zamknęły dzień wzrostem o 31%, po prawie 33% spadku od 8 listopada.",
+   "body": "Kiedy pracowałeś, Nvidia zmieniła zdanie. Zarząd ogłosił, że Jensen Huang wraca na fotel CEO ze skutkiem natychmiastowym. Huang zrezygnował na początku miesiąca po doniesieniach o romansach, w tym z kobietą, która według New York Timesa miała kontakt z oficerem chińskiego Ministerstwa Bezpieczeństwa Państwowego.\n\nZarząd twierdzi, że zasięgnął opinii „wysokich szczebli” rządu USA i jest przekonany, że powrót Huanga nie zagraża bezpieczeństwu narodowemu. Według anonimowych źródeł urzędnicy poinformowali zarząd pod koniec ubiegłego tygodnia, że nie złamano żadnych przepisów o bezpieczeństwie narodowym. Pierwsze rozmowy z Huangiem odbyły się w sobotę, decyzja zapadła w niedzielę. Prezydent Trump mówił, że rozmawiał z zarządem i że Huang „nie zrobił nic złego”. O powrót zabiegali też m.in. Elon Musk i inwestorzy Gavin Baker oraz Brad Gerstner.\n\nOd 8 listopada, gdy Huang przyznał się do romansu, akcje straciły prawie 33%. Spadek kursu przyspieszył rozmowy, jak twierdzą źródła CNBC. Colette Kress, dotychczasowa tymczasowa prezes, zostaje dyrektorem finansowym.\n\nSprawa nie jest zamknięta. Niezależny komitet z kancelarią Wachtell, Lipton, Rosen & Katz dokończy śledztwo, czy nie doszło do wycieku tajemnic firmy lub zagrożenia bezpieczeństwa narodowego. Senator Elizabeth Warren nazwała powrót lekkomyślnym. Huang ma zeznawać za zamkniętymi drzwiami 1 grudnia przed komisją Izby Reprezentantów, a 3 grudnia publicznie w Senacie, na przesłuchaniu o kontroli eksportu chipów. Chodzi o to, jak daleko sięgają jego wpływy na politykę eksportową.",
+   "for_you": "Nvidia dostarcza sprzęt, na którym działa większość Twoich obciążeń AI, więc stabilność jej kierownictwa ma znaczenie dla cen i dostępności GPU. Do przesłuchań w Kongresie sprawa pozostaje otwarta.",
+   "sources": [
+    {
+     "name": "CNBC",
+     "url": "https://www.cnbc.com/2026/11/23/nvidia-jensen-huang-ceo.html",
+     "primary": false
+    }
+   ],
+   "image_topic": "Jensen Huang",
+   "image": {
+    "url": "https://image.cnbcfm.com/api/v1/image/108353993-1787677585886-108353993-1787675816989-gettyimages-2266718431-NVIDIA_GTC.jpg?v=1795450778&w=1920&h=1080",
+    "credit": "cnbc.com",
+    "link": "https://www.cnbc.com/2026/11/23/nvidia-jensen-huang-ceo.html"
+   },
+   "may_affect": [
+    "nvda",
+    "tsm",
+    "amd",
+    "msft"
+   ],
+   "disclaimer": "To nie jest porada inwestycyjna.",
+   "image_fallback": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/75/2788-2888_San_Tomas_Expwy.jpg/960px-2788-2888_San_Tomas_Expwy.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+    "credit": "Coolcaesar / CC BY-SA 4.0, Wikimedia Commons",
+    "link": "https://commons.wikimedia.org/wiki/File:2788-2888_San_Tomas_Expwy.jpg"
+   }
+  },
+  {
+   "title": "GLM-5.4 od Z.ai: kolejny model z pętlą warstw, na razie bez otwartych wag",
+   "category": "modele",
+   "status": "potwierdzone",
+   "is_update": true,
+   "lede": "Chińskie laboratorium Z.ai wypuściło GLM-5.4, swój pierwszy model typu looped transformer. Dostępny jest przez API, na razie tylko w planie Coding Plan.",
+   "body": "Po Inkling 2 Mini z Thinking Machines Lab to drugi model z pętlą warstw w ciągu tygodnia. W looped transformerze grupa warstw ze wspólnymi wagami przechodzi kilka iteracji i dopracowuje stany ukryte z poprzedniego przebiegu. Sieć jest głębsza bez zwiększania liczby parametrów.\n\nZ.ai opisuje GLM-5.4 jako model do uogólnionego kodowania. Wagi nie są jeszcze otwarte. Simon Willison pisze, że dostęp dostał dopiero po wykupieniu Coding Plan, bo zwykłe API nie obsługuje jeszcze modelu. Oba warianty korzystają z tego samego API zgodnego z OpenAI Responses, pod adresem api.z.ai/api/v1, i ten sam klucz działa w obu.\n\nWillison napisał na szybko wtyczkę llm-glm do swojego narzędzia llm. Istnieje już llm-zai Tommy'ego Hughesa, ale nie obsługuje jeszcze nowego modelu. Willison zamierza więc wycofać swoją wtyczkę, gdy tamta nadgoni. Jego nieformalny test, czyli rysowanie pelikana na rowerze w trzech poziomach wysiłku, pokazuje, że 5.3 i 5.4 dają wyniki podobne do siebie i do modeli OpenAI czy Anthropic. Wcześniejsze GLM 5.1 i 5.2 miały wyraźnie odmienny styl.\n\nTo anegdotyczna ocena, nie benchmark. Nie ma cen ani wyników testów, więc o jakości w kodowaniu trudno na razie wyrokować.",
+   "for_you": "Jeśli używasz API zgodnego z OpenAI, sprawdzenie GLM-5.4 wymaga tylko zmiany adresu i klucza z Coding Plan. Pętla warstw staje się wyraźnym trendem w modelach do kodowania.",
+   "sources": [
+    {
+     "name": "Simon Willison",
+     "url": "https://simonwillison.net/2026/Nov/23/glm-54/",
+     "primary": false
+    }
+   ],
+   "image_topic": "Zhipu AI",
+   "image": {
+    "url": "https://static.simonwillison.net/static/2026/glm-family-4.webp",
+    "credit": "simonwillison.net",
+    "link": "https://simonwillison.net/2026/Nov/23/glm-54/"
+   },
+   "may_affect": [
+    "qwen4-max",
+    "kimi-k3-1-pro"
+   ],
+   "disclaimer": null,
+   "image_fallback": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/50/Qwen_3_chatbot_example_screenshot.webp/960px-Qwen_3_chatbot_example_screenshot.webp?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+    "credit": "Software: Alibaba Cloud Screenshot: VulcanSphere / Public domain, Wikimedia Commons",
+    "link": "https://commons.wikimedia.org/wiki/File:Qwen_3_chatbot_example_screenshot.webp"
+   },
+   "terms": [
+    "looped-transformer",
+    "open-weight"
+   ]
+  },
+  {
+   "title": "Anthropic: Enterprise Frontier Safeguards z zerową retencją danych w becie",
+   "category": "narzedzia",
+   "status": "potwierdzone",
+   "is_update": false,
+   "lede": "Anthropic otwiera publiczną betę Enterprise Frontier Safeguards. Wykrywanie nadużyć działa na danych, które zostają w infrastrukturze klienta, więc zgadza się z zasadą zero data retention.",
+   "body": "Zero data retention (ZDR) oznacza, że ani Anthropic, ani dostawcy chmury nie przechowują danych klienta. Dotąd firmy w ZDR miały ochronę klasyfikatorów Claude'a, które oceniają pojedyncze zapytania w czasie rzeczywistym. Zaawansowane ataki rozkładają się jednak na wiele zapytań, a każde z osobna wygląda niewinnie.\n\nAnthropic przywołuje swój wrześniowy raport o operacji przeciw około pięćdziesięciu organizacjom. Agent AI dzielił w niej pracę między wiele agentów działających równolegle i zapisywał zdobyte poświadczenia między sesjami. Oceniane pojedynczo, takie żądania wyglądałyby jak niegroźne zadania.\n\nEFS dodaje drugą warstwę: automatyczny monitoring bezpieczeństwa, który szuka wzorców nadużyć w wielu zapytaniach. Analizuje dane przechowywane wyłącznie na infrastrukturze klienta. Gdy wykryje ryzyko, tworzy Safety Case, czyli zgłoszenie do przeglądu, które nie zawiera wejść ani wyjść modelu. Można je odczytać z własnego storage'u lub przez API i podłączyć do systemów SIEM, czyli narzędzi do zbierania i analizy zdarzeń bezpieczeństwa. Monitoring ma wychwytywać celowe nadużycia, np. ofensywne operacje cybernetyczne, oraz agentów wykraczających poza intencje użytkownika.\n\nOd września program rozwijano z ponad stu klientami, w tym czwartą częścią firm z Fortune 100. W prywatnej becie testowali go m.in. Bridgewater, Salesforce i Stripe. Stripe chce trzymać logi rozmów w swoim środowisku AWS, a Wells Fargo podkreśla własne klucze szyfrujące.",
+   "for_you": "Jeśli budujesz produkty dla regulowanych branż, dotychczasowy kompromis między ZDR a monitoringiem nadużyć może zniknąć. Sprawdź, jak Safety Case wpina się w Twój stos logowania.",
+   "sources": [
+    {
+     "name": "Claude",
+     "url": "https://claude.com/resources/articles/zero-data-retention-with-enterprise-frontier-safeguards",
+     "primary": true
+    }
+   ],
+   "image_topic": "Anthropic",
+   "image": {
+    "url": "https://claude.com/resources/articles/zero-data-retention-with-enterprise-frontier-safeguards/opengraph-image/og",
+    "credit": "claude.com",
+    "link": "https://claude.com/resources/articles/zero-data-retention-with-enterprise-frontier-safeguards"
+   },
+   "may_affect": [
+    "claude-opus-5-5",
+    "claude-fable-5-2",
+    "amzn"
+   ],
+   "disclaimer": null,
+   "image_fallback": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/3/33/Jeff_Bezos_2016.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
+    "credit": "U.S. Department of Defense photo by Senior Master Sgt. Adrian Cadiz / CC BY 2.0, Wikimedia Commons",
+    "link": "https://commons.wikimedia.org/wiki/File:Jeff_Bezos_2016.jpg"
+   },
+   "terms": [
+    "zero-data-retention",
+    "klasyfikator"
+   ]
+  },
+  {
+   "title": "Amazon kupuje technologię Decart i zatrudnia założycieli",
+   "category": "inwestycje",
+   "status": "potwierdzone",
+   "is_update": false,
+   "lede": "Amazon przejmuje technologię izraelskiego startupu Decart i zatrudnia jego trzech założycieli oraz zespół. Media podają, że cena to 7,5 mld dolarów, ale Amazon tego nie potwierdza.",
+   "body": "Decart, założony w 2023 roku, znany jest z oprogramowania Decart Optimization Stack. Pozwala ono synchronizować modele AI między różnymi układami i szybko zmieniać sprzęt. Amazon ogłosił w poniedziałek, że kupuje „własnościową technologię” firmy i zatrudnia założycieli, badaczy i inżynierów.\n\nTo tzw. reverse acquihire: duża firma przejmuje technologię i ludzi, ale nie kupuje spółki w całości. Podobne umowy z Adept i Covariant Amazon zawarł w 2024 roku, a robiły to też Microsoft, Meta i Google. Takie transakcje bywają przedmiotem uwagi regulatorów, a Amazon zaznaczył, że ta wymaga ich zgody.\n\nPeter DeSantis, wiceprezes Amazona odpowiedzialny m.in. za modele bazowe i własne układy, uzasadnia ruch potrzebą wyciśnięcia więcej z każdego chipa. Amazon rozwija własne układy Trainium i Inferentia jako tańszą alternatywę dla Nvidii. Prezes Andy Jassy mówił w zeszłym miesiącu, że Trainium będą dostępne dla zewnętrznych klientów po raz pierwszy „późno w 2027 roku”.\n\nKwotę 7,5 mld dolarów podały liczne media, powołując się na osoby zbliżone do sprawy. Bloomberg pisał też, że Anthropic rozważał zakup Decart i przeprowadził analizę firmy, ale się wycofał.",
+   "for_you": "Warstwa przenośności między chipami to dokładnie to, czego brakuje, by wygodnie przenosić trening i inferencję poza CUDA. Warto obserwować, czy Amazon udostępni ją użytkownikom Trainium.",
+   "sources": [
+    {
+     "name": "CNBC",
+     "url": "https://www.cnbc.com/2026/11/23/amazon-decarts-ai-acquisition.html",
+     "primary": false
+    }
+   ],
+   "image_topic": "Amazon Web Services",
+   "image": {
+    "url": "https://image.cnbcfm.com/api/v1/image/108217403-1769610896097-108217403-1761591014974-gettyimages-2233522650-298621final.jpg?v=1773149071&w=1920&h=1080",
+    "credit": "cnbc.com",
+    "link": "https://www.cnbc.com/2026/11/23/amazon-decarts-ai-acquisition.html"
+   },
+   "may_affect": [
+    "amzn",
+    "nvda"
+   ],
+   "disclaimer": "To nie jest porada inwestycyjna.",
+   "image_fallback": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/3/33/Jeff_Bezos_2016.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
+    "credit": "U.S. Department of Defense photo by Senior Master Sgt. Adrian Cadiz / CC BY 2.0, Wikimedia Commons",
+    "link": "https://commons.wikimedia.org/wiki/File:Jeff_Bezos_2016.jpg"
+   },
+   "terms": [
+    "reverse-acquihire"
+   ]
+  },
+  {
+   "title": "DeepMind: agenci Gemini 4 i Lean przyspieszają algorytmy kwantowe",
+   "category": "modele",
+   "status": "potwierdzone",
+   "is_update": false,
+   "lede": "Zespoły agentów Gemini 4 ulepszyły znane algorytmy kwantowe, a każdy wynik został udowodniony w narzędziu Lean. DeepMind publikuje bibliotekę i rozwiązania na GitHubie.",
+   "body": "Komputery kwantowe mogą w przyszłości rozwiązywać problemy poza zasięgiem superkomputerów. Haczyk: nawet najlepsze algorytmy wymagają więcej zasobów, niż zapewni pierwszy sprzęt. DeepMind i Google Quantum AI zajęły się więc ich optymalizacją, a konkretnie obwodami kwantowymi, czyli instrukcjami dla komputera kwantowego, do modelowania energii fuzji, chemii i enzymów.\n\nObwodów nie da się sprawdzić na zwykłych komputerach ani dzisiejszych małych procesorach kwantowych, więc trzeba udowodnić ich poprawność matematycznie. Agenci robili to w Lean, narzędziu do formalnych dowodów. Dla każdego problemu niezależne zespoły agentów szukały usprawnień, które po weryfikacji w Lean trafiały do wspólnego notatnika. Co cztery godziny agenci z różnych zespołów spotykali się na wirtualnej konferencji, by porównywać pomysły. Koszt obliczeniowy stopniowo spadał do końca eksperymentu.\n\nDeepMind zastrzega, że uruchomienie tych algorytmów w symulacjach naukowych nadal wymagałoby więcej zasobów, niż dadzą pierwsze komputery kwantowe z korekcją błędów, choć poprawy są istotne. Opublikowano bibliotekę Lean dla algorytmów kwantowych, specyfikacje problemów i zweryfikowane rozwiązania. Konkretnych liczb poprawy nie podano.",
+   "for_you": "To praktyczny wzorzec: wiele agentów, wspólna pamięć i weryfikator formalny, który odrzuca błędne pomysły. Biblioteka Lean jest otwarta, więc można podejrzeć, jak zorganizowano pętlę.",
+   "sources": [
+    {
+     "name": "Google DeepMind",
+     "url": "https://deepmind.google/blog/finding-faster-quantum-algorithms-with-agents-and-formal-verification/",
+     "primary": true
+    }
+   ],
+   "image_topic": "Quantum algorithm",
+   "image": null,
+   "may_affect": [
+    "gemini-4-argon",
+    "googl"
+   ],
+   "disclaimer": null,
+   "image_fallback": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e2/Google_Campus%2C_Mountain_View%2C_CA.jpg/960px-Google_Campus%2C_Mountain_View%2C_CA.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+    "credit": "Austin McKinley / CC BY 3.0, Wikimedia Commons",
+    "link": "https://commons.wikimedia.org/wiki/File:Google_Campus,_Mountain_View,_CA.jpg"
+   },
+   "terms": [
+    "lean",
+    "obwod-kwantowy"
+   ]
+  },
+  {
+   "title": "Shirudo od OpenAI i Cisco: tarcze eBPF chronią Linuksa, zanim przyjdzie łatka",
+   "category": "narzedzia",
+   "status": "potwierdzone",
+   "is_update": false,
+   "lede": "OpenAI i Cisco udostępniają na licencji open source Shirudo, runtime blokujący exploity na działających systemach Linux bez restartu. Tarcze może generować Codex.",
+   "body": "Wdrożenie łatki bywa kwestią dni lub tygodni. Doraźna ochrona jest trudna, bo exploit i prawidłowe żądanie mogą używać tej samej operacji systemowej. Zablokowanie jej całkiem mogłoby wyłączyć usługę.\n\nShirudo (po japońsku „tarcza”) pozwala przetestować tymczasowe zabezpieczenie, zwane shieldem, które blokuje zachowanie otwierające lukę i przepuszcza uprawnione żądania. Po zatwierdzeniu przez operatora tarcza jest ładowana, a usługa działa dalej. Całość opiera się na eBPF, technologii Linuksa pozwalającej uruchamiać małe programy w wybranych punktach wewnątrz systemu.\n\nW kontrolowanym teście tarcza wygenerowana przez Codexa zablokowała próbę exploita Java4Shell na działającym Elasticsearchu. Dodała kontrolę wejścia do dekodera Base64 w Javie i dołączyła się do działającego procesu. Elasticsearch nie wymagał restartu.\n\nProjekt opiera się na czterech założeniach. Pierwsze to ochrona na żywo. Drugie to agenci, którzy badają podatności i budują tarcze, a decyzję o wdrożeniu zawsze podejmują ludzie. Trzecie to podpisywanie tarcz kryptograficznie i weryfikator eBPF w jądrze. Czwarte to weryfikacja sprzętowa przez moduł TPM, czyli układ z bezpiecznym zapisem, co zostało załadowane lub usunięte.\n\nKod jest na licencji BSD 2-Clause, a programy BPF mają podwójną licencję BSD i GPL. Autorzy chcą, by sprawdzone tarcze towarzyszyły ujawnieniom podatności. 15 grudnia odbędzie się webinar techniczny.",
+   "for_you": "Jeśli utrzymujesz usługi na Linuksie, to potencjalnie sposób na przeczekanie okna między ujawnieniem luki a wdrożeniem łatki. To też ciekawy przykład agenta generującego kod pod nadzorem człowieka.",
+   "sources": [
+    {
+     "name": "OpenAI",
+     "url": "https://openai.com/index/introducing-shirudo",
+     "primary": true
+    }
+   ],
+   "image_topic": "EBPF",
+   "image": {
+    "url": "https://images.ctfassets.net/kftzwdyauwt9/5K7gFDr3r8vgjdIcsW6RVY/aba5325ce7902e5d1499b907f8e78f0b/shirudo-partner-logos-landscape-2x.png?w=1600&h=900&fit=fill",
+    "credit": "openai.com",
+    "link": "https://openai.com/index/introducing-shirudo"
+   },
+   "may_affect": [
+    "msft"
+   ],
+   "disclaimer": null,
+   "image_fallback": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d6/Aerial_Microsoft_West_Campus_August_2009.jpg/960px-Aerial_Microsoft_West_Campus_August_2009.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+    "credit": "Jelson25 / Public domain, Wikimedia Commons",
+    "link": "https://commons.wikimedia.org/wiki/File:Aerial_Microsoft_West_Campus_August_2009.jpg"
+   },
+   "terms": [
+    "ebpf",
+    "exploit"
+   ]
+  }
+ ],
+ "market": {
+  "commentary": "Poniedziałek przyniósł szeroki odbicie całego koszyka, a motorem była Nvidia: po przywróceniu Jensena Huanga na stanowisko prezesa akcje zyskały 31,48%, po wcześniejszych spadkach. Za nią poszli dostawcy i odbiorcy chipów: Micron +19,04%, Intel +16,34%, Arm +16,08%, TSMC +14,08% i CoreWeave +22,32%. Większe spółki rosły słabiej: Microsoft +1,65%, Apple +1,9%, Amazon +3,47%. W horyzoncie 30 dni prawie cały koszyk nadal jest pod kreską, a Intel traci 31,39%. Dzisiejszy ruch to więc głównie odreagowanie po spadkach, a nie nowy trend.",
+  "mood": "Cały koszyk 18 spółek zamknął dzień na plusie, a spółki związane z chipami rosły najmocniej.",
+  "disclaimer": "To nie jest porada inwestycyjna.",
+  "rows": [
+   {
+    "ticker": "NVDA",
+    "name": "NVIDIA",
+    "close": 165.05,
+    "change_1d": 31.48,
+    "change_7d": 5.71,
+    "change_30d": -21.76,
+    "last_trade_date": "2026-11-23"
+   },
+   {
+    "ticker": "MSFT",
+    "name": "Microsoft",
+    "close": 492.5,
+    "change_1d": 1.65,
+    "change_7d": -4.92,
+    "change_30d": -6.1,
+    "last_trade_date": "2026-11-23"
+   },
+   {
+    "ticker": "GOOGL",
+    "name": "Alphabet",
+    "close": 282.1,
+    "change_1d": 6.34,
+    "change_7d": -0.57,
+    "change_30d": -11.9,
+    "last_trade_date": "2026-11-23"
+   },
+   {
+    "ticker": "META",
+    "name": "Meta",
+    "close": 597.6,
+    "change_1d": 6.55,
+    "change_7d": -4.6,
+    "change_30d": -7.01,
+    "last_trade_date": "2026-11-23"
+   },
+   {
+    "ticker": "AMZN",
+    "name": "Amazon",
+    "close": 255.39,
+    "change_1d": 3.47,
+    "change_7d": -0.92,
+    "change_30d": 2.98,
+    "last_trade_date": "2026-11-23"
+   },
+   {
+    "ticker": "AAPL",
+    "name": "Apple",
+    "close": 349.08,
+    "change_1d": 1.9,
+    "change_7d": -1.05,
+    "change_30d": 0.39,
+    "last_trade_date": "2026-11-23"
+   },
+   {
+    "ticker": "TSM",
+    "name": "TSMC",
+    "close": 363.6,
+    "change_1d": 14.08,
+    "change_7d": -2.64,
+    "change_30d": -13.12,
+    "last_trade_date": "2026-11-23"
+   },
+   {
+    "ticker": "AMD",
+    "name": "AMD",
+    "close": 453.46,
+    "change_1d": 6.85,
+    "change_7d": -10.08,
+    "change_30d": -12.25,
+    "last_trade_date": "2026-11-23"
+   },
+   {
+    "ticker": "AVGO",
+    "name": "Broadcom",
+    "close": 313.55,
+    "change_1d": 3,
+    "change_7d": -5.95,
+    "change_30d": -2.53,
+    "last_trade_date": "2026-11-23"
+   },
+   {
+    "ticker": "ORCL",
+    "name": "Oracle",
+    "close": 113.68,
+    "change_1d": 12.34,
+    "change_7d": -4.54,
+    "change_30d": -9.89,
+    "last_trade_date": "2026-11-23"
+   },
+   {
+    "ticker": "PLTR",
+    "name": "Palantir",
+    "close": 159.36,
+    "change_1d": 11.06,
+    "change_7d": -0.64,
+    "change_30d": -19,
+    "last_trade_date": "2026-11-23"
+   },
+   {
+    "ticker": "CRWV",
+    "name": "CoreWeave",
+    "close": 48.33,
+    "change_1d": 22.32,
+    "change_7d": -3.11,
+    "change_30d": -10.89,
+    "last_trade_date": "2026-11-23"
+   },
+   {
+    "ticker": "ARM",
+    "name": "Arm",
+    "close": 176.67,
+    "change_1d": 16.08,
+    "change_7d": 0.93,
+    "change_30d": -16,
+    "last_trade_date": "2026-11-23"
+   },
+   {
+    "ticker": "ASML",
+    "name": "ASML",
+    "close": 1383.78,
+    "change_1d": 9.28,
+    "change_7d": -1.64,
+    "change_30d": -11.96,
+    "last_trade_date": "2026-11-23"
+   },
+   {
+    "ticker": "SMCI",
+    "name": "Super Micro",
+    "close": 24.53,
+    "change_1d": 13.3,
+    "change_7d": -1.98,
+    "change_30d": -25.53,
+    "last_trade_date": "2026-11-23"
+   },
+   {
+    "ticker": "TSLA",
+    "name": "Tesla",
+    "close": 385.46,
+    "change_1d": 11.46,
+    "change_7d": 1.51,
+    "change_30d": 3.56,
+    "last_trade_date": "2026-11-23"
+   },
+   {
+    "ticker": "INTC",
+    "name": "Intel",
+    "close": 59.66,
+    "change_1d": 16.34,
+    "change_7d": 7.55,
+    "change_30d": -31.39,
+    "last_trade_date": "2026-11-23"
+   },
+   {
+    "ticker": "MU",
+    "name": "Micron",
+    "close": 707.7,
+    "change_1d": 19.04,
+    "change_7d": -1.57,
+    "change_30d": -19.36,
+    "last_trade_date": "2026-11-23"
+   }
+  ],
+  "as_of": "2026-11-23"
+ },
+ "rankings": {
+  "commentary": "W Artificial Analysis prowadzi Claude Fable 5.2, przed GPT-6.2 Astra i dwoma modelami Gemini 4. Na Hugging Face dominuje Inkling 2 Mini w kilku wersjach. Dane z LMArena są dziś niedostępne.",
+  "notes": [
+   {
+    "board": "aa",
+    "text": "Na czele Artificial Analysis stoi Claude Fable 5.2 od Anthropic, drugie miejsce ma GPT-6.2 Astra, trzecie Gemini 4 Neon."
+   },
+   {
+    "board": "hf_trending",
+    "text": "Trzy z czterech pierwszych miejsc zajmuje Inkling 2 Mini i jego warianty, a wersja Uncensored GGUF awansowała z #6 na #4."
+   }
+  ],
+  "lmarena": null,
+  "aa": [
+   {
+    "rank": 1,
+    "model": "Claude Fable 5.2",
+    "org": "Anthropic",
+    "score": 64.6,
+    "variant": "Max, Default Fallback",
+    "delta": null
+   },
+   {
+    "rank": 2,
+    "model": "GPT-6.2 Astra",
+    "org": "OpenAI",
+    "score": 62.1,
+    "variant": "Max",
+    "delta": null
+   },
+   {
+    "rank": 3,
+    "model": "Gemini 4 Neon",
+    "org": "Google",
+    "score": 61.4,
+    "variant": "Xhigh",
+    "delta": null
+   },
+   {
+    "rank": 4,
+    "model": "Gemini 4 Carbon",
+    "org": "Google",
+    "score": 60,
+    "variant": "High",
+    "delta": null
+   },
+   {
+    "rank": 5,
+    "model": "Claude Opus 5.5",
+    "org": "Anthropic",
+    "score": 59.1,
+    "variant": "Max, Default Fallback",
+    "delta": null
+   },
+   {
+    "rank": 6,
+    "model": "GPT-6.2 Sol",
+    "org": "OpenAI",
+    "score": 57.3,
+    "variant": "Max",
+    "delta": null
+   },
+   {
+    "rank": 7,
+    "model": "GPT-6 Astra",
+    "org": "OpenAI",
+    "score": 56.9,
+    "variant": "Max",
+    "delta": null
+   },
+   {
+    "rank": 8,
+    "model": "GPT-6.1 Sol",
+    "org": "OpenAI",
+    "score": 54.6,
+    "variant": "Max",
+    "delta": null
+   },
+   {
+    "rank": 9,
+    "model": "Claude Sonnet 5.5",
+    "org": "Anthropic",
+    "score": 54.5,
+    "variant": "Max, Default Fallback",
+    "delta": null
+   },
+   {
+    "rank": 10,
+    "model": "Gemini 4 Hydrogen",
+    "org": "Google",
+    "score": 53.9,
+    "variant": "Xhigh",
+    "delta": null
+   },
+   {
+    "rank": 11,
+    "model": "GPT-6.1 Terra",
+    "org": "OpenAI",
+    "score": 51.3,
+    "variant": "Max",
+    "delta": null
+   },
+   {
+    "rank": 12,
+    "model": "Gemini 4 Argon",
+    "org": "Google",
+    "score": 50.4,
+    "variant": "High",
+    "delta": null
+   },
+   {
+    "rank": 13,
+    "model": "Muse Wonder Full",
+    "org": "Meta",
+    "score": 50.1,
+    "variant": "Max",
+    "delta": null
+   },
+   {
+    "rank": 14,
+    "model": "Claude Fable 5.1",
+    "org": "Anthropic",
+    "score": 50,
+    "variant": "Xhigh, Default Fallback",
+    "delta": null
+   },
+   {
+    "rank": 15,
+    "model": "Kimi K3.1 Pro",
+    "org": "Kimi",
+    "score": 46.5,
+    "variant": null,
+    "delta": null
+   },
+   {
+    "rank": 16,
+    "model": "Claude Opus 5",
+    "org": "Anthropic",
+    "score": 44.2,
+    "variant": "Max",
+    "delta": null
+   },
+   {
+    "rank": 17,
+    "model": "GPT-6 Sol",
+    "org": "OpenAI",
+    "score": 44.2,
+    "variant": "Max",
+    "delta": null
+   },
+   {
+    "rank": 18,
+    "model": "Muse Wonder",
+    "org": "Meta",
+    "score": 43.6,
+    "variant": "Max",
+    "delta": null
+   },
+   {
+    "rank": 19,
+    "model": "Qwen4 Max",
+    "org": "Alibaba",
+    "score": 42.9,
+    "variant": null,
+    "delta": null
+   },
+   {
+    "rank": 20,
+    "model": "Muse Spark 1.3",
+    "org": "Meta",
+    "score": 36.6,
+    "variant": "Max",
+    "delta": null
+   }
+  ],
+  "hf_trending": [
+   {
+    "rank": 1,
+    "model": "thinkingmachines/Inkling-2-Mini",
+    "org": "thinkingmachines",
+    "score": 1136.5,
+    "delta": null
+   },
+   {
+    "rank": 2,
+    "model": "unsloth/Inkling-2-Mini-GGUF",
+    "org": "unsloth",
+    "score": 1001,
+    "delta": null
+   },
+   {
+    "rank": 3,
+    "model": "inworld/voice-isolator",
+    "org": "inworld",
+    "score": 573,
+    "delta": null
+   },
+   {
+    "rank": 4,
+    "model": "AtomicChat/Inkling-2-Mini-Uncensored-GGUF",
+    "org": "AtomicChat",
+    "score": 396.9,
+    "delta": 2
+   },
+   {
+    "rank": 5,
+    "model": "harness-hub/Qwen3.8-27B-pi-adapted",
+    "org": "harness-hub",
+    "score": 352.5,
+    "delta": null
+   },
+   {
+    "rank": 6,
+    "model": "higurashi-ai/Haru-4B",
+    "org": "higurashi-ai",
+    "score": 248,
+    "delta": null
+   },
+   {
+    "rank": 7,
+    "model": "tencent/Hy4-flash",
+    "org": "tencent",
+    "score": 223.5,
+    "delta": -3
+   },
+   {
+    "rank": 8,
+    "model": "SulphurAI/Sulphur-3",
+    "org": "SulphurAI",
+    "score": 216,
+    "delta": 4
+   },
+   {
+    "rank": 9,
+    "model": "sensenova/SenseNova-Loop-9B",
+    "org": "sensenova",
+    "score": 208,
+    "delta": null
+   },
+   {
+    "rank": 10,
+    "model": "apple/FastFrames-L",
+    "org": "apple",
+    "score": 190,
+    "delta": null
+   },
+   {
+    "rank": 11,
+    "model": "Qwen/Qwen3.8-27B",
+    "org": "Qwen",
+    "score": 182.5,
+    "delta": -2
+   },
+   {
+    "rank": 12,
+    "model": "apple/DepthPro2",
+    "org": "apple",
+    "score": 174.5,
+    "delta": -4
+   },
+   {
+    "rank": 13,
+    "model": "Lightricks/LTX-2.5",
+    "org": "Lightricks",
+    "score": 163,
+    "delta": null
+   },
+   {
+    "rank": 14,
+    "model": "chatrlabs/Qwen-Image-2.1-Uncensored-Omni-Quantized",
+    "org": "chatrlabs",
+    "score": 150.5,
+    "delta": null
+   },
+   {
+    "rank": 15,
+    "model": "RadixArk/DaisyRose-27B",
+    "org": "RadixArk",
+    "score": 111.5,
+    "delta": 4
+   },
+   {
+    "rank": 16,
+    "model": "Sentinel7/h3",
+    "org": "Sentinel7",
+    "score": 111.2,
+    "delta": "new"
+   },
+   {
+    "rank": 17,
+    "model": "meituan-longcat/LongCat-Video-Avatar-1.6",
+    "org": "meituan-longcat",
+    "score": 110.5,
+    "delta": -2
+   },
+   {
+    "rank": 18,
+    "model": "maxwell-model/Maxwell-V1-Flash",
+    "org": "maxwell-model",
+    "score": 110,
+    "delta": null
+   },
+   {
+    "rank": 19,
+    "model": "inclusionAI/Ling-3.2-air",
+    "org": "inclusionAI",
+    "score": 107,
+    "delta": "new"
+   },
+   {
+    "rank": 20,
+    "model": "facebook/sam-3d-body-dinov3",
+    "org": "facebook",
+    "score": 106,
+    "delta": null
+   }
+  ],
+  "areas": []
+ },
+ "rumors": [],
+ "big_moves": [
+  {
+   "entity_id": "nvda",
+   "board": "market",
+   "change": "+31,48% w 1 dzień",
+   "why": "CNBC pisze, że zarząd Nvidii przywrócił Jensena Huanga na stanowisko prezesa, a akcje wzrosły o 31%. Zarząd podał, że miał w tej sprawie wkład od wysokich szczebli rządu USA. Wzrost przyszedł po prawie 33% spadku od 8 listopada.",
+   "why_type": "fakt",
+   "sources": [
+    {
+     "name": "CNBC",
+     "url": "https://www.cnbc.com/2026/11/23/nvidia-jensen-huang-ceo.html",
+     "primary": false
+    }
+   ],
+   "why_short": "powrót Huanga na stanowisko prezesa"
+  },
+  {
+   "entity_id": "crwv",
+   "board": "market",
+   "change": "+22,32% w 1 dzień",
+   "why": "Żadne źródło nie łączy tego ruchu z wydarzeniem w CoreWeave. Możliwe, że spółka, jako dostawca mocy GPU, poszła za Nvidią po jej odbiciu, ale to hipoteza.",
+   "why_type": "hipoteza",
+   "sources": [
+    {
+     "name": "CNBC",
+     "url": "https://www.cnbc.com/2026/11/23/nvidia-jensen-huang-ceo.html",
+     "primary": false
+    }
+   ],
+   "why_short": "możliwe, że podążyła za odbiciem Nvidii"
+  },
+  {
+   "entity_id": "mu",
+   "board": "market",
+   "change": "+19,04% w 1 dzień",
+   "why": "Brak źródła łączącego ruch z konkretnym zdarzeniem w Micronie. Możliwe, że to część szerokiego odbicia spółek półprzewodnikowych po powrocie Huanga w Nvidii.",
+   "why_type": "hipoteza",
+   "sources": [
+    {
+     "name": "CNBC",
+     "url": "https://www.cnbc.com/2026/11/23/nvidia-jensen-huang-ceo.html",
+     "primary": false
+    }
+   ],
+   "why_short": "możliwe odbicie całego sektora chipów"
+  },
+  {
+   "entity_id": "intc",
+   "board": "market",
+   "change": "+16,34% w 1 dzień",
+   "why": "Brak źródła łączącego ruch z wydarzeniem w Intelu. Możliwe, że to odbicie całego sektora po wzroście Nvidii, po tym jak Intel stracił 31,39% w 30 dni.",
+   "why_type": "hipoteza",
+   "sources": [
+    {
+     "name": "CNBC",
+     "url": "https://www.cnbc.com/2026/11/23/nvidia-jensen-huang-ceo.html",
+     "primary": false
+    }
+   ],
+   "why_short": "możliwe odbicie sektora po wzroście Nvidii"
+  },
+  {
+   "entity_id": "arm",
+   "board": "market",
+   "change": "+16,08% w 1 dzień",
+   "why": "Brak źródła, które wiąże ruch z newsem o Arm. Rosły niemal wszystkie spółki koszyka, więc to raczej ruch rynkowy, możliwe że napędzany Nvidią.",
+   "why_type": "hipoteza",
+   "sources": [
+    {
+     "name": "CNBC",
+     "url": "https://www.cnbc.com/2026/11/23/nvidia-jensen-huang-ceo.html",
+     "primary": false
+    }
+   ],
+   "why_short": "szeroki ruch rynku po wzroście Nvidii"
+  },
+  {
+   "entity_id": "tsm",
+   "board": "market",
+   "change": "+14,08% w 1 dzień",
+   "why": "Brak źródła łączącego wzrost z wydarzeniem w TSMC. Możliwe, że to część odbicia spółek półprzewodnikowych po powrocie Huanga w Nvidii.",
+   "why_type": "hipoteza",
+   "sources": [
+    {
+     "name": "CNBC",
+     "url": "https://www.cnbc.com/2026/11/23/nvidia-jensen-huang-ceo.html",
+     "primary": false
+    }
+   ],
+   "why_short": "możliwe odbicie sektora po Nvidii"
+  },
+  {
+   "entity_id": "atomicchat-inkling-2-mini-uncensored-gguf",
+   "board": "hf_trending",
+   "change": "awans z #6 na #4",
+   "why": "Brak jednoznacznej przyczyny. To wariant modelu Inkling 2 Mini, który zajmuje czołowe miejsca listy, więc możliwe, że ciągnie za nim popularność oryginału.",
+   "why_type": "hipoteza",
+   "sources": [],
+   "why_short": "możliwe, że korzysta z popularności Inkling 2 Mini"
+  },
+  {
+   "entity_id": "tencent-hy4-flash",
+   "board": "hf_trending",
+   "change": "spadek z #4 na #7",
+   "why": "Brak jednoznacznej przyczyny.",
+   "why_type": "brak",
+   "sources": [],
+   "why_short": "brak jednoznacznej przyczyny"
+  },
+  {
+   "entity_id": "sulphurai-sulphur-3",
+   "board": "hf_trending",
+   "change": "awans z #12 na #8",
+   "why": "Brak jednoznacznej przyczyny.",
+   "why_type": "brak",
+   "sources": [],
+   "why_short": "brak jednoznacznej przyczyny"
+  },
+  {
+   "entity_id": "qwen-qwen3-8-27b",
+   "board": "hf_trending",
+   "change": "spadek z #9 na #11",
+   "why": "Brak jednoznacznej przyczyny. Wokół Qwen3.8-27B pojawia się za to wiele pochodnych, na przykład adaptery i kwantyzacje, więc możliwe, że uwaga przeniosła się na nie.",
+   "why_type": "hipoteza",
+   "sources": [
+    {
+     "name": "Hugging Face",
+     "url": "https://huggingface.co/nari-labs/Qwen3.8-27B-NariQ-GGUF",
+     "primary": false
+    }
+   ],
+   "why_short": "możliwe, że uwaga przeszła na pochodne wersje"
+  },
+  {
+   "entity_id": "apple-depthpro2",
+   "board": "hf_trending",
+   "change": "spadek z #8 na #12",
+   "why": "Brak jednoznacznej przyczyny.",
+   "why_type": "brak",
+   "sources": [],
+   "why_short": "brak jednoznacznej przyczyny"
+  },
+  {
+   "entity_id": "radixark-daisyrose-27b",
+   "board": "hf_trending",
+   "change": "awans z #19 na #15",
+   "why": "Brak jednoznacznej przyczyny.",
+   "why_type": "brak",
+   "sources": [],
+   "why_short": "brak jednoznacznej przyczyny"
+  },
+  {
+   "entity_id": "sentinel7-h3",
+   "board": "hf_trending",
+   "change": "nowy na #16",
+   "why": "Brak jednoznacznej przyczyny.",
+   "why_type": "brak",
+   "sources": [],
+   "why_short": "brak jednoznacznej przyczyny"
+  },
+  {
+   "entity_id": "meituan-longcat-longcat-video-avatar-1-6",
+   "board": "hf_trending",
+   "change": "spadek z #15 na #17",
+   "why": "Brak jednoznacznej przyczyny.",
+   "why_type": "brak",
+   "sources": [],
+   "why_short": "brak jednoznacznej przyczyny"
+  },
+  {
+   "entity_id": "inclusionai-ling-3-2-air",
+   "board": "hf_trending",
+   "change": "nowy na #19",
+   "why": "Brak jednoznacznej przyczyny.",
+   "why_type": "brak",
+   "sources": [],
+   "why_short": "brak jednoznacznej przyczyny"
+  },
+  {
+   "entity_id": "minimaxai-minimax-h3-image",
+   "board": "hf_trending",
+   "change": "wypadł z #16",
+   "why": "Brak jednoznacznej przyczyny.",
+   "why_type": "brak",
+   "sources": [],
+   "why_short": "brak jednoznacznej przyczyny"
+  },
+  {
+   "entity_id": "davidau-qwen3-8-27b-turbo-fable-cold-fusion-735-882-heretic-uncensored-neo-coder-max-mtp-gguf",
+   "board": "hf_trending",
+   "change": "wypadł z #18",
+   "why": "Brak jednoznacznej przyczyny.",
+   "why_type": "brak",
+   "sources": [],
+   "why_short": "brak jednoznacznej przyczyny"
+  }
+ ],
+ "follow_ups": [
+  {
+   "entity_id": "nvda",
+   "move": "+31,48% w 1 dzień",
+   "related_story": "Anthropic traci prawie 9% pierwszego pełnego dnia na giełdzie, a technologie spadają razem z nim",
+   "story_date": "2026-11-21"
+  },
+  {
+   "entity_id": "crwv",
+   "move": "+22,32% w 1 dzień",
+   "related_story": "Anthropic debiutuje na Nasdaq jako „ANT”, wycena około 1,5 bln dolarów",
+   "story_date": "2026-11-20"
+  },
+  {
+   "entity_id": "intc",
+   "move": "+16,34% w 1 dzień",
+   "related_story": "Intel podpisał pierwszego zewnętrznego klienta dla procesu 18A",
+   "story_date": "2026-11-19"
+  }
+ ],
+ "closing": "W najbliższych dniach warto sprawdzić, jak Claude Ship wypada w praktyce i czy na rynku utrzyma się odbicie po powrocie Huanga. Przed nami także przesłuchania w Senacie zaplanowane od 1 grudnia.",
+ "weekly": null,
+ "monthly": null,
+ "spotlight": {
+  "company_id": "tsm",
+  "model_id": "claude-fable-5-2"
+ },
+ "minutes": 11,
+ "supplement_minutes": 0
+}

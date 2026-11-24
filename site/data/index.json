@@ -1,6 +1,18 @@
 {
  "editions": [
   {
+   "date": "2026-11-24",
+   "kind": "daily",
+   "lead_title": "Claude Ship: agenci Anthropic poprawiają i zatwierdzają pull requesty",
+   "minutes": 11,
+   "categories": [
+    "narzedzia",
+    "gielda",
+    "modele",
+    "inwestycje"
+   ]
+  },
+  {
    "date": "2026-11-23",
    "kind": "daily",
    "lead_title": "OpenAI publikuje własne pomiary perplexity i chce, by stały się wspólną miarą postępu",

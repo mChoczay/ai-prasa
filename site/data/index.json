@@ -1,6 +1,16 @@
 {
  "editions": [
   {
+   "date": "2026-11-25",
+   "kind": "daily",
+   "lead_title": "OpenAI: modele GPT-6 same projektują białka, bez wyspecjalizowanych modeli biologicznych",
+   "minutes": 13,
+   "categories": [
+    "modele",
+    "inne"
+   ]
+  },
+  {
    "date": "2026-11-24",
    "kind": "daily",
    "lead_title": "Claude Ship: agenci Anthropic poprawiają i zatwierdzają pull requesty",

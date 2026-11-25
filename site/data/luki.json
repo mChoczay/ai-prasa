@@ -1,6 +1,40 @@
 {
- "updated_at": "2026-11-22T22:50:13.566Z",
+ "updated_at": "2026-11-25T05:30:41.451Z",
  "vulns": [
+  {
+   "key": "CVE-2026-16232",
+   "cve_id": "CVE-2026-16232",
+   "product": "Check Point SmartConsole",
+   "summary": "Obejście uwierzytelniania w SmartConsole pozwala atakującemu uruchamiać skrypty na serwerach zarządzania Check Point i wyłączać zaporę.",
+   "severity": "",
+   "status": "open",
+   "fixed_in": "",
+   "first_date": "2026-11-25",
+   "checked_at": "2026-11-25T05:30:39.695Z",
+   "patched_at": "",
+   "story": {
+    "date": "2026-11-25",
+    "n": 3,
+    "title": "Kampania włamań na serwery zarządzania Check Point"
+   }
+  },
+  {
+   "key": "CVE-2026-61500",
+   "cve_id": "CVE-2026-61500",
+   "product": "HFS (HTTP File Server)",
+   "summary": "Serwer HFS generuje cookie sesji z przewidywalnych liczb, więc atakujący może odtworzyć klucz i podszyć się pod administratora bez hasła.",
+   "severity": "",
+   "status": "patched",
+   "fixed_in": "3.2.1",
+   "first_date": "2026-11-25",
+   "checked_at": "2026-11-25T05:30:39.695Z",
+   "patched_at": "2026-11-25T05:30:39.695Z",
+   "story": {
+    "date": "2026-11-25",
+    "n": 3,
+    "title": "Kampania włamań na serwery zarządzania Check Point"
+   }
+  },
   {
    "key": "CVE-2026-114727",
    "cve_id": "CVE-2026-114727",
@@ -61,7 +95,7 @@
    "status": "open",
    "fixed_in": "",
    "first_date": "2026-11-22",
-   "checked_at": "2026-11-22T22:50:11.720Z",
+   "checked_at": "2026-11-25T05:30:39.695Z",
    "patched_at": "",
    "story": {
     "date": "2026-11-22",
@@ -78,7 +112,7 @@
    "status": "open",
    "fixed_in": "",
    "first_date": "2026-11-20",
-   "checked_at": "2026-11-22T22:50:11.720Z",
+   "checked_at": "2026-11-25T05:30:39.695Z",
    "patched_at": "",
    "story": {
     "date": "2026-11-20",

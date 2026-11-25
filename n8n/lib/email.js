@@ -91,7 +91,7 @@ function renderErrorEmail({ step, message, kind }) {
     subject = 'Poranna prasa AI: wstrzymane – klucz API nieważny';
     body = `<p>Pipeline zatrzymał się, bo klucz API został odrzucony (prawdopodobnie wygasł). Nie będzie ponawiał prób.</p>
 <ol><li>W Console utwórz nowy klucz w workspace używanym przez n8n.</li>
-<li>Wklej go do credentiala <code>Anthropic account 2</code> w n8n.</li>
+<li>Dodaj go w n8n jako nowy credential Anthropic i podepnij w węźle <strong>Call Claude</strong> w workflow <strong>PPAI · claude</strong> (klucze wygasają, więc nazwa się zmienia).</li>
 <li>Uruchom ręcznie workflow <strong>PPAI · odblokuj</strong> (ustawia <code>pipeline_state.paused</code> na <code>false</code>).</li></ol>`;
   } else if (kind === 'budget') {
     subject = 'Poranna prasa AI: wstrzymane – miesięczny budżet wyczerpany';

@@ -49,7 +49,9 @@ test('credits error mail', () => {
 test('auth error mail', () => {
   const { subject, html } = renderErrorEmail({ step: 'PPAI · claude', message: 'AUTH: 401', kind: 'auth' });
   assert.equal(subject, 'Poranna prasa AI: wstrzymane – klucz API nieważny');
-  assert.match(html, /Anthropic account 2/);
+  // Keys now expire every 30 days, so the mail points to where the key goes, not to one key's name.
+  assert.doesNotMatch(html, /Anthropic account 2/);
+  assert.match(html, /<strong>Call Claude<\/strong> w workflow <strong>PPAI · claude<\/strong>/);
 });
 
 test('budget stop mail', () => {

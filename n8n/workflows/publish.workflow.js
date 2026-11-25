@@ -337,7 +337,7 @@ const sendMail = node({
       message: expr('{{ $json.html }}'),
       options: { appendAttribution: false, senderName: 'Poranna prasa AI' },
     },
-    credentials: { gmailOAuth2: { id: 'fty5idxwhe9Od6Fu', name: 'Gmail account' } },
+    credentials: { gmailOAuth2: { id: '020mgqxb8eMbVh3H', name: 'ai-mail' } },
   },
   output: [{ id: 'm1', threadId: 't1', labelIds: ['SENT'] }],
 });

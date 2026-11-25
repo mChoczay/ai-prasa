@@ -69,7 +69,7 @@ const callClaude = node({
         timeout: 600000,
       },
     },
-    credentials: { anthropicApi: { id: '03l5ymVMVYDNqqbt', name: 'Anthropic account 2' } },
+    credentials: { anthropicApi: { id: 'Cda0VJtdeKx21Dcj', name: 'ai-prasa-30days' } },
   },
   output: [{ statusCode: 200, headers: {}, body: { stop_reason: 'end_turn', content: [{ type: 'text', text: '{"ok":true}' }], usage: { input_tokens: 20, output_tokens: 5 } } }],
 });

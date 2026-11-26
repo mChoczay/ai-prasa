@@ -10,13 +10,23 @@ const PATTERNS = [
   ['Bearer token', new RegExp('Bearer\\s+[A-Za-z0-9._~+/-]{30,}')],
 ];
 
-const MAIL = /[A-Za-z0-9._%+-]+@([A-Za-z0-9-]+(?:\.[A-Za-z0-9-]+)+)/g;
+// Organisations' public mailboxes (where to report a bug, the press office) appear in news texts. On a
+// free-mail domain the same name could be anyone's private address, so those stay flagged.
+const ROLE_MAILBOXES = ['security', 'psirt', 'cert', 'abuse', 'press', 'media', 'info', 'support', 'privacy', 'legal'];
+const FREE_MAIL_DOMAINS = ['gmail.com', 'googlemail.com', 'outlook.com', 'hotmail.com', 'live.com', 'yahoo.com', 'icloud.com', 'proton.me', 'protonmail.com', 'wp.pl', 'o2.pl', 'onet.pl', 'interia.pl', 'gazeta.pl'];
+
+const MAIL = /([A-Za-z0-9._%+-]+)@([A-Za-z0-9-]+(?:\.[A-Za-z0-9-]+)+)/g;
+
+function _publicRoleMailbox(local, domain) {
+  return ROLE_MAILBOXES.includes(local.toLowerCase()) && !FREE_MAIL_DOMAINS.includes(domain);
+}
 
 export function findLeaks(text) {
   const s = String(text || '');
   const found = PATTERNS.filter(([, re]) => re.test(s)).map(([kind]) => kind);
   for (const m of s.matchAll(MAIL)) {
-    const domain = m[1].toLowerCase();
+    const domain = m[2].toLowerCase();
+    if (_publicRoleMailbox(m[1], domain)) continue;
     if (!ALLOWED_MAIL_DOMAINS.some((d) => domain === d || domain.endsWith('.' + d))) {
       found.push('e-mail address');
       break;

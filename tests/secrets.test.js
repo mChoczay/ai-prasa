@@ -16,6 +16,15 @@ test('findLeaks catches an n8n host, API keys, tokens and real e-mail addresses'
   assert.deepEqual(findLeaks('github_' + 'pat_' + 'A1'.repeat(20)), ['GitHub token']);
   assert.deepEqual(findLeaks('Authorization: Bearer ' + 'x'.repeat(40)), ['Bearer token']);
   assert.deepEqual(findLeaks('mail to someone' + '@' + 'gmail.com please'), ['e-mail address']);
+  // A role mailbox on a free-mail domain can be anyone's private address.
+  assert.deepEqual(findLeaks('security' + '@' + 'gmail.com'), ['e-mail address']);
+});
+
+test('findLeaks lets public role mailboxes quoted in the news through', () => {
+  // Editions quote where to report a bug, e.g. the Linux kernel security team.
+  for (const ok of ['zgłoszenia na security@kernel.org', 'psirt@cisco.com', 'abuse@example.net', 'press@openai.com']) {
+    assert.deepEqual(findLeaks(ok), [], ok);
+  }
 });
 
 test('findLeaks lets placeholders and project text through', () => {

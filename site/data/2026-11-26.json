@@ -1,0 +1,1454 @@
+{
+ "date": "2026-11-26",
+ "edition": "daily",
+ "generated_at": "2026-11-26T04:32:54.055Z",
+ "quiet_day": false,
+ "greeting": "Kiedy pracowałeś, wyszła poprawka na dwunastoletnią lukę w jądrze Linuksa, a rynek znów oddawał grunt firmom od infrastruktury AI. Poniżej najpierw luka w NFS, potem skrót tego, co działo się na giełdzie i w rankingach.",
+ "lead_story": {
+  "title": "Nfs2root: dwunastoletnia luka w serwerze NFS jądra Linuksa daje zdalnego roota bez logowania",
+  "category": "inne",
+  "status": "potwierdzone",
+  "is_update": false,
+  "lede": "Zespół OpenSec opisał CVE-2026-99362: błąd w serwerze NFS jądra Linuksa pozwala bez logowania zdobyć roota. Luka siedzi w kodzie od wersji 3.16, a poprawki już wyszły.",
+  "body": "Port 2049 jest otwarty na serwerach plików, urządzeniach NAS, farmach buildów i węzłach storage w Kubernetesie. Tam nasłuchuje serwer NFS, czyli sieciowy system plików działający wewnątrz jądra Linuksa. Według OpenSec od 2014 roku każdy, kto mógł się z nim połączyć, mógł zapisać dane w pamięci jądra jeszcze przed zalogowaniem.\n\nLuka dostała numer CVE-2026-99362 i ocenę 9,8 w skali, w której maksimum to 10. Błąd wprowadził commit 47ee52986472, który trafił do Linuksa 3.16. Dotyczy więc każdego jądra od tamtej wersji: LTS, dystrybucyjnych i tych w urządzeniach sieciowych.\n\nW NFSv4.1 każdy slot sesji przechowuje ostatnią odpowiedź, żeby ponowione żądanie dostało ją dokładnie raz. Rozmiar tej pamięci podręcznej ustala klient. Gdy ustawi minimum, bufor każdego slotu ma zero bajtów. Funkcja nfsd4_sequence() zawęża bufor odpowiedzi do tego limitu, zanim zaakceptuje slot.\n\nKlient dopycha pole tag w żądaniu tak, by bufor zapełnił się zaraz po kodzie operacji SEQUENCE. Koder kończy pracę bez zgłoszenia błędu, a serwer uznaje, że SEQUENCE się udało. Kopiuje więc całą odpowiedź do bufora, w którym nic się nie mieści: 80 bajtów, z czego 61 ląduje poza obiektem na stercie jądra, a 40 wybiera klient. Sterta to obszar pamięci, z którego jądro przydziela dynamiczne bloki.\n\nOpenSec nie publikuje exploita, ale opisuje kroki. Każdy to zwykłe żądanie NFS. Najpierw żądanie powtórzenia zwraca 3,8 KB sterty jądra, a z nią przesunięcie KASLR, czyli losowe rozmieszczenie jądra w pamięci, które ma utrudniać ataki. Potem atakujący wypełnia zwolnioną pamięć fałszywym wywołaniem zwrotnym zbudowanym z nazw klientów NFS. Na końcu się rozłącza, nfsd wywołuje fałszywy callback, a jądro uruchamia /bin/sh jako root. W nagraniu ofiara wypisuje root oraz uid=0(root), po czym sama się wyłącza.\n\nBłąd znalazła Antara, narzędzie OpenSec typu white-box, czyli analizujące kod źródłowy. Według autorów oznaczyła ścieżkę pamięci odpowiedzi w nfsd, oceniła ją na 9,8 i sama zbudowała wyciek, dowolne zwolnienie pamięci i powłokę roota, bez udziału człowieka.\n\nOpenSec zgłosił błąd opiekunom NFSD i security@kernel.org 22 września 2026 razem z pełnym exploitem i łatką. CVE opublikowano wraz z poprawkami 20 listopada. Poprawki są w Linuksie 6.12.117, 6.18.61, 7.3.2 i 7.4-rc1. Łatka sprawdza, czy odpowiedź się zmieści, zanim zajmie slot, a koder zgłasza teraz, czego nie może zapisać.\n\nHartowanie jądra nie usuwa samego przepełnienia, więc trzeba załatać każdy host. Na dystrybucyjnym jądrze zainstaluj aktualizację wymieniającą CVE-2026-99362, a potem zrestartuj nfs-server. Według autorów wyłącza to pNFS i część funkcji 4.2. Atak to poprawny ruch NFS, więc nie ma sygnatury sieciowej, po której dałoby się go wykryć.",
+  "for_you": "Jeśli twoje buildy, rejestry artefaktów lub volumeny w Kubernetesie stoją na NFS, sprawdź wersje jąder i zamknij port 2049 przed światem. Warto też zapamiętać, że agenci do audytu kodu potrafią przejść od znalezienia luki do działającego exploita.",
+  "sources": [
+   {
+    "name": "opensec.in",
+    "url": "https://opensec.in/blog/nfs2root-cve-2026-99362",
+    "primary": true
+   }
+  ],
+  "image_topic": "Network File System",
+  "image": {
+   "url": "https://opensec.in/blog/media/ddf81bad-ef8d-43da-8d5b-bbb9d0a5f9a3.jpg",
+   "credit": "opensec.in",
+   "link": "https://opensec.in/blog/nfs2root-cve-2026-99362"
+  },
+  "may_affect": [],
+  "disclaimer": null,
+  "image_fallback": null
+ },
+ "stories": [
+  {
+   "title": "S&P grozi obniżeniem ratingu Nvidii: rosnące ryzyko w zarządzaniu firmą",
+   "category": "gielda",
+   "status": "potwierdzone",
+   "is_update": true,
+   "lede": "Agencja S&P umieściła Nvidię na liście obserwacyjnej z negatywnymi perspektywami. Powodem są luki w zarządzaniu firmą po odwołaniu i powrocie Jensena Huanga.",
+   "body": "Kiedy pracowałeś, agencja ratingowa S&P ostrzegła, że ocena kredytowa Nvidii może spaść o jeden stopień w ciągu 90 dni. Rating, czyli ocena zdolności firmy do spłaty długów, wynosi teraz AA, trzeci najwyższy poziom. Obniżka oznaczałaby AA-.\n\nS&P pisze, że sprawa prezesa i pytania o możliwe naruszenia kontroli eksportu odsłoniły słabości w zarządzaniu, zwłaszcza w składzie i skuteczności rady nadzorczej. Agencja zwraca uwagę na długi staż części członków: Harvey Jones i Tench Coxe zasiadają w radzie od 1993 roku, Brooke Seawell od 1997. Według S&P może to osłabiać ich niezależność. Wskazuje też na brak planu sukcesji, ryzyko „zależności od jednego człowieka” i pyta o kontrolę ryzyka geopolitycznego związanego z Chinami.\n\nPowrót Huanga nie rozwiązał pytań o nadzór rady nad zarządem. Agencja nie zna żadnych działań naprawczych rady i zamierza spotkać się z nią oraz z kierownictwem. Obniżka ograniczy się do jednego stopnia, chyba że śledztwa lub ujawnione informacje wskażą na szersze szkody dla reputacji firmy.\n\nObniżka ratingu zwykle oznacza tańsze obligacje, wyższe rentowności i droższe pożyczki. W czerwcu Nvidia wyemitowała obligacje na 25 mld dolarów z terminami od 2028 do 2056 roku, krótko po podniesieniu oceny z AA- do AA. W głównym amerykańskim indeksie obligacji korporacyjnych wysokiej jakości ma ich około 32,5 mld dolarów, według Bloomberga.\n\nWcześniej, 18 listopada, agencja Moody's zmieniła perspektywę Nvidii z pozytywnej na stabilną, także z powodu zarządzania. Nie zmieniła jej po powrocie Huanga w poniedziałek.",
+   "for_you": "To głównie sygnał o stabilności dostawcy infrastruktury, od którego zależy większość stosów AI. Na razie nie zmienia niczego w produktach ani cenach.",
+   "sources": [
+    {
+     "name": "CNBC",
+     "url": "https://www.cnbc.com/2026/11/26/nvidia-market-governance-risk.html",
+     "primary": false
+    }
+   ],
+   "image_topic": "Nvidia",
+   "image": {
+    "url": "https://image.cnbcfm.com/api/v1/image/108559274-1795616819098-gettyimages-2306584360-vcg111684383907.jpeg?v=1795616838&w=1920&h=1080",
+    "credit": "cnbc.com",
+    "link": "https://www.cnbc.com/2026/11/26/nvidia-market-governance-risk.html"
+   },
+   "may_affect": [
+    "nvda"
+   ],
+   "disclaimer": "To nie jest porada inwestycyjna.",
+   "image_fallback": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/75/2788-2888_San_Tomas_Expwy.jpg/960px-2788-2888_San_Tomas_Expwy.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+    "credit": "Coolcaesar / CC BY-SA 4.0, Wikimedia Commons",
+    "link": "https://commons.wikimedia.org/wiki/File:2788-2888_San_Tomas_Expwy.jpg"
+   }
+  },
+  {
+   "title": "Sprzedawcy GPU Nvidii szukają nabywców po zaostrzeniu zasad dostępu zdalnego dla Chin",
+   "category": "regulacje",
+   "status": "potwierdzone",
+   "is_update": true,
+   "lede": "Od 16 listopada na rynek trafia nietypowo dużo kart Nvidii. Rozmówcy CNBC wiążą to z nową regułą, która ogranicza chińskim firmom wynajem mocy w zagranicznych centrach danych.",
+   "body": "Dotąd amerykańskie kontrole eksportu blokowały sprzedaż najmocniejszych układów Nvidii do Chin, ale chińskie firmy mogły je wynajmować zdalnie w centrach danych w innych krajach. Teraz to się zmienia. Biuro Przemysłu i Bezpieczeństwa (BIS) w Departamencie Handlu ogłosiło 16 listopada przepis tymczasowy, który wszedł w życie 19 listopada.\n\nJack Duhamel, prezes rynku infrastruktury AI GPU Mart, i dwie osoby zaznajomione ze sprawą mówią CNBC, że wzrost liczby ofert wiąże się bezpośrednio z nową regułą. Jedna z firm miała wprost powiązać sprzedaż z przepisem. Sprzęt był pierwotnie przeznaczony do centrów danych, w których chińscy klienci wynajmowali dostęp. Od ogłoszenia reguły krążą oferty znalezienia nabywców dla tysięcy kart B300, jednych z najmocniejszych w ofercie Nvidii. Nvidia odmówiła komentarza.\n\nPrzedstawiciel handlowy USA Jamieson Greer powiedział, że celem jest zamknięcie luk: pośredniej drogi przez przemyt przez kraje Azji Południowo-Wschodniej oraz zdalnego dostępu z centrów danych w państwach trzecich. W lipcu USA oskarżyły chińskie laboratorium Moonshot AI o korzystanie z układów Nvidii przez obiekt w Tajlandii. Według CNBC z 5 listopada firma szukała też dostępu przez centra danych w Europie.\n\nOsobny wątek to projekt ustawy Remote Access Security Act, który przeszedł Izbę Reprezentantów, ale nie Senat. Według wcześniejszych informacji CNBC Nvidia ostrzegała klientów, że dawałby rządowi szersze uprawnienia kontroli dostępu do usług chmurowych. Podczas rozmowy o wynikach 17 listopada Colette Kress mówiła, że firma wciąż analizuje nowe kontrole, ale spodziewa się mocnych wyników, bo popyt przewyższa podaż.",
+   "for_you": "Jeśli korzystasz z chmur GPU poza USA albo z modeli trenowanych przez chińskie laboratoria, sprawdź, jak dostawcy interpretują nowe zasady. Więcej używanych kart może też chwilowo wpłynąć na ceny wynajmu.",
+   "sources": [
+    {
+     "name": "CNBC",
+     "url": "https://www.cnbc.com/2026/11/25/nvidia-china-ai-chip-remote-access.html",
+     "primary": false
+    }
+   ],
+   "image_topic": "Export of Nvidia chips to China",
+   "image": {
+    "url": "https://image.cnbcfm.com/api/v1/image/108558280-1795524153938-gettyimages-2306090565-NVIDIA_HQ.jpeg?v=1795524192&w=1920&h=1080",
+    "credit": "cnbc.com",
+    "link": "https://www.cnbc.com/2026/11/25/nvidia-china-ai-chip-remote-access.html"
+   },
+   "may_affect": [
+    "nvda",
+    "crwv"
+   ],
+   "disclaimer": null,
+   "image_fallback": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/75/2788-2888_San_Tomas_Expwy.jpg/960px-2788-2888_San_Tomas_Expwy.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+    "credit": "Coolcaesar / CC BY-SA 4.0, Wikimedia Commons",
+    "link": "https://commons.wikimedia.org/wiki/File:2788-2888_San_Tomas_Expwy.jpg"
+   }
+  },
+  {
+   "title": "Zadłużenie na AI: Big Tech wydaje więcej, niż zarabia, a obligacje drożeją",
+   "category": "inwestycje",
+   "status": "opinia",
+   "is_update": false,
+   "lede": "Rynek długu staje się bardziej wybredny wobec firm finansujących infrastrukturę AI. Analitycy Man Group mówią, że czas wydawania bez pytań się kończy.",
+   "body": "Po poniedziałkowym rajdzie Nvidii inwestorzy zaczynają pytać o rachunek za rozbudowę AI. Dan Taylor z Man Group uważa, że rynek się rozdrobni i nie będzie już prostego schematu „kupuj producentów chipów, sprzedawaj oprogramowanie”. Jego zdaniem Anthropic zdążył z debiutem giełdowym w ostatniej chwili. Firma zarabia już gotówkę i jest blisko zera na wolnym przepływie pieniężnym (free cash flow, czyli gotówce po nakładach inwestycyjnych).\n\nNajwięksi wydający i emitenci długu, jak Oracle, Alphabet i część producentów chipów, stracili według analizy Man od 25 do 45 proc. między czerwcowym szczytem a piątkowym zamknięciem. Apple, które nie bierze udziału w wyścigu wydatków, zyskało prawie 20 proc. Microsoft, Amazon, Meta i Alphabet mają w 2026 i 2027 roku wydawać na inwestycje więcej, niż generują gotówki.\n\nRynek obligacji jest ostrożniejszy niż akcji. Matthew Rees z L&G Asset Management mówi, że Oracle i SpaceX, formalnie w kategorii BBB (średnia jakość kredytowa), są notowane jak papiery o znacznie niższej wiarygodności, częściowo przez ogromną podaż nowych emisji. PIMCO, powołując się na dane Goldman Sachs, spodziewa się, że najwwięksi gracze AI pozyskają w tym roku około 250 mld dolarów z obligacji, a całe branżowe zadłużenie może sięgnąć od 300 do 570 mld.\n\nCole Smead ze Smead Capital pyta, czy inwestorzy w dług centrów danych dostają odpowiednią premię za ryzyko. Taylor wskazuje na pułapkę: giganci muszą odbudować przepływy gotówki, ale producenci chipów potrzebują, by ci sami klienci dalej wydawali. Jego zdaniem trudno, by obie strony dostały to, czego chcą.",
+   "for_you": "Droższy kapitał może z czasem wpłynąć na tempo budowy mocy obliczeniowej i ceny API, ale na razie to scenariusz, nie fakt.",
+   "sources": [
+    {
+     "name": "CNBC",
+     "url": "https://www.cnbc.com/2026/11/25/ai-debt-big-tech-spending-nvidia.html",
+     "primary": false
+    }
+   ],
+   "image_topic": "Hyperscale data center",
+   "image": {
+    "url": "https://image.cnbcfm.com/api/v1/image/107417946-1716311561256-gettyimages-2131329168-April_3_2024_Krakow_AI_logoes-9.jpeg?v=1727274261&w=1920&h=1080",
+    "credit": "cnbc.com",
+    "link": "https://www.cnbc.com/2026/11/25/ai-debt-big-tech-spending-nvidia.html"
+   },
+   "may_affect": [
+    "orcl",
+    "googl",
+    "msft",
+    "amzn",
+    "meta",
+    "nvda",
+    "aapl"
+   ],
+   "disclaimer": "To nie jest porada inwestycyjna.",
+   "image_fallback": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d1/Oracle_Campus_in_Austin_2018.jpg/960px-Oracle_Campus_in_Austin_2018.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+    "credit": "DronePhotographer / CC0, Wikimedia Commons",
+    "link": "https://commons.wikimedia.org/wiki/File:Oracle_Campus_in_Austin_2018.jpg"
+   }
+  },
+  {
+   "title": "OpenAI publikuje preprint: wielomianowa hipoteza Hirscha jest fałszywa",
+   "category": "modele",
+   "status": "potwierdzone",
+   "is_update": false,
+   "lede": "W repozytorium openai/math pojawił się preprint o superwielomianowej średnicy grafu prostych wielościanów. Wpis głosi, że wielomianowa hipoteza Hirscha jest fałszywa.",
+   "body": "W repozytorium openai/math na GitHubie opublikowano preprint z datą 24 listopada 2026 roku, zatytułowany „Superpolynomial graph diameter of simple polytopes”. Wątek na forum technicznym podaje go pod hasłem „The polynomial Hirsch conjecture is false”.\n\nHipoteza dotyczy wielościanów, czyli wielowymiarowych odpowiedników brył. Pytanie brzmi, jak daleko od siebie mogą leżeć dwa wierzchołki, jeśli poruszamy się tylko po krawędziach. Chodzi o to, czy tę odległość da się zawsze ograniczyć wielomianowo względem liczby ścian i wymiaru. Ma to związek z metodą sympleks w programowaniu liniowym.\n\nNie wiadomo, jak dowód powstał ani czy brały w nim udział modele AI. Nie wiadomo też, czy wynik sprawdzili niezależni matematycy lub formalna weryfikacja. To preprint, czyli tekst przed recenzją, więc na potwierdzenie trzeba poczekać.",
+   "for_you": "Na razie to temat do obserwacji: jeśli dowód się utrzyma, będzie kolejnym punktem w dyskusji o roli AI w matematyce. W Twojej codziennej pracy nic się nie zmienia.",
+   "sources": [
+    {
+     "name": "GitHub openai/math (preprint)",
+     "url": "https://github.com/openai/math/blob/main/preprints/Superpolynomial-graph-diameter-of-simple-polytopes-November-24-2026/paper.pdf",
+     "primary": true
+    }
+   ],
+   "image_topic": "Hirsch conjecture",
+   "image": {
+    "url": "https://opengraph.githubassets.com/f5cf3058db3f3f43f0cde58130bb5bd508caa5bbd144e5786950e01f2668416e/openai/math",
+    "credit": "github.com",
+    "link": "https://github.com/openai/math/blob/main/preprints/Superpolynomial-graph-diameter-of-simple-polytopes-November-24-2026/paper.pdf"
+   },
+   "may_affect": [
+    "gpt-6-2-astra"
+   ],
+   "disclaimer": null,
+   "image_fallback": null
+  }
+ ],
+ "market": {
+  "commentary": "Koszyk spółek AI był w większości na minusie. Najmocniej spadły Oracle (-5,13%), Micron (-4,53%) i Nvidia (-3,91%), a Amazon i Alphabet straciły ponad 2%. Rosły Meta (+3,4%), Super Micro (+3,05%), Palantir (+1,5%) i lekko Apple. W tle są dwa tematy z CNBC: ostrzeżenie S&P w sprawie ratingu Nvidii oraz rosnąca ostrożność rynku długu wobec firm finansujących infrastrukturę AI. Skala siedmiodniowych spadków (AMD -23,41%, Micron -14,75%, Broadcom -15,02%) wskazuje na szerszy ruch całego sektora, a nie jedno wydarzenie.",
+  "mood": "Spadło 14 z 18 spółek koszyka, więc nastroje wobec infrastruktury AI pozostają ostrożne.",
+  "disclaimer": "To nie jest porada inwestycyjna.",
+  "rows": [
+   {
+    "ticker": "NVDA",
+    "name": "NVIDIA",
+    "close": 149.3,
+    "change_1d": -3.91,
+    "change_7d": -1.1,
+    "change_30d": -30.88,
+    "last_trade_date": "2026-11-25"
+   },
+   {
+    "ticker": "MSFT",
+    "name": "Microsoft",
+    "close": 489.93,
+    "change_1d": -1.25,
+    "change_7d": -3.61,
+    "change_30d": -8.01,
+    "last_trade_date": "2026-11-25"
+   },
+   {
+    "ticker": "GOOGL",
+    "name": "Alphabet",
+    "close": 273.1,
+    "change_1d": -2.13,
+    "change_7d": -3.31,
+    "change_30d": -13.79,
+    "last_trade_date": "2026-11-25"
+   },
+   {
+    "ticker": "META",
+    "name": "Meta",
+    "close": 609.89,
+    "change_1d": 3.4,
+    "change_7d": -1.05,
+    "change_30d": -3.28,
+    "last_trade_date": "2026-11-25"
+   },
+   {
+    "ticker": "AMZN",
+    "name": "Amazon",
+    "close": 244.43,
+    "change_1d": -3.12,
+    "change_7d": -8.71,
+    "change_30d": -1.87,
+    "last_trade_date": "2026-11-25"
+   },
+   {
+    "ticker": "AAPL",
+    "name": "Apple",
+    "close": 355.58,
+    "change_1d": 0.43,
+    "change_7d": 0.89,
+    "change_30d": 3.39,
+    "last_trade_date": "2026-11-25"
+   },
+   {
+    "ticker": "TSM",
+    "name": "TSMC",
+    "close": 342.34,
+    "change_1d": -1.96,
+    "change_7d": -5.59,
+    "change_30d": -19.33,
+    "last_trade_date": "2026-11-25"
+   },
+   {
+    "ticker": "AMD",
+    "name": "AMD",
+    "close": 406.03,
+    "change_1d": -1.75,
+    "change_7d": -23.41,
+    "change_30d": -23.58,
+    "last_trade_date": "2026-11-25"
+   },
+   {
+    "ticker": "AVGO",
+    "name": "Broadcom",
+    "close": 300.86,
+    "change_1d": -0.07,
+    "change_7d": -15.02,
+    "change_30d": -8.6,
+    "last_trade_date": "2026-11-25"
+   },
+   {
+    "ticker": "ORCL",
+    "name": "Oracle",
+    "close": 103.88,
+    "change_1d": -5.13,
+    "change_7d": -8.79,
+    "change_30d": -17.59,
+    "last_trade_date": "2026-11-25"
+   },
+   {
+    "ticker": "PLTR",
+    "name": "Palantir",
+    "close": 163.59,
+    "change_1d": 1.5,
+    "change_7d": 4.42,
+    "change_30d": -17.73,
+    "last_trade_date": "2026-11-25"
+   },
+   {
+    "ticker": "CRWV",
+    "name": "CoreWeave",
+    "close": 42.57,
+    "change_1d": -0.08,
+    "change_7d": -11,
+    "change_30d": -22.87,
+    "last_trade_date": "2026-11-25"
+   },
+   {
+    "ticker": "ARM",
+    "name": "Arm",
+    "close": 161.51,
+    "change_1d": -0.03,
+    "change_7d": -11.63,
+    "change_30d": -27.69,
+    "last_trade_date": "2026-11-25"
+   },
+   {
+    "ticker": "ASML",
+    "name": "ASML",
+    "close": 1303.08,
+    "change_1d": -2.47,
+    "change_7d": -6.61,
+    "change_30d": -18.09,
+    "last_trade_date": "2026-11-25"
+   },
+   {
+    "ticker": "SMCI",
+    "name": "Super Micro",
+    "close": 23.31,
+    "change_1d": 3.05,
+    "change_7d": -4.35,
+    "change_30d": -28.69,
+    "last_trade_date": "2026-11-25"
+   },
+   {
+    "ticker": "TSLA",
+    "name": "Tesla",
+    "close": 380.14,
+    "change_1d": -1.18,
+    "change_7d": -0.93,
+    "change_30d": -2.93,
+    "last_trade_date": "2026-11-25"
+   },
+   {
+    "ticker": "INTC",
+    "name": "Intel",
+    "close": 54.47,
+    "change_1d": -0.6,
+    "change_7d": -0.37,
+    "change_30d": -39.79,
+    "last_trade_date": "2026-11-25"
+   },
+   {
+    "ticker": "MU",
+    "name": "Micron",
+    "close": 601.25,
+    "change_1d": -4.53,
+    "change_7d": -14.75,
+    "change_30d": -33.47,
+    "last_trade_date": "2026-11-25"
+   }
+  ],
+  "as_of": "2026-11-25"
+ },
+ "rankings": {
+  "commentary": "Na LMArena pierwsze trzy miejsca zajmują modele Gemini 4, a Anthropic i Meta mieszczą się w dalszej części dziesiątki. W Artificial Analysis prowadzi Claude Fable 5.2 przed GPT-6.2 Astra. Na Hugging Face dominuje rodzina Inkling-2-Mini.",
+  "notes": [
+   {
+    "board": "lmarena",
+    "text": "Gemini 4 Carbon prowadzi, a Gemini 4 Argon i Neon zajmują miejsca drugie i trzecie."
+   },
+   {
+    "board": "aa",
+    "text": "Claude Fable 5.2 jest pierwszy, GPT-6.2 Astra drugi, a Gemini 4 Neon trzeci."
+   },
+   {
+    "board": "hf_trending",
+    "text": "Inkling-2-Mini zajmuje miejsca 1, 2 i 4 w różnych wariantach, a Ternary Bonsai 2.5 27B awansował na szóste."
+   }
+  ],
+  "lmarena": [
+   {
+    "rank": 1,
+    "model": "Gemini 4 Carbon",
+    "org": "google",
+    "score": 1538.8733656178997,
+    "variant": "High",
+    "delta": null
+   },
+   {
+    "rank": 2,
+    "model": "Gemini 4 Argon",
+    "org": "google",
+    "score": 1527.6707454486746,
+    "variant": "High",
+    "delta": null
+   },
+   {
+    "rank": 3,
+    "model": "Gemini 4 Neon",
+    "org": "google",
+    "score": 1522.8896905416118,
+    "variant": "High",
+    "delta": null
+   },
+   {
+    "rank": 4,
+    "model": "Claude Opus 5.5",
+    "org": "anthropic",
+    "score": 1514.1182801107798,
+    "variant": "High",
+    "delta": null
+   },
+   {
+    "rank": 5,
+    "model": "Claude Fable 5.1",
+    "org": "anthropic",
+    "score": 1511.7703155455783,
+    "variant": "Max",
+    "delta": null
+   },
+   {
+    "rank": 6,
+    "model": "Claude Opus 5",
+    "org": "anthropic",
+    "score": 1506.1795360065344,
+    "variant": "Max",
+    "delta": null
+   },
+   {
+    "rank": 7,
+    "model": "Muse Wonder",
+    "org": "meta",
+    "score": 1503.6619735295121,
+    "variant": "Max",
+    "delta": null
+   },
+   {
+    "rank": 8,
+    "model": "Gemini 4 Hydrogen",
+    "org": "google",
+    "score": 1502.1451228167848,
+    "variant": "High",
+    "delta": null
+   },
+   {
+    "rank": 9,
+    "model": "Claude Opus 4.6",
+    "org": "anthropic",
+    "score": 1501.5275016749329,
+    "variant": "High",
+    "delta": null
+   },
+   {
+    "rank": 10,
+    "model": "Gemini 3.8 Flash",
+    "org": "google",
+    "score": 1500.8803494450558,
+    "variant": "High",
+    "delta": null
+   },
+   {
+    "rank": 11,
+    "model": "Muse Spark 1.3",
+    "org": "meta",
+    "score": 1492.9022275319262,
+    "variant": "Max",
+    "delta": null
+   },
+   {
+    "rank": 12,
+    "model": "MiMo-V2.6-Pro",
+    "org": "xiaomi",
+    "score": 1492.8697235495856,
+    "variant": null,
+    "delta": null
+   },
+   {
+    "rank": 13,
+    "model": "Claude Fable 5",
+    "org": "anthropic",
+    "score": 1491.7552175389037,
+    "variant": "High",
+    "delta": null
+   },
+   {
+    "rank": 14,
+    "model": "Claude Opus 4.7",
+    "org": "anthropic",
+    "score": 1489.8288192461714,
+    "variant": "High",
+    "delta": null
+   },
+   {
+    "rank": 15,
+    "model": "Gemini 3.7 Flash",
+    "org": "google",
+    "score": 1489.1400216744582,
+    "variant": "High",
+    "delta": null
+   },
+   {
+    "rank": 16,
+    "model": "Qwen3.8-Max",
+    "org": "alibaba",
+    "score": 1484.9138435273762,
+    "variant": null,
+    "delta": null
+   },
+   {
+    "rank": 17,
+    "model": "Muse Spark 1.2",
+    "org": "meta",
+    "score": 1483.5168032483698,
+    "variant": "xHigh",
+    "delta": null
+   },
+   {
+    "rank": 18,
+    "model": "Gemini 3.5 Flash",
+    "org": "google",
+    "score": 1482.809520861872,
+    "variant": "High",
+    "delta": null
+   },
+   {
+    "rank": 19,
+    "model": "Gemini 3.1 Pro Preview",
+    "org": "google",
+    "score": 1480.0053904777624,
+    "variant": null,
+    "delta": null
+   },
+   {
+    "rank": 20,
+    "model": "Gemini 3 Pro",
+    "org": "google",
+    "score": 1479.731647527069,
+    "variant": null,
+    "delta": null
+   }
+  ],
+  "aa": [
+   {
+    "rank": 1,
+    "model": "Claude Fable 5.2",
+    "org": "Anthropic",
+    "score": 64.8,
+    "variant": "Max, Default Fallback",
+    "delta": null
+   },
+   {
+    "rank": 2,
+    "model": "GPT-6.2 Astra",
+    "org": "OpenAI",
+    "score": 62.2,
+    "variant": "Max",
+    "delta": null
+   },
+   {
+    "rank": 3,
+    "model": "Gemini 4 Neon",
+    "org": "Google",
+    "score": 61.5,
+    "variant": "Xhigh",
+    "delta": null
+   },
+   {
+    "rank": 4,
+    "model": "Gemini 4 Carbon",
+    "org": "Google",
+    "score": 60.1,
+    "variant": "High",
+    "delta": null
+   },
+   {
+    "rank": 5,
+    "model": "Claude Opus 5.5",
+    "org": "Anthropic",
+    "score": 59.1,
+    "variant": "Max, Default Fallback",
+    "delta": null
+   },
+   {
+    "rank": 6,
+    "model": "GPT-6.2 Sol",
+    "org": "OpenAI",
+    "score": 57.3,
+    "variant": "Max",
+    "delta": null
+   },
+   {
+    "rank": 7,
+    "model": "GPT-6 Astra",
+    "org": "OpenAI",
+    "score": 56.9,
+    "variant": "Max",
+    "delta": null
+   },
+   {
+    "rank": 8,
+    "model": "Claude Sonnet 5.5",
+    "org": "Anthropic",
+    "score": 54.7,
+    "variant": "Max, Default Fallback",
+    "delta": null
+   },
+   {
+    "rank": 9,
+    "model": "GPT-6.1 Sol",
+    "org": "OpenAI",
+    "score": 54.7,
+    "variant": "Max",
+    "delta": null
+   },
+   {
+    "rank": 10,
+    "model": "Gemini 4 Hydrogen",
+    "org": "Google",
+    "score": 54.1,
+    "variant": "Xhigh",
+    "delta": null
+   },
+   {
+    "rank": 11,
+    "model": "GPT-6.1 Terra",
+    "org": "OpenAI",
+    "score": 51.4,
+    "variant": "Max",
+    "delta": null
+   },
+   {
+    "rank": 12,
+    "model": "Gemini 4 Argon",
+    "org": "Google",
+    "score": 50.5,
+    "variant": "High",
+    "delta": null
+   },
+   {
+    "rank": 13,
+    "model": "Claude Fable 5.1",
+    "org": "Anthropic",
+    "score": 50,
+    "variant": "Xhigh, Default Fallback",
+    "delta": null
+   },
+   {
+    "rank": 14,
+    "model": "Muse Wonder Full",
+    "org": "Meta",
+    "score": 49.9,
+    "variant": "Max",
+    "delta": null
+   },
+   {
+    "rank": 15,
+    "model": "Kimi K3.1 Pro",
+    "org": "Kimi",
+    "score": 46.6,
+    "variant": null,
+    "delta": null
+   },
+   {
+    "rank": 16,
+    "model": "Claude Opus 5",
+    "org": "Anthropic",
+    "score": 44.2,
+    "variant": "Max",
+    "delta": null
+   },
+   {
+    "rank": 17,
+    "model": "GPT-6 Sol",
+    "org": "OpenAI",
+    "score": 44.1,
+    "variant": "Max",
+    "delta": null
+   },
+   {
+    "rank": 18,
+    "model": "Muse Wonder",
+    "org": "Meta",
+    "score": 43.7,
+    "variant": "Max",
+    "delta": null
+   },
+   {
+    "rank": 19,
+    "model": "Qwen4 Max",
+    "org": "Alibaba",
+    "score": 42.8,
+    "variant": null,
+    "delta": null
+   },
+   {
+    "rank": 20,
+    "model": "Muse Spark 1.3",
+    "org": "Meta",
+    "score": 36.6,
+    "variant": "Max",
+    "delta": null
+   }
+  ],
+  "hf_trending": [
+   {
+    "rank": 1,
+    "model": "thinkingmachines/Inkling-2-Mini",
+    "org": "thinkingmachines",
+    "score": 1333.5,
+    "delta": null
+   },
+   {
+    "rank": 2,
+    "model": "unsloth/Inkling-2-Mini-GGUF",
+    "org": "unsloth",
+    "score": 1164,
+    "delta": null
+   },
+   {
+    "rank": 3,
+    "model": "inworld/voice-isolator",
+    "org": "inworld",
+    "score": 594,
+    "delta": null
+   },
+   {
+    "rank": 4,
+    "model": "AtomicChat/Inkling-2-Mini-Uncensored-GGUF",
+    "org": "AtomicChat",
+    "score": 471.79999999999995,
+    "delta": null
+   },
+   {
+    "rank": 5,
+    "model": "SulphurAI/Sulphur-3",
+    "org": "SulphurAI",
+    "score": 399,
+    "delta": null
+   },
+   {
+    "rank": 6,
+    "model": "prism-ml/Ternary-Bonsai-2.5-27B-GGUF",
+    "org": "prism-ml",
+    "score": 317,
+    "delta": 9
+   },
+   {
+    "rank": 7,
+    "model": "apple/DepthPro2",
+    "org": "apple",
+    "score": 206,
+    "delta": 2
+   },
+   {
+    "rank": 8,
+    "model": "llamaindex/OCRia-nano-1",
+    "org": "llamaindex",
+    "score": 193,
+    "delta": 6
+   },
+   {
+    "rank": 9,
+    "model": "inclusionAI/Ling-3.2-air",
+    "org": "inclusionAI",
+    "score": 180,
+    "delta": 2
+   },
+   {
+    "rank": 10,
+    "model": "harness-hub/Qwen3.8-27B-pi-adapted",
+    "org": "harness-hub",
+    "score": 168.5,
+    "delta": -5
+   },
+   {
+    "rank": 11,
+    "model": "Lightricks/LTX-2.5",
+    "org": "Lightricks",
+    "score": 157,
+    "delta": null
+   },
+   {
+    "rank": 12,
+    "model": "higurashi-ai/Haru-4B",
+    "org": "higurashi-ai",
+    "score": 155.5,
+    "delta": -4
+   },
+   {
+    "rank": 13,
+    "model": "nvidia/Nemotron-Labs-Image-30B-A3B",
+    "org": "nvidia",
+    "score": 149,
+    "delta": "new"
+   },
+   {
+    "rank": 14,
+    "model": "Qwen/Qwen3.8-27B",
+    "org": "Qwen",
+    "score": 137.5,
+    "delta": null
+   },
+   {
+    "rank": 15,
+    "model": "inclusionAI/LingSante-3.1-flash",
+    "org": "inclusionAI",
+    "score": 134,
+    "delta": 3
+   },
+   {
+    "rank": 16,
+    "model": "Sentinel7/h3",
+    "org": "Sentinel7",
+    "score": 133,
+    "delta": null
+   },
+   {
+    "rank": 17,
+    "model": "nari-labs/Qwen3.8-27B-NariQ-GGUF",
+    "org": "nari-labs",
+    "score": 131,
+    "delta": "new"
+   },
+   {
+    "rank": 18,
+    "model": "tencent/Hy4-flash",
+    "org": "tencent",
+    "score": 124.5,
+    "delta": -11
+   },
+   {
+    "rank": 19,
+    "model": "facebook/sam-3d-body-dinov3",
+    "org": "facebook",
+    "score": 122.5,
+    "delta": null
+   },
+   {
+    "rank": 20,
+    "model": "strata-engine/Inkling-2-Mini-Strata",
+    "org": "strata-engine",
+    "score": 121,
+    "delta": "new"
+   }
+  ],
+  "areas": [
+   {
+    "key": "webdev",
+    "label": "Programowanie",
+    "new_leader": false,
+    "rows": [
+     {
+      "rank": 1,
+      "model": "Claude Fable 5.2",
+      "org": "anthropic",
+      "delta": null
+     },
+     {
+      "rank": 2,
+      "model": "Claude Opus 5.5",
+      "org": "anthropic",
+      "delta": null
+     },
+     {
+      "rank": 3,
+      "model": "Claude Sonnet 5.5",
+      "org": "anthropic",
+      "delta": null
+     },
+     {
+      "rank": 4,
+      "model": "Gemini 4 Carbon",
+      "org": "google",
+      "delta": null
+     },
+     {
+      "rank": 5,
+      "model": "Gemini 4 Neon",
+      "org": "google",
+      "delta": null
+     },
+     {
+      "rank": 6,
+      "model": "GPT-6 Astra",
+      "org": "openai",
+      "delta": null
+     },
+     {
+      "rank": 7,
+      "model": "GPT-6.2 Astra",
+      "org": "openai",
+      "delta": null
+     },
+     {
+      "rank": 8,
+      "model": "GPT-6.2 Sol",
+      "org": "openai",
+      "delta": null
+     },
+     {
+      "rank": 9,
+      "model": "Qwen4-Max",
+      "org": "alibaba",
+      "delta": null
+     },
+     {
+      "rank": 10,
+      "model": "GPT-6.1 Sol",
+      "org": "openai",
+      "delta": null
+     }
+    ]
+   },
+   {
+    "key": "agent",
+    "label": "Agenci",
+    "new_leader": false,
+    "rows": [
+     {
+      "rank": 1,
+      "model": "Claude Fable 5.2",
+      "org": "anthropic",
+      "delta": null
+     },
+     {
+      "rank": 2,
+      "model": "Claude Opus 5.5",
+      "org": "anthropic",
+      "delta": null
+     },
+     {
+      "rank": 3,
+      "model": "Gemini 4 Neon",
+      "org": "google",
+      "delta": null
+     },
+     {
+      "rank": 4,
+      "model": "Gemini 4 Carbon",
+      "org": "google",
+      "delta": null
+     },
+     {
+      "rank": 5,
+      "model": "Claude Sonnet 5.5",
+      "org": "anthropic",
+      "delta": null
+     },
+     {
+      "rank": 6,
+      "model": "GPT-6 Astra",
+      "org": "openai",
+      "delta": null
+     },
+     {
+      "rank": 7,
+      "model": "GPT-6.2 Astra",
+      "org": "openai",
+      "delta": null
+     },
+     {
+      "rank": 8,
+      "model": "Gemini 4 Hydrogen",
+      "org": "google",
+      "delta": null
+     },
+     {
+      "rank": 9,
+      "model": "Claude Fable 5.1",
+      "org": "anthropic",
+      "delta": null
+     },
+     {
+      "rank": 10,
+      "model": "GPT-6.2 Sol",
+      "org": "openai",
+      "delta": null
+     }
+    ]
+   },
+   {
+    "key": "writing",
+    "label": "Pisanie",
+    "new_leader": false,
+    "rows": [
+     {
+      "rank": 1,
+      "model": "Gemini 4 Carbon",
+      "org": "google",
+      "delta": null
+     },
+     {
+      "rank": 2,
+      "model": "Claude Opus 5.5",
+      "org": "anthropic",
+      "delta": null
+     },
+     {
+      "rank": 3,
+      "model": "Gemini 4 Argon",
+      "org": "google",
+      "delta": null
+     },
+     {
+      "rank": 4,
+      "model": "Gemini 4 Neon",
+      "org": "google",
+      "delta": null
+     },
+     {
+      "rank": 5,
+      "model": "Claude Fable 5.1",
+      "org": "anthropic",
+      "delta": null
+     },
+     {
+      "rank": 6,
+      "model": "Claude Fable 5.2",
+      "org": "anthropic",
+      "delta": null
+     },
+     {
+      "rank": 7,
+      "model": "Gemini 4 Hydrogen",
+      "org": "google",
+      "delta": null
+     },
+     {
+      "rank": 8,
+      "model": "Claude Opus 4.6",
+      "org": "anthropic",
+      "delta": null
+     },
+     {
+      "rank": 9,
+      "model": "Gemini 3.8 Flash",
+      "org": "google",
+      "delta": null
+     },
+     {
+      "rank": 10,
+      "model": "Claude Fable 5",
+      "org": "anthropic",
+      "delta": null
+     }
+    ]
+   },
+   {
+    "key": "polish",
+    "label": "Po polsku",
+    "new_leader": false,
+    "rows": [
+     {
+      "rank": 1,
+      "model": "Gemini 4 Argon",
+      "org": "google",
+      "delta": null
+     },
+     {
+      "rank": 2,
+      "model": "Claude Fable 5.1",
+      "org": "anthropic",
+      "delta": null
+     },
+     {
+      "rank": 3,
+      "model": "Muse Wonder",
+      "org": "meta",
+      "delta": null
+     },
+     {
+      "rank": 4,
+      "model": "Claude Opus 5",
+      "org": "anthropic",
+      "delta": null
+     },
+     {
+      "rank": 5,
+      "model": "Gemini 3.5 Flash",
+      "org": "google",
+      "delta": null
+     },
+     {
+      "rank": 6,
+      "model": "Claude Opus 5.5",
+      "org": "anthropic",
+      "delta": null
+     },
+     {
+      "rank": 7,
+      "model": "Gemini 3.8 Flash",
+      "org": "google",
+      "delta": null
+     },
+     {
+      "rank": 8,
+      "model": "Muse Spark 1.2",
+      "org": "meta",
+      "delta": null
+     },
+     {
+      "rank": 9,
+      "model": "Gemini 3.7 Flash",
+      "org": "google",
+      "delta": null
+     },
+     {
+      "rank": 10,
+      "model": "Gemini 3 Pro",
+      "org": "google",
+      "delta": null
+     }
+    ]
+   },
+   {
+    "key": "math",
+    "label": "Matematyka",
+    "new_leader": false,
+    "rows": [
+     {
+      "rank": 1,
+      "model": "Gemini 4 Argon",
+      "org": "google",
+      "delta": null
+     },
+     {
+      "rank": 2,
+      "model": "Gemini 4 Neon",
+      "org": "google",
+      "delta": null
+     },
+     {
+      "rank": 3,
+      "model": "Claude Fable 5.1",
+      "org": "anthropic",
+      "delta": null
+     },
+     {
+      "rank": 4,
+      "model": "Claude Opus 5",
+      "org": "anthropic",
+      "delta": null
+     },
+     {
+      "rank": 5,
+      "model": "Gemini 3.8 Flash",
+      "org": "google",
+      "delta": null
+     },
+     {
+      "rank": 6,
+      "model": "Claude Opus 5.5",
+      "org": "anthropic",
+      "delta": null
+     },
+     {
+      "rank": 7,
+      "model": "Gemini 4 Hydrogen",
+      "org": "google",
+      "delta": null
+     },
+     {
+      "rank": 8,
+      "model": "Claude Opus 4.6",
+      "org": "anthropic",
+      "delta": null
+     },
+     {
+      "rank": 9,
+      "model": "Claude Fable 5",
+      "org": "anthropic",
+      "delta": null
+     },
+     {
+      "rank": 10,
+      "model": "Gemini 3.7 Flash",
+      "org": "google",
+      "delta": null
+     }
+    ]
+   },
+   {
+    "key": "image",
+    "label": "Obrazy",
+    "new_leader": false,
+    "rows": [
+     {
+      "rank": 1,
+      "model": "GPT-Image-2.5 Sunburst",
+      "org": "openai",
+      "delta": null
+     },
+     {
+      "rank": 2,
+      "model": "GPT-Image-2.6 Sunburst",
+      "org": "openai",
+      "delta": null
+     },
+     {
+      "rank": 3,
+      "model": "GPT-Image-2.5 Flare",
+      "org": "openai",
+      "delta": null
+     },
+     {
+      "rank": 4,
+      "model": "MAI-Image-2.7",
+      "org": "microsoft-ai",
+      "delta": null
+     },
+     {
+      "rank": 5,
+      "model": "GPT-Image-2",
+      "org": "openai",
+      "delta": null
+     },
+     {
+      "rank": 6,
+      "model": "GPT-Image-2.6 Flare",
+      "org": "openai",
+      "delta": null
+     },
+     {
+      "rank": 7,
+      "model": "MAI-Image-2.6",
+      "org": "microsoft-ai",
+      "delta": null
+     },
+     {
+      "rank": 8,
+      "model": "Grok Imagine Image 2.0",
+      "org": "xai",
+      "delta": null
+     },
+     {
+      "rank": 9,
+      "model": "Gemini Nano Banana 2.1",
+      "org": "google",
+      "delta": null
+     },
+     {
+      "rank": 10,
+      "model": "Reve 2.1",
+      "org": "reve",
+      "delta": null
+     }
+    ]
+   }
+  ]
+ },
+ "rumors": [],
+ "big_moves": [
+  {
+   "entity_id": "mu",
+   "board": "market",
+   "change": "-14,75% w 7 dni",
+   "why": "Brak jednoznacznej przyczyny. Możliwe, że to część szerszej wyprzedaży spółek infrastruktury AI: w tym samym tygodniu mocno spadły też AMD i Broadcom.",
+   "why_type": "hipoteza",
+   "sources": [
+    {
+     "name": "CNBC",
+     "url": "https://www.cnbc.com/2026/11/25/ai-debt-big-tech-spending-nvidia.html",
+     "primary": false
+    }
+   ],
+   "why_short": "możliwa szersza wyprzedaż sektora AI"
+  },
+  {
+   "entity_id": "arm",
+   "board": "market",
+   "change": "-11,63% w 7 dni",
+   "why": "Możliwe, że to efekt słabości technologicznych spółek po debiucie Anthropic na giełdzie, o którym pisaliśmy 21 listopada. Żadne źródło nie łączy tego ruchu z Armem.",
+   "why_type": "hipoteza",
+   "sources": [],
+   "why_short": "możliwy ruch całego sektora, brak źródła"
+  },
+  {
+   "entity_id": "crwv",
+   "board": "market",
+   "change": "-11% w 7 dni",
+   "why": "Brak jednoznacznej przyczyny. Możliwe, że wpływają na to obawy rynku długu wobec firm finansujących infrastrukturę AI, bo CoreWeave jest dostawcą takiej infrastruktury.",
+   "why_type": "hipoteza",
+   "sources": [
+    {
+     "name": "CNBC",
+     "url": "https://www.cnbc.com/2026/11/25/ai-debt-big-tech-spending-nvidia.html",
+     "primary": false
+    }
+   ],
+   "why_short": "możliwe obawy o finansowanie długiem"
+  },
+  {
+   "entity_id": "orcl",
+   "board": "market",
+   "change": "-8,79% w 7 dni",
+   "why": "Brak jednoznacznej przyczyny. Możliwe, że to ruch całego sektora i obawy o zadłużenie firm budujących infrastrukturę AI.",
+   "why_type": "hipoteza",
+   "sources": [
+    {
+     "name": "CNBC",
+     "url": "https://www.cnbc.com/2026/11/25/ai-debt-big-tech-spending-nvidia.html",
+     "primary": false
+    }
+   ],
+   "why_short": "możliwe obawy o dług i ruch sektora"
+  },
+  {
+   "entity_id": "amzn",
+   "board": "market",
+   "change": "-8,71% w 7 dni",
+   "why": "Brak jednoznacznej przyczyny. Możliwe, że wpływa na to szeroki spadek spółek AI i uwaga rynku na wydatki Big Techu.",
+   "why_type": "hipoteza",
+   "sources": [
+    {
+     "name": "CNBC",
+     "url": "https://www.cnbc.com/2026/11/25/ai-debt-big-tech-spending-nvidia.html",
+     "primary": false
+    }
+   ],
+   "why_short": "możliwa presja wydatków na AI"
+  },
+  {
+   "entity_id": "orcl",
+   "board": "market",
+   "change": "-5,13% w 1 dzień",
+   "why": "Brak jednoznacznej przyczyny. Spadek wpisuje się w słabą sesję większości spółek AI.",
+   "why_type": "brak",
+   "sources": [],
+   "why_short": "brak jednoznacznej przyczyny, słaba sesja sektora"
+  },
+  {
+   "entity_id": "prism-ml-ternary-bonsai-2-5-27b-gguf",
+   "board": "hf_trending",
+   "change": "z #15 na #6",
+   "why": "Model Ternary Bonsai 2.5 27B (5,9 GB, nastawiony na lokalne agenty) był tematem naszego wcześniejszego materiału. Możliwe, że to zwiększyło zainteresowanie.",
+   "why_type": "hipoteza",
+   "sources": [],
+   "why_short": "możliwy efekt premiery modelu lokalnego"
+  },
+  {
+   "entity_id": "apple-depthpro2",
+   "board": "hf_trending",
+   "change": "z #9 na #7",
+   "why": "Brak jednoznacznej przyczyny.",
+   "why_type": "brak",
+   "sources": [],
+   "why_short": "brak jednoznacznej przyczyny"
+  },
+  {
+   "entity_id": "llamaindex-ocria-nano-1",
+   "board": "hf_trending",
+   "change": "z #14 na #8",
+   "why": "Brak jednoznacznej przyczyny.",
+   "why_type": "brak",
+   "sources": [],
+   "why_short": "brak jednoznacznej przyczyny"
+  },
+  {
+   "entity_id": "inclusionai-ling-3-2-air",
+   "board": "hf_trending",
+   "change": "z #11 na #9",
+   "why": "Brak jednoznacznej przyczyny.",
+   "why_type": "brak",
+   "sources": [],
+   "why_short": "brak jednoznacznej przyczyny"
+  },
+  {
+   "entity_id": "harness-hub-qwen3-8-27b-pi-adapted",
+   "board": "hf_trending",
+   "change": "z #5 na #10",
+   "why": "Brak jednoznacznej przyczyny. Możliwe, że to zwykłe wygasanie zainteresowania po szczycie.",
+   "why_type": "hipoteza",
+   "sources": [],
+   "why_short": "możliwe wygasanie początkowego zainteresowania"
+  },
+  {
+   "entity_id": "higurashi-ai-haru-4b",
+   "board": "hf_trending",
+   "change": "z #8 na #12",
+   "why": "Brak jednoznacznej przyczyny.",
+   "why_type": "brak",
+   "sources": [],
+   "why_short": "brak jednoznacznej przyczyny"
+  },
+  {
+   "entity_id": "nvidia-nemotron-labs-image-30b-a3b",
+   "board": "hf_trending",
+   "change": "nowy na #13",
+   "why": "Brak jednoznacznej przyczyny. Model pojawił się w zestawieniu po raz pierwszy.",
+   "why_type": "brak",
+   "sources": [],
+   "why_short": "brak jednoznacznej przyczyny, nowy w zestawieniu"
+  },
+  {
+   "entity_id": "inclusionai-lingsante-3-1-flash",
+   "board": "hf_trending",
+   "change": "z #18 na #15",
+   "why": "Brak jednoznacznej przyczyny.",
+   "why_type": "brak",
+   "sources": [],
+   "why_short": "brak jednoznacznej przyczyny"
+  },
+  {
+   "entity_id": "nari-labs-qwen3-8-27b-nariq-gguf",
+   "board": "hf_trending",
+   "change": "nowy na #17",
+   "why": "Brak jednoznacznej przyczyny. To wariant GGUF Qwen3.8 27B, a model ten jest popularny w lokalnych adapterach.",
+   "why_type": "hipoteza",
+   "sources": [],
+   "why_short": "możliwa popularność bazowego Qwen3.8 27B"
+  },
+  {
+   "entity_id": "tencent-hy4-flash",
+   "board": "hf_trending",
+   "change": "z #7 na #18",
+   "why": "Brak jednoznacznej przyczyny.",
+   "why_type": "brak",
+   "sources": [],
+   "why_short": "brak jednoznacznej przyczyny"
+  },
+  {
+   "entity_id": "strata-engine-inkling-2-mini-strata",
+   "board": "hf_trending",
+   "change": "nowy na #20",
+   "why": "Brak jednoznacznej przyczyny. To pochodna Inkling-2-Mini, który dominuje w zestawieniu.",
+   "why_type": "hipoteza",
+   "sources": [],
+   "why_short": "możliwy efekt popularności Inkling-2-Mini"
+  },
+  {
+   "entity_id": "apple-fastframes-l",
+   "board": "hf_trending",
+   "change": "wypadł z #12",
+   "why": "Brak jednoznacznej przyczyny.",
+   "why_type": "brak",
+   "sources": [],
+   "why_short": "brak jednoznacznej przyczyny"
+  },
+  {
+   "entity_id": "sensenova-sensenova-loop-9b",
+   "board": "hf_trending",
+   "change": "wypadł z #17",
+   "why": "Brak jednoznacznej przyczyny.",
+   "why_type": "brak",
+   "sources": [],
+   "why_short": "brak jednoznacznej przyczyny"
+  },
+  {
+   "entity_id": "radixark-daisyrose-27b",
+   "board": "hf_trending",
+   "change": "wypadł z #20",
+   "why": "Brak jednoznacznej przyczyny.",
+   "why_type": "brak",
+   "sources": [],
+   "why_short": "brak jednoznacznej przyczyny"
+  }
+ ],
+ "follow_ups": [
+  {
+   "entity_id": "arm",
+   "move": "-11,63% w 7 dni",
+   "related_story": "Anthropic traci prawie 9% pierwszego pełnego dnia na giełdzie, a technologie spadają razem z nim",
+   "story_date": "2026-11-21"
+  },
+  {
+   "entity_id": "amzn",
+   "move": "-8,71% w 7 dni",
+   "related_story": "Agenci AI znaleźli i wykorzystali lukę zero-day niemal bez udziału człowieka",
+   "story_date": "2026-11-25"
+  },
+  {
+   "entity_id": "nvda",
+   "move": "-3,91% w 1 dzień",
+   "related_story": "Ternary Bonsai 2.5 27B: model w 5,9 GB, nastawiony na lokalne agenty",
+   "story_date": "2026-11-25"
+  }
+ ],
+ "closing": "W najbliższych dniach warto sprawdzić wersje jąder na serwerach z NFS i śledzić, czy S&P faktycznie obniży rating Nvidii. Na rynku w centrum uwagi pozostaje finansowanie długiem budowy infrastruktury AI.",
+ "weekly": null,
+ "monthly": null,
+ "spotlight": {
+  "company_id": "crwv",
+  "model_id": "claude-opus-4-6"
+ },
+ "minutes": 10,
+ "supplement_minutes": 0
+}

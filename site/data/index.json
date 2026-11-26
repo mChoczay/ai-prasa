@@ -1,6 +1,19 @@
 {
  "editions": [
   {
+   "date": "2026-11-26",
+   "kind": "daily",
+   "lead_title": "Nfs2root: dwunastoletnia luka w serwerze NFS jądra Linuksa daje zdalnego roota bez logowania",
+   "minutes": 10,
+   "categories": [
+    "inne",
+    "gielda",
+    "regulacje",
+    "inwestycje",
+    "modele"
+   ]
+  },
+  {
    "date": "2026-11-25",
    "kind": "daily",
    "lead_title": "OpenAI: modele GPT-6 same projektują białka, bez wyspecjalizowanych modeli biologicznych",

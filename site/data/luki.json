@@ -1,17 +1,34 @@
 {
- "updated_at": "2026-11-25T05:30:41.451Z",
+ "updated_at": "2026-11-26T05:30:38.673Z",
  "vulns": [
+  {
+   "key": "CVE-2026-99362",
+   "cve_id": "CVE-2026-99362",
+   "product": "Serwer NFS jądra Linuksa (nfsd)",
+   "summary": "Zdalny atakujący, który może połączyć się z serwerem NFS (port 2049), może bez logowania zapisać dane w pamięci jądra i zdobyć uprawnienia roota.",
+   "severity": "krytyczna",
+   "status": "patched",
+   "fixed_in": "5.10.275",
+   "first_date": "2026-11-26",
+   "checked_at": "2026-11-26T05:30:36.947Z",
+   "patched_at": "2026-11-26T05:30:36.947Z",
+   "story": {
+    "date": "2026-11-26",
+    "n": 1,
+    "title": "Nfs2root: dwunastoletnia luka w serwerze NFS jądra Linuksa daje zdalnego roota bez logowania"
+   }
+  },
   {
    "key": "CVE-2026-16232",
    "cve_id": "CVE-2026-16232",
    "product": "Check Point SmartConsole",
    "summary": "Obejście uwierzytelniania w SmartConsole pozwala atakującemu uruchamiać skrypty na serwerach zarządzania Check Point i wyłączać zaporę.",
-   "severity": "",
-   "status": "open",
+   "severity": "krytyczna",
+   "status": "patched",
    "fixed_in": "",
    "first_date": "2026-11-25",
-   "checked_at": "2026-11-25T05:30:39.695Z",
-   "patched_at": "",
+   "checked_at": "2026-11-26T05:30:36.947Z",
+   "patched_at": "2026-11-26T05:30:36.947Z",
    "story": {
     "date": "2026-11-25",
     "n": 3,
@@ -95,7 +112,7 @@
    "status": "open",
    "fixed_in": "",
    "first_date": "2026-11-22",
-   "checked_at": "2026-11-25T05:30:39.695Z",
+   "checked_at": "2026-11-26T05:30:36.947Z",
    "patched_at": "",
    "story": {
     "date": "2026-11-22",
@@ -112,7 +129,7 @@
    "status": "open",
    "fixed_in": "",
    "first_date": "2026-11-20",
-   "checked_at": "2026-11-25T05:30:39.695Z",
+   "checked_at": "2026-11-26T05:30:36.947Z",
    "patched_at": "",
    "story": {
     "date": "2026-11-20",

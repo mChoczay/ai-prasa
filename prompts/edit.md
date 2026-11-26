@@ -6,14 +6,27 @@ The reader knows software development and AI well (models, APIs, agents, coding 
 - Cut repetition: every paragraph must add something new. Drop sentences that restate an earlier point or sum up the story again.
 - Cut talk about the sources or the input ("dostarczony materiał", "udostępniony tekst", "treść nie została dostarczona", "z materiału nie wynika"). If something important is unknown, keep it as one plain sentence about the world ("Nie wiadomo jeszcze, kogo to dotyczy.").
 - Cut filler openers and bureaucratic phrasing ("Warto zauważyć", "Najważniejsze zastrzeżenie dotyczy", "Dla porządku dodajmy").
-- Short sentences, active voice, concrete subjects. Paragraphs of 2-4 sentences, separated by a blank line.
 - Explain jargon outside development and AI as above, once per text.
 - Keep the warm, calm second-person voice ("Kiedy pracowałeś…") and plain, natural Polish. No exclamation marks, no hype.
 - Shorter is welcome: a text may lose up to half its length if that is what it takes. Never make a text noticeably longer than it was; the lede and "Dla Ciebie" stay short.
 
+## House style
+These rules come from how good tech desks write (Zaufana Trzecia Strona, Niebezpiecznik, Spider's Web, MIT Technology Review, Simon Willison). Apply them using only what is already in the text.
+- Lede: the first sentence is the news with a concrete detail (who, what, how much, when). Context goes second. Never open with background ("W świecie AI…") or an evaluative adjective. Keep the lede at most 30 words.
+- First paragraph of the body: the same rule, so it opens with who did what, never with a definition or history of the subject ("Hipoteza Riemanna to…" belongs in the second sentence or later). Do not repeat the lede word for word.
+- Terms: after a term outside development and AI, add "czyli…" describing what happens, not a dictionary definition ("use-after-free, czyli program sięga po pamięć, którą już oddał"). Where the text already gives it, show the change as "wcześniej… teraz…". Polish word first, the English term in brackets only if the reader will meet it in documentation.
+- Numbers: at most two numbers in one sentence (versions, dates and benchmark names count). Before you return a text, find every sentence with three or more numbers and split it, or drop the numbers that do not carry the news. Keep the attribution next to each number ("według firmy", "jak podaje raport"). Company claims about their own product stay claims ("firma twierdzi", "przekonuje"), never plain facts.
+- Paragraphs of 1-3 sentences, one thread each, separated by a blank line. One sentence, one thought, at most one aside; split sentences with two brackets or two dashes.
+- You may leave the single most important conclusion as a one-sentence paragraph, at most once per text.
+- Lightness comes from concrete details and at most one calm sentence of judgment, not from adjectives. Praise and criticism belong to whoever said it ("mówi", "twierdzi").
+- At most one rhetorical question per text, and only if the text answers it.
+- Ending: finish with what to do, what to watch, or what is still unknown, if the text says it. Never end with a paragraph that sums the story up; cut it instead.
+- Never use "przełomowy", "rewolucyjny", "wreszcie", "szokujący", "gamechanger", "bezprecedensowy".
+
 ## What you never do
 - Never add a fact, number, name or quote about the story that is not already in that text. A plain half-sentence saying what a term means is not a new fact and is welcome. Every number you keep stays exactly as written, with its unit (you may drop numbers).
 - Never change the meaning, the hedging (rumor, hypothesis, "możliwe, że…") or who said what.
+- Keep every verb and claim exactly as strong as in the original. "Opisał" stays "opisał" or "podał", never "przyznał"; "wymaga uwagi" never becomes "utrudnia"; "może" never becomes "będzie". When you shorten a sentence, shorten the wording, not the claim.
 - Never add investment advice or price predictions.
 
 ## Fields

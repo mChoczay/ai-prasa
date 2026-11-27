@@ -1,6 +1,19 @@
 {
  "editions": [
   {
+   "date": "2026-11-27",
+   "kind": "daily",
+   "lead_title": "DeepMind oddaje agentom część mocy obliczeniowej. Gemini powstaje przy ich udziale, ale bez samodoskonalenia",
+   "minutes": 11,
+   "categories": [
+    "inne",
+    "narzedzia",
+    "regulacje",
+    "modele",
+    "rankingi"
+   ]
+  },
+  {
    "date": "2026-11-26",
    "kind": "daily",
    "lead_title": "Nfs2root: dwunastoletnia luka w serwerze NFS jądra Linuksa daje zdalnego roota bez logowania",

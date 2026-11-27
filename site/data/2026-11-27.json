@@ -1,0 +1,1562 @@
+{
+ "date": "2026-11-27",
+ "edition": "daily",
+ "generated_at": "2026-11-27T04:33:07.290Z",
+ "quiet_day": false,
+ "greeting": "Kiedy pracowałeś, DeepMind opowiedział, że agenci AI sami kierują częścią mocy obliczeniowej przy eksperymentach nad kolejnym Gemini. Rynek tymczasem wciąż pokazuje głębokie tygodniowe spadki całego koszyka spółek AI.",
+ "lead_story": {
+  "title": "DeepMind oddaje agentom część mocy obliczeniowej. Gemini powstaje przy ich udziale, ale bez samodoskonalenia",
+  "category": "inne",
+  "status": "potwierdzone",
+  "is_update": true,
+  "lede": "Koray Kavukcuoglu z Google DeepMind mówi, że agenci AI sami uruchamiają eksperymenty dla następnego Gemini i kontrolują część mocy obliczeniowej. Do pełnego rekurencyjnego samodoskonalenia jest według niego daleko.",
+  "body": "Koray Kavukcuoglu, wiceprezes DeepMind ds. badań, kieruje rozwojem Gemini. W podcastie firmy opisał zmianę strategii: zamiast osobnych zespołów do projektów takich jak AlphaFold czy fuzja jądrowa, DeepMind stawia dziś na jeden algorytm ogólnego przeznaczenia dla nauki i produktów.\n\nKażda generacja Gemini jest według niego jednorazowym, ręcznie zbudowanym projektem, a nie stałą architekturą. Równolegle zespoły pracują nad jej następcami.\n\nCzęść mocy obliczeniowej agenci kontrolują samodzielnie, żeby prowadzić eksperymenty. To nie jest jednak pełne rekurencyjne samodoskonalenie, czyli sytuacja, w której model sam ulepsza własnego następcę bez udziału ludzi. Do tego, jak podkreśla Kavukcuoglu, laboratorium jest jeszcze daleko.\n\nJako zabezpieczenie DeepMind nie nagradza w trakcie treningu wewnętrznych strumieni myśli agentów (Chain of Thought, czyli kolejnych kroków rozumowania zapisanych w języku naturalnym). Dzięki temu zapis ich zamiarów nie jest filtrowany i można go przejrzeć, zanim agent coś zrobi. To założenie bezpieczeństwa, a nie niezależnie zweryfikowany fakt.\n\nKavukcuoglu wskazuje też ograniczenia. Dzisiejsze modele oddają procesy fizyczne, jak przepływy cieczy czy zderzenia, tak, że wyglądają wiarygodnie, ale nie rozumieją ich precyzyjnie.\n\nZ tego samego powodu jego zdaniem nie da się wskazać momentu, w którym modele osiągną AGI, czyli ogólną inteligencję na poziomie człowieka. Żaden test nie obejmuje istoty inteligencji. Według niego AGI zacznie się wtedy, gdy codzienne produkty zdobędą tyle zaufania, że ludzie zaczną powierzać im decyzje, tak jak innym ludziom we współpracy.\n\nNa LMArena trzy pierwsze miejsca zajmują dziś modele Gemini 4, a Artificial Analysis stawia dwa z nich w pierwszej czwórce. Żadne źródło nie łączy tych pozycji z rolą agentów.\n\nNie podano, jaka część mocy trafia do agentów ani jakie zadania wykonują. Warto obserwować, czy DeepMind ujawni skalę, rodzaje eksperymentów i sposób audytu zapisów rozumowania.",
+  "for_you": "Jeśli budujesz agentów, zwróć uwagę na wzorzec: nie optymalizować treningu pod wygląd łańcucha myśli, żeby zachować jego wartość diagnostyczną. Przy własnych agentach warto logować rozumowanie i nie karać go wprost.",
+  "sources": [
+   {
+    "name": "The Decoder",
+    "url": "https://the-decoder.com/ai-agents-now-control-part-of-deepminds-compute-for-gemini-experiments-but-recursive-self-improvement-remains-distant/",
+    "primary": false
+   }
+  ],
+  "image_topic": "Google DeepMind",
+  "image": {
+   "url": "https://the-decoder.com/wp-content/uploads/2026/11/gemini-4-neon__blog-header__sm.width-1600.format-webp.webp",
+   "credit": "the-decoder.com",
+   "link": "https://the-decoder.com/ai-agents-now-control-part-of-deepminds-compute-for-gemini-experiments-but-recursive-self-improvement-remains-distant/"
+  },
+  "may_affect": [
+   "googl",
+   "gemini-4-carbon",
+   "gemini-4-argon",
+   "gemini-4-neon"
+  ],
+  "disclaimer": null,
+  "image_fallback": {
+   "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e2/Google_Campus%2C_Mountain_View%2C_CA.jpg/960px-Google_Campus%2C_Mountain_View%2C_CA.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+   "credit": "Austin McKinley / CC BY 3.0, Wikimedia Commons",
+   "link": "https://commons.wikimedia.org/wiki/File:Google_Campus,_Mountain_View,_CA.jpg"
+  },
+  "terms": [
+   "rekurencyjne-samodoskonalenie"
+  ]
+ },
+ "stories": [
+  {
+   "title": "Novita, StreamLake i inni to opakowania na API ByteDance. Prompty mogą wychodzić poza deklarowanych dostawców",
+   "category": "narzedzia",
+   "status": "opinia",
+   "is_update": true,
+   "lede": "Badacz kendell.dev twierdzi, że część hostów modeli na OpenRouterze, w tym Novita i StreamLake, przekazuje ruch do API ByteDance Ark. Dotyczy to także endpointów z etykietą ZDR, czyli deklarujących brak retencji danych.",
+   "body": "Autor wpisu publikuje własne badania, częściowo wsparte grantem OpenRouter. To nie jest oficjalne stanowisko żadnej z firm.\n\nPunkt wyjścia jest potwierdzony. Novita, AtlasCloud i StreamLake przyznały, że przekazywały żądania do modeli MiniMax właśnie do MiniMax. System bezpieczeństwa MiniMax otwierał adresy URL z tych żądań, także z ruchu ZDR. Novita nazwała to błędem konfiguracji routingu i obiecała lepsze oznaczanie tras „Partner”. Od tamtej pory z OpenRouter zniknęło 16 endpointów Novity.\n\nAutor idzie dalej. Na podstawie własnych testów twierdzi, że modele DeepSeek u Novity trafiają do ByteDance: do BytePlus w Singapurze i Volcano Engine w Pekinie. Ślady to charakterystyczne identyfikatory i komunikaty błędów.\n\nCzęść ruchu StreamLake ma przechodzić przez Novitę, więc żądanie do SiliconFlow może iść drogą SiliconFlow, StreamLake, Novita, ByteDance. Trasy się zmieniają, jedna zmieniła się w ciągu popołudnia.\n\nMotywem ma być cena. BytePlus reklamuje rabaty 30-50% przy dużym wolumenie. Novita miała też wysyłać 120-160 mld tokenów dziennie na tych modelach, zanim 20 listopada straciła etykietę ZDR.\n\nPPIO przyznaje w regulaminie, że API dużych modeli dostarczają zewnętrzni dostawcy, ale lista podprocesorów ich nie zawiera. Wsparcie Novity powiedziało autorowi tylko, że modele z etykietą „Partner” mogą trafiać do Qwen i InclusionAI.\n\nNie wiadomo, czy firmy potwierdzą trasowanie przez ByteDance. Dowody testów są publiczne, więc można je zweryfikować.",
+   "for_you": "Jeśli wysyłasz przez OpenRouter wrażliwe prompty, nie traktuj etykiety ZDR jako gwarancji. Sprawdź, którzy dostawcy mają jawną listę podprocesorów, albo przypnij konkretnych hostów.",
+   "sources": [
+    {
+     "name": "kendell.dev",
+     "url": "https://kendell.dev/blog/arkwrapper/",
+     "primary": true
+    }
+   ],
+   "image_topic": "OpenRouter",
+   "image": null,
+   "may_affect": [],
+   "disclaimer": null,
+   "image_fallback": null,
+   "terms": [
+    "dostawcy-inferencji",
+    "zero-data-retention",
+    "routing"
+   ]
+  },
+  {
+   "title": "Google zmusza agentów AI do serwerów MCP od 1 lutego 2027. Serwer Gmaila nie wyśle maila",
+   "category": "narzedzia",
+   "status": "potwierdzone",
+   "is_update": false,
+   "lede": "Google udostępnił ogólnie osiem serwerów MCP dla Workspace. Od 1 lutego 2027 narzędzie, które jest agentem AI lub jest przez niego sterowane, musi korzystać z Gmaila, Dysku i Kalendarza wyłącznie przez nie.",
+   "body": "Zmiana wynika z nowego dodatku do warunków API Google. Narzędzie dostępowe napędzane agentem lub modelem AI musi używać serwera MCP. Zakazane jest też maskowanie agenta, by uniknąć tej klasyfikacji, a Google może za to odciąć dostęp lub zawiesić konto.\n\nSerwer Gmaila potrafi szukać w poczcie, czytać wątki, tworzyć szkice i nadawać etykiety. Nie wyśle wiadomości, nie odpowie i nie zmieni szkicu po utworzeniu. Te narzędzia istnieją, ale według Google wymagają dostępu partnerskiego. Agent poprawiający odpowiedź po uwagach użytkownika musi więc tworzyć kolejny szkic. Podobne luki ma Dysk: agent utworzy raport, ale nie przeniesie go do folderu.\n\nAgenci wywołujący REST bezpośrednio dostaną limity poziomu Standard niezależnie od planu. To 5000 żądań MCP dziennie na projekt i produkt. Wyszukiwanie w Gmailu liczy się jako 10 żądań, więc daje 500 wyszukiwań dziennie dla wszystkich użytkowników projektu.\n\nPłatny poziom Scaled zaczyna naliczać opłaty 1 kwietnia 2027, a cen za żądanie Google nie podał.\n\nWedług autora tekstu limit 30 dni dotyczy m.in. embeddingów, więc asystent z długą pamięcią skrzynki musi odbudowywać indeks co miesiąc.\n\nKlienci OAuth mają pole „Use this client for an AI-powered agent”. Od 11 listopada serwery MCP odrzucają klientów bez niego. Aplikacje bez AI, jak nocny backup czy synchronizacja CRM, nie są objęte zmianą.\n\nGoogle uzasadnia to bezpieczeństwem: sam token OAuth nie wystarcza, gdy agent działa z prędkością maszyny, a prompt injection może skłonić go do przesłania faktur. Krytycy wskażą, że Google kontroluje też, kto co może. Konektor Claude'a do Workspace reklamuje wysyłanie maili, czyli właśnie to, czego brakuje publicznym serwerom.\n\nNie wiadomo, kto dostanie dostęp partnerski ani kiedy.",
+   "for_you": "Jeśli masz agenta pracującego na Gmailu lub Dysku przez REST, masz około dwóch miesięcy na migrację albo wniosek o dostęp partnerski. Utwórz nowe klienty OAuth z właściwym oznaczeniem.",
+   "sources": [
+    {
+     "name": "Tech Stackups",
+     "url": "https://techstackups.com/articles/google-workspace-ai-agents-mcp/",
+     "primary": false
+    }
+   ],
+   "image_topic": "Model Context Protocol",
+   "image": {
+    "url": "https://techstackups.com/img/articles/google-workspace-agent-api/cover.jpg",
+    "credit": "techstackups.com",
+    "link": "https://techstackups.com/articles/google-workspace-ai-agents-mcp/"
+   },
+   "may_affect": [
+    "googl"
+   ],
+   "disclaimer": null,
+   "image_fallback": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e2/Google_Campus%2C_Mountain_View%2C_CA.jpg/960px-Google_Campus%2C_Mountain_View%2C_CA.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+    "credit": "Austin McKinley / CC BY 3.0, Wikimedia Commons",
+    "link": "https://commons.wikimedia.org/wiki/File:Google_Campus,_Mountain_View,_CA.jpg"
+   },
+   "terms": [
+    "mcp"
+   ]
+  },
+  {
+   "title": "42 prokuratorów generalnych stanów chce zablokować sprzedaż czatów Character.AI",
+   "category": "regulacje",
+   "status": "potwierdzone",
+   "is_update": false,
+   "lede": "Koalicja 42 prokuratorów generalnych stanów USA sprzeciwia się sprzedaży historii czatów ponad 21 mln kont Character.AI w postępowaniu upadłościowym. Ponad 2,1 mln kont należy do nieletnich.",
+   "body": "Character.AI złożyło w październiku wniosek o upadłość (Chapter 11, czyli postępowanie z możliwością restrukturyzacji). Disney kupił część aktywów i zatrudnił prezesa Karandeepa Ananda razem z częścią zespołu technicznego. Podobna koalicja prokuratorów sprzeciwiała się też tej transakcji.\n\nTeraz spór dotyczy danych. Prokuratorzy twierdzą, że plan aukcji nie zawiera żadnych zabezpieczeń: kupujący nie musi przestrzegać obecnej polityki prywatności, użytkownicy nie mogą usunąć danych, a nabywca może je odsprzedać dalej.\n\nPierwszy oferent ma szczątkowy ślad w dokumentach. Firmę założono 13 listopada 2026 roku i nie ma ujawnionej spółki matki ani inwestorów.\n\nCharacter.AI może też naruszać przepisy o chatbotach przyjęte m.in. w Nowym Jorku, Connecticut, Kalifornii i Kolorado, które wejdą w życie 1 stycznia 2027.\n\nNie wiadomo jeszcze, jak sąd upadłościowy zareaguje na sprzeciw.",
+   "for_you": "Jeśli budujesz produkt z historią rozmów użytkowników, sprawdź, co dzieje się z tymi danymi przy przejęciu lub upadłości. Dane czatów stają się aktywem do sprzedaży.",
+   "sources": [
+    {
+     "name": "The Verge",
+     "url": "https://www.theverge.com/policy/1042620/character-ai-sale-state-ags-block-selling-users-chats",
+     "primary": false
+    }
+   ],
+   "image_topic": "Character.ai",
+   "image": {
+    "url": "https://platform.theverge.com/wp-content/uploads/sites/2/chorus/uploads/chorus_asset/file/25557391/STK278_character_ai_B.jpg?quality=90&strip=all&crop=0%2C10.732984293194%2C100%2C78.534031413613&w=1200",
+    "credit": "theverge.com",
+    "link": "https://www.theverge.com/policy/1042620/character-ai-sale-state-ags-block-selling-users-chats"
+   },
+   "may_affect": [],
+   "disclaimer": null,
+   "image_fallback": null,
+   "terms": [
+    "chapter-11"
+   ]
+  },
+  {
+   "title": "FCC zezwala SpaceX na milion satelitów z obliczeniami AI. Środowiskowe zastrzeżenia odrzucone",
+   "category": "regulacje",
+   "status": "potwierdzone",
+   "is_update": false,
+   "lede": "Przewodniczący FCC Brendan Carr ogłosił w środę zgodę dla SpaceX na wyniesienie miliona satelitów z mocą obliczeniową AI w konstelacji Starmind. Komisja odrzuciła uwagi dotyczące środowiska i astronomii.",
+   "body": "Carr napisał na X, że Starmind i konstelacje konkurentów będą zasilane energią słoneczną. Musk odpowiedział podziękowaniem.\n\nWniosek SpaceX zaskarżyły Kuiper Systems (Amazon Leo), Viasat i Amerykańskie Towarzystwo Astronomiczne. Amazon nazwał projekt „lofty ambition rather than a real plan” i twierdził, że SpaceX potrzebowałoby „stuleci”. Carr odpowiedział, że Amazon powinien skupić się na własnych opóźnieniach.\n\nFCC uznała, że kwestie środowiskowe i wpływ na astronomię optyczną leżą poza jej kompetencjami. Prawnik z Earthjustice Jan Hasselman krytykuje decyzję: wydano ją w tygodniu świątecznym i bez przeglądu środowiskowego, który jego zdaniem wymaga ustawa NEPA. Astrofizyk Adam Becker ostrzega przed zaśmiecaniem orbity i reakcją łańcuchową kolizji.\n\nInni też celują w orbitalne centra danych. Google ogłosił Project Suncatcher i w październiku wysłał pierwsze chipy w kosmos na rakiecie SpaceX. Blue Origin wnioskuje o 51 600 satelitów w ramach Project Sunrise.\n\nZgoda nie oznacza jeszcze, że satelity powstaną. Żadne źródło nie podaje harmonogramu ani kosztów.",
+   "for_you": "To sygnał, że obliczenia AI szukają energii poza ziemskimi centrami danych. Dla Twojej pracy z API nic się nie zmienia, ale warto śledzić, czy pojawią się konkretne terminy.",
+   "sources": [
+    {
+     "name": "CNBC",
+     "url": "https://www.cnbc.com/2026/11/25/spacex-fcc-satellite-approval.html",
+     "primary": false
+    }
+   ],
+   "image_topic": "SpaceX",
+   "image": {
+    "url": "https://image.cnbcfm.com/api/v1/image/108368728-1790601399956-Screenshot_2026-09-28_at_91434_AM.png?v=1790601411&w=1920&h=1080",
+    "credit": "cnbc.com",
+    "link": "https://www.cnbc.com/2026/11/25/spacex-fcc-satellite-approval.html"
+   },
+   "may_affect": [
+    "amzn",
+    "googl"
+   ],
+   "disclaimer": null,
+   "image_fallback": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/3/33/Jeff_Bezos_2016.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
+    "credit": "U.S. Department of Defense photo by Senior Master Sgt. Adrian Cadiz / CC BY 2.0, Wikimedia Commons",
+    "link": "https://commons.wikimedia.org/wiki/File:Jeff_Bezos_2016.jpg"
+   },
+   "terms": [
+    "fcc",
+    "konstelacja"
+   ]
+  },
+  {
+   "title": "Nvidia Nemotron 3.5 Parse: otwarte dane syntetyczne i spekulator DFlash2 przyspieszają parsowanie dokumentów",
+   "category": "modele",
+   "status": "potwierdzone",
+   "is_update": false,
+   "lede": "Nvidia opublikowała trzy otwarte zbiory syntetyczne do trenowania modeli dokumentowych i spekulator DFlash2 dla Nemotron 3.5 Parse. Firma podaje do 7,62-krotnie wyższą przepustowość na jednej karcie H200.",
+   "body": "Nemotron 3.5 Parse to kompaktowy model zamieniający obrazy stron w ustrukturyzowane dane dla RAG i agentów. Zwraca treść w kolejności czytania, klasy (nagłówek, akapit, tabela, wykres) i ramki położenia.\n\nNvidia otwiera trzy zbiory: Synthetic Charts V1 (9,98 mln przykładów), Synthetic Tables V1 (1 mln) i OCR Synthetic Multilingual v2 (7,9 mln). Zawierają obrazy, adnotacje, dokumentację generowania i format treningowy. Nadają się do fine-tuningu pod własny typ dokumentu lub język.\n\nTrening miał dwie fazy: nadzorowany fine-tuning, potem uczenie ze wzmocnieniem z weryfikowalną nagrodą (GRPO). Nagroda sprawdza np. poprawność serii i wartości wykresu oraz karze zapętlenia. Na checkpointach rozwojowych strony z zapętleniem spadły ze 126 do 29, a wynik ogólny wzrósł z 66,24 do 71,38.\n\nDFlash2 to mały model szkicujący, który proponuje do 32 tokenów naprzód, a Parse weryfikuje je naraz. Średnio akceptowane jest około 14 tokenów.\n\nNa jednej H200 w BF16 przepustowość rośnie według Nvidii 7,62 raza przy współbieżności 1 i 1,52 raza przy 512. Przy 512 to 20,44 strony na sekundę wobec 2,98 dla Parse 2.0.\n\nDla trudnych stron są tryby podwójnego i potrójnego przebiegu, z ponownym parsowaniem wyciętych tabel i wykresów. Wszystkie liczby pochodzą z pomiarów producenta.",
+   "for_you": "Jeśli budujesz RAG na PDF-ach z tabelami i wykresami, zbiory nadają się do własnego fine-tuningu. Przetestuj model na swoich dokumentach, bo benchmarki są Nvidii.",
+   "sources": [
+    {
+     "name": "Hugging Face / NVIDIA",
+     "url": "https://huggingface.co/blog/nvidia/building-on-nemotron-35-parse-open-data-fine-tunin",
+     "primary": true
+    }
+   ],
+   "image_topic": "Nvidia",
+   "image": {
+    "url": "https://cdn-uploads.huggingface.co/production/uploads/6365c3f398da81987e2753f2/zArpuP9uLsLz9luMW0K2g.png",
+    "credit": "huggingface.co",
+    "link": "https://huggingface.co/blog/nvidia/building-on-nemotron-35-parse-open-data-fine-tunin"
+   },
+   "may_affect": [
+    "nvda"
+   ],
+   "disclaimer": null,
+   "image_fallback": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/75/2788-2888_San_Tomas_Expwy.jpg/960px-2788-2888_San_Tomas_Expwy.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+    "credit": "Coolcaesar / CC BY-SA 4.0, Wikimedia Commons",
+    "link": "https://commons.wikimedia.org/wiki/File:2788-2888_San_Tomas_Expwy.jpg"
+   },
+   "terms": [
+    "h200",
+    "dekodowanie-spekulatywne"
+   ]
+  },
+  {
+   "title": "llama.cpp i AMD: publiczny dashboard z wynikami Ryzen i Radeon, aktualizowany co tydzień",
+   "category": "rankingi",
+   "status": "potwierdzone",
+   "is_update": false,
+   "lede": "ggml-org uruchomiło na Hugging Face dashboard wydajności llama.cpp na sprzęcie AMD. Pokazuje przetwarzanie promptu i generowanie tekstu w tokenach na sekundę dla kolejnych buildów.",
+   "body": "Dashboard pozwala wybrać sprzęt, model i build llama.cpp. Na razie dostępne są Radeon 8060S (gfx1151) i Radeon AI Pro R9700S (gfx1201).\n\nMierzone są dwa testy: PP512 (przetworzenie 512 tokenów wejścia) i TG128 (wygenerowanie 128 tokenów). Domyślnie kontekst jest pusty, a zakładka Context scaling pokazuje, jak spada szybkość wraz z jego wzrostem.\n\nBenchmarki działają co tydzień na gotowych binariach z llama-install.sh, przez llama-bench, z Flash Attention włączonym i wyłączonym, po 10 powtórzeń. Zestaw modeli obejmuje m.in. Inkling 2 Mini, Qwen, Gemma, gpt-oss i LFM, w kwantyzacjach od Q4_K_M po BF16. Dane i workflow są publiczne w bucketcie ggml-org/install.sh-benches-data.\n\nZ powiązanych źródeł: autor devnull.land opisuje własną poprawkę llama-cpp-rdna-boosts, która według niego podniosła generowanie z 35 do 55 tokenów na sekundę. Prefill wzrósł według niego z 700 do 1300. To pojedynczy pomiar na jego maszynie.\n\nAutor krytykuje też nowe silniki, jak Strata, które według niego zmieniają zachowanie modelu, np. wybierając ekspertów z VRAM.",
+   "for_you": "Jeśli uruchamiasz modele lokalnie na AMD, dashboard pozwala porównać kwantyzacje przed pobraniem. Warto zajrzeć też do repozytorium z poprawkami RDNA, ale zmierz wynik u siebie.",
+   "sources": [
+    {
+     "name": "Hugging Face / ggml-org",
+     "url": "https://huggingface.co/blog/ggml-org/llamacpp-amd-bench",
+     "primary": true
+    },
+    {
+     "name": "devnull.land",
+     "url": "https://devnull.land/amd-specific-llama-cpp",
+     "primary": false
+    }
+   ],
+   "image_topic": "Llama.cpp",
+   "image": {
+    "url": "https://cdn-uploads.huggingface.co/production/uploads/67289c93ff90038d9a6e5675/tbIvyMSISXCm64WYP3atl.png",
+    "credit": "huggingface.co",
+    "link": "https://huggingface.co/blog/ggml-org/llamacpp-amd-bench"
+   },
+   "may_affect": [
+    "amd"
+   ],
+   "disclaimer": null,
+   "image_fallback": {
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/11/2485_Augustine_Drive_headquarters_in_Santa_Clara%2C_California.jpg/960px-2485_Augustine_Drive_headquarters_in_Santa_Clara%2C_California.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+    "credit": "Coolcaesar / CC BY-SA 4.0, Wikimedia Commons",
+    "link": "https://commons.wikimedia.org/wiki/File:2485_Augustine_Drive_headquarters_in_Santa_Clara,_California.jpg"
+   },
+   "terms": [
+    "radeon",
+    "kwantyzacja"
+   ]
+  }
+ ],
+ "market": {
+  "commentary": "Ostatnie dostępne zamknięcie to 25 listopada, a dane dzienne nie są dostępne, więc widać tylko zmiany siedmiodniowe. Niemal cały koszyk jest w dużym minusie: Intel traci 41,89%, Micron 35,26%, Super Micro 33,57%, a Nvidia 31,49%. Mniej spadły Meta (-1,66%) i Amazon (-3,43%), a Apple jako jedyny zyskał 2,44%. Tak szeroki ruch wygląda na zmianę nastrojów wobec całego sektora, nie na wieści o pojedynczej firmie. W tle są debiut i spadki Anthropica, spór o rating Nvidii oraz doniesienia o zadłużeniu na AI. Z samych nagłówków dnia wynika, że w czwartek globalne giełdy odbijały mimo nowych ceł i obaw o AI.",
+  "mood": "Nastrój jest ciężki: 17 z 18 spółek koszyka traci w tydzień, a tylko Apple jest na plusie.",
+  "disclaimer": "To nie jest porada inwestycyjna.",
+  "rows": [
+   {
+    "ticker": "NVDA",
+    "name": "NVIDIA",
+    "close": 149.3,
+    "change_1d": null,
+    "change_7d": -31.49,
+    "change_30d": null,
+    "last_trade_date": "2026-11-25"
+   },
+   {
+    "ticker": "MSFT",
+    "name": "Microsoft",
+    "close": 489.93,
+    "change_1d": null,
+    "change_7d": -7.79,
+    "change_30d": null,
+    "last_trade_date": "2026-11-25"
+   },
+   {
+    "ticker": "GOOGL",
+    "name": "Alphabet",
+    "close": 273.1,
+    "change_1d": null,
+    "change_7d": -14.81,
+    "change_30d": null,
+    "last_trade_date": "2026-11-25"
+   },
+   {
+    "ticker": "META",
+    "name": "Meta",
+    "close": 609.89,
+    "change_1d": null,
+    "change_7d": -1.66,
+    "change_30d": null,
+    "last_trade_date": "2026-11-25"
+   },
+   {
+    "ticker": "AMZN",
+    "name": "Amazon",
+    "close": 244.43,
+    "change_1d": null,
+    "change_7d": -3.43,
+    "change_30d": null,
+    "last_trade_date": "2026-11-25"
+   },
+   {
+    "ticker": "AAPL",
+    "name": "Apple",
+    "close": 355.58,
+    "change_1d": null,
+    "change_7d": 2.44,
+    "change_30d": null,
+    "last_trade_date": "2026-11-25"
+   },
+   {
+    "ticker": "TSM",
+    "name": "TSMC",
+    "close": 342.34,
+    "change_1d": null,
+    "change_7d": -21.64,
+    "change_30d": null,
+    "last_trade_date": "2026-11-25"
+   },
+   {
+    "ticker": "AMD",
+    "name": "AMD",
+    "close": 406.03,
+    "change_1d": null,
+    "change_7d": -27.53,
+    "change_30d": null,
+    "last_trade_date": "2026-11-25"
+   },
+   {
+    "ticker": "AVGO",
+    "name": "Broadcom",
+    "close": 300.86,
+    "change_1d": null,
+    "change_7d": -12.11,
+    "change_30d": null,
+    "last_trade_date": "2026-11-25"
+   },
+   {
+    "ticker": "ORCL",
+    "name": "Oracle",
+    "close": 103.88,
+    "change_1d": null,
+    "change_7d": -20.42,
+    "change_30d": null,
+    "last_trade_date": "2026-11-25"
+   },
+   {
+    "ticker": "PLTR",
+    "name": "Palantir",
+    "close": 163.59,
+    "change_1d": null,
+    "change_7d": -17.68,
+    "change_30d": null,
+    "last_trade_date": "2026-11-25"
+   },
+   {
+    "ticker": "CRWV",
+    "name": "CoreWeave",
+    "close": 42.57,
+    "change_1d": null,
+    "change_7d": -28.54,
+    "change_30d": null,
+    "last_trade_date": "2026-11-25"
+   },
+   {
+    "ticker": "ARM",
+    "name": "Arm",
+    "close": 161.51,
+    "change_1d": null,
+    "change_7d": -28.72,
+    "change_30d": null,
+    "last_trade_date": "2026-11-25"
+   },
+   {
+    "ticker": "ASML",
+    "name": "ASML",
+    "close": 1303.08,
+    "change_1d": null,
+    "change_7d": -20.33,
+    "change_30d": null,
+    "last_trade_date": "2026-11-25"
+   },
+   {
+    "ticker": "SMCI",
+    "name": "Super Micro",
+    "close": 23.31,
+    "change_1d": null,
+    "change_7d": -33.57,
+    "change_30d": null,
+    "last_trade_date": "2026-11-25"
+   },
+   {
+    "ticker": "TSLA",
+    "name": "Tesla",
+    "close": 380.14,
+    "change_1d": null,
+    "change_7d": -6.7,
+    "change_30d": null,
+    "last_trade_date": "2026-11-25"
+   },
+   {
+    "ticker": "INTC",
+    "name": "Intel",
+    "close": 54.47,
+    "change_1d": null,
+    "change_7d": -41.89,
+    "change_30d": null,
+    "last_trade_date": "2026-11-25"
+   },
+   {
+    "ticker": "MU",
+    "name": "Micron",
+    "close": 601.25,
+    "change_1d": null,
+    "change_7d": -35.26,
+    "change_30d": null,
+    "last_trade_date": "2026-11-25"
+   }
+  ],
+  "as_of": "2026-11-25"
+ },
+ "rankings": {
+  "commentary": "Na górze LMArena nadal dominują modele Gemini 4, a w Artificial Analysis prowadzi Claude Fable 5.2 przed GPT-6.2 Astra. Na Hugging Face trending rządzi rodzina Inkling 2 Mini. Wśród nowości ruch widać głównie w modelach multimodalnych i narzędziach lokalnych.",
+  "notes": [
+   {
+    "board": "lmarena",
+    "text": "Trzy pierwsze miejsca zajmują Gemini 4 Carbon, Argon i Neon, a za nimi Claude Opus 5.5."
+   },
+   {
+    "board": "aa",
+    "text": "Prowadzi Claude Fable 5.2, drugi jest GPT-6.2 Astra, a Gemini 4 Neon wyprzedza Carbon na trzecim miejscu."
+   },
+   {
+    "board": "hf_trending",
+    "text": "Inkling-2-Mini zajmuje trzy pierwsze miejsca w różnych wariantach, a Nemotron-Labs-Image-30B-A3B awansował o pięć pozycji."
+   }
+  ],
+  "lmarena": [
+   {
+    "rank": 1,
+    "model": "Gemini 4 Carbon",
+    "org": "google",
+    "score": 1538.8733656178997,
+    "variant": "High",
+    "delta": null
+   },
+   {
+    "rank": 2,
+    "model": "Gemini 4 Argon",
+    "org": "google",
+    "score": 1527.6707454486746,
+    "variant": "High",
+    "delta": null
+   },
+   {
+    "rank": 3,
+    "model": "Gemini 4 Neon",
+    "org": "google",
+    "score": 1522.8896905416118,
+    "variant": "High",
+    "delta": null
+   },
+   {
+    "rank": 4,
+    "model": "Claude Opus 5.5",
+    "org": "anthropic",
+    "score": 1514.1182801107798,
+    "variant": "High",
+    "delta": null
+   },
+   {
+    "rank": 5,
+    "model": "Claude Fable 5.1",
+    "org": "anthropic",
+    "score": 1511.7703155455783,
+    "variant": "Max",
+    "delta": null
+   },
+   {
+    "rank": 6,
+    "model": "Claude Opus 5",
+    "org": "anthropic",
+    "score": 1506.1795360065344,
+    "variant": "Max",
+    "delta": null
+   },
+   {
+    "rank": 7,
+    "model": "Muse Wonder",
+    "org": "meta",
+    "score": 1503.6619735295121,
+    "variant": "Max",
+    "delta": null
+   },
+   {
+    "rank": 8,
+    "model": "Gemini 4 Hydrogen",
+    "org": "google",
+    "score": 1502.1451228167848,
+    "variant": "High",
+    "delta": null
+   },
+   {
+    "rank": 9,
+    "model": "Claude Opus 4.6",
+    "org": "anthropic",
+    "score": 1501.5275016749329,
+    "variant": "High",
+    "delta": null
+   },
+   {
+    "rank": 10,
+    "model": "Gemini 3.8 Flash",
+    "org": "google",
+    "score": 1500.8803494450558,
+    "variant": "High",
+    "delta": null
+   },
+   {
+    "rank": 11,
+    "model": "Muse Spark 1.3",
+    "org": "meta",
+    "score": 1492.9022275319262,
+    "variant": "Max",
+    "delta": null
+   },
+   {
+    "rank": 12,
+    "model": "MiMo-V2.6-Pro",
+    "org": "xiaomi",
+    "score": 1492.8697235495856,
+    "variant": null,
+    "delta": null
+   },
+   {
+    "rank": 13,
+    "model": "Claude Fable 5",
+    "org": "anthropic",
+    "score": 1491.7552175389037,
+    "variant": "High",
+    "delta": null
+   },
+   {
+    "rank": 14,
+    "model": "Claude Opus 4.7",
+    "org": "anthropic",
+    "score": 1489.8288192461714,
+    "variant": "High",
+    "delta": null
+   },
+   {
+    "rank": 15,
+    "model": "Gemini 3.7 Flash",
+    "org": "google",
+    "score": 1489.1400216744582,
+    "variant": "High",
+    "delta": null
+   },
+   {
+    "rank": 16,
+    "model": "Qwen3.8-Max",
+    "org": "alibaba",
+    "score": 1484.9138435273762,
+    "variant": null,
+    "delta": null
+   },
+   {
+    "rank": 17,
+    "model": "Muse Spark 1.2",
+    "org": "meta",
+    "score": 1483.5168032483698,
+    "variant": "xHigh",
+    "delta": null
+   },
+   {
+    "rank": 18,
+    "model": "Gemini 3.5 Flash",
+    "org": "google",
+    "score": 1482.809520861872,
+    "variant": "High",
+    "delta": null
+   },
+   {
+    "rank": 19,
+    "model": "Gemini 3.1 Pro Preview",
+    "org": "google",
+    "score": 1480.0053904777624,
+    "variant": null,
+    "delta": null
+   },
+   {
+    "rank": 20,
+    "model": "Gemini 3 Pro",
+    "org": "google",
+    "score": 1479.731647527069,
+    "variant": null,
+    "delta": null
+   }
+  ],
+  "aa": [
+   {
+    "rank": 1,
+    "model": "Claude Fable 5.2",
+    "org": "Anthropic",
+    "score": 64.8,
+    "variant": "Max, Default Fallback",
+    "delta": null
+   },
+   {
+    "rank": 2,
+    "model": "GPT-6.2 Astra",
+    "org": "OpenAI",
+    "score": 62.2,
+    "variant": "Max",
+    "delta": null
+   },
+   {
+    "rank": 3,
+    "model": "Gemini 4 Neon",
+    "org": "Google",
+    "score": 61.5,
+    "variant": "Xhigh",
+    "delta": null
+   },
+   {
+    "rank": 4,
+    "model": "Gemini 4 Carbon",
+    "org": "Google",
+    "score": 60.1,
+    "variant": "High",
+    "delta": null
+   },
+   {
+    "rank": 5,
+    "model": "Claude Opus 5.5",
+    "org": "Anthropic",
+    "score": 59.1,
+    "variant": "Max, Default Fallback",
+    "delta": null
+   },
+   {
+    "rank": 6,
+    "model": "GPT-6.2 Sol",
+    "org": "OpenAI",
+    "score": 57.3,
+    "variant": "Max",
+    "delta": null
+   },
+   {
+    "rank": 7,
+    "model": "GPT-6 Astra",
+    "org": "OpenAI",
+    "score": 56.9,
+    "variant": "Max",
+    "delta": null
+   },
+   {
+    "rank": 8,
+    "model": "Claude Sonnet 5.5",
+    "org": "Anthropic",
+    "score": 54.7,
+    "variant": "Max, Default Fallback",
+    "delta": null
+   },
+   {
+    "rank": 9,
+    "model": "GPT-6.1 Sol",
+    "org": "OpenAI",
+    "score": 54.7,
+    "variant": "Max",
+    "delta": null
+   },
+   {
+    "rank": 10,
+    "model": "Gemini 4 Hydrogen",
+    "org": "Google",
+    "score": 54.1,
+    "variant": "Xhigh",
+    "delta": null
+   },
+   {
+    "rank": 11,
+    "model": "GPT-6.1 Terra",
+    "org": "OpenAI",
+    "score": 51.4,
+    "variant": "Max",
+    "delta": null
+   },
+   {
+    "rank": 12,
+    "model": "Gemini 4 Argon",
+    "org": "Google",
+    "score": 50.5,
+    "variant": "High",
+    "delta": null
+   },
+   {
+    "rank": 13,
+    "model": "Claude Fable 5.1",
+    "org": "Anthropic",
+    "score": 50,
+    "variant": "Xhigh, Default Fallback",
+    "delta": null
+   },
+   {
+    "rank": 14,
+    "model": "Muse Wonder Full",
+    "org": "Meta",
+    "score": 49.9,
+    "variant": "Max",
+    "delta": null
+   },
+   {
+    "rank": 15,
+    "model": "Kimi K3.1 Pro",
+    "org": "Kimi",
+    "score": 46.6,
+    "variant": null,
+    "delta": null
+   },
+   {
+    "rank": 16,
+    "model": "Claude Opus 5",
+    "org": "Anthropic",
+    "score": 44.2,
+    "variant": "Max",
+    "delta": null
+   },
+   {
+    "rank": 17,
+    "model": "GPT-6 Sol",
+    "org": "OpenAI",
+    "score": 44.1,
+    "variant": "Max",
+    "delta": null
+   },
+   {
+    "rank": 18,
+    "model": "Muse Wonder",
+    "org": "Meta",
+    "score": 43.7,
+    "variant": "Max",
+    "delta": null
+   },
+   {
+    "rank": 19,
+    "model": "Qwen4 Max",
+    "org": "Alibaba",
+    "score": 42.8,
+    "variant": null,
+    "delta": null
+   },
+   {
+    "rank": 20,
+    "model": "Muse Spark 1.3",
+    "org": "Meta",
+    "score": 36.6,
+    "variant": "Max",
+    "delta": null
+   }
+  ],
+  "hf_trending": [
+   {
+    "rank": 1,
+    "model": "thinkingmachines/Inkling-2-Mini",
+    "org": "thinkingmachines",
+    "score": 1415,
+    "delta": null
+   },
+   {
+    "rank": 2,
+    "model": "unsloth/Inkling-2-Mini-GGUF",
+    "org": "unsloth",
+    "score": 1247,
+    "delta": null
+   },
+   {
+    "rank": 3,
+    "model": "AtomicChat/Inkling-2-Mini-Uncensored-GGUF",
+    "org": "AtomicChat",
+    "score": 513.8,
+    "delta": null
+   },
+   {
+    "rank": 4,
+    "model": "SulphurAI/Sulphur-3",
+    "org": "SulphurAI",
+    "score": 495,
+    "delta": null
+   },
+   {
+    "rank": 5,
+    "model": "inworld/voice-isolator",
+    "org": "inworld",
+    "score": 479,
+    "delta": -2
+   },
+   {
+    "rank": 6,
+    "model": "prism-ml/Ternary-Bonsai-2.5-27B-GGUF",
+    "org": "prism-ml",
+    "score": 466,
+    "delta": null
+   },
+   {
+    "rank": 7,
+    "model": "Lightricks/LTX-2.5",
+    "org": "Lightricks",
+    "score": 333,
+    "delta": 4
+   },
+   {
+    "rank": 8,
+    "model": "nvidia/Nemotron-Labs-Image-30B-A3B",
+    "org": "nvidia",
+    "score": 224,
+    "delta": 5
+   },
+   {
+    "rank": 9,
+    "model": "llamaindex/OCRia-nano-1",
+    "org": "llamaindex",
+    "score": 224,
+    "delta": null
+   },
+   {
+    "rank": 10,
+    "model": "apple/DepthPro2",
+    "org": "apple",
+    "score": 216.5,
+    "delta": -3
+   },
+   {
+    "rank": 11,
+    "model": "inclusionAI/Ling-3.2-air",
+    "org": "inclusionAI",
+    "score": 197,
+    "delta": -2
+   },
+   {
+    "rank": 12,
+    "model": "strata-engine/Inkling-2-Mini-Strata",
+    "org": "strata-engine",
+    "score": 173,
+    "delta": 8
+   },
+   {
+    "rank": 13,
+    "model": "nari-labs/Qwen3.8-27B-NariQ-GGUF",
+    "org": "nari-labs",
+    "score": 157,
+    "delta": 4
+   },
+   {
+    "rank": 14,
+    "model": "Sentinel7/h3",
+    "org": "Sentinel7",
+    "score": 138.8,
+    "delta": 2
+   },
+   {
+    "rank": 15,
+    "model": "orcarouter/Inkling-2-Mini-abliterated-GGUF",
+    "org": "orcarouter",
+    "score": 135.1,
+    "delta": "new"
+   },
+   {
+    "rank": 16,
+    "model": "Aleph-Alpha/Kolibri-1.1",
+    "org": "Aleph-Alpha",
+    "score": 131,
+    "delta": "new"
+   },
+   {
+    "rank": 17,
+    "model": "sand-ai/MAGI-2-preview",
+    "org": "sand-ai",
+    "score": 126,
+    "delta": "new"
+   },
+   {
+    "rank": 18,
+    "model": "harness-hub/Qwen3.8-27B-pi-adapted",
+    "org": "harness-hub",
+    "score": 126,
+    "delta": -8
+   },
+   {
+    "rank": 19,
+    "model": "Qwen/Qwen3.8-27B",
+    "org": "Qwen",
+    "score": 125.5,
+    "delta": -5
+   },
+   {
+    "rank": 20,
+    "model": "KRAFTON/Raon-1-mini",
+    "org": "KRAFTON",
+    "score": 122,
+    "delta": "new"
+   }
+  ],
+  "areas": [
+   {
+    "key": "webdev",
+    "label": "Programowanie",
+    "new_leader": false,
+    "rows": [
+     {
+      "rank": 1,
+      "model": "Claude Fable 5.2",
+      "org": "anthropic",
+      "delta": null
+     },
+     {
+      "rank": 2,
+      "model": "Claude Opus 5.5",
+      "org": "anthropic",
+      "delta": null
+     },
+     {
+      "rank": 3,
+      "model": "Claude Sonnet 5.5",
+      "org": "anthropic",
+      "delta": null
+     },
+     {
+      "rank": 4,
+      "model": "Gemini 4 Carbon",
+      "org": "google",
+      "delta": null
+     },
+     {
+      "rank": 5,
+      "model": "Gemini 4 Neon",
+      "org": "google",
+      "delta": null
+     },
+     {
+      "rank": 6,
+      "model": "GPT-6 Astra",
+      "org": "openai",
+      "delta": null
+     },
+     {
+      "rank": 7,
+      "model": "GPT-6.2 Astra",
+      "org": "openai",
+      "delta": null
+     },
+     {
+      "rank": 8,
+      "model": "GPT-6.2 Sol",
+      "org": "openai",
+      "delta": null
+     },
+     {
+      "rank": 9,
+      "model": "Qwen4-Max",
+      "org": "alibaba",
+      "delta": null
+     },
+     {
+      "rank": 10,
+      "model": "GPT-6.1 Sol",
+      "org": "openai",
+      "delta": null
+     }
+    ]
+   },
+   {
+    "key": "agent",
+    "label": "Agenci",
+    "new_leader": false,
+    "rows": [
+     {
+      "rank": 1,
+      "model": "Claude Fable 5.2",
+      "org": "anthropic",
+      "delta": null
+     },
+     {
+      "rank": 2,
+      "model": "Claude Opus 5.5",
+      "org": "anthropic",
+      "delta": null
+     },
+     {
+      "rank": 3,
+      "model": "Gemini 4 Neon",
+      "org": "google",
+      "delta": null
+     },
+     {
+      "rank": 4,
+      "model": "Gemini 4 Carbon",
+      "org": "google",
+      "delta": null
+     },
+     {
+      "rank": 5,
+      "model": "Claude Sonnet 5.5",
+      "org": "anthropic",
+      "delta": null
+     },
+     {
+      "rank": 6,
+      "model": "GPT-6 Astra",
+      "org": "openai",
+      "delta": null
+     },
+     {
+      "rank": 7,
+      "model": "GPT-6.2 Astra",
+      "org": "openai",
+      "delta": null
+     },
+     {
+      "rank": 8,
+      "model": "Gemini 4 Hydrogen",
+      "org": "google",
+      "delta": null
+     },
+     {
+      "rank": 9,
+      "model": "Claude Fable 5.1",
+      "org": "anthropic",
+      "delta": null
+     },
+     {
+      "rank": 10,
+      "model": "GPT-6.2 Sol",
+      "org": "openai",
+      "delta": null
+     }
+    ]
+   },
+   {
+    "key": "writing",
+    "label": "Pisanie",
+    "new_leader": false,
+    "rows": [
+     {
+      "rank": 1,
+      "model": "Gemini 4 Carbon",
+      "org": "google",
+      "delta": null
+     },
+     {
+      "rank": 2,
+      "model": "Claude Opus 5.5",
+      "org": "anthropic",
+      "delta": null
+     },
+     {
+      "rank": 3,
+      "model": "Gemini 4 Argon",
+      "org": "google",
+      "delta": null
+     },
+     {
+      "rank": 4,
+      "model": "Gemini 4 Neon",
+      "org": "google",
+      "delta": null
+     },
+     {
+      "rank": 5,
+      "model": "Claude Fable 5.1",
+      "org": "anthropic",
+      "delta": null
+     },
+     {
+      "rank": 6,
+      "model": "Claude Fable 5.2",
+      "org": "anthropic",
+      "delta": null
+     },
+     {
+      "rank": 7,
+      "model": "Gemini 4 Hydrogen",
+      "org": "google",
+      "delta": null
+     },
+     {
+      "rank": 8,
+      "model": "Claude Opus 4.6",
+      "org": "anthropic",
+      "delta": null
+     },
+     {
+      "rank": 9,
+      "model": "Gemini 3.8 Flash",
+      "org": "google",
+      "delta": null
+     },
+     {
+      "rank": 10,
+      "model": "Claude Fable 5",
+      "org": "anthropic",
+      "delta": null
+     }
+    ]
+   },
+   {
+    "key": "polish",
+    "label": "Po polsku",
+    "new_leader": false,
+    "rows": [
+     {
+      "rank": 1,
+      "model": "Gemini 4 Argon",
+      "org": "google",
+      "delta": null
+     },
+     {
+      "rank": 2,
+      "model": "Claude Fable 5.1",
+      "org": "anthropic",
+      "delta": null
+     },
+     {
+      "rank": 3,
+      "model": "Muse Wonder",
+      "org": "meta",
+      "delta": null
+     },
+     {
+      "rank": 4,
+      "model": "Claude Opus 5",
+      "org": "anthropic",
+      "delta": null
+     },
+     {
+      "rank": 5,
+      "model": "Gemini 3.5 Flash",
+      "org": "google",
+      "delta": null
+     },
+     {
+      "rank": 6,
+      "model": "Claude Opus 5.5",
+      "org": "anthropic",
+      "delta": null
+     },
+     {
+      "rank": 7,
+      "model": "Gemini 3.8 Flash",
+      "org": "google",
+      "delta": null
+     },
+     {
+      "rank": 8,
+      "model": "Muse Spark 1.2",
+      "org": "meta",
+      "delta": null
+     },
+     {
+      "rank": 9,
+      "model": "Gemini 3.7 Flash",
+      "org": "google",
+      "delta": null
+     },
+     {
+      "rank": 10,
+      "model": "Gemini 3 Pro",
+      "org": "google",
+      "delta": null
+     }
+    ]
+   },
+   {
+    "key": "math",
+    "label": "Matematyka",
+    "new_leader": false,
+    "rows": [
+     {
+      "rank": 1,
+      "model": "Gemini 4 Argon",
+      "org": "google",
+      "delta": null
+     },
+     {
+      "rank": 2,
+      "model": "Gemini 4 Neon",
+      "org": "google",
+      "delta": null
+     },
+     {
+      "rank": 3,
+      "model": "Claude Fable 5.1",
+      "org": "anthropic",
+      "delta": null
+     },
+     {
+      "rank": 4,
+      "model": "Claude Opus 5",
+      "org": "anthropic",
+      "delta": null
+     },
+     {
+      "rank": 5,
+      "model": "Gemini 3.8 Flash",
+      "org": "google",
+      "delta": null
+     },
+     {
+      "rank": 6,
+      "model": "Claude Opus 5.5",
+      "org": "anthropic",
+      "delta": null
+     },
+     {
+      "rank": 7,
+      "model": "Gemini 4 Hydrogen",
+      "org": "google",
+      "delta": null
+     },
+     {
+      "rank": 8,
+      "model": "Claude Opus 4.6",
+      "org": "anthropic",
+      "delta": null
+     },
+     {
+      "rank": 9,
+      "model": "Claude Fable 5",
+      "org": "anthropic",
+      "delta": null
+     },
+     {
+      "rank": 10,
+      "model": "Gemini 3.7 Flash",
+      "org": "google",
+      "delta": null
+     }
+    ]
+   },
+   {
+    "key": "image",
+    "label": "Obrazy",
+    "new_leader": false,
+    "rows": [
+     {
+      "rank": 1,
+      "model": "GPT-Image-2.5 Sunburst",
+      "org": "openai",
+      "delta": null
+     },
+     {
+      "rank": 2,
+      "model": "GPT-Image-2.6 Sunburst",
+      "org": "openai",
+      "delta": null
+     },
+     {
+      "rank": 3,
+      "model": "GPT-Image-2.5 Flare",
+      "org": "openai",
+      "delta": null
+     },
+     {
+      "rank": 4,
+      "model": "MAI-Image-2.7",
+      "org": "microsoft-ai",
+      "delta": null
+     },
+     {
+      "rank": 5,
+      "model": "GPT-Image-2",
+      "org": "openai",
+      "delta": null
+     },
+     {
+      "rank": 6,
+      "model": "GPT-Image-2.6 Flare",
+      "org": "openai",
+      "delta": null
+     },
+     {
+      "rank": 7,
+      "model": "MAI-Image-2.6",
+      "org": "microsoft-ai",
+      "delta": null
+     },
+     {
+      "rank": 8,
+      "model": "Grok Imagine Image 2.0",
+      "org": "xai",
+      "delta": null
+     },
+     {
+      "rank": 9,
+      "model": "Gemini Nano Banana 2.1",
+      "org": "google",
+      "delta": null
+     },
+     {
+      "rank": 10,
+      "model": "Reve 2.1",
+      "org": "reve",
+      "delta": null
+     }
+    ]
+   }
+  ]
+ },
+ "rumors": [],
+ "big_moves": [
+  {
+   "entity_id": "intc",
+   "board": "market",
+   "change": "-41,89% w 7 dni",
+   "why": "Brak jednoznacznej przyczyny. Spadek wpisuje się w szeroką przecenę spółek AI i półprzewodników w ostatnim tygodniu, więc to ruch rynkowy, a nie wiadomość o samej firmie.",
+   "why_type": "brak",
+   "sources": [
+    {
+     "name": "CNBC",
+     "url": "https://www.cnbc.com/2026/11/26/stock-markets-today-.html",
+     "primary": false
+    }
+   ],
+   "why_short": "brak jednoznacznej przyczyny, szeroka przecena sektora"
+  },
+  {
+   "entity_id": "smci",
+   "board": "market",
+   "change": "-33,57% w 7 dni",
+   "why": "Brak jednoznacznej przyczyny. Możliwe, że to część ogólnej wyprzedaży spółek związanych z infrastrukturą AI.",
+   "why_type": "hipoteza",
+   "sources": [],
+   "why_short": "możliwa przecena całego sektora infrastruktury AI"
+  },
+  {
+   "entity_id": "nvda",
+   "board": "market",
+   "change": "-31,49% w 7 dni",
+   "why": "Możliwe, że wpływ miały niedawne doniesienia o groźbie obniżenia ratingu Nvidii przez S&P i szeroka przecena sektora. Żadne źródło nie łączy wprost tych zdarzeń ze spadkiem.",
+   "why_type": "hipoteza",
+   "sources": [],
+   "why_short": "możliwy wpływ ratingu S&P i przeceny sektora"
+  },
+  {
+   "entity_id": "amd",
+   "board": "market",
+   "change": "-27,53% w 7 dni",
+   "why": "Możliwe, że to efekt przeceny sektora i wcześniejszego raportu Hunterbrook o ekspozycji na Chiny. Żadne źródło nie łączy ich wprost z tym ruchem.",
+   "why_type": "hipoteza",
+   "sources": [],
+   "why_short": "możliwy efekt przeceny sektora i raportu o Chinach"
+  },
+  {
+   "entity_id": "tsm",
+   "board": "market",
+   "change": "-21,64% w 7 dni",
+   "why": "Brak jednoznacznej przyczyny. Skala spadku jest podobna jak u innych spółek półprzewodnikowych, co wskazuje na ruch całego sektora.",
+   "why_type": "brak",
+   "sources": [],
+   "why_short": "brak jednoznacznej przyczyny, ruch całego sektora"
+  },
+  {
+   "entity_id": "asml",
+   "board": "market",
+   "change": "-20,33% w 7 dni",
+   "why": "Brak jednoznacznej przyczyny. Spadek wygląda na część szerokiej przeceny sprzętu dla AI.",
+   "why_type": "brak",
+   "sources": [],
+   "why_short": "brak jednoznacznej przyczyny, szeroka przecena"
+  },
+  {
+   "entity_id": "inworld-voice-isolator",
+   "board": "hf_trending",
+   "change": "spadek z #3 na #5",
+   "why": "Brak jednoznacznej przyczyny. Wyższe miejsca zajęły warianty Inkling 2 Mini.",
+   "why_type": "hipoteza",
+   "sources": [],
+   "why_short": "wyprzedziły go warianty Inkling 2 Mini"
+  },
+  {
+   "entity_id": "lightricks-ltx-2-5",
+   "board": "hf_trending",
+   "change": "awans z #11 na #7",
+   "why": "Brak jednoznacznej przyczyny w dostępnych źródłach.",
+   "why_type": "brak",
+   "sources": [],
+   "why_short": "brak jednoznacznej przyczyny"
+  },
+  {
+   "entity_id": "nvidia-nemotron-labs-image-30b-a3b",
+   "board": "hf_trending",
+   "change": "awans z #13 na #8",
+   "why": "Możliwe, że wpływ ma świeża aktywność Nvidii wokół otwartych modeli i danych Nemotron. Źródła nie łączą tego wprost z awansem.",
+   "why_type": "hipoteza",
+   "sources": [
+    {
+     "name": "Hugging Face",
+     "url": "https://huggingface.co/blog/nvidia/building-on-nemotron-35-parse-open-data-fine-tunin",
+     "primary": true
+    }
+   ],
+   "why_short": "możliwy efekt świeżych publikacji Nvidii"
+  },
+  {
+   "entity_id": "apple-depthpro2",
+   "board": "hf_trending",
+   "change": "spadek z #7 na #10",
+   "why": "Brak jednoznacznej przyczyny.",
+   "why_type": "brak",
+   "sources": [],
+   "why_short": "brak jednoznacznej przyczyny"
+  },
+  {
+   "entity_id": "inclusionai-ling-3-2-air",
+   "board": "hf_trending",
+   "change": "spadek z #9 na #11",
+   "why": "Brak jednoznacznej przyczyny.",
+   "why_type": "brak",
+   "sources": [],
+   "why_short": "brak jednoznacznej przyczyny"
+  },
+  {
+   "entity_id": "strata-engine-inkling-2-mini-strata",
+   "board": "hf_trending",
+   "change": "awans z #20 na #12",
+   "why": "Możliwe, że to pochodna popularności Inkling 2 Mini, którego warianty dominują listę.",
+   "why_type": "hipoteza",
+   "sources": [],
+   "why_short": "możliwa fala zainteresowania Inkling 2 Mini"
+  },
+  {
+   "entity_id": "nari-labs-qwen3-8-27b-nariq-gguf",
+   "board": "hf_trending",
+   "change": "awans z #17 na #13",
+   "why": "Możliwe, że wpływ ma wcześniejsze zainteresowanie Qwen3.8-27B, np. adapterami harness. Źródła nie potwierdzają związku.",
+   "why_type": "hipoteza",
+   "sources": [],
+   "why_short": "możliwe zainteresowanie Qwen3.8-27B"
+  },
+  {
+   "entity_id": "sentinel7-h3",
+   "board": "hf_trending",
+   "change": "awans z #16 na #14",
+   "why": "Brak jednoznacznej przyczyny.",
+   "why_type": "brak",
+   "sources": [],
+   "why_short": "brak jednoznacznej przyczyny"
+  },
+  {
+   "entity_id": "orcarouter-inkling-2-mini-abliterated-gguf",
+   "board": "hf_trending",
+   "change": "nowy na #15",
+   "why": "Możliwe, że to kolejny wariant popularnego Inkling 2 Mini.",
+   "why_type": "hipoteza",
+   "sources": [],
+   "why_short": "kolejny wariant popularnego Inkling 2 Mini"
+  },
+  {
+   "entity_id": "aleph-alpha-kolibri-1-1",
+   "board": "hf_trending",
+   "change": "nowy na #16",
+   "why": "Brak jednoznacznej przyczyny w dostępnych źródłach.",
+   "why_type": "brak",
+   "sources": [],
+   "why_short": "brak jednoznacznej przyczyny"
+  },
+  {
+   "entity_id": "sand-ai-magi-2-preview",
+   "board": "hf_trending",
+   "change": "nowy na #17",
+   "why": "Brak jednoznacznej przyczyny w dostępnych źródłach.",
+   "why_type": "brak",
+   "sources": [],
+   "why_short": "brak jednoznacznej przyczyny"
+  },
+  {
+   "entity_id": "harness-hub-qwen3-8-27b-pi-adapted",
+   "board": "hf_trending",
+   "change": "spadek z #10 na #18",
+   "why": "Brak jednoznacznej przyczyny. Możliwe, że zainteresowanie opadło po wcześniejszym zwiększonym ruchu.",
+   "why_type": "hipoteza",
+   "sources": [],
+   "why_short": "możliwy spadek po wcześniejszym szczycie"
+  },
+  {
+   "entity_id": "qwen-qwen3-8-27b",
+   "board": "hf_trending",
+   "change": "spadek z #14 na #19",
+   "why": "Brak jednoznacznej przyczyny.",
+   "why_type": "brak",
+   "sources": [],
+   "why_short": "brak jednoznacznej przyczyny"
+  },
+  {
+   "entity_id": "krafton-raon-1-mini",
+   "board": "hf_trending",
+   "change": "nowy na #20",
+   "why": "Brak jednoznacznej przyczyny w dostępnych źródłach.",
+   "why_type": "brak",
+   "sources": [],
+   "why_short": "brak jednoznacznej przyczyny"
+  },
+  {
+   "entity_id": "higurashi-ai-haru-4b",
+   "board": "hf_trending",
+   "change": "wypadł z listy (był #12)",
+   "why": "Brak jednoznacznej przyczyny. Miejsca zajęli nowi wchodzący.",
+   "why_type": "brak",
+   "sources": [],
+   "why_short": "wyparli go nowi wchodzący"
+  },
+  {
+   "entity_id": "inclusionai-lingsante-3-1-flash",
+   "board": "hf_trending",
+   "change": "wypadł z listy (był #15)",
+   "why": "Brak jednoznacznej przyczyny.",
+   "why_type": "brak",
+   "sources": [],
+   "why_short": "brak jednoznacznej przyczyny"
+  },
+  {
+   "entity_id": "tencent-hy4-flash",
+   "board": "hf_trending",
+   "change": "wypadł z listy (był #18)",
+   "why": "Brak jednoznacznej przyczyny.",
+   "why_type": "brak",
+   "sources": [],
+   "why_short": "brak jednoznacznej przyczyny"
+  },
+  {
+   "entity_id": "facebook-sam-3d-body-dinov3",
+   "board": "hf_trending",
+   "change": "wypadł z listy (był #19)",
+   "why": "Brak jednoznacznej przyczyny.",
+   "why_type": "brak",
+   "sources": [],
+   "why_short": "brak jednoznacznej przyczyny"
+  }
+ ],
+ "follow_ups": [
+  {
+   "entity_id": "intc",
+   "move": "-41,89% w 7 dni",
+   "related_story": "Ternary Bonsai 2.5 27B: model w 5,9 GB, nastawiony na lokalne agenty",
+   "story_date": "2026-11-25"
+  },
+  {
+   "entity_id": "nvda",
+   "move": "-31,49% w 7 dni",
+   "related_story": "S&P grozi obniżeniem ratingu Nvidii: rosnące ryzyko w zarządzaniu firmą",
+   "story_date": "2026-11-26"
+  },
+  {
+   "entity_id": "amd",
+   "move": "-27,53% w 7 dni",
+   "related_story": "Huang wraca na stanowisko szefa Nvidii, akcje rosną o 31%",
+   "story_date": "2026-11-24"
+  }
+ ],
+ "closing": "W najbliższych dniach warto sprawdzić, czy DeepMind poda szczegóły o pracy agentów i czy przecena spółek AI znajdzie wyjaśnienie w konkretnych wydarzeniach. Zerknij też na zmiany w polityce Google wobec serwerów MCP, które wejdą w życie 1 lutego 2027.",
+ "weekly": null,
+ "monthly": null,
+ "spotlight": {
+  "company_id": "smci",
+  "model_id": "gemini-4-carbon"
+ },
+ "minutes": 11,
+ "supplement_minutes": 0
+}

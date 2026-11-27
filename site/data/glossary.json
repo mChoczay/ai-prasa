@@ -26,6 +26,11 @@
    "explain": "To zapisywany krok po kroku tok rozumowania modelu, widoczny zanim poda odpowiedź. Można to porównać do pokazywania na kartce obliczeń, a nie tylko wyniku. Jest ważny, bo pozwala ludziom sprawdzić, czy model nie kombinuje czegoś niepokojącego. Tutaj autorzy zwracają uwagę, że nowa architektura z pętlą rozumuje bez zapisywania całego toku, co utrudnia tę kontrolę."
   },
   {
+   "id": "chapter-11",
+   "term": "Chapter 11",
+   "explain": "To amerykańskie postępowanie upadłościowe, w którym firma nie musi od razu zamykać działalności, tylko może się przekształcić lub sprzedać część majątku. Działa trochę jak przerwa na uporządkowanie długów przed podjęciem decyzji. W tej sprawie dzięki niemu można sprzedać historię czatów, a prokuratorzy chcą temu zapobiec."
+  },
+  {
    "id": "cobra",
    "term": "COBRA",
    "explain": "COBRA to amerykański mechanizm, który pozwala zachować ubezpieczenie zdrowotne przez pewien czas po utracie pracy. Osoba płaci wtedy pełną składkę z własnej kieszeni, bez dopłaty pracodawcy. W tej historii pracownicy dostali tę możliwość, ale za pełną cenę, choć ubezpieczenie wygasło wstecznie."
@@ -66,9 +71,19 @@
    "explain": "To gotowy sposób wykorzystania błędu w programie, który pozwala komuś zrobić coś, na co nie powinien mieć zgody. Przypomina wytrych dopasowany do zamka z usterką. W tej historii ochrona polega na zablokowaniu dokładnie tej operacji, której exploit używa."
   },
   {
+   "id": "fcc",
+   "term": "FCC",
+   "explain": "To Federalna Komisja Łączności w USA, urząd, który wydaje zgody na używanie fal radiowych i wysyłanie satelitów. Można ją porównać do urzędu, który przydziela pasy na drodze powietrznej. W tej historii to właśnie FCC zgodziła się na ogromną liczbę satelitów SpaceX."
+  },
+  {
    "id": "ground-stop",
    "term": "ground stop",
    "explain": "Ground stop to decyzja urzędu lotnictwa o wstrzymaniu wszystkich lotów na danym obszarze, zwykle na kilka godzin. Samoloty pozostają na lotniskach, dopóki problem nie zostanie usunięty. W tym przypadku FAA wstrzymała loty w całym kraju przez awarię systemów danych."
+  },
+  {
+   "id": "h200",
+   "term": "H200",
+   "explain": "To bardzo wydajny układ graficzny firmy Nvidia, używany głównie w centrach danych do trenowania i uruchamiania modeli AI. Można go porównać do superszybkiego silnika w ciężarówce dla firm, a nie dla zwykłych komputerów. W tym tekście podano, o ile szybciej model przetwarza dokumenty na jednej takiej karcie."
   },
   {
    "id": "harness",
@@ -106,6 +121,11 @@
    "explain": "To program, który ocenia dane i przypisuje im etykietę, na przykład „bezpieczne” albo „podejrzane”. Działa podobnie jak kontroler na lotnisku, który sprawdza każdego pasażera osobno. W tej historii klasyfikatory oceniają pojedyncze zapytania, więc łatwo przeoczają atak rozłożony na wiele małych kroków."
   },
   {
+   "id": "konstelacja",
+   "term": "konstelacja",
+   "explain": "To duża grupa satelitów krążących wokół Ziemi i współpracujących ze sobą jak jedna sieć. Przypomina rój świetlików, który razem tworzy jeden wzór. W tym tekście chodzi o planowaną sieć SpaceX z miliona satelitów z obliczeniami AI."
+  },
+  {
    "id": "kwantyzacja",
    "term": "kwantyzacja",
    "explain": "Kwantyzacja to zmniejszenie precyzji liczb, z których zbudowany jest model. Działa trochę jak zapisywanie zdjęcia w niższej jakości: plik jest mniejszy, ale obraz traci trochę szczegółów. Dzięki temu duży model mieści się w pamięci zwykłego laptopa, a Localcode pokazuje ich aż 169 wariantów."
@@ -119,6 +139,11 @@
    "id": "looped-transformer",
    "term": "looped transformer",
    "explain": "To rodzaj sieci neuronowej, w której ta sama grupa warstw działa kilka razy pod rząd, a każdy kolejny przebieg poprawia wynik poprzedniego. Przypomina pętlę, w której ktoś wielokrotnie przerabia ten sam szkic, zamiast pisać kolejne strony. Dzięki temu model może być „głębszy” bez dokładania nowych parametrów. W tej historii to nowość Z.ai, a takie modele pojawiają się dopiero od niedawna."
+  },
+  {
+   "id": "mcp",
+   "term": "MCP",
+   "explain": "To standard, dzięki któremu programy AI mogą w uporządkowany sposób korzystać z zewnętrznych usług, na przykład poczty czy kalendarza. Można to porównać do wspólnego gniazdka, do którego pasują różne wtyczki. W tym tekście oznacza, że agenci mają od 2027 roku korzystać z Gmaila i Dysku tylko przez oficjalne serwery Google."
   },
   {
    "id": "mixture-of-experts",
@@ -151,9 +176,19 @@
    "explain": "Perplexity to miara tego, jak bardzo model jest zaskoczony, widząc nowy tekst. Im niższa wartość, tym lepiej model przewiduje kolejne słowo lub fragment. Na co dzień to trochę jak test: ile razy zgadujący musiałby zgadywać, zanim trafi właściwe słowo. W tym artykule OpenAI proponuje, żeby ta jedna liczba była wspólnym sposobem porównywania postępu modeli."
   },
   {
+   "id": "radeon",
+   "term": "Radeon",
+   "explain": "To marka kart graficznych firmy AMD, używanych w komputerach i stacjach roboczych. Działają podobnie jak karty Nvidia, ale są produkowane przez inną firmę. W tym tekście testowano na nich, jak szybko modele AI działają lokalnie."
+  },
+  {
    "id": "refresh-token",
    "term": "refresh token",
    "explain": "Refresh token to długowieczny klucz, którym aplikacja odnawia krótkotrwały dostęp do konta, bez ponownego logowania użytkownika. Działa jak karta stałego klienta, na podstawie której wydaje się nowe jednorazowe przepustki. W tym artykule błąd w zapisie takich kluczy zmusił użytkowników do ponownej zgody na dostęp."
+  },
+  {
+   "id": "rekurencyjne-samodoskonalenie",
+   "term": "rekurencyjne samodoskonalenie",
+   "explain": "To sytuacja, w której system AI ulepsza samego siebie, a każda jego nowa wersja jest lepsza w projektowaniu kolejnej. Można to porównać do ucznia, który sam pisze coraz lepsze podręczniki dla siebie. W tym tekście firma mówi wprost, że do takiego stanu jest jeszcze daleko, bo agenty tylko pomagają w eksperymentach."
   },
   {
    "id": "reverse-acquihire",
@@ -164,6 +199,11 @@
    "id": "router-ai",
    "term": "router AI",
    "explain": "To pośrednik, który odbiera zapytanie do modelu i decyduje, do którego dostawcy je wysłać. Działa jak dyspozytor w taksówkach, który kieruje kurs do właściwego kierowcy. Problem polega na tym, że aby wybrać dostawcę, router musi przeczytać treść zapytania, więc widzi w niej także hasła i klucze. Stąd ryzyko wycieku wrażliwych danych."
+  },
+  {
+   "id": "routing",
+   "term": "routing",
+   "explain": "To kierowanie zapytania od użytkownika do konkretnego serwera, który ma odpowiedzieć. Działa jak poczta, która decyduje, do którego okienka trafi list. W tej historii chodzi o to, czy trasa prowadziła tam, gdzie firma deklarowała, bo od tego zależy, kto widzi treść promptów."
   },
   {
    "id": "use-after-free",

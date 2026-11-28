@@ -41,6 +41,16 @@
    "explain": "Cross-entropy loss to funkcja straty, czyli wynik, który pokazuje, jak bardzo model się myli podczas treningu. Model dostaje kary za przewidywanie złych kolejnych tokenów, a trening polega na tym, żeby kary były jak najmniejsze. Według autora eseju to ta sama wartość, co perplexity, tylko zapisana w innej skali."
   },
   {
+   "id": "cuda",
+   "term": "CUDA",
+   "explain": "To platforma programistyczna Nvidii, dzięki której programy wykorzystują karty graficzne do obliczeń. Większość narzędzi AI została napisana właśnie pod nią, więc działa najpewniej na kartach Nvidii. Autor tekstu nie mógł porównać wyniku z CUDA, bo nie miał rzetelnych danych z tej platformy."
+  },
+  {
+   "id": "dear-imgui",
+   "term": "Dear ImGui",
+   "explain": "To biblioteka do budowy interfejsów graficznych, popularna wśród twórców narzędzi i gier. Jest lekka i prosta, więc łatwo ją wbudować w mały program. Dzięki niej Prospero może działać jako jeden plik bez dużych zależności."
+  },
+  {
    "id": "dekodowanie-spekulatywne",
    "term": "dekodowanie spekulatywne",
    "explain": "Dekodowanie spekulatywne to sposób przyspieszania odpowiedzi modelu. Mały, szybki model zgaduje kilka kolejnych słów naraz, a duży model tylko je sprawdza zamiast generować każde od zera. Efekt jest taki, jak gdy szybki pomocnik szkicuje tekst, a redaktor go zatwierdza, zamiast pisać wszystko samodzielnie."
@@ -176,6 +186,11 @@
    "explain": "Perplexity to miara tego, jak bardzo model jest zaskoczony, widząc nowy tekst. Im niższa wartość, tym lepiej model przewiduje kolejne słowo lub fragment. Na co dzień to trochę jak test: ile razy zgadujący musiałby zgadywać, zanim trafi właściwe słowo. W tym artykule OpenAI proponuje, żeby ta jedna liczba była wspólnym sposobem porównywania postępu modeli."
   },
   {
+   "id": "polaczenia-rezydualne",
+   "term": "połączenia rezydualne",
+   "explain": "To skrót drogi w sieci neuronowej: wynik warstwy jest dodawany do jej wejścia, zanim trafi dalej. Działa jak notatka, która przechodzi z kartki na kartkę, a każda warstwa tylko coś do niej dopisuje. Autorzy DCA twierdzą, że przy takim dodawaniu wczesne informacje się rozmywają, dlatego ten mechanizm jest w tekście zamieniany na coś sprytniejszego."
+  },
+  {
    "id": "radeon",
    "term": "Radeon",
    "explain": "To marka kart graficznych firmy AMD, używanych w komputerach i stacjach roboczych. Działają podobnie jak karty Nvidia, ale są produkowane przez inną firmę. W tym tekście testowano na nich, jak szybko modele AI działają lokalnie."
@@ -204,6 +219,16 @@
    "id": "routing",
    "term": "routing",
    "explain": "To kierowanie zapytania od użytkownika do konkretnego serwera, który ma odpowiedzieć. Działa jak poczta, która decyduje, do którego okienka trafi list. W tej historii chodzi o to, czy trasa prowadziła tam, gdzie firma deklarowała, bo od tego zależy, kto widzi treść promptów."
+  },
+  {
+   "id": "skille",
+   "term": "skille",
+   "explain": "Skille to paczki instrukcji i narzędzi, które agent AI wczytuje, żeby wiedzieć, jak wykonać konkretne zadanie. Można to porównać do dodatków do przeglądarki, które dają jej nowe umiejętności. W tej historii chodzi o to, że takie paczki mogą po cichu wysyłać dane o projekcie użytkownika na zewnętrzny serwer."
+  },
+  {
+   "id": "trainium3",
+   "term": "Trainium3",
+   "explain": "To własny chip Amazona (AWS), zaprojektowany specjalnie do liczenia modeli AI, a nie uniwersalny procesor graficzny. Działa jak alternatywa dla kart Nvidii, które dominują na rynku. W tekście chodzi o to, czy taki chip da równie szybkie generowanie wideo jak sprzęt konkurencji."
   },
   {
    "id": "use-after-free",

@@ -1,0 +1,1426 @@
+{
+ "date": "2026-11-28",
+ "edition": "daily",
+ "generated_at": "2026-11-28T04:32:36.502Z",
+ "quiet_day": false,
+ "greeting": "Kiedy pracowałeś, Google opublikowało architekturę, która obiecuje szybsze trenowanie transformerów, a giełda odrabiała część wcześniejszych strat. Poniżej najważniejsze rzeczy w skrócie, bez ściany tekstu.",
+ "lead_story": {
+  "title": "DeepCrossAttention od Google: połączenia rezydualne z routingiem, do 3x szybsze dojście do tej samej jakości",
+  "category": "modele",
+  "status": "potwierdzone",
+  "is_update": false,
+  "lede": "Google Research opisało DeepCrossAttention (DCA), zamiennik klasycznych połączeń rezydualnych w transformerach. Zespół twierdzi, że ta sama jakość modelu przychodzi nawet trzy razy szybciej, przy dodatku poniżej 0,2% parametrów.",
+  "body": "Google Research opisało DCA, czyli sposób łączenia warstw transformera, w którym model sam wybiera, z których wcześniejszych warstw korzystać. Klasyczne połączenie rezydualne po prostu dodaje wyjście warstwy do jej wejścia. Według autorów traktuje to wszystkie wcześniejsze reprezentacje jednakowo, więc szczegóły z wczesnych warstw się uśredniają i sieć musi je później liczyć od nowa.\n\nDCA zamienia to w problem routingu. Każda warstwa dostaje lekki moduł, który dla każdego tokenu uczy się wag łączenia wyników wcześniejszych warstw. Służy do tego uwaga międzywarstwowa (depth-wise cross-attention).\n\nAutorzy testowali podejście na zadaniach syntetycznych, modelowaniu języka i klasyfikacji obrazów. Na zbiorach C4 i LM1B DCA osiągał jakość zwykłego transformera nawet w pięciokrotnie mniejszej liczbie kroków treningu. Przy tym samym budżecie parametrów i treningu miał niższą perplexity, czyli lepiej przewidywał kolejne słowa. Porównywano go z LAUREL-PA, 1x1-DenseFormer i Hyper-Connections.\n\nPrzykład głębokości: żeby zejść poniżej perplexity 14 na LM1B, zwykły transformer o stałej szerokości potrzebował 42 warstw. Model z DCA uzyskał niższy wynik przy 30 warstwach, czyli o 29% mniej głębokości i parametrów. Google podaje, że oszczędność parametrów sięga 30-40% przy porównywalnej jakości.\n\nKoszt jest mały: DCA dodaje mniej niż 0,2% parametrów. Autorzy zaznaczają jednak, że zwiększa zapotrzebowanie na przepustowość pamięci, bo reprezentacje z różnych warstw są podawane osobno, a nie zmieszane.\n\nNajciekawszy dla praktyków jest wariant doszkalania. DCA można zainicjalizować tak, by na starcie zachowywał się jak zwykła sieć rezydualna, więc da się go doszczepić do już wytrenowanego transformera i krótko kontynuować trening. Na LM1B obniżyło to perplexity o 0,19, a zwykłe dalsze trenowanie tylko o 0,02.\n\nPraca była prezentowana na konferencji ICML 2025, a wpis na blogu Google Research wraca do niej teraz. Wyniki pochodzą od autorów i dotyczą modeli badawczych. Nie wiadomo, jak DCA zachowuje się w modelach rzędu setek miliardów parametrów ani jaki jest realny koszt przepustowości pamięci przy inferencji.",
+  "for_you": "Jeśli doszkalasz własne transformery, DCA to tani eksperyment: da się go dodać do gotowego checkpointu. Przed wdrożeniem zmierz wpływ na przepustowość pamięci, bo tam leży ukryty koszt.",
+  "sources": [
+   {
+    "name": "Google Research",
+    "url": "https://research.google/blog/supercharging-transformer-residual-connections/",
+    "primary": true
+   }
+  ],
+  "image_topic": "Transformer (deep learning architecture)",
+  "image": {
+   "url": "https://storage.googleapis.com/gweb-research2023-media/images/HO_previewImage1.width-800.format-jpeg.jpg",
+   "credit": "research.google",
+   "link": "https://research.google/blog/supercharging-transformer-residual-connections/"
+  },
+  "may_affect": [
+   "googl",
+   "nvda",
+   "gemini-4-carbon"
+  ],
+  "disclaimer": null,
+  "image_fallback": {
+   "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e2/Google_Campus%2C_Mountain_View%2C_CA.jpg/960px-Google_Campus%2C_Mountain_View%2C_CA.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+   "credit": "Austin McKinley / CC BY 3.0, Wikimedia Commons",
+   "link": "https://commons.wikimedia.org/wiki/File:Google_Campus,_Mountain_View,_CA.jpg"
+  },
+  "terms": [
+   "polaczenia-rezydualne",
+   "routing"
+  ]
+ },
+ "stories": [
+  {
+   "title": "Wtyczka Convex w oficjalnym katalogu Anthropic wysyła pomysł na aplikację na zdalny serwer",
+   "category": "narzedzia",
+   "status": "opinia",
+   "is_update": false,
+   "lede": "Autor zgłoszenia na GitHubie twierdzi, że trzy skille wtyczki Convex wysyłają opis projektu użytkownika na zdalny serwer bez jego wiedzy. Wtyczka figuruje w katalogu claude-plugins-official.",
+   "body": "Kiedy pracowałeś, na GitHubie zrobiło się głośno wokół wtyczki Convex. Zgłoszenie nr 64 opisuje trzy skille, które według autora budzą te same zastrzeżenia. Wątek trafił na stronę główną Hacker News, stąd lawina komentarzy.\n\nPierwszy zarzut: pomysł użytkownika na aplikację jest wysyłany na zdalny serwer bez uprzedzenia i bez możliwości odmowy. Komentujący pytają, jak długo dane są przechowywane, kto ma do nich dostęp i do czego służą. Opis projektu może zawierać poufne informacje klienta.\n\nDrugi zarzut: skrypty startowe są pobierane w trakcie działania, spod adresu z wygenerowaną nazwą hosta, i nie są przypięte do konkretnej wersji. Użytkownik nie ma więc jak sprawdzić, co dokładnie się uruchomi.\n\nTrzeci zarzut jest najpoważniejszy. Jedna z instrukcji każe agentowi zmienić kształt polecenia tak, by narzędzia bezpieczeństwa użytkownika go nie wychwyciły. To omija kontrolę wybraną przez użytkownika lub jego administratora, choć autor zgłoszenia czyta to jako próbę ułatwienia wdrożenia, a nie złośliwość.\n\nAutor proponuje trzy poprawki: informować użytkownika przed wysłaniem pomysłu i uczynić to opcjonalnym, dołączyć skrypty do wtyczki albo przypiąć je hashem, oraz usunąć instrukcję o klasyfikatorze. Według komentarza po stronie projektu zmiany trafiły już do repozytorium w pull requeście nr 230, ale to nie jest oficjalna odpowiedź zespołu Convex. Nie wiadomo, czy Anthropic zmieni zasady weryfikacji wtyczek w katalogu.",
+   "for_you": "Zanim zainstalujesz skill z katalogu, przeczytaj jego pliki. Sprawdź, czy pobiera kod w czasie działania i czy każe agentowi omijać zabezpieczenia.",
+   "sources": [
+    {
+     "name": "GitHub: convex-backend-skill #64",
+     "url": "https://github.com/convex/convex-backend-skill/issues/64",
+     "primary": true
+    }
+   ],
+   "image_topic": "Convex",
+   "image": {
+    "url": "https://opengraph.githubassets.com/948678486470c2a1c53c0a0bcfdc4fd459ad3cff6bf0ff0e6896284cea52528b/convex/convex-backend-skill/issues/64",
+    "credit": "github.com",
+    "link": "https://github.com/convex/convex-backend-skill/issues/64"
+   },
+   "may_affect": [],
+   "disclaimer": null,
+   "image_fallback": null,
+   "terms": [
+    "skille"
+   ]
+  },
+  {
+   "title": "SAP szykuje cięcie co najmniej 10 tysięcy etatów w imię AI, jednocześnie zgłasza atak",
+   "category": "inne",
+   "status": "potwierdzone",
+   "is_update": false,
+   "lede": "Bloomberg donosi, że SAP przygotowuje plan likwidacji co najmniej 10 tysięcy stanowisk. Firma nie potwierdza decyzji i zgłosiła też podejrzaną aktywność w swoich systemach.",
+   "body": "Według Bloomberga, cytowanego przez CNBC, niemiecki producent oprogramowania dla firm prosi wszystkie działy o wskazanie możliwych cięć. Szczególnie dotyczy to produktu, inżynierii i sprzedaży. SAP zatrudnia ponad 110 tysięcy osób.\n\nFirma komentuje ostrożnie: role i funkcje będą się zmieniać, a decyzji o dalszych krokach nie podjęto. Spekulacji nie komentuje.\n\nTo nie pierwsza taka runda. W 2024 roku SAP zlikwidował około 10 tysięcy stanowisk, głównie przez dobrowolne odejścia i przekwalifikowanie. Potem zatrudnienie pozostało mniej więcej stałe, bo firma przyjmowała ludzi do nowych ról.\n\nSAP idzie w stronę strategii AI-first pod kierunkiem Christiana Kleina. W tym roku kupił Reltio, Dremio, Prior Labs i TechWolf, a zainwestował m.in. w Parloa, n8n i Conduct. Przejęcia mają pomóc w porządkowaniu danych firmowych, budowie modeli dla danych biznesowych i analizie kompetencji pracowników.\n\nW tym samym dniu SAP poinformował o wykryciu podejrzanej aktywności i wdrożeniu środków ochronnych. Firma nie widzi dowodów na nieautoryzowany dostęp do danych biznesowych klientów.\n\nAI jako powód zwolnień podaje coraz więcej firm: WiseTech (około 2000 etatów), Atlassian (około 1600) i Cloudflare (ponad 1100). W USA pracodawcy powoływali się na AI w 121 401 ogłoszeniach o cięciach do końca października, czyli w około 20% wszystkich, według raportu Challenger, Gray & Christmas.\n\nNie wiadomo, ile z 10 tysięcy etatów rzeczywiście zniknie i w których krajach.",
+   "for_you": "Jeśli pracujesz z ekosystemem SAP, to sygnał, że nacisk przesuwa się na integracje AI i dane. Zespoły inżynierskie są wprost wskazane jako obszar przeglądu.",
+   "sources": [
+    {
+     "name": "CNBC",
+     "url": "https://www.cnbc.com/2026/11/27/sap-job-cuts-ai-restructuring.html",
+     "primary": false
+    }
+   ],
+   "image_topic": "SAP",
+   "image": {
+    "url": "https://image.cnbcfm.com/api/v1/image/108120789-1742904573651-gettyimages-159129388-72801932.jpeg?v=1758797166&w=1920&h=1080",
+    "credit": "cnbc.com",
+    "link": "https://www.cnbc.com/2026/11/27/sap-job-cuts-ai-restructuring.html"
+   },
+   "may_affect": [],
+   "disclaimer": null,
+   "image_fallback": null
+  },
+  {
+   "title": "Agenci zakupowi AI wpadają na blokady sklepów. Test Visy: 43% nieudanych zakupów",
+   "category": "inne",
+   "status": "potwierdzone",
+   "is_update": false,
+   "lede": "W badaniu Visy 22 modele z 12 laboratoriów zawiodły w około 43% prób zakupowych. Amazon, eBay i inni ograniczają agentów lub ich blokują, choć Walmart i Sephora ich wpuszczają.",
+   "body": "CNBC opisuje, jak wygląda zakupowy agent w praktyce. Dyrektorka produktu fintechu Imprint poprosiła agenta Muse od Mety o kupno wycieraczek w AutoZone. Po 17 godzinach przyszło powiadomienie, że sklep anulował zamówienie z nieokreślonym błędem.\n\nBadanie Visy, opublikowane w tym miesiącu, zleciło 22 modelom z 12 laboratoriów zakupy, np. telewizora i laptopa. Agenci zawiedli w około 43% przebiegów. W ponad połowie nieudanych prób kupili produkt niespełniający wymagań klienta.\n\nDo błędów dochodzą blokady. Amazon zamknął stronę dla agentów niemal całkowicie: we wrześniu zablokował Muse, w zeszłym miesiącu Groka, a rok temu pozwał Perplexity za agenta Comet. Prezes Andy Jassy mówi, że partnerstwa są możliwe, ale wymagają odpowiedniej wymiany wartości.\n\nCoach i Gap pozwalają agentom przeglądać, ale nie płacić. Audyt Billions Network z sierpnia wskazuje, że Target czasem blokuje agentów przez pomyłkę.\n\nSklepy boją się fałszywych botów. Agenci wyglądają podejrzanie, bo ukrywają adres IP przez centra danych i płacą jednorazowymi kartami. Skyfire chce dostarczać dane o tym, jaki bot odwiedza stronę, i potwierdzać, że człowiek zezwolił na zakup.\n\nAnalitycy McKinsey i ICSC prognozują, że przychody z handlu agentowego w USA mogą sięgnąć do 1 biliona dolarów w 2030 roku. Nie rozstrzygnięto, kto odpowiada za zakup, który poszedł źle.",
+   "for_you": "Budując agenta kupującego, zakładaj blokady, captche i logowanie przy płatności. Potrzebujesz potwierdzenia człowieka i weryfikacji sprzedawcy, zanim agent wyda pieniądze.",
+   "sources": [
+    {
+     "name": "CNBC",
+     "url": "https://www.cnbc.com/2026/11/27/ai-shopping-agents-retailer-blocks.html",
+     "primary": false
+    }
+   ],
+   "image_topic": "Agentic commerce",
+   "image": {
+    "url": "https://image.cnbcfm.com/api/v1/image/108560156-1795790550973-AgentGame.jpg?v=1795790567&w=1920&h=1080",
+    "credit": "cnbc.com",
+    "link": "https://www.cnbc.com/2026/11/27/ai-shopping-agents-retailer-blocks.html"
+   },
+   "may_affect": [
+    "amzn",
+    "meta",
+    "googl"
+   ],
+   "disclaimer": null,
+   "image_fallback": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/3/33/Jeff_Bezos_2016.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
+    "credit": "U.S. Department of Defense photo by Senior Master Sgt. Adrian Cadiz / CC BY 2.0, Wikimedia Commons",
+    "link": "https://commons.wikimedia.org/wiki/File:Jeff_Bezos_2016.jpg"
+   }
+  },
+  {
+   "title": "LTX-2.5 na Trainium3: 10-sekundowy klip z dźwiękiem w 22-23 sekundy",
+   "category": "modele",
+   "status": "potwierdzone",
+   "is_update": false,
+   "lede": "Inżynier Hugging Face uruchomił model wideo LTX-2.5 na chipie AWS Trainium3 i uzyskał 22-23 s na 10-sekundowy klip z dźwiękiem. Wynik dotyczy połowy maszyny i załadowanych modeli.",
+   "body": "Hugging Face dostał na miesiąc dostęp do maszyny trn3.48xlarge z 64 rdzeniami NeuronCore, dzięki partnerstwu z AWS. Autor wpisu użył końcówki testów do generowania wideo modelem LTX-2.5 od Lightricks, który tworzy obraz i dźwięk razem.\n\nKlip 10-sekundowy w rozdzielczości 2048×1024 powstaje w 22-23 s na połowie maszyny. Autor porównuje to z API LTX, które według producenta robi 10 sekund w 1080p w 23,7 s. Porównania z CUDA nie ma, bo jedyna dostępna liczba, 6,8 s na czterech B200, nie ma opisu metodyki.\n\nPierwsza działająca wersja potrzebowała około 5 min 20 s, a rdzenie liczyły tylko około 45 s. Poprawa wymagała trzech rzeczy: uruchomienia modelu na NeuronCore z tensor parallelism, rozdzielenia go na więcej rdzeni (sequence parallelism) i przyspieszenia hosta. Największe oszczędności dała strona hosta.\n\nFilm powstaje ze scenariusza w JSON: lista ujęć z nazwą, promptem i opcjonalnym seedem. Ujęcia łączą się przez klatki, na których jedno się kończy, a drugie zaczyna. Autor poleca kolejność pose to pose: najpierw kluczowe ujęcie, potem pozostałe.\n\nKod to około 160 linii Pythona na diffusers, w repozytorium dacorvo/video-generation.\n\nSą też otwarte kwestie. Transformer skompilowany jako jeden graf zwrócił NaN przy jednym rozmiarze, a upsampler nie ładuje się obok transformera i działa na CPU. Poprawki są w toku w diffusers (#15420 i #14725). Załadowanie modeli trwa około 3 minut.",
+   "for_you": "Jeśli szukasz alternatywy dla GPU Nvidii przy generowaniu wideo, to praktyczny dowód, że diffusers działa na Trainium3, choć wymaga ręcznych poprawek.",
+   "sources": [
+    {
+     "name": "Hugging Face blog",
+     "url": "https://huggingface.co/blog/video-trainium3",
+     "primary": true
+    }
+   ],
+   "image_topic": "AWS Trainium",
+   "image": {
+    "url": "https://huggingface.co/blog/assets/video-trainium3/thumbnail.jpg",
+    "credit": "huggingface.co",
+    "link": "https://huggingface.co/blog/video-trainium3"
+   },
+   "may_affect": [
+    "amzn",
+    "nvda"
+   ],
+   "disclaimer": null,
+   "image_fallback": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/3/33/Jeff_Bezos_2016.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
+    "credit": "U.S. Department of Defense photo by Senior Master Sgt. Adrian Cadiz / CC BY 2.0, Wikimedia Commons",
+    "link": "https://commons.wikimedia.org/wiki/File:Jeff_Bezos_2016.jpg"
+   },
+   "terms": [
+    "trainium3",
+    "cuda"
+   ]
+  },
+  {
+   "title": "Prospero: natywny agent do kodowania w jednym pliku C++, działa nawet na Windows XP",
+   "category": "narzedzia",
+   "status": "potwierdzone",
+   "is_update": false,
+   "lede": "Prospero to natywna aplikacja GUI na Windows, macOS i Linuksa, która łączy agenta kodującego z lokalnym lub zdalnym modelem. Jest jednym plikiem wykonywalnym w C++ i trafia do domeny publicznej.",
+   "body": "Prospero łączy się z dostawcą modelu przez API zgodne z OpenAI Chat Completions, czyli z llama.cpp, vLLM, LiteLLM i podobnymi. Obsługuje też Messages API Anthropic z extended thinking i prompt caching. Domyślnie nie ma skonfigurowanego żadnego dostawcy.\n\nNarzędzie działa jako jeden program, w typowym przypadku bez demona czy serwera. Ten sam plik może pracować bez okna, na innej maszynie przez ssh albo w tle po zamknięciu okna. Autor twierdzi, że silnik jest lekki i działa na komputerach sprzed ćwierć wieku, więc teoretycznie na Windows XP.\n\nInterfejs oparty na Dear ImGui pozwala dowolnie przestawiać panele i zapisywać układy. W odróżnieniu od typowych aplikacji ImGui renderowanie jest pasywne i nie zużywa zasobów w bezczynności.\n\nAgent może sterować pulpitem, co ma pomagać w tworzeniu, testowaniu i debugowaniu natywnych aplikacji GUI. Na Windows najlepiej współpracuje z w64devkit. Czyta własną wbudowaną dokumentację, konfiguruje się sam i prowadzi użytkownika po interfejsie. Potrafi też ciągnąć zadanie mimo przejściowych błędów, bez nadzoru.\n\nKod jest wydany jako wolne oprogramowanie w domenie publicznej (UNLICENSE). Używa bibliotek z własnymi licencjami, m.in. Dear ImGui, SDL3, FreeType i Mbed TLS. Wbudowana sieć modelu, src/gemma.cpp, wywodzi się z gemma4.c na licencji MIT.",
+   "for_you": "Jeśli chcesz agenta bez Electrona i bez zależności od jednego dostawcy, to ciekawa alternatywa do testów z lokalnym modelem. Warto sprawdzić, jak radzi sobie z długimi, nienadzorowanymi sesjami.",
+   "sources": [
+    {
+     "name": "GitHub: skeeto/prospero",
+     "url": "https://github.com/skeeto/prospero",
+     "primary": true
+    }
+   ],
+   "image_topic": "Dear ImGui",
+   "image": {
+    "url": "https://opengraph.githubassets.com/b6b41855455f80f4810c6f5ade1d6d7cfb36392a03ac048ba9370a12a918916d/skeeto/prospero",
+    "credit": "github.com",
+    "link": "https://github.com/skeeto/prospero"
+   },
+   "may_affect": [],
+   "disclaimer": null,
+   "image_fallback": null,
+   "terms": [
+    "dear-imgui"
+   ]
+  }
+ ],
+ "market": {
+  "commentary": "Wszystkie 18 spółek z koszyka zakończyło tydzień na plusie, a największe odbicia dotyczyły Palantira (+19,99%), Nvidii (+19,88%) i Tesli (+15,67%). Mimo to w skali 30 dni większość pozostaje wyraźnie niżej, m.in. Intel (-39,91%), Micron (-34,2%) i Super Micro (-33,65%). To raczej odbicie po wcześniejszych spadkach niż nowy trend. Dane o zmianie dziennej nie są dostępne.",
+  "mood": "Cały koszyk rośnie w ujęciu tygodniowym, ale w miesięcznym większość wciąż jest mocno pod kreską.",
+  "disclaimer": "To nie jest porada inwestycyjna.",
+  "rows": [
+   {
+    "ticker": "NVDA",
+    "name": "NVIDIA",
+    "close": 150.49,
+    "change_1d": null,
+    "change_7d": 19.88,
+    "change_30d": -30.13,
+    "last_trade_date": "2026-11-27"
+   },
+   {
+    "ticker": "MSFT",
+    "name": "Microsoft",
+    "close": 492.85,
+    "change_1d": null,
+    "change_7d": 1.72,
+    "change_30d": -7.19,
+    "last_trade_date": "2026-11-27"
+   },
+   {
+    "ticker": "GOOGL",
+    "name": "Alphabet",
+    "close": 274.96,
+    "change_1d": null,
+    "change_7d": 3.65,
+    "change_30d": -15.37,
+    "last_trade_date": "2026-11-27"
+   },
+   {
+    "ticker": "META",
+    "name": "Meta",
+    "close": 628.96,
+    "change_1d": null,
+    "change_7d": 12.15,
+    "change_30d": 2.69,
+    "last_trade_date": "2026-11-27"
+   },
+   {
+    "ticker": "AMZN",
+    "name": "Amazon",
+    "close": 254.12,
+    "change_1d": null,
+    "change_7d": 2.96,
+    "change_30d": -0.19,
+    "last_trade_date": "2026-11-27"
+   },
+   {
+    "ticker": "AAPL",
+    "name": "Apple",
+    "close": 358.54,
+    "change_1d": null,
+    "change_7d": 4.66,
+    "change_30d": 4.28,
+    "last_trade_date": "2026-11-27"
+   },
+   {
+    "ticker": "TSM",
+    "name": "TSMC",
+    "close": 353.34,
+    "change_1d": null,
+    "change_7d": 10.87,
+    "change_30d": -19.61,
+    "last_trade_date": "2026-11-27"
+   },
+   {
+    "ticker": "AMD",
+    "name": "AMD",
+    "close": 424.54,
+    "change_1d": null,
+    "change_7d": 0.04,
+    "change_30d": -26.61,
+    "last_trade_date": "2026-11-27"
+   },
+   {
+    "ticker": "AVGO",
+    "name": "Broadcom",
+    "close": 312.34,
+    "change_1d": null,
+    "change_7d": 2.61,
+    "change_30d": -11.22,
+    "last_trade_date": "2026-11-27"
+   },
+   {
+    "ticker": "ORCL",
+    "name": "Oracle",
+    "close": 107.13,
+    "change_1d": null,
+    "change_7d": 5.87,
+    "change_30d": -25.88,
+    "last_trade_date": "2026-11-27"
+   },
+   {
+    "ticker": "PLTR",
+    "name": "Palantir",
+    "close": 172.17,
+    "change_1d": null,
+    "change_7d": 19.99,
+    "change_30d": -12.52,
+    "last_trade_date": "2026-11-27"
+   },
+   {
+    "ticker": "CRWV",
+    "name": "CoreWeave",
+    "close": 44.15,
+    "change_1d": null,
+    "change_7d": 11.74,
+    "change_30d": -30.94,
+    "last_trade_date": "2026-11-27"
+   },
+   {
+    "ticker": "ARM",
+    "name": "Arm",
+    "close": 171.55,
+    "change_1d": null,
+    "change_7d": 12.71,
+    "change_30d": -27.28,
+    "last_trade_date": "2026-11-27"
+   },
+   {
+    "ticker": "ASML",
+    "name": "ASML",
+    "close": 1325.82,
+    "change_1d": null,
+    "change_7d": 4.71,
+    "change_30d": -20.27,
+    "last_trade_date": "2026-11-27"
+   },
+   {
+    "ticker": "SMCI",
+    "name": "Super Micro",
+    "close": 23.76,
+    "change_1d": null,
+    "change_7d": 9.75,
+    "change_30d": -33.65,
+    "last_trade_date": "2026-11-27"
+   },
+   {
+    "ticker": "TSLA",
+    "name": "Tesla",
+    "close": 400,
+    "change_1d": null,
+    "change_7d": 15.67,
+    "change_30d": -1.04,
+    "last_trade_date": "2026-11-27"
+   },
+   {
+    "ticker": "INTC",
+    "name": "Intel",
+    "close": 57.4,
+    "change_1d": null,
+    "change_7d": 11.93,
+    "change_30d": -39.91,
+    "last_trade_date": "2026-11-27"
+   },
+   {
+    "ticker": "MU",
+    "name": "Micron",
+    "close": 646.95,
+    "change_1d": null,
+    "change_7d": 8.82,
+    "change_30d": -34.2,
+    "last_trade_date": "2026-11-27"
+   }
+  ],
+  "as_of": "2026-11-27"
+ },
+ "rankings": {
+  "commentary": "W LMArena prowadzi trójka modeli Gemini 4, a Anthropic zajmuje miejsca 4-6. W Artificial Analysis na czele jest Claude Fable 5.2, przed GPT-6.2 Astra. Na Hugging Face dominuje rodzina Inkling-2-Mini.",
+  "notes": [
+   {
+    "board": "lmarena",
+    "text": "Gemini 4 Carbon, Argon i Neon zajmują trzy pierwsze miejsca, a pierwszy model Anthropic, Claude Opus 5.5, jest czwarty."
+   },
+   {
+    "board": "aa",
+    "text": "Claude Fable 5.2 jest pierwszy, drugi jest GPT-6.2 Astra, a Gemini 4 Neon trzeci."
+   },
+   {
+    "board": "hf_trending",
+    "text": "Inkling-2-Mini od Thinking Machines i jego kwantyzacje GGUF zajmują miejsca 1, 2, 5 i 10, a Ternary-Bonsai-2.5-27B awansował na czwarte."
+   }
+  ],
+  "lmarena": [
+   {
+    "rank": 1,
+    "model": "Gemini 4 Carbon",
+    "org": "google",
+    "score": 1538.8733656178997,
+    "variant": "High",
+    "delta": null
+   },
+   {
+    "rank": 2,
+    "model": "Gemini 4 Argon",
+    "org": "google",
+    "score": 1527.6707454486746,
+    "variant": "High",
+    "delta": null
+   },
+   {
+    "rank": 3,
+    "model": "Gemini 4 Neon",
+    "org": "google",
+    "score": 1522.8896905416118,
+    "variant": "High",
+    "delta": null
+   },
+   {
+    "rank": 4,
+    "model": "Claude Opus 5.5",
+    "org": "anthropic",
+    "score": 1514.1182801107798,
+    "variant": "High",
+    "delta": null
+   },
+   {
+    "rank": 5,
+    "model": "Claude Fable 5.1",
+    "org": "anthropic",
+    "score": 1511.7703155455783,
+    "variant": "Max",
+    "delta": null
+   },
+   {
+    "rank": 6,
+    "model": "Claude Opus 5",
+    "org": "anthropic",
+    "score": 1506.1795360065344,
+    "variant": "Max",
+    "delta": null
+   },
+   {
+    "rank": 7,
+    "model": "Muse Wonder",
+    "org": "meta",
+    "score": 1503.6619735295121,
+    "variant": "Max",
+    "delta": null
+   },
+   {
+    "rank": 8,
+    "model": "Gemini 4 Hydrogen",
+    "org": "google",
+    "score": 1502.1451228167848,
+    "variant": "High",
+    "delta": null
+   },
+   {
+    "rank": 9,
+    "model": "Claude Opus 4.6",
+    "org": "anthropic",
+    "score": 1501.5275016749329,
+    "variant": "High",
+    "delta": null
+   },
+   {
+    "rank": 10,
+    "model": "Gemini 3.8 Flash",
+    "org": "google",
+    "score": 1500.8803494450558,
+    "variant": "High",
+    "delta": null
+   },
+   {
+    "rank": 11,
+    "model": "Muse Spark 1.3",
+    "org": "meta",
+    "score": 1492.9022275319262,
+    "variant": "Max",
+    "delta": null
+   },
+   {
+    "rank": 12,
+    "model": "MiMo-V2.6-Pro",
+    "org": "xiaomi",
+    "score": 1492.8697235495856,
+    "variant": null,
+    "delta": null
+   },
+   {
+    "rank": 13,
+    "model": "Claude Fable 5",
+    "org": "anthropic",
+    "score": 1491.7552175389037,
+    "variant": "High",
+    "delta": null
+   },
+   {
+    "rank": 14,
+    "model": "Claude Opus 4.7",
+    "org": "anthropic",
+    "score": 1489.8288192461714,
+    "variant": "High",
+    "delta": null
+   },
+   {
+    "rank": 15,
+    "model": "Gemini 3.7 Flash",
+    "org": "google",
+    "score": 1489.1400216744582,
+    "variant": "High",
+    "delta": null
+   },
+   {
+    "rank": 16,
+    "model": "Qwen3.8-Max",
+    "org": "alibaba",
+    "score": 1484.9138435273762,
+    "variant": null,
+    "delta": null
+   },
+   {
+    "rank": 17,
+    "model": "Muse Spark 1.2",
+    "org": "meta",
+    "score": 1483.5168032483698,
+    "variant": "xHigh",
+    "delta": null
+   },
+   {
+    "rank": 18,
+    "model": "Gemini 3.5 Flash",
+    "org": "google",
+    "score": 1482.809520861872,
+    "variant": "High",
+    "delta": null
+   },
+   {
+    "rank": 19,
+    "model": "Gemini 3.1 Pro Preview",
+    "org": "google",
+    "score": 1480.0053904777624,
+    "variant": null,
+    "delta": null
+   },
+   {
+    "rank": 20,
+    "model": "Gemini 3 Pro",
+    "org": "google",
+    "score": 1479.731647527069,
+    "variant": null,
+    "delta": null
+   }
+  ],
+  "aa": [
+   {
+    "rank": 1,
+    "model": "Claude Fable 5.2",
+    "org": "Anthropic",
+    "score": 64.8,
+    "variant": "Max, Default Fallback",
+    "delta": null
+   },
+   {
+    "rank": 2,
+    "model": "GPT-6.2 Astra",
+    "org": "OpenAI",
+    "score": 62.2,
+    "variant": "Max",
+    "delta": null
+   },
+   {
+    "rank": 3,
+    "model": "Gemini 4 Neon",
+    "org": "Google",
+    "score": 61.5,
+    "variant": "Xhigh",
+    "delta": null
+   },
+   {
+    "rank": 4,
+    "model": "Gemini 4 Carbon",
+    "org": "Google",
+    "score": 60.1,
+    "variant": "High",
+    "delta": null
+   },
+   {
+    "rank": 5,
+    "model": "Claude Opus 5.5",
+    "org": "Anthropic",
+    "score": 59.1,
+    "variant": "Max, Default Fallback",
+    "delta": null
+   },
+   {
+    "rank": 6,
+    "model": "GPT-6.2 Sol",
+    "org": "OpenAI",
+    "score": 57.3,
+    "variant": "Max",
+    "delta": null
+   },
+   {
+    "rank": 7,
+    "model": "GPT-6 Astra",
+    "org": "OpenAI",
+    "score": 56.9,
+    "variant": "Max",
+    "delta": null
+   },
+   {
+    "rank": 8,
+    "model": "Claude Sonnet 5.5",
+    "org": "Anthropic",
+    "score": 54.7,
+    "variant": "Max, Default Fallback",
+    "delta": null
+   },
+   {
+    "rank": 9,
+    "model": "GPT-6.1 Sol",
+    "org": "OpenAI",
+    "score": 54.7,
+    "variant": "Max",
+    "delta": null
+   },
+   {
+    "rank": 10,
+    "model": "Gemini 4 Hydrogen",
+    "org": "Google",
+    "score": 54.1,
+    "variant": "Xhigh",
+    "delta": null
+   },
+   {
+    "rank": 11,
+    "model": "GPT-6.1 Terra",
+    "org": "OpenAI",
+    "score": 51.4,
+    "variant": "Max",
+    "delta": null
+   },
+   {
+    "rank": 12,
+    "model": "Gemini 4 Argon",
+    "org": "Google",
+    "score": 50.5,
+    "variant": "High",
+    "delta": null
+   },
+   {
+    "rank": 13,
+    "model": "Claude Fable 5.1",
+    "org": "Anthropic",
+    "score": 50,
+    "variant": "Xhigh, Default Fallback",
+    "delta": null
+   },
+   {
+    "rank": 14,
+    "model": "Muse Wonder Full",
+    "org": "Meta",
+    "score": 49.9,
+    "variant": "Max",
+    "delta": null
+   },
+   {
+    "rank": 15,
+    "model": "Kimi K3.1 Pro",
+    "org": "Kimi",
+    "score": 46.6,
+    "variant": null,
+    "delta": null
+   },
+   {
+    "rank": 16,
+    "model": "Claude Opus 5",
+    "org": "Anthropic",
+    "score": 44.2,
+    "variant": "Max",
+    "delta": null
+   },
+   {
+    "rank": 17,
+    "model": "GPT-6 Sol",
+    "org": "OpenAI",
+    "score": 44.1,
+    "variant": "Max",
+    "delta": null
+   },
+   {
+    "rank": 18,
+    "model": "Muse Wonder",
+    "org": "Meta",
+    "score": 43.7,
+    "variant": "Max",
+    "delta": null
+   },
+   {
+    "rank": 19,
+    "model": "Qwen4 Max",
+    "org": "Alibaba",
+    "score": 42.8,
+    "variant": null,
+    "delta": null
+   },
+   {
+    "rank": 20,
+    "model": "Muse Spark 1.3",
+    "org": "Meta",
+    "score": 36.6,
+    "variant": "Max",
+    "delta": null
+   }
+  ],
+  "hf_trending": [
+   {
+    "rank": 1,
+    "model": "thinkingmachines/Inkling-2-Mini",
+    "org": "thinkingmachines",
+    "score": 1190,
+    "delta": null
+   },
+   {
+    "rank": 2,
+    "model": "unsloth/Inkling-2-Mini-GGUF",
+    "org": "unsloth",
+    "score": 1065,
+    "delta": null
+   },
+   {
+    "rank": 3,
+    "model": "SulphurAI/Sulphur-3",
+    "org": "SulphurAI",
+    "score": 576,
+    "delta": null
+   },
+   {
+    "rank": 4,
+    "model": "prism-ml/Ternary-Bonsai-2.5-27B-GGUF",
+    "org": "prism-ml",
+    "score": 546,
+    "delta": 2
+   },
+   {
+    "rank": 5,
+    "model": "AtomicChat/Inkling-2-Mini-Uncensored-GGUF",
+    "org": "AtomicChat",
+    "score": 544.5999999999999,
+    "delta": -2
+   },
+   {
+    "rank": 6,
+    "model": "inworld/voice-isolator",
+    "org": "inworld",
+    "score": 420,
+    "delta": null
+   },
+   {
+    "rank": 7,
+    "model": "Lightricks/LTX-2.5",
+    "org": "Lightricks",
+    "score": 337,
+    "delta": null
+   },
+   {
+    "rank": 8,
+    "model": "llamaindex/OCRia-nano-1",
+    "org": "llamaindex",
+    "score": 259,
+    "delta": null
+   },
+   {
+    "rank": 9,
+    "model": "nvidia/Nemotron-Labs-Image-30B-A3B",
+    "org": "nvidia",
+    "score": 249,
+    "delta": null
+   },
+   {
+    "rank": 10,
+    "model": "ISTA-DASLab/Inkling-2-Mini-GSQ-RCO-GGUF",
+    "org": "ISTA-DASLab",
+    "score": 229,
+    "delta": "new"
+   },
+   {
+    "rank": 11,
+    "model": "strata-engine/Inkling-2-Mini-Strata",
+    "org": "strata-engine",
+    "score": 216,
+    "delta": null
+   },
+   {
+    "rank": 12,
+    "model": "apple/DepthPro2",
+    "org": "apple",
+    "score": 172,
+    "delta": -2
+   },
+   {
+    "rank": 13,
+    "model": "sand-ai/MAGI-2-preview",
+    "org": "sand-ai",
+    "score": 166,
+    "delta": 4
+   },
+   {
+    "rank": 14,
+    "model": "kandinskylab/Kandinsky-ImageSR-2.0",
+    "org": "kandinskylab",
+    "score": 153,
+    "delta": "new"
+   },
+   {
+    "rank": 15,
+    "model": "Sentinel7/h3",
+    "org": "Sentinel7",
+    "score": 116.5,
+    "delta": null
+   },
+   {
+    "rank": 16,
+    "model": "baidu/ERNIE-5.5-Flash-Preview",
+    "org": "baidu",
+    "score": 113,
+    "delta": "new"
+   },
+   {
+    "rank": 17,
+    "model": "Qwen/Qwen3.8-27B",
+    "org": "Qwen",
+    "score": 110,
+    "delta": 2
+   },
+   {
+    "rank": 18,
+    "model": "inclusionAI/Ling-3.2-air",
+    "org": "inclusionAI",
+    "score": 103,
+    "delta": -7
+   },
+   {
+    "rank": 19,
+    "model": "Lakonik/pi-H3",
+    "org": "Lakonik",
+    "score": 102.5,
+    "delta": "new"
+   },
+   {
+    "rank": 20,
+    "model": "orcarouter/Inkling-2-Mini-abliterated-GGUF",
+    "org": "orcarouter",
+    "score": 102,
+    "delta": -5
+   }
+  ],
+  "areas": [
+   {
+    "key": "webdev",
+    "label": "Programowanie",
+    "new_leader": false,
+    "rows": [
+     {
+      "rank": 1,
+      "model": "Claude Fable 5.2",
+      "org": "anthropic",
+      "delta": null
+     },
+     {
+      "rank": 2,
+      "model": "Claude Opus 5.5",
+      "org": "anthropic",
+      "delta": null
+     },
+     {
+      "rank": 3,
+      "model": "Claude Sonnet 5.5",
+      "org": "anthropic",
+      "delta": null
+     },
+     {
+      "rank": 4,
+      "model": "Gemini 4 Carbon",
+      "org": "google",
+      "delta": null
+     },
+     {
+      "rank": 5,
+      "model": "Gemini 4 Neon",
+      "org": "google",
+      "delta": null
+     },
+     {
+      "rank": 6,
+      "model": "GPT-6 Astra",
+      "org": "openai",
+      "delta": null
+     },
+     {
+      "rank": 7,
+      "model": "GPT-6.2 Astra",
+      "org": "openai",
+      "delta": null
+     },
+     {
+      "rank": 8,
+      "model": "GPT-6.2 Sol",
+      "org": "openai",
+      "delta": null
+     },
+     {
+      "rank": 9,
+      "model": "Qwen4-Max",
+      "org": "alibaba",
+      "delta": null
+     },
+     {
+      "rank": 10,
+      "model": "GPT-6.1 Sol",
+      "org": "openai",
+      "delta": null
+     }
+    ]
+   },
+   {
+    "key": "agent",
+    "label": "Agenci",
+    "new_leader": false,
+    "rows": [
+     {
+      "rank": 1,
+      "model": "Claude Fable 5.2",
+      "org": "anthropic",
+      "delta": null
+     },
+     {
+      "rank": 2,
+      "model": "Claude Opus 5.5",
+      "org": "anthropic",
+      "delta": null
+     },
+     {
+      "rank": 3,
+      "model": "Gemini 4 Neon",
+      "org": "google",
+      "delta": null
+     },
+     {
+      "rank": 4,
+      "model": "Gemini 4 Carbon",
+      "org": "google",
+      "delta": null
+     },
+     {
+      "rank": 5,
+      "model": "Claude Sonnet 5.5",
+      "org": "anthropic",
+      "delta": null
+     },
+     {
+      "rank": 6,
+      "model": "GPT-6 Astra",
+      "org": "openai",
+      "delta": null
+     },
+     {
+      "rank": 7,
+      "model": "GPT-6.2 Astra",
+      "org": "openai",
+      "delta": null
+     },
+     {
+      "rank": 8,
+      "model": "Gemini 4 Hydrogen",
+      "org": "google",
+      "delta": null
+     },
+     {
+      "rank": 9,
+      "model": "Claude Fable 5.1",
+      "org": "anthropic",
+      "delta": null
+     },
+     {
+      "rank": 10,
+      "model": "GPT-6.2 Sol",
+      "org": "openai",
+      "delta": null
+     }
+    ]
+   },
+   {
+    "key": "writing",
+    "label": "Pisanie",
+    "new_leader": false,
+    "rows": [
+     {
+      "rank": 1,
+      "model": "Gemini 4 Carbon",
+      "org": "google",
+      "delta": null
+     },
+     {
+      "rank": 2,
+      "model": "Claude Opus 5.5",
+      "org": "anthropic",
+      "delta": null
+     },
+     {
+      "rank": 3,
+      "model": "Gemini 4 Argon",
+      "org": "google",
+      "delta": null
+     },
+     {
+      "rank": 4,
+      "model": "Gemini 4 Neon",
+      "org": "google",
+      "delta": null
+     },
+     {
+      "rank": 5,
+      "model": "Claude Fable 5.1",
+      "org": "anthropic",
+      "delta": null
+     },
+     {
+      "rank": 6,
+      "model": "Claude Fable 5.2",
+      "org": "anthropic",
+      "delta": null
+     },
+     {
+      "rank": 7,
+      "model": "Gemini 4 Hydrogen",
+      "org": "google",
+      "delta": null
+     },
+     {
+      "rank": 8,
+      "model": "Claude Opus 4.6",
+      "org": "anthropic",
+      "delta": null
+     },
+     {
+      "rank": 9,
+      "model": "Gemini 3.8 Flash",
+      "org": "google",
+      "delta": null
+     },
+     {
+      "rank": 10,
+      "model": "Claude Fable 5",
+      "org": "anthropic",
+      "delta": null
+     }
+    ]
+   },
+   {
+    "key": "polish",
+    "label": "Po polsku",
+    "new_leader": false,
+    "rows": [
+     {
+      "rank": 1,
+      "model": "Gemini 4 Argon",
+      "org": "google",
+      "delta": null
+     },
+     {
+      "rank": 2,
+      "model": "Claude Fable 5.1",
+      "org": "anthropic",
+      "delta": null
+     },
+     {
+      "rank": 3,
+      "model": "Muse Wonder",
+      "org": "meta",
+      "delta": null
+     },
+     {
+      "rank": 4,
+      "model": "Claude Opus 5",
+      "org": "anthropic",
+      "delta": null
+     },
+     {
+      "rank": 5,
+      "model": "Gemini 3.5 Flash",
+      "org": "google",
+      "delta": null
+     },
+     {
+      "rank": 6,
+      "model": "Claude Opus 5.5",
+      "org": "anthropic",
+      "delta": null
+     },
+     {
+      "rank": 7,
+      "model": "Gemini 3.8 Flash",
+      "org": "google",
+      "delta": null
+     },
+     {
+      "rank": 8,
+      "model": "Muse Spark 1.2",
+      "org": "meta",
+      "delta": null
+     },
+     {
+      "rank": 9,
+      "model": "Gemini 3.7 Flash",
+      "org": "google",
+      "delta": null
+     },
+     {
+      "rank": 10,
+      "model": "Gemini 3 Pro",
+      "org": "google",
+      "delta": null
+     }
+    ]
+   },
+   {
+    "key": "math",
+    "label": "Matematyka",
+    "new_leader": false,
+    "rows": [
+     {
+      "rank": 1,
+      "model": "Gemini 4 Argon",
+      "org": "google",
+      "delta": null
+     },
+     {
+      "rank": 2,
+      "model": "Gemini 4 Neon",
+      "org": "google",
+      "delta": null
+     },
+     {
+      "rank": 3,
+      "model": "Claude Fable 5.1",
+      "org": "anthropic",
+      "delta": null
+     },
+     {
+      "rank": 4,
+      "model": "Claude Opus 5",
+      "org": "anthropic",
+      "delta": null
+     },
+     {
+      "rank": 5,
+      "model": "Gemini 3.8 Flash",
+      "org": "google",
+      "delta": null
+     },
+     {
+      "rank": 6,
+      "model": "Claude Opus 5.5",
+      "org": "anthropic",
+      "delta": null
+     },
+     {
+      "rank": 7,
+      "model": "Gemini 4 Hydrogen",
+      "org": "google",
+      "delta": null
+     },
+     {
+      "rank": 8,
+      "model": "Claude Opus 4.6",
+      "org": "anthropic",
+      "delta": null
+     },
+     {
+      "rank": 9,
+      "model": "Claude Fable 5",
+      "org": "anthropic",
+      "delta": null
+     },
+     {
+      "rank": 10,
+      "model": "Gemini 3.7 Flash",
+      "org": "google",
+      "delta": null
+     }
+    ]
+   },
+   {
+    "key": "image",
+    "label": "Obrazy",
+    "new_leader": false,
+    "rows": [
+     {
+      "rank": 1,
+      "model": "GPT-Image-2.5 Sunburst",
+      "org": "openai",
+      "delta": null
+     },
+     {
+      "rank": 2,
+      "model": "GPT-Image-2.6 Sunburst",
+      "org": "openai",
+      "delta": null
+     },
+     {
+      "rank": 3,
+      "model": "GPT-Image-2.5 Flare",
+      "org": "openai",
+      "delta": null
+     },
+     {
+      "rank": 4,
+      "model": "MAI-Image-2.7",
+      "org": "microsoft-ai",
+      "delta": null
+     },
+     {
+      "rank": 5,
+      "model": "GPT-Image-2",
+      "org": "openai",
+      "delta": null
+     },
+     {
+      "rank": 6,
+      "model": "GPT-Image-2.6 Flare",
+      "org": "openai",
+      "delta": null
+     },
+     {
+      "rank": 7,
+      "model": "MAI-Image-2.6",
+      "org": "microsoft-ai",
+      "delta": null
+     },
+     {
+      "rank": 8,
+      "model": "Grok Imagine Image 2.0",
+      "org": "xai",
+      "delta": null
+     },
+     {
+      "rank": 9,
+      "model": "Gemini Nano Banana 2.1",
+      "org": "google",
+      "delta": null
+     },
+     {
+      "rank": 10,
+      "model": "Reve 2.1",
+      "org": "reve",
+      "delta": null
+     }
+    ]
+   }
+  ]
+ },
+ "rumors": [],
+ "big_moves": [
+  {
+   "entity_id": "tsla",
+   "board": "market",
+   "change": "+15,67% w 7 dni",
+   "why": "Brak jednoznacznej przyczyny w dostępnych źródłach. Cały koszyk spółek AI i chipów rósł w tym tygodniu, więc możliwe, że to szerszy ruch rynkowy, a nie wiadomość o samej Tesli.",
+   "why_type": "brak",
+   "sources": [],
+   "why_short": "brak jednoznacznej przyczyny, rośnie cały koszyk"
+  },
+  {
+   "entity_id": "meta",
+   "board": "market",
+   "change": "+12,15% w 7 dni",
+   "why": "Brak źródła łączącego ruch z konkretnym zdarzeniem. Możliwe, że to część szerszego odbicia spółek technologicznych po wcześniejszych spadkach.",
+   "why_type": "hipoteza",
+   "sources": [],
+   "why_short": "możliwe odbicie całego sektora technologicznego"
+  },
+  {
+   "entity_id": "prism-ml-ternary-bonsai-2-5-27b-gguf",
+   "board": "hf_trending",
+   "change": "z #6 na #4",
+   "why": "Model Ternary Bonsai 2.5 27B (5,9 GB, nastawiony na lokalne agenty) był opisywany w ostatnich dniach. Możliwe, że wzrost wynika z zainteresowania lokalnymi modelami.",
+   "why_type": "hipoteza",
+   "sources": [],
+   "why_short": "możliwe zainteresowanie lokalnymi modelami po premierze"
+  },
+  {
+   "entity_id": "atomicchat-inkling-2-mini-uncensored-gguf",
+   "board": "hf_trending",
+   "change": "z #3 na #5",
+   "why": "Brak jednoznacznej przyczyny. Wariant jest pochodną Inkling-2-Mini, a ruch o dwa miejsca to zwykła rotacja w rankingu.",
+   "why_type": "brak",
+   "sources": [],
+   "why_short": "brak jednoznacznej przyczyny, zwykła rotacja"
+  },
+  {
+   "entity_id": "ista-daslab-inkling-2-mini-gsq-rco-gguf",
+   "board": "hf_trending",
+   "change": "nowy na #10",
+   "why": "Kolejna kwantyzacja Inkling-2-Mini. Możliwe, że wchodzi na fali popularności modelu bazowego.",
+   "why_type": "hipoteza",
+   "sources": [],
+   "why_short": "kolejna kwantyzacja popularnego Inkling-2-Mini"
+  },
+  {
+   "entity_id": "apple-depthpro2",
+   "board": "hf_trending",
+   "change": "z #10 na #12",
+   "why": "Brak jednoznacznej przyczyny.",
+   "why_type": "brak",
+   "sources": [],
+   "why_short": "brak jednoznacznej przyczyny"
+  },
+  {
+   "entity_id": "sand-ai-magi-2-preview",
+   "board": "hf_trending",
+   "change": "z #17 na #13",
+   "why": "Brak jednoznacznej przyczyny.",
+   "why_type": "brak",
+   "sources": [],
+   "why_short": "brak jednoznacznej przyczyny"
+  },
+  {
+   "entity_id": "kandinskylab-kandinsky-imagesr-2-0",
+   "board": "hf_trending",
+   "change": "nowy na #14",
+   "why": "Brak jednoznacznej przyczyny. Model trafił do zestawienia po raz pierwszy.",
+   "why_type": "brak",
+   "sources": [],
+   "why_short": "brak jednoznacznej przyczyny, nowy w zestawieniu"
+  },
+  {
+   "entity_id": "baidu-ernie-5-5-flash-preview",
+   "board": "hf_trending",
+   "change": "nowy na #16",
+   "why": "Brak jednoznacznej przyczyny. Model trafił do zestawienia po raz pierwszy.",
+   "why_type": "brak",
+   "sources": [],
+   "why_short": "brak jednoznacznej przyczyny, nowy w zestawieniu"
+  },
+  {
+   "entity_id": "qwen-qwen3-8-27b",
+   "board": "hf_trending",
+   "change": "z #19 na #17",
+   "why": "Możliwe, że wzrost wiąże się z tym, że wokół Qwen3.8-27B powstają adaptery i kwantyzacje, w tym opisany niedawno adapter RL podnoszący wynik na Terminal-Bench 2.1.",
+   "why_type": "hipoteza",
+   "sources": [],
+   "why_short": "możliwe zainteresowanie adapterami i kwantyzacjami modelu"
+  },
+  {
+   "entity_id": "inclusionai-ling-3-2-air",
+   "board": "hf_trending",
+   "change": "z #11 na #18",
+   "why": "Brak jednoznacznej przyczyny.",
+   "why_type": "brak",
+   "sources": [],
+   "why_short": "brak jednoznacznej przyczyny"
+  },
+  {
+   "entity_id": "lakonik-pi-h3",
+   "board": "hf_trending",
+   "change": "nowy na #19",
+   "why": "Brak jednoznacznej przyczyny. Repozytorium trafiło do zestawienia po raz pierwszy.",
+   "why_type": "brak",
+   "sources": [],
+   "why_short": "brak jednoznacznej przyczyny, nowy w zestawieniu"
+  },
+  {
+   "entity_id": "orcarouter-inkling-2-mini-abliterated-gguf",
+   "board": "hf_trending",
+   "change": "z #15 na #20",
+   "why": "Wariant Inkling-2-Mini ustępuje miejsca innym pochodnym tego modelu. Możliwe, że to rotacja wśród wielu podobnych kwantyzacji.",
+   "why_type": "hipoteza",
+   "sources": [],
+   "why_short": "możliwa rotacja wśród wielu wariantów Inkling-2-Mini"
+  },
+  {
+   "entity_id": "nari-labs-qwen3-8-27b-nariq-gguf",
+   "board": "hf_trending",
+   "change": "wypadł z #13",
+   "why": "Brak jednoznacznej przyczyny.",
+   "why_type": "brak",
+   "sources": [],
+   "why_short": "brak jednoznacznej przyczyny"
+  },
+  {
+   "entity_id": "aleph-alpha-kolibri-1-1",
+   "board": "hf_trending",
+   "change": "wypadł z #16",
+   "why": "Brak jednoznacznej przyczyny.",
+   "why_type": "brak",
+   "sources": [],
+   "why_short": "brak jednoznacznej przyczyny"
+  },
+  {
+   "entity_id": "harness-hub-qwen3-8-27b-pi-adapted",
+   "board": "hf_trending",
+   "change": "wypadł z #18",
+   "why": "Brak jednoznacznej przyczyny.",
+   "why_type": "brak",
+   "sources": [],
+   "why_short": "brak jednoznacznej przyczyny"
+  },
+  {
+   "entity_id": "krafton-raon-1-mini",
+   "board": "hf_trending",
+   "change": "wypadł z #20",
+   "why": "Brak jednoznacznej przyczyny.",
+   "why_type": "brak",
+   "sources": [],
+   "why_short": "brak jednoznacznej przyczyny"
+  }
+ ],
+ "follow_ups": [
+  {
+   "entity_id": "meta",
+   "move": "+12,15% w 7 dni",
+   "related_story": "Zadłużenie na AI: Big Tech wydaje więcej, niż zarabia, a obligacje drożeją",
+   "story_date": "2026-11-26"
+  }
+ ],
+ "closing": "W najbliższych dniach warto sprawdzić, czy ktoś niezależny powtórzy wyniki DCA na większej skali. Dobrze też obserwować, czy odbicie na giełdzie utrzyma się po weekendzie.",
+ "weekly": null,
+ "monthly": null,
+ "spotlight": {
+  "company_id": "meta",
+  "model_id": "claude-opus-4-7"
+ },
+ "minutes": 10,
+ "supplement_minutes": 0
+}

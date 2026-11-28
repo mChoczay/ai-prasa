@@ -1,6 +1,17 @@
 {
  "editions": [
   {
+   "date": "2026-11-28",
+   "kind": "daily",
+   "lead_title": "DeepCrossAttention od Google: połączenia rezydualne z routingiem, do 3x szybsze dojście do tej samej jakości",
+   "minutes": 10,
+   "categories": [
+    "modele",
+    "narzedzia",
+    "inne"
+   ]
+  },
+  {
    "date": "2026-11-27",
    "kind": "daily",
    "lead_title": "DeepMind oddaje agentom część mocy obliczeniowej. Gemini powstaje przy ich udziale, ale bez samodoskonalenia",
